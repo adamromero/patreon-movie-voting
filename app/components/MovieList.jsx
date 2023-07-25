@@ -291,7 +291,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                onChange={(e) => setSearchTitle(e.target.value)}
             />
          </div>
-         <table className="w-full bg-[#830483]">
+         <table className="w-full">
             {tableHead}
             {tableBody}
          </table>

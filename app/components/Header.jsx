@@ -25,9 +25,9 @@ export async function Header() {
                      <AiFillYoutube className="text-[red] text-[32px]" />
                   </a>
                </div>
-               <h1 className="text-[20px] sm:text-[40px] flex text-white">
+               <h1 className="text-[20px] sm:text-[25px] flex text-white">
                   <span className={satisfy.className}>
-                     Patreon Movie Voting
+                     Let My Patrons Decide
                   </span>
                </h1>
                <div className="flex-1">
