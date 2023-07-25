@@ -49,6 +49,9 @@ export const nextAuthOptions = {
 
          return session;
       },
+      async redirect({ url, baseUrl }) {
+         return baseUrl;
+      },
    },
 };
 
