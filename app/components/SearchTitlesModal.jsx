@@ -14,54 +14,56 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
 
-   const API_URL = `https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${title}`;
+   const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
 
-   //    useEffect(() => {
-   //       const fetchMovieTitles = async () => {
-   //          if (title) {
-   //             setLoading(true);
-   //             inputRef.current.blur();
-   //             const response = await fetch(API_URL);
-   //             const data = await response.json();
-   //             if (data.Response === "True") {
-   //                const titles = data.Search.filter(
-   //                   (title) => title.Type === "movie" || title.Type === "series"
-   //                );
-   //                setMovies(titles);
+   useEffect(() => {
+      const fetchMovieTitles = async () => {
+         if (title) {
+            setLoading(true);
+            inputRef.current.blur();
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            if (data.Response === "True") {
+               const titles = data.Search.filter(
+                  (title) => title.Type === "movie" || title.Type === "series"
+               );
+               setMovies(titles);
 
-   //                const ids = data.Search.map((entry) => entry.imdbID);
-   //                const result = ids.reduce((obj, num) => {
-   //                   obj[num] = false;
-   //                   return obj;
-   //                }, {});
+               const ids = data.Search.map((entry) => entry.imdbID);
+               const result = ids.reduce((obj, num) => {
+                  obj[num] = false;
+                  return obj;
+               }, {});
 
-   //                setImdbIDCollection(result);
+               setImdbIDCollection(result);
 
-   //                setLoading(false);
-   //             } else {
-   //                setMovies([]);
-   //                setError(data.Error);
-   //                setLoading(false);
-   //             }
-   //          }
-   //       };
-   //       if (inputRef.current) {
-   //          inputRef.current.focus();
-   //       }
-   //       fetchMovieTitles();
-   //    }, [title]);
+               setLoading(false);
+            } else {
+               setMovies([]);
+               setError(data.Error);
+               setLoading(false);
+            }
+         }
+      };
+      if (inputRef.current) {
+         inputRef.current.focus();
+      }
+      fetchMovieTitles();
+   }, [title]);
 
-   //    const isMovieInList = (selectedMovie) => {
-   //       return moviesList.filter(
-   //          (movie) => movie.data.imdbID === selectedMovie.imdbID
-   //       ).length;
-   //    };
+   const isMovieInList = (selectedMovie) => {
+      //   return moviesList.filter(
+      //      (movie) => movie.data.imdbID === selectedMovie.imdbID
+      //   ).length;
+      return false;
+   };
 
-   //    const isMovieWatched = (selectedMovie) => {
-   //       return moviesList.find(
-   //          (movie) => movie.data.imdbID === selectedMovie.imdbID
-   //       ).isWatched;
-   //    };
+   const isMovieWatched = (selectedMovie) => {
+      // return moviesList.find(
+      //    (movie) => movie.data.imdbID === selectedMovie.imdbID
+      // ).isWatched;
+      return false;
+   };
 
    const handleTitleSubmit = (e) => {
       e.preventDefault();
@@ -70,15 +72,15 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
       }
    };
 
-   //    const handleMovieSelection = async (movie) => {
-   //       setImdbIDCollection({ [movie.imdbID]: true });
-   //       createMovieVote(movie, currentUser);
-   //    };
+   const handleMovieSelection = async (movie) => {
+      setImdbIDCollection({ [movie.imdbID]: true });
+      console.log("Add this movie: ", movie);
+      // createMovieVote(movie, currentUser);
+   };
 
    return (
-      <div className="p-[45px] fixed shadow-2xl	shadow-black top-[50%] translate-y-[-50%] max-w-[1024px] w-full h-[85vh] bg-black border-[1px] border-white z-50 rounded-[16px]">
+      <div className="p-[45px] fixed r shadow-2xl right-0 left-0 mx-auto shadow-black top-[50%] translate-y-[-50%] max-w-[1024px] w-full h-[85vh] bg-black border-[1px] border-white z-50 rounded-[16px]">
          <div className="flex gap-2 items-center justify-center pb-[16px]">
-            {currentUser}
             <form className="flex gap-2" onSubmit={(e) => handleTitleSubmit(e)}>
                <input
                   className="border-[1px] border-black text-black px-2"
@@ -125,7 +127,7 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
                   {movies.length ? (
                      movies.map((movie) => (
                         <div className="mx-auto" key={movie.imdbID}>
-                           {/* {isMovieInList(movie) ? (
+                           {isMovieInList(movie) ? (
                               <div
                                  className={`${
                                     isMovieWatched(movie)
@@ -208,7 +210,7 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
                                     </div>
                                  </button>
                               </div>
-                           )} */}
+                           )}
                         </div>
                      ))
                   ) : (

@@ -12,14 +12,6 @@ export const nextAuthOptions = {
                scope: "identity identity.memberships",
             },
          },
-         // profile: (profile) => {
-         //    return {
-         //       id: profile.data.id,
-         //       name: profile.data.attributes.full_name,
-         //       email: profile.data.attributes.email,
-         //       image: profile.data.attributes.image_url,
-         //    };
-         // },
       }),
    ],
    secret: process.env.NEXTAUTH_SECRET,
