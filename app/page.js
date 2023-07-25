@@ -26,7 +26,7 @@ export default async function Home() {
                         <h2 className="text-[20px] font-bold">
                            Hi {user.firstName ? user.firstName : user.name}! 🙂
                         </h2>
-                        <p>Begin requesting movies and make requests.</p>
+                        <p>Begin voting and requesting movies.</p>
                      </div>
                      <RequestMovies currentUser={user.id} />
                   </>

@@ -7,7 +7,7 @@ import { Satisfy } from "next/font/google";
 
 const satisfy = Satisfy({
    subsets: ["latin"],
-   weight: "400",
+   weight: ["400"],
 });
 
 export async function Header() {
@@ -25,7 +25,7 @@ export async function Header() {
                      <AiFillYoutube className="text-[red] text-[32px]" />
                   </a>
                </div>
-               <h1 className="text-[20px] sm:text-[25px] flex text-white">
+               <h1 className="text-[25px] sm:text-[38px] flex text-white">
                   <span className={satisfy.className}>
                      Let My Patrons Decide
                   </span>

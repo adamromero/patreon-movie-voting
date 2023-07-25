@@ -37,7 +37,7 @@ const FilterMovieList = () => {
    };
 
    return (
-      <div className="flex justify-center gap-[50px] max-w-[700px] w-full p-[8px] text-center bg-black text-white hidden md:flex">
+      <div className="flex gap-[20px] max-w-[700px] w-full text-white hidden md:flex">
          {/* <div>
             <label htmlFor="votes">Votes</label>
             <br />
@@ -68,7 +68,7 @@ const FilterMovieList = () => {
             <label htmlFor="chronological">Chronological</label>
             <br />
             <select
-               className="text-black"
+               className="bg-black text-white w-[125px] p-[5px]"
                name="chronologicalFilter"
                id="chronological"
             >
@@ -79,7 +79,11 @@ const FilterMovieList = () => {
          <div>
             <label htmlFor="added">Order added</label>
             <br />
-            <select className="text-black" name="addedFilter" id="added">
+            <select
+               className="bg-black text-white w-[125px] p-[5px]"
+               name="addedFilter"
+               id="added"
+            >
                <option value="">Older</option>
                <option value="">Newer</option>
             </select>
@@ -87,7 +91,11 @@ const FilterMovieList = () => {
          <div>
             <label htmlFor="type">Type</label>
             <br />
-            <select className="text-black" name="typeFilter" id="type">
+            <select
+               className="bg-black text-white w-[125px] p-[5px]"
+               name="typeFilter"
+               id="type"
+            >
                <option value="all">All</option>
                <option value="">TV Show</option>
                <option value="">Movie</option>
@@ -97,7 +105,7 @@ const FilterMovieList = () => {
             <label htmlFor="genre">Genre</label>
             <br />
             <select
-               className="text-black"
+               className="bg-black text-white w-[125px] p-[5px]"
                name="genreFilter"
                id="genre"
                onChange={handleGenreFilter}
@@ -126,7 +134,7 @@ const FilterMovieList = () => {
             <label htmlFor="status">Status</label>
             <br />
             <select
-               className="text-black"
+               className="bg-black text-white w-[125px] p-[5px]"
                name="statusFilter"
                id="status"
                onChange={handleWatchedFilter}
