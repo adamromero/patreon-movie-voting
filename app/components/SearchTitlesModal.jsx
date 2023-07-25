@@ -14,9 +14,7 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
 
-   //    const API_URL = `https://www.omdbapi.com/?apikey=${
-   //       import.meta.env.VITE_OMDB_API_KEY
-   //    }&s=${title}`;
+   const API_URL = `https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${title}`;
 
    //    useEffect(() => {
    //       const fetchMovieTitles = async () => {

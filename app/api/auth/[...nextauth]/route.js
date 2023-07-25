@@ -1,14 +1,9 @@
 import NextAuth from "next-auth/next";
-import GithubProvider from "next-auth/providers/github";
 import PatreonProvider from "next-auth/providers/patreon";
 import axios from "axios";
 
 export const nextAuthOptions = {
    providers: [
-      GithubProvider({
-         clientId: process.env.GITHUB_CLIENT_ID,
-         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      }),
       PatreonProvider({
          clientId: process.env.PATREON_CLIENT_ID,
          clientSecret: process.env.PATREON_CLIENT_SECRET,
@@ -17,8 +12,17 @@ export const nextAuthOptions = {
                scope: "identity identity.memberships",
             },
          },
+         // profile: (profile) => {
+         //    return {
+         //       id: profile.data.id,
+         //       name: profile.data.attributes.full_name,
+         //       email: profile.data.attributes.email,
+         //       image: profile.data.attributes.image_url,
+         //    };
+         // },
       }),
    ],
+   secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
       async jwt({ token, account, profile }) {
          if (account) {
