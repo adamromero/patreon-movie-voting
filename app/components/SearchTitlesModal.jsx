@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
 
-const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
+const SearchTitlesModal = ({ currentUser }) => {
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [movies, setMovies] = useState([]);
@@ -79,9 +79,13 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
    };
 
    return (
-      <div className="p-[45px] fixed r shadow-2xl right-0 left-0 mx-auto shadow-black top-[50%] translate-y-[-50%] max-w-[1024px] w-full h-[85vh] bg-black border-[1px] border-white z-50 rounded-[16px]">
-         <div className="flex gap-2 items-center justify-center pb-[16px]">
-            <form className="flex gap-2" onSubmit={(e) => handleTitleSubmit(e)}>
+      <div>
+         {/* <div className="p-[45px] fixed r shadow-2xl right-0 left-0 mx-auto shadow-black top-[50%] translate-y-[-50%] max-w-[1024px] w-full h-[85vh] bg-black border-[1px] border-white z-50 rounded-[16px]"> */}
+         <div className="flex flex-col sm:flex-row gap-2 items-center justify-center pb-[16px]">
+            <form
+               className="flex flex-col sm:flex-row gap-2"
+               onSubmit={(e) => handleTitleSubmit(e)}
+            >
                <input
                   className="border-[1px] border-black text-black px-2"
                   type="text"
@@ -112,12 +116,12 @@ const SearchTitlesModal = ({ setIsModalOpen, currentUser }) => {
                   placeholder="Year"
                />
             </form>
-            <button
+            {/* <button
                className="ml-auto px-3"
                onClick={() => setIsModalOpen((isOpen) => !isOpen)}
             >
                <AiOutlineClose className="text-[25px] text-white" />
-            </button>
+            </button> */}
          </div>
          <div className="overflow-auto h-[65vh] relative no-scrollbar">
             {loading ? (
