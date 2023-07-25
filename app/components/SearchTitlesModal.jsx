@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 //import { MovieContext } from "../context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
+import { data } from "../../data";
 
 const SearchTitlesModal = ({ currentUser }) => {
    const [input, setInput] = useState("");
@@ -11,6 +12,7 @@ const SearchTitlesModal = ({ currentUser }) => {
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
    //const { moviesList, createMovieVote } = useContext(MovieContext);
+   const [moviesList, setMoviesList] = useState(data || []);
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
 
@@ -52,16 +54,16 @@ const SearchTitlesModal = ({ currentUser }) => {
    }, [title]);
 
    const isMovieInList = (selectedMovie) => {
-      //   return moviesList.filter(
-      //      (movie) => movie.data.imdbID === selectedMovie.imdbID
-      //   ).length;
+      return moviesList.filter(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).length;
       return false;
    };
 
    const isMovieWatched = (selectedMovie) => {
-      // return moviesList.find(
-      //    (movie) => movie.data.imdbID === selectedMovie.imdbID
-      // ).isWatched;
+      return moviesList.find(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).isWatched;
       return false;
    };
 

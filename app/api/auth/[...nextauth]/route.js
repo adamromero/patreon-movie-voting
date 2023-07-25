@@ -32,7 +32,7 @@ export const nextAuthOptions = {
 
          const user = response.data;
          const { id } = user.data;
-         const { full_name, image_url } = user.data.attributes;
+         const { first_name, full_name, image_url } = user.data.attributes;
          const creator_id = user.included[0].relationships.creator.data.id;
          const findPledge = user.data.relationships.pledges.data.find(
             (pledge) => pledge.id === "129412053"
@@ -41,6 +41,7 @@ export const nextAuthOptions = {
 
          if (token) {
             session.user.id = id;
+            session.user.firstName = first_name;
             session.user.name = full_name;
             session.user.image = image_url;
             session.user.creatorId = creator_id;

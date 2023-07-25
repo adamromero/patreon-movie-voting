@@ -285,7 +285,7 @@ const MovieList = ({ currentUser, isCreator }) => {
 
          <div>
             <input
-               className="border-[1px] border-black text-black px-[5px]"
+               className="border-[1px] border-black text-black px-[5px] mb-[20px]"
                type="text"
                placeholder="Search requested movies"
                onChange={(e) => setSearchTitle(e.target.value)}

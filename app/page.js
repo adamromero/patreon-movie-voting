@@ -18,13 +18,13 @@ export default async function Home() {
    return (
       <main>
          <Header />
-         <div className="flex flex-col justify-between p-[16px]">
+         <div className="flex flex-col justify-between p-[16px] pt-[97px] sm:pt-[16px]">
             <div className="max-w-[1200px] w-full mx-auto">
                {user ? (
                   <>
                      <div className="mb-[20px]">
                         <h2 className="text-[20px] font-bold">
-                           Hi {user.name}! 🙂
+                           Hi {user.firstName ? user.firstName : user.name}! 🙂
                         </h2>
                         <p>Begin requesting movies and make requests.</p>
                      </div>

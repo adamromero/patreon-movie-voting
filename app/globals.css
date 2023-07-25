@@ -7,3 +7,125 @@ body {
    background-color: #830483;
    color: white;
 }
+
+table {
+   border-collapse: separate;
+   border-spacing: 0 10px;
+}
+
+.react-responsive-modal-root .react-responsive-modal-modal {
+   background: black;
+   border-radius: 10px;
+   border: 1px solid white;
+   max-width: 1000px;
+}
+
+.react-responsive-modal-root .react-responsive-modal-closeButton {
+   color: white;
+}
+
+.switch {
+   display: inline-block;
+   height: 34px;
+   position: relative;
+   width: 60px;
+}
+
+.switch input {
+   clip: rect(0 0 0 0);
+   clip-path: inset(50%);
+   height: 1px;
+   overflow: hidden;
+   position: absolute;
+   white-space: nowrap;
+   width: 1px;
+}
+
+.slider {
+   background-color: #ccc;
+   bottom: 0;
+   cursor: pointer;
+   left: 0;
+   position: absolute;
+   right: 0;
+   top: 0;
+   transition: 0.4s;
+}
+
+.slider:before {
+   background-color: #fff;
+   bottom: 4px;
+   content: "";
+   height: 26px;
+   left: 4px;
+   position: absolute;
+   transition: 0.4s;
+   width: 26px;
+}
+
+input:checked + .slider {
+   background-color: #66bb6a;
+}
+
+input:checked + .slider:before {
+   transform: translateX(26px);
+}
+
+.slider.round {
+   border-radius: 34px;
+}
+
+.slider.round:before {
+   border-radius: 50%;
+}
+
+.container {
+   margin: 0 auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+   display: none;
+}
+
+.no-scrollbar {
+   -ms-overflow-style: none;
+   scrollbar-width: none;
+}
+
+.loader {
+   margin: auto;
+   border: 20px solid #eaf0f6;
+   border-radius: 50%;
+   border-top: 20px solid #830483;
+   width: 200px;
+   height: 200px;
+   animation: spinner 1s linear infinite;
+   transform: translate(-50%, -50%);
+   left: 0;
+   right: 0;
+   top: 35%;
+   position: absolute;
+}
+
+@keyframes spinner {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
+
+.animate-rotation {
+   animation: addIcon 0.2s linear forwards;
+   transform: rotate(45deg); /* Add this line to set initial rotation */
+}
+
+@keyframes addIcon {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(45deg);
+   }
+}

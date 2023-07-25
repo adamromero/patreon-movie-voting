@@ -37,8 +37,8 @@ const FilterMovieList = () => {
    };
 
    return (
-      <div className="flex justify-center gap-[50px] w-full p-[8px] text-center bg-black text-white hidden md:flex">
-         <div>
+      <div className="flex justify-center gap-[50px] max-w-[700px] w-full p-[8px] text-center bg-black text-white hidden md:flex">
+         {/* <div>
             <label htmlFor="votes">Votes</label>
             <br />
             <select
@@ -51,8 +51,8 @@ const FilterMovieList = () => {
                <option value="most">Most votes</option>
                <option value="fewest">Fewest votes</option>
             </select>
-         </div>
-         <div>
+         </div> */}
+         {/* <div>
             <label htmlFor="alphabetical">Alphabetical</label>
             <br />
             <select
@@ -63,7 +63,7 @@ const FilterMovieList = () => {
                <option value="">A-Z</option>
                <option value="">Z-A</option>
             </select>
-         </div>
+         </div> */}
          <div>
             <label htmlFor="chronological">Chronological</label>
             <br />
@@ -82,6 +82,15 @@ const FilterMovieList = () => {
             <select className="text-black" name="addedFilter" id="added">
                <option value="">Older</option>
                <option value="">Newer</option>
+            </select>
+         </div>
+         <div>
+            <label htmlFor="type">Type</label>
+            <br />
+            <select className="text-black" name="typeFilter" id="type">
+               <option value="all">All</option>
+               <option value="">TV Show</option>
+               <option value="">Movie</option>
             </select>
          </div>
          <div>
