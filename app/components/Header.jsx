@@ -17,19 +17,24 @@ export async function Header() {
       <header className="bg-black p-[20px] sm:mt-[10px] w-full fixed sm:static z-10">
          <div className="max-w-[1200px] mx-auto">
             <div className="flex items-center justify-around sm:gap-[25px]">
-               <div className="flex flex-1 justify-end gap-[5px]">
-                  <a href="https://patreon.com/" target="_blank">
-                     <BiLogoPatreon className="text-white text-[32px]" />
-                  </a>
-                  <a href="https://www.youtube.com/" target="_blank">
-                     <AiFillYoutube className="text-[red] text-[32px]" />
-                  </a>
+               <div className="flex-1 hidden sm:block"></div>
+               <div className="flex items-center gap-[20px]">
+                  <div className="flex gap-[5px]">
+                     <a href="https://patreon.com/" target="_blank">
+                        <BiLogoPatreon className="text-white text-[32px]" />
+                     </a>
+                     <a href="https://www.youtube.com/" target="_blank">
+                        <AiFillYoutube className="text-[red] text-[32px]" />
+                     </a>
+                  </div>
+                  <div>
+                     <h1 className="text-[25px] sm:text-[38px] flex text-white">
+                        <span className={satisfy.className}>
+                           Let My Patrons Decide
+                        </span>
+                     </h1>
+                  </div>
                </div>
-               <h1 className="text-[25px] sm:text-[38px] flex text-white">
-                  <span className={satisfy.className}>
-                     Let My Patrons Decide
-                  </span>
-               </h1>
                <div className="flex-1">
                   <UserSignIn user={user} />
                </div>
