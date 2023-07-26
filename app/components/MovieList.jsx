@@ -52,6 +52,16 @@ const MovieList = ({ currentUser, isCreator }) => {
          });
       }
 
+      if (filterOptions.type === "movie") {
+         // filteredList = filteredList.filter((movie) =>
+         //    movie.data.Type.includes("movie")
+         // );
+      } else if (filterOptions.type === "series") {
+         // filteredList = filteredList.filter((movie) =>
+         //    movie.data.Type.includes("series")
+         // );
+      }
+
       if (filterOptions.genre === "action") {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes("Action")

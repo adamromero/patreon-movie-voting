@@ -26,6 +26,10 @@ const movieSchema = new mongoose.Schema({
          type: String,
          required: true,
       },
+      Type: {
+         type: String,
+         required: true,
+      },
    },
    voters: [{ type: String }],
    isWatched: {

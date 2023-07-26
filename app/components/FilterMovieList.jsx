@@ -5,11 +5,11 @@ import { MovieContext } from "@/context/MovieContext";
 const FilterMovieList = () => {
    const { setFilterOptions } = useContext(MovieContext);
 
-   const handleVotesFilter = (e) => {
+   const handleTypeFilter = (e) => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         votes: selection,
+         type: selection,
       }));
    };
 
@@ -31,32 +31,6 @@ const FilterMovieList = () => {
 
    return (
       <div className="flex gap-[20px] max-w-[700px] w-full text-white hidden md:flex">
-         {/* <div>
-            <label htmlFor="votes">Votes</label>
-            <br />
-            <select
-               className="text-black"
-               name="votesFilter"
-               id="votes"
-               onChange={handleVotesFilter}
-               defaultValue="most"
-            >
-               <option value="most">Most votes</option>
-               <option value="fewest">Fewest votes</option>
-            </select>
-         </div> */}
-         {/* <div>
-            <label htmlFor="alphabetical">Alphabetical</label>
-            <br />
-            <select
-               className="text-black"
-               name="alphabeticalFilter"
-               id="alphabetical"
-            >
-               <option value="">A-Z</option>
-               <option value="">Z-A</option>
-            </select>
-         </div> */}
          <div>
             <label htmlFor="chronological">Chronological</label>
             <br />
@@ -88,10 +62,11 @@ const FilterMovieList = () => {
                className="bg-black text-white w-[125px] p-[5px]"
                name="typeFilter"
                id="type"
+               onChange={handleTypeFilter}
             >
                <option value="all">All</option>
-               <option value="">TV Show</option>
-               <option value="">Movie</option>
+               <option value="movie">Movie</option>
+               <option value="series">Series</option>
             </select>
          </div>
          <div>

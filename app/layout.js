@@ -6,7 +6,7 @@ import { Lato } from "next/font/google";
 
 const lato = Lato({
    subsets: ["latin"],
-   weight: ["400"],
+   weight: "400",
 });
 
 const inter = Inter({ subsets: ["latin"] });
