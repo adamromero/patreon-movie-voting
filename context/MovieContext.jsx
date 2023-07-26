@@ -17,7 +17,7 @@ export const MovieProvider = ({ children }) => {
    });
 
    const getMovieVotes = async () => {
-      const response = await fetch("http://localhost:3000/api/movies");
+      const response = await fetch("/api/movies");
       const movies = await response.json();
       setMoviesList(movies);
    };
@@ -43,10 +43,7 @@ export const MovieProvider = ({ children }) => {
       };
 
       try {
-         const response = await fetch(
-            "http://localhost:3000/api/movies",
-            config
-         );
+         const response = await fetch("/api/movies", config);
          const data = await response.json();
          setMoviesList((movies) => [...movies, data]);
          return data;
@@ -75,10 +72,7 @@ export const MovieProvider = ({ children }) => {
       });
 
       try {
-         const response = await fetch(
-            `http://localhost:3000/api/movies/${movieId}`,
-            config
-         );
+         const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
          setMoviesList(updatedMoviesList);
          return data;
@@ -106,10 +100,7 @@ export const MovieProvider = ({ children }) => {
       });
 
       try {
-         const response = await fetch(
-            `http://localhost:3000/api/movies/${movieId}`,
-            config
-         );
+         const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
          setMoviesList(updatedMoviesList);
          return data;
@@ -138,10 +129,7 @@ export const MovieProvider = ({ children }) => {
       });
 
       try {
-         const response = await fetch(
-            `http://localhost:3000/api/movies/${movieId}`,
-            config
-         );
+         const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
          setMoviesList(updatedMoviesList);
          return data;
