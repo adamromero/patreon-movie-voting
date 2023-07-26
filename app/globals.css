@@ -19,6 +19,7 @@ table {
    border: 1px solid white;
    max-width: 1000px;
    width: 100%;
+   margin: 0;
 }
 
 .react-responsive-modal-root .react-responsive-modal-closeButton {

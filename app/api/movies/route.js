@@ -28,6 +28,7 @@ export async function POST(req, res) {
 }
 
 export async function PUT(req, res) {
+   console.log(req.url);
    const updatedMovieVote = await req.json();
    console.log(updatedMovieVote);
    // try {
