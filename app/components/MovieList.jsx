@@ -29,6 +29,18 @@ const MovieList = ({ currentUser, isCreator }) => {
    //    }, []);
 
    useEffect(() => {
+      // const fetchUserImage = async () => {
+      //    const response = await fetch(
+      //       `https://www.patreon.com/api/user/${data.requestor}`
+      //    );
+      //    const user = await response.json();
+      //    console.log("requestor: ", data.requestor);
+      //    console.log("user: ", user);
+      // };
+      // fetchUserImage();
+   }, []);
+
+   useEffect(() => {
       let filteredList = [...moviesList];
 
       if (filterOptions.votes === "most") {
@@ -285,11 +297,18 @@ const MovieList = ({ currentUser, isCreator }) => {
 
          <div>
             <input
-               className="border-[1px] border-black text-black px-[10px] py-[6px] mb-[20px] max-w-[250px] w-full"
+               className="border-[1px] border-black text-black px-[10px] py-[5px] mb-[20px] max-w-[250px] w-full"
                type="text"
                placeholder="Search requested movies"
+               value={searchTitle}
                onChange={(e) => setSearchTitle(e.target.value)}
             />
+            <button
+               onClick={() => setSearchTitle("")}
+               className="bg-black px-[10px] py-[5px]"
+            >
+               Clear
+            </button>
          </div>
          <table className="w-full">
             {tableHead}
