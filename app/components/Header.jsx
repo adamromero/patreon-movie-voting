@@ -7,7 +7,7 @@ import { Satisfy } from "next/font/google";
 
 const satisfy = Satisfy({
    subsets: ["latin"],
-   weight: ["400"],
+   weight: "400",
 });
 
 export async function Header() {
