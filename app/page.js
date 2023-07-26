@@ -20,7 +20,7 @@ export default async function Home() {
                   <>
                      <div className="mb-[20px]">
                         <h2 className="text-[20px] font-bold">
-                           Hi {user.firstName ? user.firstName : user.name}! 🙂
+                           Hi {user.firstName ? user.firstName : user.name}!
                         </h2>
                         <p>Begin voting and requesting movies.</p>
                      </div>

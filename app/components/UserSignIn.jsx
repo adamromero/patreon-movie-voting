@@ -31,7 +31,7 @@ const UserSignIn = ({ user }) => {
                   onClick={() => signIn("patreon")}
                   className="bg-[#ff424d] py-[8px] px-[10px] text-black rounded-sm"
                >
-                  Connect with Patreon
+                  Connect <span className="hidden sm:inline">with Patreon</span>
                </button>
             )}
          </div>

@@ -52,8 +52,9 @@ const SearchTitlesModal = ({ currentUser }) => {
    }, [title]);
 
    const isMovieInList = (selectedMovie) => {
-      return moviesList.filter((movie) => movie.imdbID === selectedMovie.imdbID)
-         .length;
+      return moviesList.filter(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).length;
    };
 
    const isMovieWatched = (selectedMovie) => {
@@ -70,7 +71,6 @@ const SearchTitlesModal = ({ currentUser }) => {
    };
 
    const handleMovieSelection = async (movie) => {
-      console.log(movie.imdbID);
       setImdbIDCollection({ [movie.imdbID]: true });
       createMovieVote(movie, currentUser);
    };

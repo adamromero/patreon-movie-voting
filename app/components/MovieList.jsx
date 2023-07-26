@@ -9,11 +9,15 @@ const MovieList = ({ currentUser, isCreator }) => {
       castMovieVote,
       removeMovieVote,
       filterOptions,
+      setFilterOptions,
       setMovieVoteToWatched,
    } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [searchTitle, setSearchTitle] = useState("");
+   const [isRequestFilterAscending, setIsRequestFilterAscending] =
+      useState(true);
+   const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
 
    useEffect(() => {
       getMovieVotes();
@@ -22,15 +26,31 @@ const MovieList = ({ currentUser, isCreator }) => {
    useEffect(() => {
       let filteredList = [...moviesList];
 
-      // if (filterOptions.votes === "most") {
-      //    filteredList = filteredList.sort(
-      //       (a, b) => b.voters.length - a.voters.length
-      //    );
-      // } else if (filterOptions.votes === "fewest") {
-      //    filteredList = filteredList.sort(
-      //       (a, b) => a.voters.length - b.voters.length
-      //    );
-      // }
+      if (filterOptions.votes === "most") {
+         filteredList = filteredList.sort(
+            (a, b) => b.voters.length - a.voters.length
+         );
+      } else if (filterOptions.votes === "fewest") {
+         filteredList = filteredList.sort(
+            (a, b) => a.voters.length - b.voters.length
+         );
+      }
+
+      if (filterOptions.alphabetical === "ascend") {
+         // filteredList = filteredList.sort((a, b) => {
+         //    if (a.data.Title > b.data.Title) {
+         //       return 1;
+         //    }
+         //    return 0;
+         // });
+      } else if (filterOptions.alphabetical === "descend") {
+         filteredList = filteredList.sort((a, b) => {
+            if (a.data.Title < b.data.Title) {
+               return -1;
+            }
+            return 0;
+         });
+      }
 
       if (filterOptions.genre === "action") {
          filteredList = filteredList.filter((movie) =>
@@ -142,8 +162,20 @@ const MovieList = ({ currentUser, isCreator }) => {
       }));
    };
 
-   const handleTitleFiltering = () => {
-      console.log("title filterering");
+   const handleTitleFilter = () => {
+      console.log("trigger title filter");
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         alphabetical: isTitleFilterAscending ? "ascend" : "descend",
+      }));
+   };
+
+   const handleRequestsFilter = () => {
+      console.log("requests filter");
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         votes: isRequestFilterAscending ? "most" : "fewest",
+      }));
    };
 
    const tableHead = (
@@ -153,19 +185,30 @@ const MovieList = ({ currentUser, isCreator }) => {
             <th className="md:w-[300px]">
                <button
                   className="w-full text-left p-[10px]"
-                  onClick={handleTitleFiltering}
+                  onClick={() => {
+                     setIsTitleFilterAscending(!isTitleFilterAscending);
+                     handleTitleFilter();
+                  }}
                >
                   Title
                </button>
             </th>
             <th className="hidden md:table-cell">
-               <button className="w-full text-left p-[10px]">Rating</button>
+               <div className="w-full text-left p-[10px]">Rating</div>
             </th>
             <th className="hidden md:table-cell">
-               <button className="w-full text-left p-[10px]">Genre</button>
+               <div className="w-full text-left p-[10px]">Genre</div>
             </th>
             <th>
-               <button className="w-full text-left p-[10px]">Requests</button>
+               <button
+                  onClick={() => {
+                     setIsRequestFilterAscending(!isRequestFilterAscending);
+                     handleRequestsFilter();
+                  }}
+                  className="w-full text-left p-[10px]"
+               >
+                  Requests
+               </button>
             </th>
             <th></th>
             {isCreator && <th>Watched</th>}

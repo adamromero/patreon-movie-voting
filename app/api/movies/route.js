@@ -16,9 +16,9 @@ export async function GET(req, res) {
 }
 
 export async function POST(req, res) {
-   console.log("POST method");
+   const selectedMovie = await req.json();
    try {
-      const movie = await Movie.create(req.body);
+      const movie = await Movie.create(selectedMovie);
       return NextResponse.json(movie);
    } catch (error) {
       return NextResponse.json({
@@ -28,22 +28,23 @@ export async function POST(req, res) {
 }
 
 export async function PUT(req, res) {
-   console.log("PUT method");
-   try {
-      const movie = await Movie.findByIdAndUpdate(req.body._id, req.body, {
-         new: true,
-         runValidators: true,
-      });
+   const updatedMovieVote = await req.json();
+   console.log(updatedMovieVote);
+   // try {
+   //    const movie = await Movie.findByIdAndUpdate(req.body._id, req.body, {
+   //       new: true,
+   //       runValidators: true,
+   //    });
 
-      if (!movie) {
-         throw new Error(
-            "Movie vote not found... something went really wrong."
-         );
-      }
-      return NextResponse.json(movie);
-   } catch (error) {
-      return NextResponse.json({
-         error: "Unable to update movie vote in the database.",
-      });
-   }
+   //    if (!movie) {
+   //       throw new Error(
+   //          "Movie vote not found... something went really wrong."
+   //       );
+   //    }
+   //    return NextResponse.json(movie);
+   // } catch (error) {
+   //    return NextResponse.json({
+   //       error: "Unable to update movie vote in the database.",
+   //    });
+   // }
 }
