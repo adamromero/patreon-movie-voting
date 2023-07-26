@@ -1,9 +1,8 @@
 "use client";
 import React, { useState, useEffect, useContext, useRef } from "react";
-//import { MovieContext } from "../context/MovieContext";
+import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
-import { data } from "../../data";
 
 const SearchTitlesModal = ({ currentUser }) => {
    const [input, setInput] = useState("");
@@ -11,8 +10,7 @@ const SearchTitlesModal = ({ currentUser }) => {
    const [movies, setMovies] = useState([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
-   //const { moviesList, createMovieVote } = useContext(MovieContext);
-   const [moviesList, setMoviesList] = useState(data || []);
+   const { moviesList, createMovieVote } = useContext(MovieContext);
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
 
@@ -54,17 +52,14 @@ const SearchTitlesModal = ({ currentUser }) => {
    }, [title]);
 
    const isMovieInList = (selectedMovie) => {
-      return moviesList.filter(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
-      ).length;
-      return false;
+      return moviesList.filter((movie) => movie.imdbID === selectedMovie.imdbID)
+         .length;
    };
 
    const isMovieWatched = (selectedMovie) => {
       return moviesList.find(
          (movie) => movie.data.imdbID === selectedMovie.imdbID
       ).isWatched;
-      return false;
    };
 
    const handleTitleSubmit = (e) => {
@@ -75,15 +70,14 @@ const SearchTitlesModal = ({ currentUser }) => {
    };
 
    const handleMovieSelection = async (movie) => {
+      console.log(movie.imdbID);
       setImdbIDCollection({ [movie.imdbID]: true });
-      console.log("Add this movie: ", movie);
-      // createMovieVote(movie, currentUser);
+      createMovieVote(movie, currentUser);
    };
 
    return (
       <div>
-         {/* <div className="p-[45px] fixed r shadow-2xl right-0 left-0 mx-auto shadow-black top-[50%] translate-y-[-50%] max-w-[1024px] w-full h-[85vh] bg-black border-[1px] border-white z-50 rounded-[16px]"> */}
-         <div className="flex flex-col sm:flex-row gap-2 items-center justify-center pb-[16px]">
+         <div className="flex flex-col sm:flex-row gap-2 items-center pb-[16px]">
             <form
                className="flex flex-col sm:flex-row gap-2"
                onSubmit={(e) => handleTitleSubmit(e)}
@@ -118,12 +112,6 @@ const SearchTitlesModal = ({ currentUser }) => {
                   placeholder="Year"
                />
             </form>
-            {/* <button
-               className="ml-auto px-3"
-               onClick={() => setIsModalOpen((isOpen) => !isOpen)}
-            >
-               <AiOutlineClose className="text-[25px] text-white" />
-            </button> */}
          </div>
          <div className="overflow-auto h-[65vh] relative no-scrollbar">
             {loading ? (

@@ -11,10 +11,6 @@ export default async function Home() {
       redirect("/denied");
    }
 
-   // const response = await fetch("/api/movies");
-   // const movies = await response.json();
-   // console.log(movies);
-
    return (
       <main>
          <Header />

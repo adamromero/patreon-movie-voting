@@ -1,57 +1,36 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-//import { MovieContext } from "../context/MovieContext";
-import { data } from "../../data";
+import { MovieContext } from "@/context/MovieContext";
 
 const MovieList = ({ currentUser, isCreator }) => {
-   //    const {
-   //       moviesList,
-   //       getMovieVotes,
-   //       castMovieVote,
-   //       removeMovieVote,
-   //       filterOptions,
-   //       setMovieVoteToWatched,
-   //    } = useContext(MovieContext);
-   const [moviesList, setMoviesList] = useState(data || []);
-   const [filterOptions, setFilterOptions] = useState({
-      votes: "most",
-      alphabetical: "",
-      chronological: "",
-      genre: "all",
-      status: "unwatched",
-   });
+   const {
+      moviesList,
+      getMovieVotes,
+      castMovieVote,
+      removeMovieVote,
+      filterOptions,
+      setMovieVoteToWatched,
+   } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [searchTitle, setSearchTitle] = useState("");
 
-   //    useEffect(() => {
-   //       getMovieVotes();
-   //    }, []);
-
    useEffect(() => {
-      // const fetchUserImage = async () => {
-      //    const response = await fetch(
-      //       `https://www.patreon.com/api/user/${data.requestor}`
-      //    );
-      //    const user = await response.json();
-      //    console.log("requestor: ", data.requestor);
-      //    console.log("user: ", user);
-      // };
-      // fetchUserImage();
+      getMovieVotes();
    }, []);
 
    useEffect(() => {
       let filteredList = [...moviesList];
 
-      if (filterOptions.votes === "most") {
-         filteredList = filteredList.sort(
-            (a, b) => b.voters.length - a.voters.length
-         );
-      } else if (filterOptions.votes === "fewest") {
-         filteredList = filteredList.sort(
-            (a, b) => a.voters.length - b.voters.length
-         );
-      }
+      // if (filterOptions.votes === "most") {
+      //    filteredList = filteredList.sort(
+      //       (a, b) => b.voters.length - a.voters.length
+      //    );
+      // } else if (filterOptions.votes === "fewest") {
+      //    filteredList = filteredList.sort(
+      //       (a, b) => a.voters.length - b.voters.length
+      //    );
+      // }
 
       if (filterOptions.genre === "action") {
          filteredList = filteredList.filter((movie) =>
@@ -147,16 +126,16 @@ const MovieList = ({ currentUser, isCreator }) => {
    }, [filteredMoviesList]);
 
    const handleCastVote = async (movieId, voters) => {
-      //castMovieVote(movieId, voters, currentUser);
+      castMovieVote(movieId, voters, currentUser);
    };
 
    const handleRemoveVote = async (movieId, voters) => {
-      //removeMovieVote(movieId, voters, currentUser);
+      removeMovieVote(movieId, voters, currentUser);
    };
 
    const handleWatchSetting = (e, data) => {
       const isChecked = e.target.checked;
-      //setMovieVoteToWatched(data._id, isChecked);
+      setMovieVoteToWatched(data._id, isChecked);
       setWatchedState((prevState) => ({
          ...prevState,
          [data._id]: isChecked,

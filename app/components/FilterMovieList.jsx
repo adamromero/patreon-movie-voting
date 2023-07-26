@@ -1,16 +1,9 @@
 "use client";
-import React, { useState, useContext } from "react";
-// import { MovieContext } from "../context/MovieContext";
+import React, { useContext } from "react";
+import { MovieContext } from "@/context/MovieContext";
 
 const FilterMovieList = () => {
-   //const { setFilterOptions } = useContext(MovieContext);
-   const [filterOptions, setFilterOptions] = useState({
-      votes: "most",
-      alphabetical: "",
-      chronological: "",
-      genre: "all",
-      status: "unwatched",
-   });
+   const { setFilterOptions } = useContext(MovieContext);
 
    const handleVotesFilter = (e) => {
       const selection = e.target.value;
