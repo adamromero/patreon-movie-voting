@@ -6,13 +6,13 @@ connectDB();
 
 export async function PUT(req, res) {
    const updatedVote = await req.json();
+
    try {
       const movie = await Movie.findByIdAndUpdate(
          updatedVote._id,
          updatedVote,
          {
             new: true,
-            runValidators: true,
          }
       );
 

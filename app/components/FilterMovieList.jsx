@@ -30,7 +30,7 @@ const FilterMovieList = () => {
    };
 
    return (
-      <div className="flex gap-[20px] max-w-[700px] w-full text-white hidden md:flex">
+      <div className="flex gap-[20px] max-w-[700px] mb-[15px] w-full text-white hidden md:flex">
          <div>
             <label htmlFor="chronological">Chronological</label>
             <br />

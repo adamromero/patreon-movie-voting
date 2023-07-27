@@ -316,20 +316,9 @@ const MovieList = ({ currentUser, isCreator }) => {
 
    return (
       <>
-         <div className="flex gap-3 mt-[10px] mb-[20px]">
-            <div>Total count: {moviesList.length}</div>
-            <div>
-               Not watched:{" "}
-               {moviesList.filter((movie) => !movie.isWatched).length}
-            </div>
-            <div>
-               Watched: {moviesList.filter((movie) => movie.isWatched).length}
-            </div>
-         </div>
-
-         <div>
+         <div className="mb-[15px]">
             <input
-               className="border-[1px] border-black text-black px-[10px] py-[5px] mb-[20px] max-w-[250px] w-full"
+               className="border-[1px] border-black text-black px-[10px] py-[5px] max-w-[250px] w-full"
                type="text"
                placeholder="Search requested movies"
                value={searchTitle}
@@ -341,6 +330,16 @@ const MovieList = ({ currentUser, isCreator }) => {
             >
                Clear
             </button>
+         </div>
+         <div className="flex gap-3 mb-[10px]">
+            <div>Total count: {moviesList.length}</div>
+            <div>
+               Not watched:{" "}
+               {moviesList.filter((movie) => !movie.isWatched).length}
+            </div>
+            <div>
+               Watched: {moviesList.filter((movie) => movie.isWatched).length}
+            </div>
          </div>
          <table className="w-full">
             {tableHead}
