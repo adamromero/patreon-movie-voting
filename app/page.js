@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import RequestMovies from "./components/RequestMovies";
 import MovieList from "./components/MovieList";
 import FilterMovieList from "./components/FilterMovieList";
+import FilterTags from "./components/FilterTags";
 
 export default async function Home() {
    const user = await getCurrentUser();
@@ -36,14 +37,15 @@ export default async function Home() {
                   </div>
                )}
                <FilterMovieList />
-               <div className="flex justify-between max-w-[500px] mx-auto">
+               <FilterTags />
+               {/* <div className="flex justify-between max-w-[500px] mx-auto">
                   <button className="bg-black text-[20px] px-[10px]">
                      &lt;
                   </button>
                   <button className="bg-black text-[20px] px-[10px]">
                      &gt;
                   </button>
-               </div>
+               </div> */}
                <MovieList
                   currentUser={user && user.id}
                   isCreator={user && user.creatorId === user.id}

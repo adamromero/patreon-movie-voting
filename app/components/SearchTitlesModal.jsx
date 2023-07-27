@@ -52,12 +52,12 @@ const SearchTitlesModal = ({ currentUser }) => {
                }, {});
 
                setImdbIDCollection(result);
-               setLoading(false);
+               setInput("");
             } else {
                setMovies([]);
                setError(data.Error);
-               setLoading(false);
             }
+            setLoading(false);
          }
       };
       if (inputRef.current) {
@@ -76,14 +76,14 @@ const SearchTitlesModal = ({ currentUser }) => {
             if (data.Response === "True") {
                if (data.Type === "movie" || data.Type === "series") {
                   setMovies([data]);
+                  setInputTitle("");
+                  setInputYear("");
                }
-
-               setLoading(false);
             } else {
                setMovies([]);
                setError(data.Error);
-               setLoading(false);
             }
+            setLoading(false);
          }
       };
 
@@ -200,12 +200,14 @@ const SearchTitlesModal = ({ currentUser }) => {
                         className="flex-1 border-[1px] border-black text-black px-2"
                         type="text"
                         placeholder="Title"
+                        value={inputTitle}
                         onChange={(e) => setInputTitle(e.target.value)}
                      />
                      <input
                         className="border-[1px] border-black text-black px-2 w-[80px]"
                         type="text"
                         placeholder="Year"
+                        value={inputYear}
                         maxLength="4"
                         onChange={(e) => setInputYear(e.target.value)}
                      />
