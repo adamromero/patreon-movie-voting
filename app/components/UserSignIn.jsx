@@ -20,7 +20,7 @@ const UserSignIn = ({ user }) => {
                         alt={user.name}
                         width={40}
                         height={40}
-                        className="rounded-full"
+                        className="rounded-full max-w-[40px]"
                      />
 
                      <span className="hidden sm:block">{user.name}</span>

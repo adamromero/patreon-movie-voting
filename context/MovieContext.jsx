@@ -84,26 +84,47 @@ export const MovieProvider = ({ children }) => {
       const removeMovieVote = moviesList.find((movie) => movie._id === movieId);
       const updatedMovieVote = { ...removeMovieVote, voters: newVoters };
 
-      const config = {
-         method: "PUT",
-         headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify(updatedMovieVote),
-      };
+      if (voters.length === 1) {
+         try {
+            const response = await fetch(`/api/movies/${movieId}`, {
+               method: "DELETE",
+               headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify(movieId),
+            });
 
-      const updatedMoviesList = moviesList.map((movie) => {
-         return movie._id === movieId ? updatedMovieVote : movie;
-      });
+            const deletedMovie = await response.json();
+            const updatedMoviesList = moviesList.filter(
+               (movie) => movie._id !== deletedMovie._id
+            );
+            setMoviesList(updatedMoviesList);
+         } catch (e) {
+            return e;
+         }
+      } else {
+         const config = {
+            method: "PUT",
+            headers: {
+               Accept: "application/json",
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedMovieVote),
+         };
 
-      try {
-         const response = await fetch(`/api/movies/${movieId}`, config);
-         const data = await response.json();
-         setMoviesList(updatedMoviesList);
-         return data;
-      } catch (e) {
-         return e;
+         const updatedMoviesList = moviesList.map((movie) => {
+            return movie._id === movieId ? updatedMovieVote : movie;
+         });
+
+         try {
+            const response = await fetch(`/api/movies/${movieId}`, config);
+            const data = await response.json();
+            setMoviesList(updatedMoviesList);
+            return data;
+         } catch (e) {
+            return e;
+         }
       }
    };
 

@@ -16,8 +16,8 @@ export async function GET(req, res) {
 }
 
 export async function POST(req, res) {
-   const selectedMovie = await req.json();
    try {
+      const selectedMovie = await req.json();
       const movie = await Movie.create(selectedMovie);
       return NextResponse.json(movie);
    } catch (error) {
