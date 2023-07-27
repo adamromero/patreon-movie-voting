@@ -236,8 +236,8 @@ const MovieList = ({ currentUser, isCreator }) => {
                      className="text-center md:text-left text-[12px] md:text-[16px]"
                      style={{
                         marginBottom: "20px",
-                        backgroundColor: data.isWatched ? "gray" : "#000",
-                        color: data.isWatched ? "#d6d6d6" : "#fff",
+                        backgroundColor: data.isWatched ? "none" : "#000",
+                        color: data.isWatched ? "#000" : "#fff",
                         position: "relative",
                      }}
                   >

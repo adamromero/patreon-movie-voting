@@ -26,26 +26,3 @@ export async function POST(req, res) {
       });
    }
 }
-
-export async function PUT(req, res) {
-   console.log(req.url);
-   const updatedMovieVote = await req.json();
-   console.log(updatedMovieVote);
-   // try {
-   //    const movie = await Movie.findByIdAndUpdate(req.body._id, req.body, {
-   //       new: true,
-   //       runValidators: true,
-   //    });
-
-   //    if (!movie) {
-   //       throw new Error(
-   //          "Movie vote not found... something went really wrong."
-   //       );
-   //    }
-   //    return NextResponse.json(movie);
-   // } catch (error) {
-   //    return NextResponse.json({
-   //       error: "Unable to update movie vote in the database.",
-   //    });
-   // }
-}

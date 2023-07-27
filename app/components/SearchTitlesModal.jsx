@@ -7,6 +7,10 @@ import { AiOutlineClose } from "react-icons/ai";
 const SearchTitlesModal = ({ currentUser }) => {
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
+   const [inputTitle, setInputTitle] = useState("");
+   const [inputYear, setInputYear] = useState("");
+   const [searchTitle, setSearchTitle] = useState("");
+   const [searchYear, setSearchYear] = useState("");
    const [movies, setMovies] = useState([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
@@ -36,7 +40,6 @@ const SearchTitlesModal = ({ currentUser }) => {
                }, {});
 
                setImdbIDCollection(result);
-
                setLoading(false);
             } else {
                setMovies([]);
@@ -50,6 +53,30 @@ const SearchTitlesModal = ({ currentUser }) => {
       }
       fetchMovieTitles();
    }, [title]);
+
+   useEffect(() => {
+      const fetchTitleByYear = async () => {
+         if (searchTitle && searchYear) {
+            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&t=${searchTitle}&y=${searchYear}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            if (data.Response === "True") {
+               if (data.Type === "movie" || data.Type === "series") {
+                  setMovies([data]);
+               }
+
+               setLoading(false);
+            } else {
+               setMovies([]);
+               setError(data.Error);
+               setLoading(false);
+            }
+         }
+      };
+
+      fetchTitleByYear();
+   }, [searchTitle, searchYear]);
 
    const isMovieInList = (selectedMovie) => {
       return moviesList.filter(
@@ -70,6 +97,12 @@ const SearchTitlesModal = ({ currentUser }) => {
       }
    };
 
+   const handleTitleYearSubmit = (e) => {
+      e.preventDefault();
+      if (inputTitle) setSearchTitle(inputTitle);
+      if (inputYear) setSearchYear(inputYear);
+   };
+
    const handleMovieSelection = async (movie) => {
       setImdbIDCollection({ [movie.imdbID]: true });
       createMovieVote(movie, currentUser);
@@ -87,7 +120,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                   type="text"
                   name=""
                   id=""
-                  placeholder="Search titles"
+                  placeholder="Search Titles"
                   value={input}
                   ref={inputRef}
                   onChange={(e) => setInput(e.target.value)}
@@ -99,17 +132,27 @@ const SearchTitlesModal = ({ currentUser }) => {
                />
             </form>
             <div>or</div>
-
-            <form>
+            <form
+               onSubmit={(e) => handleTitleYearSubmit(e)}
+               className="flex flex-col sm:flex-row gap-2"
+            >
                <input
                   className="border-[1px] border-black text-black px-2"
                   type="text"
-                  placeholder="Search title by year"
+                  placeholder="Title"
+                  onChange={(e) => setInputTitle(e.target.value)}
                />
                <input
-                  className="border-[1px] border-black text-black px-2"
+                  className="border-[1px] border-black text-black px-2 w-[80px]"
                   type="text"
                   placeholder="Year"
+                  maxLength="4"
+                  onChange={(e) => setInputYear(e.target.value)}
+               />
+               <input
+                  className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+                  type="submit"
+                  value="Submit"
                />
             </form>
          </div>

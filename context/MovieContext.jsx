@@ -6,8 +6,6 @@ export const MovieContext = createContext();
 
 export const MovieProvider = ({ children }) => {
    const [moviesList, setMoviesList] = useState([]);
-   //const [voteFilter, setVoteFilter] = useState("all");
-
    const [filterOptions, setFilterOptions] = useState({
       votes: "most",
       alphabetical: "ascend",
@@ -54,7 +52,6 @@ export const MovieProvider = ({ children }) => {
    };
 
    const castMovieVote = async (movieId, voters, currentUser) => {
-      console.log("cast movie vote in context");
       const newVoters = [...voters, currentUser];
       const votedMovie = moviesList.find((movie) => movie._id === movieId);
       const updatedMovieVote = { ...votedMovie, voters: newVoters };
