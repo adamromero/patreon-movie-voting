@@ -13,7 +13,7 @@ const UserSignIn = ({ user }) => {
                <div className="relative">
                   <button
                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                     className="flex items-center gap-[10px] py-[8px] px-[12px] border-[1px] border-[#2a2a2a] rounded-[5px]"
+                     className="flex items-center gap-[10px] py-[8px] px-[12px] sm:hover:bg-[#1a1a1a] sm:focus:bg-[#1a1a1a] rounded-[5px]"
                   >
                      <Image
                         src={user.image}

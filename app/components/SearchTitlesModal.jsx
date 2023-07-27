@@ -220,7 +220,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                </form>
             )}
          </div>
-         <div className="overflow-auto h-[65vh] relative no-scrollbar">
+         <div className="overflow-auto h-[75vh] relative no-scrollbar">
             {loading ? (
                <div className="loader"></div>
             ) : (
