@@ -1,10 +1,17 @@
 "use client";
-import React, { useState, useEffect, useContext, useRef } from "react";
+
+import React, {
+   useState,
+   useEffect,
+   useContext,
+   useRef,
+   useCallback,
+} from "react";
 import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { AiOutlineClose } from "react-icons/ai";
 
 const SearchTitlesModal = ({ currentUser }) => {
+   const mobileBreakPoint = 640;
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [inputTitle, setInputTitle] = useState("");
@@ -17,6 +24,10 @@ const SearchTitlesModal = ({ currentUser }) => {
    const { moviesList, createMovieVote } = useContext(MovieContext);
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
+   const [isSearchByYear, setIsSearchByYear] = useState(true);
+   const [isDesktopView, setIsDesktopView] = useState(
+      window.innerWidth >= mobileBreakPoint
+   );
 
    const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
 
@@ -78,6 +89,18 @@ const SearchTitlesModal = ({ currentUser }) => {
       fetchTitleByYear();
    }, [searchTitle, searchYear]);
 
+   const handleWindowResize = useCallback(() => {
+      setIsDesktopView(window.innerWidth >= mobileBreakPoint);
+   }, []);
+
+   useEffect(() => {
+      window.addEventListener("resize", handleWindowResize);
+
+      return () => {
+         window.removeEventListener("resize", handleWindowResize);
+      };
+   }, [handleWindowResize]);
+
    const isMovieInList = (selectedMovie) => {
       return moviesList.filter(
          (movie) => movie.data.imdbID === selectedMovie.imdbID
@@ -111,50 +134,64 @@ const SearchTitlesModal = ({ currentUser }) => {
    return (
       <div>
          <div className="flex flex-col sm:flex-row gap-2 items-center pb-[16px]">
-            <form
-               className="flex flex-col sm:flex-row gap-2"
-               onSubmit={(e) => handleTitleSubmit(e)}
+            <button
+               onClick={() => setIsSearchByYear(!isSearchByYear)}
+               className="block sm:hidden bg-[#830483] text-white cursor-pointer py-1 px-3"
             >
-               <input
-                  className="border-[1px] border-black text-black px-2"
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Search Titles"
-                  value={input}
-                  ref={inputRef}
-                  onChange={(e) => setInput(e.target.value)}
-               />
-               <input
-                  className="bg-[#830483] text-white cursor-pointer py-1 px-3"
-                  type="submit"
-                  value="Submit"
-               />
-            </form>
-            <div>or</div>
-            <form
-               onSubmit={(e) => handleTitleYearSubmit(e)}
-               className="flex flex-col sm:flex-row gap-2"
-            >
-               <input
-                  className="border-[1px] border-black text-black px-2"
-                  type="text"
-                  placeholder="Title"
-                  onChange={(e) => setInputTitle(e.target.value)}
-               />
-               <input
-                  className="border-[1px] border-black text-black px-2 w-[80px]"
-                  type="text"
-                  placeholder="Year"
-                  maxLength="4"
-                  onChange={(e) => setInputYear(e.target.value)}
-               />
-               <input
-                  className="bg-[#830483] text-white cursor-pointer py-1 px-3"
-                  type="submit"
-                  value="Submit"
-               />
-            </form>
+               {isSearchByYear ? <>Search by Year</> : <>Search by Titles</>}
+            </button>
+            {(isSearchByYear || isDesktopView) && (
+               <form
+                  className="flex flex-col sm:flex-row gap-2 w-full sm:w-[initial]"
+                  onSubmit={(e) => handleTitleSubmit(e)}
+               >
+                  <input
+                     className="border-[1px] border-black text-black px-2"
+                     type="text"
+                     name=""
+                     id=""
+                     placeholder="Search Titles"
+                     value={input}
+                     ref={inputRef}
+                     onChange={(e) => setInput(e.target.value)}
+                  />
+                  <input
+                     className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+                     type="submit"
+                     value="Submit"
+                  />
+               </form>
+            )}
+
+            <div className="hidden sm:block">or</div>
+
+            {(!isSearchByYear || isDesktopView) && (
+               <form
+                  onSubmit={(e) => handleTitleYearSubmit(e)}
+                  className="flex flex-col sm:flex-row gap-2 w-full sm:w-[initial]"
+               >
+                  <div className="flex w-full gap-[5px]">
+                     <input
+                        className="flex-1 border-[1px] border-black text-black px-2"
+                        type="text"
+                        placeholder="Title"
+                        onChange={(e) => setInputTitle(e.target.value)}
+                     />
+                     <input
+                        className="border-[1px] border-black text-black px-2 w-[80px]"
+                        type="text"
+                        placeholder="Year"
+                        maxLength="4"
+                        onChange={(e) => setInputYear(e.target.value)}
+                     />
+                  </div>
+                  <input
+                     className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+                     type="submit"
+                     value="Submit"
+                  />
+               </form>
+            )}
          </div>
          <div className="overflow-auto h-[65vh] relative no-scrollbar">
             {loading ? (
