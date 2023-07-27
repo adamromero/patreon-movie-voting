@@ -241,7 +241,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                         position: "relative",
                      }}
                   >
-                     <td>{index + 1}</td>
+                     {/* <td>{index + 1}</td> */}
                      <td className="">
                         <a
                            href={`https://www.imdb.com/title/${data.data.imdbID}`}
