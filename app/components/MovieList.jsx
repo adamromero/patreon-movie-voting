@@ -230,7 +230,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       <tbody>
          {filteredMoviesList.length ? (
             <>
-               {filteredMoviesList.map((data) => (
+               {filteredMoviesList.map((data, index) => (
                   <tr
                      key={data._id}
                      className="text-center md:text-left text-[12px] md:text-[16px]"
@@ -241,6 +241,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                         position: "relative",
                      }}
                   >
+                     <td>{index + 1}</td>
                      <td className="">
                         <a
                            href={`https://www.imdb.com/title/${data.data.imdbID}`}

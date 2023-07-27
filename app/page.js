@@ -21,8 +21,8 @@ export default async function Home() {
                      <div className="mb-[20px]">
                         <h2 className="text-[20px] font-bold">
                            Hi {user.firstName ? user.firstName : user.name}!
+                           Begin voting and requesting movies.
                         </h2>
-                        <p>Begin voting and requesting movies.</p>
                      </div>
                      <RequestMovies currentUser={user.id} />
                   </>
@@ -36,6 +36,14 @@ export default async function Home() {
                   </div>
                )}
                <FilterMovieList />
+               <div className="flex justify-between max-w-[500px] mx-auto">
+                  <button className="bg-black text-[20px] px-[10px]">
+                     &lt;
+                  </button>
+                  <button className="bg-black text-[20px] px-[10px]">
+                     &gt;
+                  </button>
+               </div>
                <MovieList
                   currentUser={user && user.id}
                   isCreator={user && user.creatorId === user.id}

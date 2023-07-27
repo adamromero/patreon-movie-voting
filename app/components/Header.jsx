@@ -20,7 +20,7 @@ export async function Header() {
                <div className="flex-1 hidden sm:block"></div>
                <div className="flex items-center gap-[20px]">
                   <div className="flex gap-[5px]">
-                     <a href="https://patreon.com/" target="_blank">
+                     <a href="https://www.patreon.com/" target="_blank">
                         <BiLogoPatreon className="text-white text-[20px] sm:text-[32px]" />
                      </a>
                      <a href="https://www.youtube.com/" target="_blank">
@@ -28,7 +28,7 @@ export async function Header() {
                      </a>
                   </div>
                   <div>
-                     <h1 className="text-[22px] sm:text-[38px] flex text-white">
+                     <h1 className="text-[22px] sm:text-[35px] flex text-white">
                         <span className={satisfy.className}>
                            Let My Patrons Decide
                         </span>

@@ -21,7 +21,8 @@ const SearchTitlesModal = ({ currentUser }) => {
    const [movies, setMovies] = useState([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
-   const { moviesList, createMovieVote } = useContext(MovieContext);
+   const { moviesList, createMovieVote, castMovieVote, removeMovieVote } =
+      useContext(MovieContext);
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
    const [isSearchByYear, setIsSearchByYear] = useState(true);
@@ -131,6 +132,30 @@ const SearchTitlesModal = ({ currentUser }) => {
       createMovieVote(movie, currentUser);
    };
 
+   const isMovieVotedByUser = (selectedMovie) => {
+      return moviesList.find((movie) => {
+         if (movie.data.imdbID === selectedMovie.imdbID) {
+            return movie.voters.filter((voter) => voter === currentUser).length;
+         }
+      });
+   };
+
+   const handleRemoveVote = (selectedMovie) => {
+      return moviesList.find((movie) => {
+         if (movie.data.imdbID === selectedMovie.imdbID) {
+            removeMovieVote(movie._id, movie.voters, currentUser);
+         }
+      });
+   };
+
+   const handleCastVote = (selectedMovie) => {
+      return moviesList.find((movie) => {
+         if (movie.data.imdbID === selectedMovie.imdbID) {
+            castMovieVote(movie._id, movie.voters, currentUser);
+         }
+      });
+   };
+
    return (
       <div>
          <div className="flex flex-col sm:flex-row gap-2 items-center pb-[16px]">
@@ -205,9 +230,9 @@ const SearchTitlesModal = ({ currentUser }) => {
                               <div
                                  className={`${
                                     isMovieWatched(movie)
-                                       ? "text-[#8d8d8d]"
+                                       ? "text-[#8d8d8d] cursor-not-allowed"
                                        : "text-white"
-                                 } relative cursor-not-allowed`}
+                                 } relative`}
                               >
                                  {movie.Poster === "N/A" ? (
                                     <div className="w-[175px] h-[285px] bg-slate-400 flex items-center justify-center mx-auto"></div>
@@ -237,6 +262,27 @@ const SearchTitlesModal = ({ currentUser }) => {
                                              ? "Watched"
                                              : "Pending"}
                                        </div>
+
+                                       {!isMovieWatched(movie) &&
+                                          (isMovieVotedByUser(movie) ? (
+                                             <button
+                                                onClick={() =>
+                                                   handleRemoveVote(movie)
+                                                }
+                                                className="bg-[gray] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                             >
+                                                Retract
+                                             </button>
+                                          ) : (
+                                             <button
+                                                onClick={() =>
+                                                   handleCastVote(movie)
+                                                }
+                                                className="bg-[#830483] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                             >
+                                                Request
+                                             </button>
+                                          ))}
                                     </div>
                                  </div>
                                  <div
