@@ -6,20 +6,37 @@ const FilterMovieList = () => {
    const mobileBreakPoint = 640;
    const { setFilterOptions } = useContext(MovieContext);
    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-   const [isDesktopView, setIsDesktopView] = useState(
-      typeof window !== "undefined" && window.innerWidth >= mobileBreakPoint
-   );
-   const handleWindowResize = useCallback(() => {
-      setIsDesktopView(window.innerWidth >= mobileBreakPoint);
-   }, []);
+   const isDesktopView = true;
+   // const [isDesktopView, setIsDesktopView] = useState(
+   //    typeof window !== "undefined" && window.innerWidth >= mobileBreakPoint
+   // );
+   // const handleWindowResize = useCallback(() => {
+   //    setIsDesktopView(window.innerWidth >= mobileBreakPoint);
+   // }, []);
 
-   useEffect(() => {
-      window.addEventListener("resize", handleWindowResize);
+   // useEffect(() => {
+   //    window.addEventListener("resize", handleWindowResize);
 
-      return () => {
-         window.removeEventListener("resize", handleWindowResize);
-      };
-   }, [handleWindowResize]);
+   //    return () => {
+   //       window.removeEventListener("resize", handleWindowResize);
+   //    };
+   // }, [handleWindowResize]);
+
+   const handleChronologicalFilter = (e) => {
+      const selection = e.target.value;
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         chronological: selection,
+      }));
+   };
+
+   const handleAddedFilter = (e) => {
+      const selection = e.target.value;
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         added: selection,
+      }));
+   };
 
    const handleTypeFilter = (e) => {
       const selection = e.target.value;
@@ -57,57 +74,49 @@ const FilterMovieList = () => {
          {(isMobileFiltersOpen || isDesktopView) && (
             <div className="flex flex-col mt-[10px] mb-[15px] sm:mt-0 sm:flex-row gap-[10px] max-w-[700px] w-full text-white flex">
                <div>
-                  <label className="hidden sm:block" htmlFor="chronological">
-                     Chronological
-                  </label>
                   <select
                      className="bg-black text-white w-full sm:w-[125px] p-[5px]"
                      name="chronologicalFilter"
                      id="chronological"
+                     onChange={handleChronologicalFilter}
                   >
-                     <option value="">Older</option>
-                     <option value="">Newer</option>
+                     <option value="">Chronological</option>
+                     <option value="older">Older</option>
+                     <option value="newer">Newer</option>
                   </select>
                </div>
                <div>
-                  <label className="hidden sm:block" htmlFor="added">
-                     Order added
-                  </label>
                   <select
                      className="bg-black text-white w-full sm:w-[125px] p-[5px]"
                      name="addedFilter"
                      id="added"
+                     onChange={handleAddedFilter}
                   >
-                     <option value="">Older</option>
-                     <option value="">Newer</option>
+                     <option value="">Order added</option>
+                     <option value="older">Older</option>
+                     <option value="newer">Newer</option>
                   </select>
                </div>
                <div>
-                  <label className="hidden sm:block" htmlFor="type">
-                     Type
-                  </label>
                   <select
                      className="bg-black text-white w-full sm:w-[125px] p-[5px]"
                      name="typeFilter"
                      id="type"
                      onChange={handleTypeFilter}
                   >
-                     <option value="all">All</option>
+                     <option value="">Type</option>
                      <option value="movie">Movie</option>
                      <option value="series">Series</option>
                   </select>
                </div>
                <div>
-                  <label className="hidden sm:block" htmlFor="genre">
-                     Genre
-                  </label>
                   <select
                      className="bg-black text-white w-full sm:w-[125px] p-[5px]"
                      name="genreFilter"
                      id="genre"
                      onChange={handleGenreFilter}
                   >
-                     <option value="all">All</option>
+                     <option value="">Genre</option>
                      <option value="action">Action</option>
                      <option value="animation">Animation</option>
                      <option value="bio">Biography</option>
@@ -128,9 +137,6 @@ const FilterMovieList = () => {
                   </select>
                </div>
                <div>
-                  <label className="hidden sm:block" htmlFor="status">
-                     Status
-                  </label>
                   <select
                      className="bg-black text-white w-full sm:w-[125px] p-[5px]"
                      name="statusFilter"
@@ -138,7 +144,7 @@ const FilterMovieList = () => {
                      onChange={handleWatchedFilter}
                      defaultValue="unwatched"
                   >
-                     <option value="all">All</option>
+                     <option value="">Status</option>
                      <option value="watched">Watched</option>
                      <option value="unwatched">Unwatched</option>
                   </select>

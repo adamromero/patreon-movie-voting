@@ -51,6 +51,26 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          });
       }
 
+      if (filterOptions.chronological === "older") {
+         filteredList = filteredList.sort(
+            (a, b) => parseInt(a.data.Year) - parseInt(b.data.Year)
+         );
+      } else if (filterOptions.chronological === "newer") {
+         filteredList = filteredList.sort(
+            (a, b) => parseInt(b.data.Year) - parseInt(a.data.Year)
+         );
+      }
+
+      if (filterOptions.added === "older") {
+         filteredList = filteredList.sort(
+            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+         );
+      } else if (filterOptions.added === "newer") {
+         filteredList = filteredList.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+         );
+      }
+
       if (filterOptions.type === "movie") {
          // filteredList = filteredList.filter((movie) =>
          //    movie.data.Type.includes("movie")

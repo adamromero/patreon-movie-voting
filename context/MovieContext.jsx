@@ -7,11 +7,12 @@ export const MovieContext = createContext();
 export const MovieProvider = ({ children }) => {
    const [moviesList, setMoviesList] = useState([]);
    const [filterOptions, setFilterOptions] = useState({
-      votes: "most",
       alphabetical: "",
+      votes: "most",
       chronological: "",
-      type: "all",
-      genre: "all",
+      added: "",
+      type: "",
+      genre: "",
       status: "unwatched",
    });
 
