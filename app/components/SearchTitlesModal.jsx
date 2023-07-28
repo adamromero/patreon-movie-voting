@@ -25,6 +25,7 @@ const SearchTitlesModal = ({ currentUser }) => {
       useContext(MovieContext);
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
+   const [disabledButtonStates, setDisabledButtonStates] = useState({});
    const [isSearchByYear, setIsSearchByYear] = useState(true);
    const [isDesktopView, setIsDesktopView] = useState(
       window.innerWidth >= mobileBreakPoint
@@ -52,6 +53,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                }, {});
 
                setImdbIDCollection(result);
+               setDisabledButtonStates(result);
                setInput("");
             } else {
                setMovies([]);
@@ -129,6 +131,7 @@ const SearchTitlesModal = ({ currentUser }) => {
 
    const handleMovieSelection = async (movie) => {
       setImdbIDCollection({ [movie.imdbID]: true });
+      setDisabledButtonStates({ [movie.imdbID]: true });
       createMovieVote(movie, currentUser);
    };
 
@@ -299,6 +302,9 @@ const SearchTitlesModal = ({ currentUser }) => {
                                  <button
                                     className="block"
                                     onClick={() => handleMovieSelection(movie)}
+                                    disabled={
+                                       disabledButtonStates[movie.imdbID]
+                                    }
                                  >
                                     {movie.Poster === "N/A" ? (
                                        <div className="w-[175px] h-[285px] bg-slate-400 flex items-center justify-center mx-auto"></div>
