@@ -1,10 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { FiLogOut } from "react-icons/fi";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 import { signIn, signOut } from "next-auth/react";
 
 const UserSignIn = ({ user }) => {
    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+   const handleOutsideClick = () => {
+      setIsDropdownOpen(false);
+   };
+   const ref = useOutsideClick(handleOutsideClick);
 
    return (
       <div className="text-[14px] md:text-[16px]">
@@ -12,8 +18,9 @@ const UserSignIn = ({ user }) => {
             {user ? (
                <div className="relative">
                   <button
+                     ref={ref}
                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                     className="flex items-center gap-[10px] py-[8px] px-[12px] sm:hover:bg-[#1a1a1a] sm:focus:bg-[#1a1a1a] rounded-[5px]"
+                     className="flex items-center gap-[10px] py-[8px] px-[12px] sm:hover:bg-[#1a1a1a] sm:focus-visible:bg-[#1a1a1a] rounded-[5px]"
                   >
                      <Image
                         src={user.image}
@@ -27,9 +34,10 @@ const UserSignIn = ({ user }) => {
                   </button>
                   {isDropdownOpen && (
                      <button
-                        className="absolute top-[60px] right-0 bg-white hover:bg-[gray] text-black w-[100px] p-[5px]"
+                        className="absolute top-[60px] right-0 bg-white hover:bg-[#a9a9a9] text-black w-[110px] px-[10px] py-[5px] flex justify-center items-center gap-[5px]"
                         onClick={() => signOut()}
                      >
+                        <FiLogOut />
                         Sign Out
                      </button>
                   )}
