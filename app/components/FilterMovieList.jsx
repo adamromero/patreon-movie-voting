@@ -7,9 +7,8 @@ const FilterMovieList = () => {
    const { setFilterOptions } = useContext(MovieContext);
    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
    const [isDesktopView, setIsDesktopView] = useState(
-      window.innerWidth >= mobileBreakPoint
+      typeof window !== "undefined" && window.innerWidth >= mobileBreakPoint
    );
-
    const handleWindowResize = useCallback(() => {
       setIsDesktopView(window.innerWidth >= mobileBreakPoint);
    }, []);
@@ -52,7 +51,7 @@ const FilterMovieList = () => {
             className="block sm:hidden bg-black w-full p-[5px]"
             onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
          >
-            Filters
+            {isMobileFiltersOpen ? <>Close Filters</> : <>Open Filters</>}
          </button>
 
          {(isMobileFiltersOpen || isDesktopView) && (
