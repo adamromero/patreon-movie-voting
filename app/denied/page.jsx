@@ -8,16 +8,16 @@ const DeniedPage = () => {
          <ul className="flex flex-col list-disc list-inside sm:ml-[40px]">
             <li>
                Be a current patron of this channel. If you currently are not,
-               join here:{" "}
+               please join here:
                <a
                   className="max-w-[75px] m-[20px] ml-[22px] text-center bg-black px-[10px] py-[8px] block"
                   href="/"
                   target="_blank"
                >
                   Join
-               </a>{" "}
+               </a>
             </li>
-            <li>
+            {/* <li>
                Have your pledges be public. Your pledges visibility settings can
                be updated here:{" "}
                <a
@@ -27,7 +27,7 @@ const DeniedPage = () => {
                >
                   Update Settings
                </a>
-            </li>
+            </li> */}
          </ul>
          <a
             className="sm:max-w-[200px] w-full mx-auto text-center bg-black px-[10px] py-[8px] block"

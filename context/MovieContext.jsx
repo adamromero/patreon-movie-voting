@@ -9,8 +9,8 @@ export const MovieProvider = ({ children }) => {
    const [filterOptions, setFilterOptions] = useState({
       alphabetical: "",
       votes: "most",
-      chronological: "",
-      added: "",
+      chronological: "chronological",
+      added: "added",
       type: "",
       genre: "",
       status: "unwatched",
