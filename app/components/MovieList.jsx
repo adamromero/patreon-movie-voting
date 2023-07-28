@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MovieContext } from "@/context/MovieContext";
 
-const MovieList = ({ currentUser, isCreator }) => {
+const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const {
       moviesList,
       getMovieVotes,
@@ -14,7 +14,6 @@ const MovieList = ({ currentUser, isCreator }) => {
    } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
-   const [searchTitle, setSearchTitle] = useState("");
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(true);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
@@ -226,7 +225,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       </thead>
    );
 
-   const tableBody = filteredMoviesList.length ? (
+   const tableBody = (
       <tbody>
          {filteredMoviesList.length ? (
             <>
@@ -310,43 +309,16 @@ const MovieList = ({ currentUser, isCreator }) => {
                ))}
             </>
          ) : (
-            <div className="loader"></div>
+            <tr className="loader loader--list"></tr>
          )}
       </tbody>
-   ) : null;
+   );
 
    return (
-      <>
-         <div className="mb-[15px]">
-            <input
-               className="border-[1px] border-black text-black px-[10px] py-[5px] max-w-[250px] w-full"
-               type="text"
-               placeholder="Search requested movies"
-               value={searchTitle}
-               onChange={(e) => setSearchTitle(e.target.value)}
-            />
-            <button
-               onClick={() => setSearchTitle("")}
-               className="bg-black px-[10px] py-[5px]"
-            >
-               Clear
-            </button>
-         </div>
-         <div className="flex gap-3 mb-[10px]">
-            <div>Total count: {moviesList.length}</div>
-            <div>
-               Not watched:{" "}
-               {moviesList.filter((movie) => !movie.isWatched).length}
-            </div>
-            <div>
-               Watched: {moviesList.filter((movie) => movie.isWatched).length}
-            </div>
-         </div>
-         <table className="w-full">
-            {tableHead}
-            {tableBody}
-         </table>
-      </>
+      <table className="w-full">
+         {tableHead}
+         {tableBody}
+      </table>
    );
 };
 

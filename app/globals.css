@@ -109,6 +109,10 @@ input:checked + .slider:before {
    position: absolute;
 }
 
+.loader--list {
+   top: 50%;
+}
+
 @keyframes spinner {
    0% {
       transform: rotate(0deg);

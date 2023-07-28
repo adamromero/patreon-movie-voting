@@ -1,10 +1,7 @@
 import Header from "./components/Header";
 import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
-import RequestMovies from "./components/RequestMovies";
-import MovieList from "./components/MovieList";
-import FilterMovieList from "./components/FilterMovieList";
-import FilterTags from "./components/FilterTags";
+import VotingApp from "./components/VotingApp";
 
 export default async function Home() {
    const user = await getCurrentUser();
@@ -18,15 +15,12 @@ export default async function Home() {
          <div className="flex flex-col justify-between p-[16px] pt-[114px] sm:pt-[16px]">
             <div className="max-w-[1200px] w-full mx-auto">
                {user ? (
-                  <>
-                     <div className="mb-[20px]">
-                        <h2 className="text-[20px] font-bold">
-                           Hi {user.firstName ? user.firstName : user.name}!
-                           Begin voting and requesting movies.
-                        </h2>
-                     </div>
-                     <RequestMovies currentUser={user.id} />
-                  </>
+                  <div className="mb-[20px]">
+                     <h2 className="text-[20px]">
+                        Hi {user.firstName ? user.firstName : user.name}! Begin
+                        voting and requesting movies.
+                     </h2>
+                  </div>
                ) : (
                   <div className="mb-[20px]">
                      <p>
@@ -36,20 +30,7 @@ export default async function Home() {
                      <p>You must be a current Patron of this channel.</p>
                   </div>
                )}
-               <FilterMovieList />
-               <FilterTags />
-               {/* <div className="flex justify-between max-w-[500px] mx-auto">
-                  <button className="bg-black text-[20px] px-[10px]">
-                     &lt;
-                  </button>
-                  <button className="bg-black text-[20px] px-[10px]">
-                     &gt;
-                  </button>
-               </div> */}
-               <MovieList
-                  currentUser={user && user.id}
-                  isCreator={user && user.creatorId === user.id}
-               />
+               <VotingApp user={user} />
             </div>
          </div>
       </main>
