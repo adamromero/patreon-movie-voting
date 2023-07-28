@@ -174,7 +174,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                   onSubmit={(e) => handleTitleSubmit(e)}
                >
                   <input
-                     className="border-[1px] border-black text-black py-[5px] px-[10px]"
+                     className="text-black py-[5px] px-[10px]"
                      type="text"
                      name=""
                      id=""
@@ -200,14 +200,14 @@ const SearchTitlesModal = ({ currentUser }) => {
                >
                   <div className="flex w-full gap-[5px]">
                      <input
-                        className="flex-1 border-[1px] border-black text-black py-[5px] px-[10px]"
+                        className="flex-1 text-black py-[5px] px-[10px]"
                         type="text"
                         placeholder="Title"
                         value={inputTitle}
                         onChange={(e) => setInputTitle(e.target.value)}
                      />
                      <input
-                        className="border-[1px] border-black text-black w-[80px] py-[5px] px-[10px]"
+                        className="text-black w-[80px] py-[5px] px-[10px]"
                         type="text"
                         placeholder="Year"
                         value={inputYear}

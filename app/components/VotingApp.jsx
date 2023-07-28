@@ -11,7 +11,7 @@ const VotingApp = ({ user }) => {
 
    return (
       <div>
-         <div className="flex gap-[10px]">
+         <div className="flex flex-col sm:flex-row gap-[10px]">
             {user && <RequestMovies currentUser={user && user.id} />}
             <SearchMoviesList
                searchTitle={searchTitle}
