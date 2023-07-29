@@ -255,8 +255,9 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                      className="text-center md:text-left text-[12px] md:text-[16px]"
                      style={{
                         marginBottom: "20px",
-                        backgroundColor: data.isWatched ? "none" : "#000",
-                        color: data.isWatched ? "#000" : "#fff",
+                        backgroundColor: data.isWatched
+                           ? "rgb(0 0 0 / 40%)"
+                           : "#000",
                         position: "relative",
                      }}
                   >

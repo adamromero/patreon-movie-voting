@@ -22,6 +22,10 @@ const movieSchema = new mongoose.Schema({
          type: String,
          required: true,
       },
+      imdbRating: {
+         type: String,
+         required: true,
+      },
       imdbID: {
          type: String,
          required: true,
