@@ -18,6 +18,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(true);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
+   const [isRatingFilterHighest, setIsRatingFilterHighest] = useState(true);
 
    useEffect(() => {
       getMovieVotes();
@@ -52,6 +53,24 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          });
       }
 
+      if (filterOptions.rating === "Highest") {
+         filteredList = filteredList.sort((a, b) => {
+            if (a.data.imdbRating !== "N/A") {
+               return (
+                  parseFloat(a.data.imdbRating) - parseFloat(b.data.imdbRating)
+               );
+            }
+         });
+      } else if (filterOptions.rating === "Lowest") {
+         filteredList = filteredList.sort((a, b) => {
+            if (a.data.imdbRating !== "N/A") {
+               return (
+                  parseFloat(b.data.imdbRating) - parseFloat(a.data.imdbRating)
+               );
+            }
+         });
+      }
+
       if (filterOptions.chronological === chronological.Older) {
          filteredList = filteredList.sort(
             (a, b) => parseInt(a.data.Year) - parseInt(b.data.Year)
@@ -73,13 +92,17 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }
 
       if (filterOptions.type === type.Movie) {
-         // filteredList = filteredList.filter((movie) =>
-         //    movie.data.Type.includes("movie")
-         // );
+         // filteredList = filteredList.filter((movie) => {
+         //    if (movie.data.Type) {
+         //       movie.data.Type.includes(type.Movie);
+         //    }
+         // });
       } else if (filterOptions.type === type.Series) {
-         // filteredList = filteredList.filter((movie) =>
-         //    movie.data.Type.includes("series")
-         // );
+         // filteredList = filteredList.filter((movie) => {
+         //    if (movie.data.Type) {
+         //       movie.data.Type.includes(type.Series);
+         //    }
+         // });
       }
 
       if (filterOptions.genre === genre.Action) {
@@ -191,6 +214,14 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }));
    };
 
+   const handleRatingsFilter = () => {
+      console.log("ratings filter");
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         rating: isRatingFilterHighest ? "Highest" : "Lowest",
+      }));
+   };
+
    const tableHead = (
       <thead className="bg-black">
          <tr className="text-left">
@@ -207,7 +238,15 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </button>
             </th>
             <th className="hidden md:table-cell">
-               <div className="w-full text-left p-[10px]">Rating</div>
+               <button
+                  onClick={() => {
+                     setIsRatingFilterHighest(!isRatingFilterHighest);
+                     handleRatingsFilter();
+                  }}
+                  className="w-full text-left p-[10px]"
+               >
+                  Rating
+               </button>
             </th>
             <th className="hidden md:table-cell">
                <div className="w-full text-left p-[10px]">Genre</div>

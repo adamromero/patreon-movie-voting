@@ -15,6 +15,7 @@ export const MovieProvider = ({ children }) => {
    const [filterOptions, setFilterOptions] = useState({
       alphabetical: "",
       votes: "most",
+      rating: "",
       chronological: chronological.Default,
       added: added.Default,
       type: type.Default,
