@@ -8,7 +8,10 @@ const SearchMoviesList = ({ searchTitle, setSearchTitle }) => {
             type="text"
             placeholder="Search requested movies"
             value={searchTitle}
-            onChange={(e) => setSearchTitle(e.target.value)}
+            onChange={(e) => {
+               const regex = /^[a-zA-Z0-9 ]+$/;
+               setSearchTitle(regex.test(e.target.value) ? e.target.value : "");
+            }}
          />
          <button
             onClick={() => setSearchTitle("")}

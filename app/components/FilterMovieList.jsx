@@ -1,6 +1,13 @@
 "use client";
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { MovieContext } from "@/context/MovieContext";
+import {
+   genre,
+   status,
+   type,
+   chronological,
+   added,
+} from "@/app/utils/filtersOptions";
 
 const FilterMovieList = () => {
    const { filterOptions, setFilterOptions } = useContext(MovieContext);
@@ -9,7 +16,6 @@ const FilterMovieList = () => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         added: "added",
          chronological: selection,
       }));
    };
@@ -18,7 +24,6 @@ const FilterMovieList = () => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         chronological: "chronological",
          added: selection,
       }));
    };
@@ -53,61 +58,65 @@ const FilterMovieList = () => {
             <div className="flex gap-[4px] mb-[5px]">
                <div>Filters:</div>
                <div className="capitalize">
-                  {filterOptions.genre} {filterOptions.type}{" "}
-                  {filterOptions.status}
+                  {filterOptions.genre !== "All" && filterOptions.genre}{" "}
+                  {filterOptions.type !== "All" && filterOptions.type}{" "}
+                  {filterOptions.status !== "All" && filterOptions.status}
                </div>
             </div>
             <div className="flex gap-[10px]">
-               <div>
+               <div className="flex flex-col">
+                  <label htmlFor="genre">{genre.Name}</label>
                   <select
-                     className="bg-black text-white w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="genreFilter"
                      id="genre"
                      onChange={handleGenreFilter}
                   >
-                     <option value="">Genre</option>
-                     <option value="Action">Action</option>
-                     <option value="Animation">Animation</option>
-                     <option value="Biography">Biography</option>
-                     <option value="Comedy">Comedy</option>
-                     <option value="Crime">Crime</option>
-                     <option value="Drama">Drama</option>
-                     <option value="Family">Family</option>
-                     <option value="Fantasy">Fantasy</option>
-                     <option value="Horror">Horror</option>
-                     <option value="Mystery">Mystery</option>
-                     <option value="Music">Music</option>
-                     <option value="Romance">Romance</option>
-                     <option value="Sci-Fi">Sci-Fi</option>
-                     <option value="Sport">Sport</option>
-                     <option value="Thriller">Thriller</option>
-                     <option value="Western">Western</option>
-                     <option value="War">War</option>
+                     <option value={genre.Default}>All</option>
+                     <option value={genre.Action}>Action</option>
+                     <option value={genre.Animation}>Animation</option>
+                     <option value={genre.Biography}>Biography</option>
+                     <option value={genre.Comedy}>Comedy</option>
+                     <option value={genre.Crime}>Crime</option>
+                     <option value={genre.Drama}>Drama</option>
+                     <option value={genre.Family}>Family</option>
+                     <option value={genre.Fantasy}>Fantasy</option>
+                     <option value={genre.Horror}>Horror</option>
+                     <option value={genre.Mystery}>Mystery</option>
+                     <option value={genre.Music}>Music</option>
+                     <option value={genre.Romance}>Romance</option>
+                     <option value={genre.SciFi}>Sci-Fi</option>
+                     <option value={genre.Sport}>Sport</option>
+                     <option value={genre.Thriller}>Thriller</option>
+                     <option value={genre.Western}>Western</option>
+                     <option value={genre.War}>War</option>
                   </select>
                </div>
-               <div>
+               <div className="flex flex-col">
+                  <label htmlFor="type">{type.Name}</label>
                   <select
-                     className="bg-black text-white w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="typeFilter"
                      id="type"
                      onChange={handleTypeFilter}
                   >
-                     <option value="">Type</option>
-                     <option value="Movie">Movie</option>
-                     <option value="Series">Series</option>
+                     <option value="All">All</option>
+                     <option value={type.Movie}>Movie</option>
+                     <option value={type.Series}>Series</option>
                   </select>
                </div>
-               <div>
+               <div className="flex flex-col">
+                  <label htmlFor="status">{status.Name}</label>
                   <select
-                     className="bg-black text-white w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="statusFilter"
                      id="status"
                      onChange={handleWatchedFilter}
                      defaultValue="Unwatched"
                   >
-                     <option value="">Status</option>
-                     <option value="Watched">Watched</option>
-                     <option value="Unwatched">Unwatched</option>
+                     <option value="All">All</option>
+                     <option value={status.Watched}>Watched</option>
+                     <option value={status.Unwatched}>Unwatched</option>
                   </select>
                </div>
             </div>
@@ -115,30 +124,32 @@ const FilterMovieList = () => {
          <div>
             <div>Sorting</div>
             <div className="flex gap-[10px]">
-               <div>
+               <div className="flex flex-col">
+                  <label htmlFor="chronological">{chronological.Name}</label>
                   <select
-                     className="bg-black text-white w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="chronologicalFilter"
                      id="chronological"
                      value={setFilterOptions.chronological}
                      onChange={handleChronologicalSort}
                   >
-                     <option value="chronological">Chronological</option>
-                     <option value="older">Older</option>
-                     <option value="newer">Newer</option>
+                     <option value={chronological.Default}>All</option>
+                     <option value={chronological.Older}>Older</option>
+                     <option value={chronological.Newer}>Newer</option>
                   </select>
                </div>
-               <div>
+               <div className="flex flex-col">
+                  <label htmlFor="added">{added.Name}</label>
                   <select
-                     className="bg-black text-white w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="addedFilter"
                      id="added"
                      value={setFilterOptions.added}
                      onChange={handleAddedSort}
                   >
-                     <option value="added">Order added</option>
-                     <option value="older">Older</option>
-                     <option value="newer">Newer</option>
+                     <option value={added.Default}>All</option>
+                     <option value={added.Older}>Older</option>
+                     <option value={added.Newer}>Newer</option>
                   </select>
                </div>
             </div>

@@ -1,6 +1,12 @@
 "use client";
-
 import React, { createContext, useState } from "react";
+import {
+   genre,
+   type,
+   status,
+   chronological,
+   added,
+} from "@/app/utils/filtersOptions";
 
 export const MovieContext = createContext();
 
@@ -9,11 +15,11 @@ export const MovieProvider = ({ children }) => {
    const [filterOptions, setFilterOptions] = useState({
       alphabetical: "",
       votes: "most",
-      chronological: "chronological",
-      added: "added",
-      type: "",
-      genre: "",
-      status: "unwatched",
+      chronological: chronological.Default,
+      added: added.Default,
+      type: type.Default,
+      genre: genre.Default,
+      status: status.Unwatched,
    });
 
    const getMovieVotes = async () => {
