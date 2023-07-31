@@ -33,7 +33,7 @@ const FilterMovieListSortTags = () => {
          return alphabetical.Name;
       }
       if (filterOptions.rating !== rating.Default) {
-         return alphabetical.Name;
+         return rating.Name;
       }
       if (filterOptions.votes !== votes.Default) {
          return votes.Name;

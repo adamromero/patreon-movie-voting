@@ -64,21 +64,15 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }
 
       if (filterOptions.rating === rating.Ascending) {
-         filteredList = filteredList.sort((a, b) => {
-            if (a.data.imdbRating !== "N/A") {
-               return (
-                  parseFloat(a.data.imdbRating) - parseFloat(b.data.imdbRating)
-               );
-            }
-         });
+         filteredList = filteredList.sort(
+            (a, b) =>
+               parseFloat(b.data.imdbRating) - parseFloat(a.data.imdbRating)
+         );
       } else if (filterOptions.rating === rating.Descending) {
-         filteredList = filteredList.sort((a, b) => {
-            if (a.data.imdbRating !== "N/A") {
-               return (
-                  parseFloat(b.data.imdbRating) - parseFloat(a.data.imdbRating)
-               );
-            }
-         });
+         filteredList = filteredList.sort(
+            (a, b) =>
+               parseFloat(a.data.imdbRating) - parseFloat(b.data.imdbRating)
+         );
       } else {
          setIsRatingFilterHighest(true);
       }
@@ -104,17 +98,13 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }
 
       if (filterOptions.type === type.Movie) {
-         // filteredList = filteredList.filter((movie) => {
-         //    if (movie.data.Type) {
-         //       movie.data.Type.includes(type.Movie);
-         //    }
-         // });
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Type.includes(type.Movie.toLowerCase())
+         );
       } else if (filterOptions.type === type.Series) {
-         // filteredList = filteredList.filter((movie) => {
-         //    if (movie.data.Type) {
-         //       movie.data.Type.includes(type.Series);
-         //    }
-         // });
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Type.includes(type.Series.toLowerCase())
+         );
       }
 
       if (filterOptions.genre === genre.Action) {
