@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { MovieContext } from "@/context/MovieContext";
+import { genre, type, status } from "../utils/filtersOptions";
 
 const FilterMovieListTags = () => {
    const { filterOptions, setFilterOptions } = useContext(MovieContext);
@@ -7,21 +8,21 @@ const FilterMovieListTags = () => {
    const handleGenreFilterRemove = () => {
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         genre: "All",
+         genre: genre.Default,
       }));
    };
 
    const handleTypeFilterRemove = () => {
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         type: "All",
+         type: type.Default,
       }));
    };
 
    const handleStatusFilterRemove = () => {
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         status: "All",
+         status: status.Default,
       }));
    };
 

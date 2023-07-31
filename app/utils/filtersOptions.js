@@ -47,3 +47,24 @@ export const added = {
    Older: "Older",
    Newer: "Newer",
 };
+
+export const alphabetical = {
+   Name: "Title",
+   Default: "",
+   Ascending: "Ascending",
+   Descending: "Descending",
+};
+
+export const rating = {
+   Name: "Rating",
+   Default: "",
+   Ascending: "Ascending",
+   Descending: "Descending",
+};
+
+export const votes = {
+   Name: "Requests",
+   Default: "",
+   Ascending: "Ascending",
+   Descending: "Descending",
+};

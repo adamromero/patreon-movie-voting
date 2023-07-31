@@ -7,6 +7,9 @@ import {
    type,
    chronological,
    added,
+   alphabetical,
+   rating,
+   votes,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 
@@ -27,33 +30,35 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    useEffect(() => {
       let filteredList = [...moviesList];
 
-      if (filterOptions.votes === "most") {
+      if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
             (a, b) => b.voters.length - a.voters.length
          );
-      } else if (filterOptions.votes === "fewest") {
+      } else if (filterOptions.votes === votes.Descending) {
          filteredList = filteredList.sort(
             (a, b) => a.voters.length - b.voters.length
          );
       }
 
-      if (filterOptions.alphabetical === "ascend") {
-         // filteredList = filteredList.sort((a, b) => {
-         //    if (a.data.Title > b.data.Title) {
-         //       return 1;
-         //    }
-         //    return 0;
-         // });
-      } else if (filterOptions.alphabetical === "descend") {
+      if (filterOptions.alphabetical === alphabetical.Ascending) {
          filteredList = filteredList.sort((a, b) => {
             if (a.data.Title < b.data.Title) {
                return -1;
             }
             return 0;
          });
+      } else if (filterOptions.alphabetical === alphabetical.Descending) {
+         filteredList = filteredList
+            .sort((a, b) => {
+               if (a.data.Title < b.data.Title) {
+                  return -1;
+               }
+               return 0;
+            })
+            .reverse();
       }
 
-      if (filterOptions.rating === "Highest") {
+      if (filterOptions.rating === rating.Ascending) {
          filteredList = filteredList.sort((a, b) => {
             if (a.data.imdbRating !== "N/A") {
                return (
@@ -61,7 +66,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                );
             }
          });
-      } else if (filterOptions.rating === "Lowest") {
+      } else if (filterOptions.rating === rating.Descending) {
          filteredList = filteredList.sort((a, b) => {
             if (a.data.imdbRating !== "N/A") {
                return (
@@ -199,18 +204,26 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    }, [filteredMoviesList]);
 
    const handleTitleFilter = () => {
-      console.log("trigger title filter");
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         alphabetical: isTitleFilterAscending ? "ascend" : "descend",
+         votes: votes.Default,
+         rating: rating.Default,
+         chronological: chronological.Default,
+         added: added.Default,
+         alphabetical: isTitleFilterAscending
+            ? alphabetical.Ascending
+            : alphabetical.Descending,
       }));
    };
 
    const handleRequestsFilter = () => {
-      console.log("requests filter");
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         votes: isRequestFilterAscending ? "most" : "fewest",
+         alphabetical: alphabetical.Default,
+         rating: rating.Default,
+         chronological: chronological.Default,
+         added: added.Default,
+         votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
       }));
    };
 
@@ -218,7 +231,11 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       console.log("ratings filter");
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
-         rating: isRatingFilterHighest ? "Highest" : "Lowest",
+         alphabetical: alphabetical.Default,
+         votes: votes.Default,
+         chronological: chronological.Default,
+         added: added.Default,
+         rating: isRatingFilterHighest ? rating.Ascending : rating.Descending,
       }));
    };
 

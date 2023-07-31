@@ -7,8 +7,12 @@ import {
    type,
    chronological,
    added,
+   rating,
+   votes,
+   alphabetical,
 } from "@/app/utils/filtersOptions";
 import FilterMovieListTags from "./FilterMovieListTags";
+import FilterMovieListSortTags from "./FilterMovieListSortTags";
 
 const FilterMovieList = () => {
    const { filterOptions, setFilterOptions } = useContext(MovieContext);
@@ -17,6 +21,10 @@ const FilterMovieList = () => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
+         alphabetical: alphabetical.Default,
+         votes: votes.Default,
+         rating: rating.Default,
+         added: added.Default,
          chronological: selection,
       }));
    };
@@ -25,7 +33,11 @@ const FilterMovieList = () => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
+         alphabetical: alphabetical.Default,
+         votes: votes.Default,
+         rating: rating.Default,
          added: selection,
+         chronological: chronological.Default,
       }));
    };
 
@@ -122,7 +134,10 @@ const FilterMovieList = () => {
             </div>
          </div>
          <div>
-            <div>Sorting</div>
+            <div className="flex gap-[4px] mb-[5px]">
+               <div>Sorting: </div>
+               <FilterMovieListSortTags />
+            </div>
             <div className="flex gap-[10px]">
                <div className="flex flex-col">
                   <label htmlFor="chronological">{chronological.Name}</label>
@@ -130,7 +145,7 @@ const FilterMovieList = () => {
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="chronologicalFilter"
                      id="chronological"
-                     value={setFilterOptions.chronological}
+                     value={filterOptions.chronological}
                      onChange={handleChronologicalSort}
                   >
                      <option value={chronological.Default}>All</option>
@@ -144,7 +159,7 @@ const FilterMovieList = () => {
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="addedFilter"
                      id="added"
-                     value={setFilterOptions.added}
+                     value={filterOptions.added}
                      onChange={handleAddedSort}
                   >
                      <option value={added.Default}>All</option>

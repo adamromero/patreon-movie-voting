@@ -6,6 +6,9 @@ import {
    status,
    chronological,
    added,
+   alphabetical,
+   votes,
+   rating,
 } from "@/app/utils/filtersOptions";
 
 export const MovieContext = createContext();
@@ -13,9 +16,9 @@ export const MovieContext = createContext();
 export const MovieProvider = ({ children }) => {
    const [moviesList, setMoviesList] = useState([]);
    const [filterOptions, setFilterOptions] = useState({
-      alphabetical: "",
-      votes: "most",
-      rating: "",
+      alphabetical: alphabetical.Default,
+      votes: votes.Ascending,
+      rating: rating.Default,
       chronological: chronological.Default,
       added: added.Default,
       type: type.Default,
