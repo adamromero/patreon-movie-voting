@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { BiLogoPatreon } from "react-icons/bi";
 import { FiLogOut } from "react-icons/fi";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 import { signIn, signOut } from "next-auth/react";
@@ -45,9 +46,11 @@ const UserSignIn = ({ user }) => {
             ) : (
                <button
                   onClick={() => signIn("patreon")}
-                  className="bg-[#ff424d] py-[8px] px-[10px] text-black rounded-sm"
+                  className="flex items-center gap-[3px] bg-white py-[8px] px-[10px] text-black rounded-sm"
                >
-                  Connect <span className="hidden sm:inline">with Patreon</span>
+                  <BiLogoPatreon className="text-[#ff424d] text-[20px] sm:text-[32px]" />
+                  <span className="md:hidden">Connect</span>
+                  <span className="hidden md:inline">Connect with Patreon</span>
                </button>
             )}
          </div>
