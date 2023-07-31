@@ -8,6 +8,7 @@ import {
    chronological,
    added,
 } from "@/app/utils/filtersOptions";
+import FilterMovieListTags from "./FilterMovieListTags";
 
 const FilterMovieList = () => {
    const { filterOptions, setFilterOptions } = useContext(MovieContext);
@@ -57,11 +58,7 @@ const FilterMovieList = () => {
          <div>
             <div className="flex gap-[4px] mb-[5px]">
                <div>Filters:</div>
-               <div className="capitalize">
-                  {filterOptions.genre !== "All" && filterOptions.genre}{" "}
-                  {filterOptions.type !== "All" && filterOptions.type}{" "}
-                  {filterOptions.status !== "All" && filterOptions.status}
-               </div>
+               <FilterMovieListTags />
             </div>
             <div className="flex gap-[10px]">
                <div className="flex flex-col">
@@ -70,6 +67,7 @@ const FilterMovieList = () => {
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="genreFilter"
                      id="genre"
+                     value={filterOptions.genre}
                      onChange={handleGenreFilter}
                   >
                      <option value={genre.Default}>All</option>
@@ -98,6 +96,7 @@ const FilterMovieList = () => {
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="typeFilter"
                      id="type"
+                     value={filterOptions.type}
                      onChange={handleTypeFilter}
                   >
                      <option value="All">All</option>
@@ -111,6 +110,7 @@ const FilterMovieList = () => {
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
                      name="statusFilter"
                      id="status"
+                     value={filterOptions.status}
                      onChange={handleWatchedFilter}
                      defaultValue="Unwatched"
                   >
