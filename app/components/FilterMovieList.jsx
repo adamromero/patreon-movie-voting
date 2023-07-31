@@ -124,7 +124,6 @@ const FilterMovieList = () => {
                      id="status"
                      value={filterOptions.status}
                      onChange={handleWatchedFilter}
-                     defaultValue="Unwatched"
                   >
                      <option value="All">All</option>
                      <option value={status.Watched}>Watched</option>

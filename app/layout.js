@@ -14,9 +14,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
    title: "Let My Patrons Decide",
    description: "A movie voting app for the patreon channel",
-   icons: {
-      icon: "",
-   },
    other: {
       "google-site-verification": "ik7hvs9SJ6lg9swECf_QuiptsofDCk5K1a_ucnHEw-Y",
    },
