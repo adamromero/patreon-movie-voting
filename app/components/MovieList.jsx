@@ -12,6 +12,7 @@ import {
    votes,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 
 const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const { moviesList, getMovieVotes, filterOptions, setFilterOptions } =
@@ -38,6 +39,8 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          filteredList = filteredList.sort(
             (a, b) => a.voters.length - b.voters.length
          );
+      } else {
+         setIsRequestFilterAscending(true);
       }
 
       if (filterOptions.alphabetical === alphabetical.Ascending) {
@@ -56,6 +59,8 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                return 0;
             })
             .reverse();
+      } else {
+         setIsTitleFilterAscending(true);
       }
 
       if (filterOptions.rating === rating.Ascending) {
@@ -74,6 +79,8 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                );
             }
          });
+      } else {
+         setIsRatingFilterHighest(true);
       }
 
       if (filterOptions.chronological === chronological.Older) {
@@ -228,7 +235,6 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    };
 
    const handleRatingsFilter = () => {
-      console.log("ratings filter");
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
          alphabetical: alphabetical.Default,
@@ -245,13 +251,23 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             <th className="w-[100px]"></th>
             <th className="md:w-[300px]">
                <button
-                  className="w-full text-left p-[10px]"
+                  className="w-full text-left p-[10px] pl-0"
                   onClick={() => {
                      setIsTitleFilterAscending(!isTitleFilterAscending);
                      handleTitleFilter();
                   }}
                >
-                  Title
+                  <div className="flex gap-[5px] items-center">
+                     {filterOptions.alphabetical === alphabetical.Default && (
+                        <FaSort />
+                     )}
+                     {filterOptions.alphabetical === alphabetical.Ascending && (
+                        <FaSortUp />
+                     )}
+                     {filterOptions.alphabetical ===
+                        alphabetical.Descending && <FaSortDown />}
+                     Title
+                  </div>
                </button>
             </th>
             <th className="hidden md:table-cell">
@@ -260,9 +276,16 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                      setIsRatingFilterHighest(!isRatingFilterHighest);
                      handleRatingsFilter();
                   }}
-                  className="w-full text-left p-[10px]"
+                  className="w-full text-left p-[10px] pl-0"
                >
-                  Rating
+                  <div className="flex gap-[5px] items-center">
+                     {filterOptions.rating === rating.Default && <FaSort />}
+                     {filterOptions.rating === rating.Ascending && <FaSortUp />}
+                     {filterOptions.rating === rating.Descending && (
+                        <FaSortDown />
+                     )}
+                     Rating
+                  </div>
                </button>
             </th>
             <th className="hidden md:table-cell">
@@ -274,9 +297,16 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                      setIsRequestFilterAscending(!isRequestFilterAscending);
                      handleRequestsFilter();
                   }}
-                  className="w-full text-left p-[10px]"
+                  className="w-full text-left p-[10px] pl-0"
                >
-                  Requests
+                  <div className="flex gap-[5px] items-center">
+                     {filterOptions.votes === rating.Default && <FaSort />}
+                     {filterOptions.votes === rating.Ascending && <FaSortUp />}
+                     {filterOptions.votes === votes.Descending && (
+                        <FaSortDown />
+                     )}
+                     Requests
+                  </div>
                </button>
             </th>
             <th></th>
