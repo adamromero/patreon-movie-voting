@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ currentUser }) => {
    const mobileBreakPoint = 640;
@@ -21,7 +22,8 @@ const SearchTitlesModal = ({ currentUser }) => {
    const [movies, setMovies] = useState([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
-   const { moviesList, createMovieVote, castMovieVote, removeMovieVote } =
+   const moviesList = useRetrieveMovies();
+   const { createMovieVote, castMovieVote, removeMovieVote } =
       useContext(MovieContext);
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});

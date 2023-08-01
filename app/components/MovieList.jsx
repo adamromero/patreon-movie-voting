@@ -13,20 +13,17 @@ import {
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
+import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const MovieList = ({ currentUser, isCreator, searchTitle }) => {
-   const { moviesList, getMovieVotes, filterOptions, setFilterOptions } =
-      useContext(MovieContext);
+   const moviesList = useRetrieveMovies();
+   const { filterOptions, setFilterOptions } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(true);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
    const [isRatingFilterHighest, setIsRatingFilterHighest] = useState(true);
-
-   useEffect(() => {
-      getMovieVotes();
-   }, []);
 
    useEffect(() => {
       let filteredList = [...moviesList];

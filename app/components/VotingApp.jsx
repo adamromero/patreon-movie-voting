@@ -5,6 +5,8 @@ import MovieList from "./MovieList";
 import FilterMovieList from "./FilterMovieList";
 import SearchMoviesList from "./SearchMoviesList";
 import MovieCount from "./MovieCount";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PDFFile from "./PDFFile";
 
 const VotingApp = ({ user }) => {
    const [searchTitle, setSearchTitle] = useState("");
@@ -17,6 +19,21 @@ const VotingApp = ({ user }) => {
                searchTitle={searchTitle}
                setSearchTitle={setSearchTitle}
             />
+            {user && user.creatorId === user.id && (
+               <PDFDownloadLink document={<PDFFile />} fileName="MovieList">
+                  {({ loading }) =>
+                     loading ? (
+                        <button className="bg-black px-[10px] py-[5px] mb-[15px]">
+                           Loading
+                        </button>
+                     ) : (
+                        <button className="bg-black px-[10px] py-[5px] mb-[15px]">
+                           Download PDF
+                        </button>
+                     )
+                  }
+               </PDFDownloadLink>
+            )}
          </div>
          <MovieCount />
          <FilterMovieList />

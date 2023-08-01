@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import React from "react";
+import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const MovieCount = () => {
-   const { moviesList } = useContext(MovieContext);
+   const moviesList = useRetrieveMovies();
 
    return (
       <div className="flex gap-3 mb-[10px]">
