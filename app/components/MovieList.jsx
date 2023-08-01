@@ -14,6 +14,7 @@ import {
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
+import Pagination from "./Pagination";
 
 const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const moviesList = useRetrieveMovies();
@@ -23,7 +24,11 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(true);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
-   const [isRatingFilterHighest, setIsRatingFilterHighest] = useState(true);
+   const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
+   const [currentPage, setCurrentPage] = useState(1);
+   const [postsPerPage] = useState(20);
+   const indexOfLastPost = currentPage * postsPerPage;
+   const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
    useEffect(() => {
       let filteredList = [...moviesList];
@@ -71,7 +76,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                parseFloat(a.data.imdbRating) - parseFloat(b.data.imdbRating)
          );
       } else {
-         setIsRatingFilterHighest(true);
+         setIsRatingFilterAscending(true);
       }
 
       if (filterOptions.chronological === chronological.Older) {
@@ -228,9 +233,11 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
-         rating: isRatingFilterHighest ? rating.Ascending : rating.Descending,
+         rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
    };
+
+   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
    const tableHead = (
       <thead className="bg-black">
@@ -260,7 +267,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             <th className="hidden md:table-cell">
                <button
                   onClick={() => {
-                     setIsRatingFilterHighest(!isRatingFilterHighest);
+                     setIsRatingFilterAscending(!isRatingFilterAscending);
                      handleRatingsFilter();
                   }}
                   className="w-full text-left p-[10px] pl-0"
@@ -306,27 +313,29 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       <tbody>
          {filteredMoviesList.length ? (
             <>
-               {filteredMoviesList.map((data, index) => (
-                  <tr
-                     key={data._id}
-                     className="text-center md:text-left text-[12px] md:text-[16px]"
-                     style={{
-                        marginBottom: "20px",
-                        backgroundColor: data.isWatched
-                           ? "rgb(0 0 0 / 40%)"
-                           : "#000",
-                        position: "relative",
-                     }}
-                  >
-                     <MovieListEntry
-                        data={data}
-                        currentUser={currentUser}
-                        isCreator={isCreator}
-                        watchedState={watchedState}
-                        setWatchedState={setWatchedState}
-                     />
-                  </tr>
-               ))}
+               {filteredMoviesList
+                  .slice(indexOfFirstPost, indexOfLastPost)
+                  .map((data, index) => (
+                     <tr
+                        key={data._id}
+                        className="text-center md:text-left text-[12px] md:text-[16px]"
+                        style={{
+                           marginBottom: "20px",
+                           backgroundColor: data.isWatched
+                              ? "rgb(0 0 0 / 40%)"
+                              : "#000",
+                           position: "relative",
+                        }}
+                     >
+                        <MovieListEntry
+                           data={data}
+                           currentUser={currentUser}
+                           isCreator={isCreator}
+                           watchedState={watchedState}
+                           setWatchedState={setWatchedState}
+                        />
+                     </tr>
+                  ))}
             </>
          ) : (
             <tr className="loader loader--list"></tr>
@@ -335,10 +344,17 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    );
 
    return (
-      <table className="w-full">
-         {tableHead}
-         {tableBody}
-      </table>
+      <>
+         <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={moviesList.length}
+            paginate={paginate}
+         />
+         <table className="w-full">
+            {tableHead}
+            {tableBody}
+         </table>
+      </>
    );
 };
 
