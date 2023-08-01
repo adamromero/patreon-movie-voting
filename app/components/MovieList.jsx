@@ -347,7 +347,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       <>
          <Pagination
             postsPerPage={postsPerPage}
-            totalPosts={moviesList.length}
+            totalPosts={filteredMoviesList.length}
             paginate={paginate}
          />
          <table className="w-full">
