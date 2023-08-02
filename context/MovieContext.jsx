@@ -9,6 +9,7 @@ import {
    alphabetical,
    votes,
    rating,
+   watched,
 } from "@/app/utils/filtersOptions";
 
 export const MovieContext = createContext();
@@ -25,6 +26,7 @@ export const MovieProvider = ({ children }) => {
       type: type.Default,
       genre: genre.Default,
       status: status.Unwatched,
+      watched: watched.Default,
    });
 
    const getMovieVotes = async () => {

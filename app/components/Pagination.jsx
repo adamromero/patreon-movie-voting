@@ -15,7 +15,7 @@ const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
                      onClick={() => paginate(number)}
                      className={`${
                         currentPage === number ? "bg-black" : ""
-                     } px-[8px] rounded-[3px] hover:bg-[#620062] focus-visible:bg-[#620062]`}
+                     } px-[8px] rounded-[3px] hover:bg-black focus:bg-black`}
                   >
                      {number}
                   </button>

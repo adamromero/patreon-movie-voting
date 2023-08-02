@@ -360,34 +360,28 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
 
    const tableBody = (
       <div>
-         {filteredMoviesList.length ? (
-            <>
-               {filteredMoviesList
-                  .slice(indexOfFirstPost, indexOfLastPost)
-                  .map((data, index) => (
-                     <div
-                        key={data._id}
-                        className="row text-[12px] md:text-[16px]"
-                        style={{
-                           backgroundColor: data.isWatched
-                              ? "rgb(0 0 0 / 40%)"
-                              : "#000",
-                           position: "relative",
-                        }}
-                     >
-                        <MovieListEntry
-                           data={data}
-                           currentUser={currentUser}
-                           isCreator={isCreator}
-                           watchedState={watchedState}
-                           setWatchedState={setWatchedState}
-                        />
-                     </div>
-                  ))}
-            </>
-         ) : (
-            <div className="loader loader--list"></div>
-         )}
+         {filteredMoviesList
+            .slice(indexOfFirstPost, indexOfLastPost)
+            .map((data) => (
+               <div
+                  key={data._id}
+                  className="row text-[12px] md:text-[16px]"
+                  style={{
+                     backgroundColor: data.isWatched
+                        ? "rgb(0 0 0 / 40%)"
+                        : "#000",
+                     position: "relative",
+                  }}
+               >
+                  <MovieListEntry
+                     data={data}
+                     currentUser={currentUser}
+                     isCreator={isCreator}
+                     watchedState={watchedState}
+                     setWatchedState={setWatchedState}
+                  />
+               </div>
+            ))}
       </div>
    );
 
@@ -399,10 +393,14 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             currentPage={currentPage}
             paginate={paginate}
          />
-         <div>
-            {tableHead}
-            {tableBody}
-         </div>
+         {filteredMoviesList.length ? (
+            <div>
+               {tableHead}
+               {tableBody}
+            </div>
+         ) : (
+            <div className="loader loader--list"></div>
+         )}
       </>
    );
 };
