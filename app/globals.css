@@ -135,3 +135,75 @@ input:checked + .slider:before {
       transform: rotate(45deg);
    }
 }
+
+.img-poster {
+   width: 100px;
+   height: 150px;
+}
+
+.table-header {
+   display: flex;
+   background: black;
+   color: white;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+
+.row {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 10px;
+   gap: 15px;
+   background: black;
+   color: white;
+   font-size: 16px;
+   flex: 1;
+}
+
+.content {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   flex: 1;
+   gap: 5px;
+   padding: 10px 0;
+}
+
+.table {
+   width: 100%;
+}
+
+@media screen and (min-width: 820px) {
+   .img-poster {
+      width: 75px;
+      height: 115px;
+   }
+
+   .title-cell {
+      width: 225px;
+   }
+
+   .genre-cell {
+      width: 200px;
+   }
+
+   .rating-cell,
+   .request-cell {
+      width: 40px;
+   }
+
+   .watched-cell {
+      width: 100px;
+   }
+
+   .row {
+      flex-direction: row;
+   }
+
+   .content {
+      align-items: center;
+      flex-direction: row;
+      padding: 0;
+   }
+}

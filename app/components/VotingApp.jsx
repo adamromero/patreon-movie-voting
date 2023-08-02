@@ -21,7 +21,7 @@ const VotingApp = ({ user }) => {
                searchTitle={searchTitle}
                setSearchTitle={setSearchTitle}
             />
-            {user && user.creatorId === user.id && (
+            {/* {user && user.creatorId === user.id && (
                <PDFDownloadLink
                   document={<PDFFile filteredMoviesList={filteredMoviesList} />}
                   fileName="MovieList"
@@ -38,7 +38,7 @@ const VotingApp = ({ user }) => {
                      )
                   }
                </PDFDownloadLink>
-            )}
+            )} */}
          </div>
          <MovieCount />
          <FilterMovieList />

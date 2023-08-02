@@ -273,109 +273,102 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
    const tableHead = (
-      <thead className="bg-black">
-         <tr className="text-left">
-            <th className="w-[100px]"></th>
-            <th className="md:w-[300px]">
+      <div className="flex justify-between bg-black mb-[10px]">
+         <div className="w-[75px]"></div>
+         <div className="w-[225px]">
+            <button
+               className="w-full text-left p-[10px] pl-0"
+               onClick={() => {
+                  setIsTitleFilterAscending(!isTitleFilterAscending);
+                  handleTitleFilter();
+               }}
+            >
+               <div className="flex gap-[5px] items-center">
+                  {filterOptions.alphabetical === alphabetical.Default && (
+                     <FaSort />
+                  )}
+                  {filterOptions.alphabetical === alphabetical.Ascending && (
+                     <FaSortUp />
+                  )}
+                  {filterOptions.alphabetical === alphabetical.Descending && (
+                     <FaSortDown />
+                  )}
+                  Title
+               </div>
+            </button>
+         </div>
+         <div className="w-[200px]">
+            <div className="w-full text-left p-[10px]">Genre</div>
+         </div>
+         <div className="w-[80px]">
+            <button
+               onClick={() => {
+                  setIsRatingFilterAscending(!isRatingFilterAscending);
+                  handleRatingsFilter();
+               }}
+               className="w-full text-left p-[10px] pl-0"
+            >
+               <div className="flex gap-[5px] items-center">
+                  {filterOptions.rating === rating.Default && <FaSort />}
+                  {filterOptions.rating === rating.Ascending && <FaSortUp />}
+                  {filterOptions.rating === rating.Descending && <FaSortDown />}
+                  Rating
+               </div>
+            </button>
+         </div>
+         <div className="w-[100px]">
+            <button
+               onClick={() => {
+                  setIsRequestFilterAscending(!isRequestFilterAscending);
+                  handleRequestsFilter();
+               }}
+               className="w-full text-left p-[10px] pl-0"
+            >
+               <div className="flex gap-[5px] items-center">
+                  {filterOptions.votes === votes.Default && <FaSort />}
+                  {filterOptions.votes === votes.Ascending && <FaSortUp />}
+                  {filterOptions.votes === votes.Descending && <FaSortDown />}
+                  Requests
+               </div>
+            </button>
+         </div>
+         <div className="w-[100px]"></div>
+         {isCreator && (
+            <div className="w-[100px]">
                <button
-                  className="w-full text-left p-[10px] pl-0"
                   onClick={() => {
-                     setIsTitleFilterAscending(!isTitleFilterAscending);
-                     handleTitleFilter();
+                     setIsWatchedFilterAscending(!isWatchedFilterAscending);
+                     handleWatchedSort();
                   }}
+                  className="w-full text-left p-[10px] pl-0"
                >
                   <div className="flex gap-[5px] items-center">
-                     {filterOptions.alphabetical === alphabetical.Default && (
-                        <FaSort />
-                     )}
-                     {filterOptions.alphabetical === alphabetical.Ascending && (
+                     {filterOptions.watched === watched.Default && <FaSort />}
+                     {filterOptions.watched === watched.Ascending && (
                         <FaSortUp />
                      )}
-                     {filterOptions.alphabetical ===
-                        alphabetical.Descending && <FaSortDown />}
-                     Title
-                  </div>
-               </button>
-            </th>
-            <th className="hidden md:table-cell">
-               <button
-                  onClick={() => {
-                     setIsRatingFilterAscending(!isRatingFilterAscending);
-                     handleRatingsFilter();
-                  }}
-                  className="w-full text-left p-[10px] pl-0"
-               >
-                  <div className="flex gap-[5px] items-center">
-                     {filterOptions.rating === rating.Default && <FaSort />}
-                     {filterOptions.rating === rating.Ascending && <FaSortUp />}
-                     {filterOptions.rating === rating.Descending && (
+                     {filterOptions.watched === watched.Descending && (
                         <FaSortDown />
                      )}
-                     Rating
+                     Watched
                   </div>
                </button>
-            </th>
-            <th className="hidden md:table-cell">
-               <div className="w-full text-left p-[10px]">Genre</div>
-            </th>
-            <th>
-               <button
-                  onClick={() => {
-                     setIsRequestFilterAscending(!isRequestFilterAscending);
-                     handleRequestsFilter();
-                  }}
-                  className="w-full text-left p-[10px] pl-0"
-               >
-                  <div className="flex gap-[5px] items-center">
-                     {filterOptions.votes === votes.Default && <FaSort />}
-                     {filterOptions.votes === votes.Ascending && <FaSortUp />}
-                     {filterOptions.votes === votes.Descending && (
-                        <FaSortDown />
-                     )}
-                     Requests
-                  </div>
-               </button>
-            </th>
-            <th></th>
-            {isCreator && (
-               <th>
-                  <button
-                     onClick={() => {
-                        setIsWatchedFilterAscending(!isWatchedFilterAscending);
-                        handleWatchedSort();
-                     }}
-                  >
-                     <div className="flex gap-[5px] items-center">
-                        {filterOptions.watched === watched.Default && (
-                           <FaSort />
-                        )}
-                        {filterOptions.watched === watched.Ascending && (
-                           <FaSortUp />
-                        )}
-                        {filterOptions.watched === watched.Descending && (
-                           <FaSortDown />
-                        )}
-                        Watched
-                     </div>
-                  </button>
-               </th>
-            )}
-         </tr>
-      </thead>
+            </div>
+         )}
+      </div>
    );
 
    const tableBody = (
-      <tbody>
+      <div>
          {filteredMoviesList.length ? (
             <>
                {filteredMoviesList
                   .slice(indexOfFirstPost, indexOfLastPost)
                   .map((data, index) => (
-                     <tr
+                     <div
                         key={data._id}
-                        className="text-center md:text-left text-[12px] md:text-[16px]"
+                        className="row text-[12px] md:text-[16px]"
                         style={{
-                           marginBottom: "20px",
                            backgroundColor: data.isWatched
                               ? "rgb(0 0 0 / 40%)"
                               : "#000",
@@ -389,13 +382,13 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                            watchedState={watchedState}
                            setWatchedState={setWatchedState}
                         />
-                     </tr>
+                     </div>
                   ))}
             </>
          ) : (
-            <tr className="loader loader--list"></tr>
+            <div className="loader loader--list"></div>
          )}
-      </tbody>
+      </div>
    );
 
    return (
@@ -406,10 +399,10 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             currentPage={currentPage}
             paginate={paginate}
          />
-         <table className="w-full">
+         <div>
             {tableHead}
             {tableBody}
-         </table>
+         </div>
       </>
    );
 };

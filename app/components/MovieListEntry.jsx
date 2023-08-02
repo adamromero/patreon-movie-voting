@@ -30,65 +30,66 @@ const MovieListEntry = ({
 
    return (
       <>
-         <td className="">
+         <div>
             <a
                href={`https://www.imdb.com/title/${data.data.imdbID}`}
                title="Go to IMDB"
                target="_blank"
             >
                <img
+                  className="img-poster"
                   src={data.data.Poster}
-                  width={50}
-                  height={205}
+                  // width={50}
+                  // height={205}
                   alt={data.data.Title}
                />
             </a>
-         </td>
-         <td className="pr-[5px]">
-            {data.data.Title} ({data.data.Year})
-         </td>
-         {data.data.imdbRating ? (
-            <td className="hidden md:table-cell">{data.data.imdbRating}</td>
-         ) : (
-            <td>N/A</td>
-         )}
-
-         <td className="hidden md:table-cell">{data.data.Genre}</td>
-         <td>{data.voters.length}</td>
-         <td>
-            {!data.isWatched && currentUser ? (
-               data.voters.filter((voter) => voter === currentUser).length ? (
-                  <button
-                     className="bg-[gray] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                     onClick={() => handleRemoveVote(data._id, data.voters)}
-                  >
-                     Retract
-                  </button>
-               ) : (
-                  <button
-                     className="bg-[#830483] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                     onClick={() => handleCastVote(data._id, data.voters)}
-                  >
-                     Request
-                  </button>
-               )
-            ) : null}
-         </td>
-         {isCreator && (
-            <td>
-               <div className="container">
-                  <label className="switch" htmlFor={`checkbox-${data._id}`}>
-                     <input
-                        type="checkbox"
-                        id={`checkbox-${data._id}`}
-                        checked={!!watchedState[data._id]}
-                        onChange={(e) => handleWatchSetting(e, data)}
-                     />
-                     <div className="slider round"></div>
-                  </label>
-               </div>
-            </td>
-         )}
+         </div>
+         <div className="content">
+            <div className="title-cell">
+               {data.data.Title} ({data.data.Year})
+            </div>
+            <div className="genre-cell">{data.data.Genre}</div>
+            <div className="rating-cell">
+               {data.data.imdbRating ? <>{data.data.imdbRating}</> : <>N/A</>}
+            </div>
+            <div className="request-cell">{data.voters.length}</div>
+            <div>
+               {!data.isWatched && currentUser ? (
+                  data.voters.filter((voter) => voter === currentUser)
+                     .length ? (
+                     <button
+                        className="bg-[gray] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        onClick={() => handleRemoveVote(data._id, data.voters)}
+                     >
+                        Retract
+                     </button>
+                  ) : (
+                     <button
+                        className="bg-[#830483] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        onClick={() => handleCastVote(data._id, data.voters)}
+                     >
+                        Request
+                     </button>
+                  )
+               ) : null}
+            </div>
+            <div className="watched-cell">
+               {isCreator && (
+                  <div className="container">
+                     <label className="switch" htmlFor={`checkbox-${data._id}`}>
+                        <input
+                           type="checkbox"
+                           id={`checkbox-${data._id}`}
+                           checked={!!watchedState[data._id]}
+                           onChange={(e) => handleWatchSetting(e, data)}
+                        />
+                        <div className="slider round"></div>
+                     </label>
+                  </div>
+               )}
+            </div>
+         </div>
       </>
    );
 };
