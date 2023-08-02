@@ -18,8 +18,12 @@ import Pagination from "./Pagination";
 
 const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const moviesList = useRetrieveMovies();
-   const { filterOptions, setFilterOptions } = useContext(MovieContext);
-   const [filteredMoviesList, setFilteredMoviesList] = useState([]);
+   const {
+      filterOptions,
+      setFilterOptions,
+      filteredMoviesList,
+      setFilteredMoviesList,
+   } = useContext(MovieContext);
    const [watchedState, setWatchedState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(true);
@@ -348,6 +352,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          <Pagination
             postsPerPage={postsPerPage}
             totalPosts={filteredMoviesList.length}
+            currentPage={currentPage}
             paginate={paginate}
          />
          <table className="w-full">

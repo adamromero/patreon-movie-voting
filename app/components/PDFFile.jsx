@@ -1,32 +1,37 @@
-import React, { useEffect, useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
    page: {
-      flexDirection: "row",
-      backgroundColor: "#E4E4E4",
+      padding: 20,
    },
-   section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
+   itemContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 8,
+      fontSize: 12,
    },
 });
 
-const PDFFile = () => {
+const PDFFile = ({ filteredMoviesList }) => {
    return (
       <Document>
-         <Page size="A4" style={styles.page}>
-            <View style={styles.section}>
-               hello!
-               {/* {moviesList.map((movie) => (
-                  <Text key={movie._id}>
-                     {movie.data.Title} - {movie.data.imdbRating} -{" "}
-                     {movie.voters.length} -{" "}
-                     {movie.isWatched ? "Watched" : "Unwatched"}
-                  </Text>
-               ))} */}
+         <Page size="A4">
+            <View style={styles.page}>
+               {filteredMoviesList.map((movie) => (
+                  <View key={movie._id} style={styles.itemContainer}>
+                     <Text
+                        style={{
+                           textDecoration: movie.isWatched
+                              ? "line-through"
+                              : "none",
+                        }}
+                     >
+                        {movie.data.Title} ({movie.data.Year})
+                     </Text>
+                  </View>
+               ))}
             </View>
          </Page>
       </Document>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import RequestMovies from "./RequestMovies";
 import MovieList from "./MovieList";
 import FilterMovieList from "./FilterMovieList";
@@ -7,9 +7,11 @@ import SearchMoviesList from "./SearchMoviesList";
 import MovieCount from "./MovieCount";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFFile from "./PDFFile";
+import { MovieContext } from "@/context/MovieContext";
 
 const VotingApp = ({ user }) => {
    const [searchTitle, setSearchTitle] = useState("");
+   const { filteredMoviesList } = useContext(MovieContext);
 
    return (
       <div>
@@ -20,7 +22,10 @@ const VotingApp = ({ user }) => {
                setSearchTitle={setSearchTitle}
             />
             {user && user.creatorId === user.id && (
-               <PDFDownloadLink document={<PDFFile />} fileName="MovieList">
+               <PDFDownloadLink
+                  document={<PDFFile filteredMoviesList={filteredMoviesList} />}
+                  fileName="MovieList"
+               >
                   {({ loading }) =>
                      loading ? (
                         <button className="bg-black px-[10px] py-[5px] mb-[15px]">
