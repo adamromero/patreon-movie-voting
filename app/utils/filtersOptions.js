@@ -68,3 +68,10 @@ export const votes = {
    Ascending: "Ascending",
    Descending: "Descending",
 };
+
+export const watched = {
+   Name: "Watched",
+   Default: "",
+   Ascending: "Ascending",
+   Descending: "Descending",
+};

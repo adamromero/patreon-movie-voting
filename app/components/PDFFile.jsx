@@ -19,7 +19,7 @@ const PDFFile = ({ filteredMoviesList }) => {
       <Document>
          <Page size="A4">
             <View style={styles.page}>
-               {filteredMoviesList.map((movie) => (
+               {/* {filteredMoviesList.map((movie) => (
                   <View key={movie._id} style={styles.itemContainer}>
                      <Text
                         style={{
@@ -31,7 +31,7 @@ const PDFFile = ({ filteredMoviesList }) => {
                         {movie.data.Title} ({movie.data.Year})
                      </Text>
                   </View>
-               ))}
+               ))} */}
             </View>
          </Page>
       </Document>

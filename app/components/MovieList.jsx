@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { MovieContext } from "@/context/MovieContext";
 import {
    genre,
@@ -10,6 +10,7 @@ import {
    alphabetical,
    rating,
    votes,
+   watched,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
@@ -21,14 +22,17 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const {
       filterOptions,
       setFilterOptions,
-      filteredMoviesList,
-      setFilteredMoviesList,
+      // filteredMoviesList,
+      // setFilteredMoviesList,
    } = useContext(MovieContext);
+   const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(true);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
    const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
+   const [isWatchedFilterAscending, setIsWatchedFilterAscending] =
+      useState(true);
    const [currentPage, setCurrentPage] = useState(1);
    const [postsPerPage] = useState(20);
    const indexOfLastPost = currentPage * postsPerPage;
@@ -189,6 +193,14 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          filteredList = filteredList.filter((movie) => !movie.isWatched);
       }
 
+      if (filterOptions.watched === watched.Ascending) {
+         //not watched first
+         filteredList = filteredList.sort((a, b) => b.isWatched - a.isWatched);
+      } else if (filterOptions.watched === watched.Descending) {
+         //watched first
+         filteredList = filteredList.sort((a, b) => a.isWatched - b.isWatched);
+      }
+
       if (searchTitle) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Title.toLowerCase().includes(searchTitle.toLowerCase())
@@ -213,6 +225,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
+         watched: watched.Default,
          alphabetical: isTitleFilterAscending
             ? alphabetical.Ascending
             : alphabetical.Descending,
@@ -226,6 +239,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
+         watched: watched.Default,
          votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
       }));
    };
@@ -237,7 +251,22 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
+         watched: watched.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
+      }));
+   };
+
+   const handleWatchedSort = () => {
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         alphabetical: alphabetical.Default,
+         votes: votes.Default,
+         chronological: chronological.Default,
+         added: added.Default,
+         rating: rating.Default,
+         watched: isWatchedFilterAscending
+            ? watched.Ascending
+            : watched.Descending,
       }));
    };
 
@@ -298,8 +327,8 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                   className="w-full text-left p-[10px] pl-0"
                >
                   <div className="flex gap-[5px] items-center">
-                     {filterOptions.votes === rating.Default && <FaSort />}
-                     {filterOptions.votes === rating.Ascending && <FaSortUp />}
+                     {filterOptions.votes === votes.Default && <FaSort />}
+                     {filterOptions.votes === votes.Ascending && <FaSortUp />}
                      {filterOptions.votes === votes.Descending && (
                         <FaSortDown />
                      )}
@@ -308,7 +337,29 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </button>
             </th>
             <th></th>
-            {isCreator && <th>Watched</th>}
+            {isCreator && (
+               <th>
+                  <button
+                     onClick={() => {
+                        setIsWatchedFilterAscending(!isWatchedFilterAscending);
+                        handleWatchedSort();
+                     }}
+                  >
+                     <div className="flex gap-[5px] items-center">
+                        {filterOptions.watched === watched.Default && (
+                           <FaSort />
+                        )}
+                        {filterOptions.watched === watched.Ascending && (
+                           <FaSortUp />
+                        )}
+                        {filterOptions.watched === watched.Descending && (
+                           <FaSortDown />
+                        )}
+                        Watched
+                     </div>
+                  </button>
+               </th>
+            )}
          </tr>
       </thead>
    );

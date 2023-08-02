@@ -6,6 +6,7 @@ import {
    chronological,
    rating,
    votes,
+   watched,
 } from "@/app/utils/filtersOptions";
 
 const FilterMovieListSortTags = () => {
@@ -18,6 +19,7 @@ const FilterMovieListSortTags = () => {
          votes: votes.Default,
          rating: rating.Default,
          added: added.Default,
+         watched: watched.Default,
          chronological: chronological.Default,
       }));
    };
@@ -38,6 +40,9 @@ const FilterMovieListSortTags = () => {
       if (filterOptions.votes !== votes.Default) {
          return votes.Name;
       }
+      if (filterOptions.watched !== watched.Default) {
+         return watched.Name;
+      }
    };
 
    return (
@@ -46,7 +51,8 @@ const FilterMovieListSortTags = () => {
             filterOptions.added !== added.Default ||
             filterOptions.alphabetical !== alphabetical.Default ||
             filterOptions.rating !== rating.Default ||
-            filterOptions.votes !== votes.Default) && (
+            filterOptions.votes !== votes.Default ||
+            filterOptions.watched !== watched.Default) && (
             <button
                onClick={handleSortFilterRemove}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer"
