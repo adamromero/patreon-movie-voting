@@ -58,9 +58,9 @@ const MovieListEntry = ({
                <span className="inline md:hidden">Requests:</span>{" "}
                {data.voters.length}
             </div>
-            <div>
-               {!data.isWatched && currentUser ? (
-                  data.voters.filter((voter) => voter === currentUser)
+            {!data.isWatched && currentUser ? (
+               <div className="mt-[10px] sm:mt-0">
+                  {data.voters.filter((voter) => voter === currentUser)
                      .length ? (
                      <button
                         className="bg-[gray] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
@@ -75,11 +75,11 @@ const MovieListEntry = ({
                      >
                         Request
                      </button>
-                  )
-               ) : null}
-            </div>
+                  )}
+               </div>
+            ) : null}
             {isCreator && (
-               <div className="watched-cell">
+               <div className="watched-cell mt-[10px] sm:mt-0">
                   <div className="container">
                      <label className="switch" htmlFor={`checkbox-${data._id}`}>
                         <input
