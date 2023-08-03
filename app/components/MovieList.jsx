@@ -341,7 +341,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         <div className="hidden md:block md:w-[100px]"></div>
+         {currentUser && <div className="hidden md:block md:w-[100px]"></div>}
          {isCreator && (
             <div className="bg-black w-full md:w-[100px]">
                <button

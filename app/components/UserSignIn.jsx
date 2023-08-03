@@ -35,7 +35,7 @@ const UserSignIn = ({ user }) => {
                   </button>
                   {isDropdownOpen && (
                      <button
-                        className="absolute top-[60px] right-0 bg-white hover:bg-[#a9a9a9] text-black w-[110px] px-[10px] py-[5px] flex justify-center items-center gap-[5px]"
+                        className="absolute top-[60px] right-0 bg-white hover:bg-[#a9a9a9] transition-colors duration-300 ease-in-out text-black w-[110px] px-[10px] py-[5px] flex justify-center items-center gap-[5px]"
                         onClick={() => signOut()}
                      >
                         <FiLogOut />
@@ -48,8 +48,7 @@ const UserSignIn = ({ user }) => {
                   onClick={() => signIn("patreon")}
                   className="flex items-center gap-[3px] bg-white py-[8px] px-[10px] text-black rounded-sm"
                >
-                  <BiLogoPatreon className="text-[#ff424d] text-[20px] sm:text-[32px]" />
-                  <span className="md:hidden">Connect</span>
+                  <BiLogoPatreon className="text-[#ff424d] text-[20px] md:text-[28px]" />
                   <span className="hidden md:inline">Connect with Patreon</span>
                </button>
             )}

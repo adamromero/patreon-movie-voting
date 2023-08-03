@@ -12,22 +12,22 @@ export default async function Home() {
    return (
       <main>
          <Header />
-         <div className="flex flex-col justify-between p-[16px] pt-[114px] sm:pt-[16px]">
+         <div className="flex flex-col justify-between p-[16px] pt-[93px] sm:pt-[16px]">
             <div className="max-w-[1200px] w-full mx-auto">
                {user ? (
-                  <div className="mb-[20px]">
-                     <h2 className="text-[18px]">
+                  <div className="mb-[15px]">
+                     <h2 className="text-[16px] sm:text-[18px]">
                         Hi {user.firstName ? user.firstName : user.name}! Begin
                         voting and requesting movies.
                      </h2>
                   </div>
                ) : (
-                  <div className="mb-[20px]">
-                     <p className="text-[18px]">
+                  <div className="mb-[20px] text-[16px] sm:text-[18px]">
+                     <p>
                         Connect with your Patreon account to request movies and
                         vote.
                      </p>
-                     <p>You must be a current Patron of this channel.</p>
+                     <p>You must be a current patron of this channel.</p>
                   </div>
                )}
                <VotingApp user={user} />

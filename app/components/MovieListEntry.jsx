@@ -63,14 +63,14 @@ const MovieListEntry = ({
                   {data.voters.filter((voter) => voter === currentUser)
                      .length ? (
                      <button
-                        className="bg-[gray] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                         onClick={() => handleRemoveVote(data._id, data.voters)}
                      >
                         Retract
                      </button>
                   ) : (
                      <button
-                        className="bg-[#830483] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                         onClick={() => handleCastVote(data._id, data.voters)}
                      >
                         Request
