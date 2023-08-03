@@ -14,7 +14,7 @@ const RequestMovies = ({ currentUser }) => {
       <>
          <button
             onClick={onOpenModal}
-            className="bg-[black] focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out text-white cursor-pointer sm:mb-4 py-1 px-3"
+            className="bg-[black] focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
          >
             Request Movies
          </button>
