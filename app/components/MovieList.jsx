@@ -26,7 +26,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
-      useState(true);
+      useState(false);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
    const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
    const [isWatchedFilterAscending, setIsWatchedFilterAscending] =
