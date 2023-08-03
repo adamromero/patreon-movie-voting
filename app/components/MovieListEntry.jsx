@@ -45,17 +45,19 @@ const MovieListEntry = ({
                />
             </a>
          </div>
-         <div
-            className={`${
-               isCreator ? "pr-0" : "md:pr-[16px]"
-            } py-[10px] md:py-0 content`}
-         >
+         <div className={`${isCreator ? "pr-0" : "md:pr-[16px]"} content`}>
             <div className="title-cell">
                {data.data.Title} ({data.data.Year})
             </div>
             <div className="genre-cell">{data.data.Genre}</div>
-            <div className="rating-cell">{data.data.imdbRating}</div>
-            <div className="request-cell">{data.voters.length}</div>
+            <div className="rating-cell">
+               <span className="inline md:hidden">Rating:</span>{" "}
+               {data.data.imdbRating}
+            </div>
+            <div className="request-cell">
+               <span className="inline md:hidden">Requests:</span>{" "}
+               {data.voters.length}
+            </div>
             <div>
                {!data.isWatched && currentUser ? (
                   data.voters.filter((voter) => voter === currentUser)

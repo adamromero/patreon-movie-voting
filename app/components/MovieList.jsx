@@ -282,15 +282,15 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
    const tableHead = (
-      <div className="flex justify-between bg-black mb-[10px]">
-         <div className="w-[75px]"></div>
-         <div className="w-[225px]">
+      <div className="flex flex-col sm:flex-row gap-[10px] md:gap-0 bg-transparent md:bg-black justify-between mb-[10px]">
+         <div className="hidden md:block w-[75px]"></div>
+         <div className="bg-black w-full md:w-[225px]">
             <button
-               className="w-full text-left p-[10px] pl-0"
                onClick={() => {
                   setIsTitleFilterAscending(!isTitleFilterAscending);
                   handleTitleSort();
                }}
+               className="flex justify-center md:block w-full text-left p-[10px] pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.alphabetical === alphabetical.Default && (
@@ -306,16 +306,16 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         <div className="w-[200px]">
+         <div className="hidden md:block w-[200px]">
             <div className="w-full text-left p-[10px]">Genre</div>
          </div>
-         <div className="w-[80px]">
+         <div className="bg-black w-full md:w-[80px]">
             <button
                onClick={() => {
                   setIsRatingFilterAscending(!isRatingFilterAscending);
                   handleRatingsSort();
                }}
-               className="w-full text-left p-[10px] pl-0"
+               className="flex justify-center md:block w-full text-center md:text-left p-[10px] pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.rating === rating.Default && <FaSort />}
@@ -325,13 +325,13 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         <div className="w-[100px]">
+         <div className="bg-black w-full md:w-[100px]">
             <button
                onClick={() => {
                   setIsRequestFilterAscending(!isRequestFilterAscending);
                   handleRequestsSort();
                }}
-               className="w-full text-left p-[10px] pl-0"
+               className="flex justify-center md:block w-full text-left p-[10px] pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.votes === votes.Default && <FaSort />}
@@ -341,15 +341,15 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         <div className="w-[100px]"></div>
+         <div className="hidden md:block md:w-[100px]"></div>
          {isCreator && (
-            <div className="w-[100px]">
+            <div className="bg-black w-full md:w-[100px]">
                <button
                   onClick={() => {
                      setIsWatchedFilterAscending(!isWatchedFilterAscending);
                      handleWatchedSort();
                   }}
-                  className="w-full text-left p-[10px] pl-0"
+                  className="flex justify-center md:block w-full text-left p-[10px] pl-0"
                >
                   <div className="flex gap-[5px] items-center">
                      {filterOptions.watched === watched.Default && <FaSort />}
@@ -374,7 +374,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             .map((data) => (
                <div
                   key={data._id}
-                  className="row text-[12px] md:text-[16px]"
+                  className="row p-[10px] md:p-0 text-[16px]"
                   style={{
                      backgroundColor: data.isWatched
                         ? "rgb(0 0 0 / 40%)"

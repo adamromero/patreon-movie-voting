@@ -153,13 +153,11 @@ input:checked + .slider:before {
 .row {
    display: flex;
    justify-content: space-between;
-   align-items: center;
+   align-items: flex-start;
    margin-bottom: 10px;
    gap: 15px;
    background: black;
    color: white;
-   font-size: 16px;
-   flex: 1;
 }
 
 .content {
@@ -174,7 +172,15 @@ input:checked + .slider:before {
    width: 100%;
 }
 
-@media screen and (min-width: 820px) {
+@media screen and (min-width: 640px) {
+   .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+   }
+}
+
+@media screen and (min-width: 767px) {
    .img-poster {
       width: 50px;
       height: 75px;
@@ -199,9 +205,11 @@ input:checked + .slider:before {
 
    .row {
       flex-direction: row;
+      align-items: center;
    }
 
    .content {
+      display: flex;
       align-items: center;
       flex-direction: row;
    }

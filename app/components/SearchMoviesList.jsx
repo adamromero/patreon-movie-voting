@@ -2,7 +2,7 @@ import React from "react";
 
 const SearchMoviesList = ({ searchTitle, setSearchTitle }) => {
    return (
-      <div className="flex flex-1 gap-[5px] mb-[15px]">
+      <div className="flex flex-1 gap-[5px]">
          <input
             className="text-black px-[10px] py-[5px] max-w-[250px] w-full"
             type="text"
