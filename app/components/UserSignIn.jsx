@@ -21,7 +21,7 @@ const UserSignIn = ({ user }) => {
                   <button
                      ref={ref}
                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                     className="flex items-center gap-[10px] py-[8px] px-[12px] sm:hover:bg-[#1a1a1a] sm:focus-visible:bg-[#1a1a1a] rounded-[5px]"
+                     className="flex items-center gap-[10px] p-0 sm:py-[8px] sm:px-[12px] sm:hover:bg-[#1a1a1a] sm:focus-visible:bg-[#1a1a1a] rounded-[5px]"
                   >
                      <Image
                         src={user.image}
