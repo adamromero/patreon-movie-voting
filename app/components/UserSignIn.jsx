@@ -35,7 +35,7 @@ const UserSignIn = ({ user }) => {
                   </button>
                   {isDropdownOpen && (
                      <button
-                        className="absolute top-[60px] right-0 bg-white hover:bg-[#a9a9a9] transition-colors duration-300 ease-in-out text-black w-[110px] px-[10px] py-[5px] flex justify-center items-center gap-[5px]"
+                        className="absolute top-[50px] sm:top-[60px] right-0 bg-white hover:bg-[#a9a9a9] transition-colors duration-300 ease-in-out text-black text-[16px] w-[135px] sm:w-[110px] px-[15px] py-[10px] sm:px-[10px] sm:py-[5px] flex justify-center items-center gap-[5px]"
                         onClick={() => signOut()}
                      >
                         <FiLogOut />
