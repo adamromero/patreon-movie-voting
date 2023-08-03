@@ -36,20 +36,6 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
-   let dummyList = [
-      { _id: "2", data: { Title: "movie 1", Year: "1992" }, isWatched: true },
-      { _id: "1", data: { Title: "movie 2", Year: "1995" }, isWatched: false },
-      { _id: "3", data: { Title: "movie 3", Year: "1996" }, isWatched: false },
-      { _id: "4", data: { Title: "movie 4", Year: "1997" }, isWatched: false },
-      { _id: "5", data: { Title: "movie 1", Year: "1991" }, isWatched: true },
-      { _id: "6", data: { Title: "movie 2", Year: "1985" }, isWatched: true },
-      { _id: "7", data: { Title: "movie 3", Year: "1987" }, isWatched: false },
-      { _id: "8", data: { Title: "movie 4", Year: "1999" }, isWatched: false },
-   ];
-   let filteredDummyList = dummyList.sort(
-      (a, b) => parseInt(a.data.Year) - parseInt(b.data.Year)
-   );
-
    useEffect(() => {
       let filteredList = [...moviesList];
 
@@ -225,11 +211,11 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          );
       }
 
-      setCurrentPage(
+      const initialPage =
          currentPage <= Math.ceil(filteredList.length / postsPerPage)
             ? currentPage
-            : Math.ceil(filteredList.length / postsPerPage)
-      );
+            : Math.ceil(filteredList.length / postsPerPage);
+      setCurrentPage(initialPage > 0 ? initialPage : 1);
       setFilteredMoviesList(filteredList);
    }, [moviesList, filterOptions, searchTitle]);
 
