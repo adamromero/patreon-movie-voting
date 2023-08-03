@@ -18,6 +18,18 @@ const movieSchema = new mongoose.Schema({
          type: String,
          required: true,
       },
+      Director: {
+         type: String,
+         required: true,
+      },
+      Actors: {
+         type: String,
+         required: true,
+      },
+      Plot: {
+         type: String,
+         required: true,
+      },
       Poster: {
          type: String,
          required: true,
