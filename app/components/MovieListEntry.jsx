@@ -45,14 +45,16 @@ const MovieListEntry = ({
                />
             </a>
          </div>
-         <div className="content">
+         <div
+            className={`${
+               isCreator ? "pr-0" : "md:pr-[16px]"
+            } py-[10px] md:py-0 content`}
+         >
             <div className="title-cell">
                {data.data.Title} ({data.data.Year})
             </div>
             <div className="genre-cell">{data.data.Genre}</div>
-            <div className="rating-cell">
-               {data.data.imdbRating ? <>{data.data.imdbRating}</> : <>N/A</>}
-            </div>
+            <div className="rating-cell">{data.data.imdbRating}</div>
             <div className="request-cell">{data.voters.length}</div>
             <div>
                {!data.isWatched && currentUser ? (
@@ -74,8 +76,8 @@ const MovieListEntry = ({
                   )
                ) : null}
             </div>
-            <div className="watched-cell">
-               {isCreator && (
+            {isCreator && (
+               <div className="watched-cell">
                   <div className="container">
                      <label className="switch" htmlFor={`checkbox-${data._id}`}>
                         <input
@@ -87,8 +89,8 @@ const MovieListEntry = ({
                         <div className="slider round"></div>
                      </label>
                   </div>
-               )}
-            </div>
+               </div>
+            )}
          </div>
       </>
    );

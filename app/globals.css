@@ -168,7 +168,6 @@ input:checked + .slider:before {
    justify-content: space-between;
    flex: 1;
    gap: 5px;
-   padding: 10px 0;
 }
 
 .table {
@@ -205,6 +204,5 @@ input:checked + .slider:before {
    .content {
       align-items: center;
       flex-direction: row;
-      padding: 0;
    }
 }
