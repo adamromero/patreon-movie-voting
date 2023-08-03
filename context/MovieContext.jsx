@@ -16,7 +16,6 @@ export const MovieContext = createContext();
 
 export const MovieProvider = ({ children }) => {
    const [moviesList, setMoviesList] = useState([]);
-   const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [filterOptions, setFilterOptions] = useState({
       alphabetical: alphabetical.Default,
       votes: votes.Ascending,
@@ -182,8 +181,6 @@ export const MovieProvider = ({ children }) => {
             filterOptions,
             setFilterOptions,
             setMovieVoteToWatched,
-            filteredMoviesList,
-            setFilteredMoviesList,
          }}
       >
          {children}

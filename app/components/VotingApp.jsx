@@ -11,7 +11,8 @@ import { MovieContext } from "@/context/MovieContext";
 
 const VotingApp = ({ user }) => {
    const [searchTitle, setSearchTitle] = useState("");
-   const { filteredMoviesList } = useContext(MovieContext);
+   //const { filteredMoviesList } = useContext(MovieContext);
+   const { moviesList } = useContext(MovieContext);
 
    return (
       <div>
@@ -23,7 +24,7 @@ const VotingApp = ({ user }) => {
             />
             {/* {user && user.creatorId === user.id && (
                <PDFDownloadLink
-                  document={<PDFFile filteredMoviesList={filteredMoviesList} />}
+                  document={<PDFFile moviesList={moviesList} />}
                   fileName="MovieList"
                >
                   {({ loading }) =>

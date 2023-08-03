@@ -2,6 +2,7 @@ export const genre = {
    Name: "Genre",
    Default: "All",
    Action: "Action",
+   Adventure: "Adventure",
    Animation: "Animation",
    Biography: "Biography",
    Comedy: "Comedy",

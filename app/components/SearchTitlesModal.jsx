@@ -302,7 +302,11 @@ const SearchTitlesModal = ({ currentUser }) => {
                            ) : (
                               <div className="relative">
                                  <button
-                                    className="block"
+                                    className={`block ${
+                                       disabledButtonStates[movie.imdbID]
+                                          ? "cursor-wait"
+                                          : ""
+                                    }`}
                                     onClick={() => handleMovieSelection(movie)}
                                     disabled={
                                        disabledButtonStates[movie.imdbID]

@@ -16,14 +16,14 @@ export default async function Home() {
             <div className="max-w-[1200px] w-full mx-auto">
                {user ? (
                   <div className="mb-[20px]">
-                     <h2 className="text-[20px]">
+                     <h2 className="text-[18px]">
                         Hi {user.firstName ? user.firstName : user.name}! Begin
                         voting and requesting movies.
                      </h2>
                   </div>
                ) : (
                   <div className="mb-[20px]">
-                     <p>
+                     <p className="text-[18px]">
                         Connect with your Patreon account to request movies and
                         vote.
                      </p>

@@ -17,14 +17,12 @@ import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
 
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PDFFile from "./PDFFile";
+
 const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const moviesList = useRetrieveMovies();
-   const {
-      filterOptions,
-      setFilterOptions,
-      // filteredMoviesList,
-      // setFilteredMoviesList,
-   } = useContext(MovieContext);
+   const { filterOptions, setFilterOptions } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
@@ -38,8 +36,32 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
+   let dummyList = [
+      { _id: "2", data: { Title: "movie 1", Year: "1992" }, isWatched: true },
+      { _id: "1", data: { Title: "movie 2", Year: "1995" }, isWatched: false },
+      { _id: "3", data: { Title: "movie 3", Year: "1996" }, isWatched: false },
+      { _id: "4", data: { Title: "movie 4", Year: "1997" }, isWatched: false },
+      { _id: "5", data: { Title: "movie 1", Year: "1991" }, isWatched: true },
+      { _id: "6", data: { Title: "movie 2", Year: "1985" }, isWatched: true },
+      { _id: "7", data: { Title: "movie 3", Year: "1987" }, isWatched: false },
+      { _id: "8", data: { Title: "movie 4", Year: "1999" }, isWatched: false },
+   ];
+   let filteredDummyList = dummyList.sort(
+      (a, b) => parseInt(a.data.Year) - parseInt(b.data.Year)
+   );
+
    useEffect(() => {
       let filteredList = [...moviesList];
+
+      if (filterOptions.watched === watched.Ascending) {
+         //not watched first
+         filteredList = filteredList.sort((a, b) => b.isWatched - a.isWatched);
+      } else if (filterOptions.watched === watched.Descending) {
+         //watched first
+         filteredList = filteredList.sort((a, b) => a.isWatched - b.isWatched);
+      } else {
+         setIsWatchedFilterAscending(true);
+      }
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
@@ -121,6 +143,10 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Action)
          );
+      } else if (filterOptions.genre === genre.Adventure) {
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Genre.includes(genre.Adventure)
+         );
       } else if (filterOptions.genre === genre.Animation) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Animation)
@@ -193,20 +219,17 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          filteredList = filteredList.filter((movie) => !movie.isWatched);
       }
 
-      if (filterOptions.watched === watched.Ascending) {
-         //not watched first
-         filteredList = filteredList.sort((a, b) => b.isWatched - a.isWatched);
-      } else if (filterOptions.watched === watched.Descending) {
-         //watched first
-         filteredList = filteredList.sort((a, b) => a.isWatched - b.isWatched);
-      }
-
       if (searchTitle) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Title.toLowerCase().includes(searchTitle.toLowerCase())
          );
       }
 
+      setCurrentPage(
+         currentPage <= Math.ceil(filteredList.length / postsPerPage)
+            ? currentPage
+            : Math.ceil(filteredList.length / postsPerPage)
+      );
       setFilteredMoviesList(filteredList);
    }, [moviesList, filterOptions, searchTitle]);
 
@@ -218,7 +241,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       setWatchedState(watchedStateObject);
    }, [filteredMoviesList]);
 
-   const handleTitleFilter = () => {
+   const handleTitleSort = () => {
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
          votes: votes.Default,
@@ -232,7 +255,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }));
    };
 
-   const handleRequestsFilter = () => {
+   const handleRequestsSort = () => {
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
          alphabetical: alphabetical.Default,
@@ -244,7 +267,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }));
    };
 
-   const handleRatingsFilter = () => {
+   const handleRatingsSort = () => {
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
          alphabetical: alphabetical.Default,
@@ -280,7 +303,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                className="w-full text-left p-[10px] pl-0"
                onClick={() => {
                   setIsTitleFilterAscending(!isTitleFilterAscending);
-                  handleTitleFilter();
+                  handleTitleSort();
                }}
             >
                <div className="flex gap-[5px] items-center">
@@ -304,7 +327,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             <button
                onClick={() => {
                   setIsRatingFilterAscending(!isRatingFilterAscending);
-                  handleRatingsFilter();
+                  handleRatingsSort();
                }}
                className="w-full text-left p-[10px] pl-0"
             >
@@ -320,7 +343,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             <button
                onClick={() => {
                   setIsRequestFilterAscending(!isRequestFilterAscending);
-                  handleRequestsFilter();
+                  handleRequestsSort();
                }}
                className="w-full text-left p-[10px] pl-0"
             >
@@ -387,6 +410,25 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
 
    return (
       <>
+         {isCreator && (
+            <PDFDownloadLink
+               document={<PDFFile moviesList={filteredMoviesList} />}
+               fileName="MovieList"
+            >
+               {({ loading }) =>
+                  loading ? (
+                     <button className="bg-black px-[10px] py-[5px] mb-[15px]">
+                        Loading
+                     </button>
+                  ) : (
+                     <button className="bg-black px-[10px] py-[5px] mb-[15px]">
+                        Download PDF
+                     </button>
+                  )
+               }
+            </PDFDownloadLink>
+         )}
+         <div className="mb-[5px]">Results: {filteredMoviesList.length}</div>
          <Pagination
             postsPerPage={postsPerPage}
             totalPosts={filteredMoviesList.length}
@@ -401,6 +443,12 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          ) : (
             <div className="loader loader--list"></div>
          )}
+         <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={filteredMoviesList.length}
+            currentPage={currentPage}
+            paginate={paginate}
+         />
       </>
    );
 };

@@ -84,6 +84,7 @@ const FilterMovieList = () => {
                   >
                      <option value={genre.Default}>All</option>
                      <option value={genre.Action}>Action</option>
+                     <option value={genre.Adventure}>Adventure</option>
                      <option value={genre.Animation}>Animation</option>
                      <option value={genre.Biography}>Biography</option>
                      <option value={genre.Comedy}>Comedy</option>
