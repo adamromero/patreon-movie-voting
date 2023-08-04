@@ -188,7 +188,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                   <input
                      className="bg-[#830483] text-white cursor-pointer py-1 px-3"
                      type="submit"
-                     value="Submit"
+                     value="Search"
                   />
                </form>
             )}
@@ -220,7 +220,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                   <input
                      className="bg-[#830483] text-white cursor-pointer py-1 px-3"
                      type="submit"
-                     value="Submit"
+                     value="Search"
                   />
                </form>
             )}
