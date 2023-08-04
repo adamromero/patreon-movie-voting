@@ -12,11 +12,7 @@ export default async function Home() {
    return (
       <main>
          <Header />
-         <div
-            className={`flex flex-col justify-between p-[16px] ${
-               user ? "pt-[96px]" : "pt-[93px]"
-            } sm:pt-[16px]`}
-         >
+         <div className="flex flex-col justify-between p-[16px]">
             <div className="max-w-[1200px] w-full mx-auto">
                {user ? (
                   <div className="mb-[15px]">

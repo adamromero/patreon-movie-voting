@@ -428,26 +428,29 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             </PDFDownloadLink>
          )}
 
-         {filteredMoviesList.length ? (
-            <>
-               <div className="flex flex-col-reverse md:flex-row items-center gap-[10px] mb-[10px]">
-                  <Pagination
-                     postsPerPage={postsPerPage}
-                     totalPosts={filteredMoviesList.length}
-                     currentPage={currentPage}
-                     firstPage={firstPage}
-                     lastPage={lastPage}
-                     decrementPage={decrementPage}
-                     incrementPage={incrementPage}
-                  />
-                  <div>Results: {filteredMoviesList.length}</div>
-               </div>
-
-               <div>
-                  {tableHead}
-                  {tableBody}
-               </div>
-            </>
+         {moviesList.length ? (
+            filteredMoviesList.length ? (
+               <>
+                  <div className="sticky top-0 z-10 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[10px]">
+                     <Pagination
+                        postsPerPage={postsPerPage}
+                        totalPosts={filteredMoviesList.length}
+                        currentPage={currentPage}
+                        firstPage={firstPage}
+                        lastPage={lastPage}
+                        decrementPage={decrementPage}
+                        incrementPage={incrementPage}
+                     />
+                     <div>Results: {filteredMoviesList.length}</div>
+                  </div>
+                  <div>
+                     {tableHead}
+                     {tableBody}
+                  </div>
+               </>
+            ) : (
+               <div>No results found</div>
+            )
          ) : (
             <div className="loader loader--list"></div>
          )}
