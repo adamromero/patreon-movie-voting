@@ -12,7 +12,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ currentUser }) => {
-   const mobileBreakPoint = 640;
+   const mediumBreakPoint = 768;
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [inputTitle, setInputTitle] = useState("");
@@ -29,8 +29,8 @@ const SearchTitlesModal = ({ currentUser }) => {
    const [imdbIDCollection, setImdbIDCollection] = useState({});
    const [disabledButtonStates, setDisabledButtonStates] = useState({});
    const [isSearchByYear, setIsSearchByYear] = useState(true);
-   const [isDesktopView, setIsDesktopView] = useState(
-      window.innerWidth >= mobileBreakPoint
+   const [isTabletView, setisTabletView] = useState(
+      window.innerWidth >= mediumBreakPoint
    );
 
    const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
@@ -95,7 +95,7 @@ const SearchTitlesModal = ({ currentUser }) => {
    }, [searchTitle, searchYear]);
 
    const handleWindowResize = useCallback(() => {
-      setIsDesktopView(window.innerWidth >= mobileBreakPoint);
+      setisTabletView(window.innerWidth >= mediumBreakPoint);
    }, []);
 
    useEffect(() => {
@@ -163,16 +163,16 @@ const SearchTitlesModal = ({ currentUser }) => {
 
    return (
       <div>
-         <div className="flex flex-col sm:flex-row gap-2 items-center pb-[16px]">
+         <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px]">
             <button
                onClick={() => setIsSearchByYear(!isSearchByYear)}
-               className="block sm:hidden bg-[#830483] text-white cursor-pointer py-1 px-3"
+               className="block md:hidden bg-[#830483] text-white cursor-pointer py-1 px-3"
             >
                {isSearchByYear ? <>Search by Year</> : <>Search by Titles</>}
             </button>
-            {(isSearchByYear || isDesktopView) && (
+            {(isSearchByYear || isTabletView) && (
                <form
-                  className="flex flex-col sm:flex-row gap-2 w-full sm:w-[initial]"
+                  className="flex flex-col md:flex-row gap-2 w-full md:w-[initial]"
                   onSubmit={(e) => handleTitleSubmit(e)}
                >
                   <input
@@ -193,12 +193,12 @@ const SearchTitlesModal = ({ currentUser }) => {
                </form>
             )}
 
-            <div className="hidden sm:block">or</div>
+            <div className="hidden md:block">or</div>
 
-            {(!isSearchByYear || isDesktopView) && (
+            {(!isSearchByYear || isTabletView) && (
                <form
                   onSubmit={(e) => handleTitleYearSubmit(e)}
-                  className="flex flex-col sm:flex-row gap-2 w-full sm:w-[initial]"
+                  className="flex flex-col md:flex-row gap-2 w-full md:w-[initial]"
                >
                   <div className="flex w-full gap-[5px]">
                      <input
@@ -229,7 +229,7 @@ const SearchTitlesModal = ({ currentUser }) => {
             {loading ? (
                <div className="loader absolute"></div>
             ) : (
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-[32px]">
+               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-[32px]">
                   {movies.length ? (
                      movies.map((movie) => (
                         <div className="mx-auto" key={movie.imdbID}>
@@ -276,7 +276,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                 onClick={() =>
                                                    handleRemoveVote(movie)
                                                 }
-                                                className="bg-[gray] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                                              >
                                                 Retract
                                              </button>
@@ -285,7 +285,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                 onClick={() =>
                                                    handleCastVote(movie)
                                                 }
-                                                className="bg-[#830483] text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                                              >
                                                 Request
                                              </button>
