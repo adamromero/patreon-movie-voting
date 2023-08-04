@@ -73,7 +73,7 @@ const FilterMovieList = () => {
                <FilterMovieListTags />
             </div>
             <div className="flex gap-[10px]">
-               <div className="flex flex-col">
+               <div className="flex flex-col flex-1 sm:flex-none">
                   <label htmlFor="genre">{genre.Name}</label>
                   <select
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
@@ -103,7 +103,7 @@ const FilterMovieList = () => {
                      <option value={genre.War}>War</option>
                   </select>
                </div>
-               <div className="flex flex-col">
+               <div className="flex flex-col flex-1 sm:flex-none">
                   <label htmlFor="type">{type.Name}</label>
                   <select
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
@@ -117,7 +117,7 @@ const FilterMovieList = () => {
                      <option value={type.Series}>Series</option>
                   </select>
                </div>
-               <div className="flex flex-col">
+               <div className="flex flex-col flex-1 sm:flex-none">
                   <label htmlFor="status">{status.Name}</label>
                   <select
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
@@ -139,7 +139,7 @@ const FilterMovieList = () => {
                <FilterMovieListSortTags />
             </div>
             <div className="flex gap-[10px]">
-               <div className="flex flex-col">
+               <div className="flex flex-col flex-1 sm:flex-none">
                   <label htmlFor="chronological">{chronological.Name}</label>
                   <select
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
@@ -153,7 +153,7 @@ const FilterMovieList = () => {
                      <option value={chronological.Newer}>Newer</option>
                   </select>
                </div>
-               <div className="flex flex-col">
+               <div className="flex flex-col flex-1 sm:flex-none">
                   <label htmlFor="added">{added.Name}</label>
                   <select
                      className="bg-white text-black w-full sm:w-[125px] p-[5px]"
