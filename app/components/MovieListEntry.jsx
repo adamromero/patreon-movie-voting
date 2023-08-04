@@ -44,7 +44,7 @@ const MovieListEntry = ({
                   </div>
                )}
                <img
-                  className="img-poster"
+                  className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
                   src={data.data.Poster}
                   // width={50}
                   // height={205}
@@ -52,16 +52,20 @@ const MovieListEntry = ({
                />
             </a>
          </div>
-         <div className={`${isCreator ? "pr-0" : "md:pr-[16px]"} content`}>
-            <div className="title-cell">
+         <div
+            className={`${
+               isCreator ? "pr-0" : "md:pr-[16px]"
+            } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
+         >
+            <div className="lg:w-[225px]">
                {data.data.Title} ({data.data.Year})
             </div>
-            <div className="genre-cell">{data.data.Genre}</div>
-            <div className="rating-cell">
+            <div className="lg:w-[200px]">{data.data.Genre}</div>
+            <div className="lg:w-[40px]">
                <span className="inline md:hidden">Rating:</span>{" "}
                {data.data.imdbRating}
             </div>
-            <div className="request-cell">
+            <div className="lg:w-[40px]">
                <span className="inline md:hidden">Requests:</span>{" "}
                {data.voters.length}
             </div>
@@ -86,7 +90,7 @@ const MovieListEntry = ({
                </div>
             ) : null}
             {isCreator && (
-               <div className="watched-cell mt-[10px] sm:mt-0">
+               <div className="lg:w-[100px] mt-[10px] sm:mt-0">
                   <div className="container">
                      <label className="switch" htmlFor={`checkbox-${data._id}`}>
                         <input

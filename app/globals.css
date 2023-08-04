@@ -8,6 +8,15 @@ body {
    color: white;
 }
 
+.dots {
+   -o-border-image: url(svg-dotted.svg) 25% repeat;
+   -webkit-border-image: url(svg-dotted.svg) 25% repeat;
+   border-image: url(svg-dotted.svg) 25% repeat;
+   border-width: 0px;
+   border-top-width: 5px;
+   border-style: solid;
+}
+
 .text-shadow {
    text-shadow: 2px 2px 2px black;
 }
@@ -148,7 +157,7 @@ input:checked + .slider:before {
 
 .animate-rotation {
    animation: addIcon 0.2s linear forwards;
-   transform: rotate(45deg); /* Add this line to set initial rotation */
+   transform: rotate(45deg);
 }
 
 @keyframes addIcon {
@@ -157,83 +166,5 @@ input:checked + .slider:before {
    }
    100% {
       transform: rotate(45deg);
-   }
-}
-
-.img-poster {
-   width: 100px;
-   height: 150px;
-}
-
-.table-header {
-   display: flex;
-   background: black;
-   color: white;
-   justify-content: space-between;
-   margin-bottom: 10px;
-}
-
-.row {
-   display: flex;
-   justify-content: space-between;
-   align-items: flex-start;
-   margin-bottom: 10px;
-   gap: 15px;
-   background: black;
-   color: white;
-}
-
-.content {
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-   flex: 1;
-   gap: 5px;
-}
-
-.table {
-   width: 100%;
-}
-
-@media screen and (min-width: 640px) {
-   .content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-   }
-}
-
-@media screen and (min-width: 767px) {
-   .img-poster {
-      width: 50px;
-      height: 75px;
-   }
-
-   .title-cell {
-      width: 225px;
-   }
-
-   .genre-cell {
-      width: 200px;
-   }
-
-   .rating-cell,
-   .request-cell {
-      width: 40px;
-   }
-
-   .watched-cell {
-      width: 100px;
-   }
-
-   .row {
-      flex-direction: row;
-      align-items: center;
-   }
-
-   .content {
-      display: flex;
-      align-items: center;
-      flex-direction: row;
    }
 }

@@ -299,15 +299,15 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    };
 
    const tableHead = (
-      <div className="flex gap-[10px] md:gap-0 bg-transparent md:bg-black justify-between mb-[10px]">
-         <div className="hidden md:block w-[75px]"></div>
-         <div className="bg-black w-full md:w-[225px]">
+      <div className="flex gap-[5px] sm:gap-[10px] lg:gap-0 bg-transparent lg:bg-black justify-between mb-[10px]">
+         <div className="hidden lg:block w-[75px]"></div>
+         <div className="bg-black w-full lg:w-[225px]">
             <button
                onClick={() => {
                   setIsTitleFilterAscending(!isTitleFilterAscending);
                   handleTitleSort();
                }}
-               className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:pl-0 md:p-[10px]"
+               className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px] lg:pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.alphabetical === alphabetical.Default && (
@@ -323,16 +323,16 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         <div className="hidden md:block w-[200px]">
+         <div className="hidden lg:block w-[200px]">
             <div className="w-full text-left p-[10px]">Genre</div>
          </div>
-         <div className="bg-black w-full md:w-[80px]">
+         <div className="bg-black w-full lg:w-[80px]">
             <button
                onClick={() => {
                   setIsRatingFilterAscending(!isRatingFilterAscending);
                   handleRatingsSort();
                }}
-               className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:p-[10px] md:pl-0"
+               className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px] lg:pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.rating === rating.Default && <FaSort />}
@@ -342,13 +342,13 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         <div className="bg-black w-full md:w-[100px]">
+         <div className="bg-black w-full lg:w-[100px]">
             <button
                onClick={() => {
                   setIsRequestFilterAscending(!isRequestFilterAscending);
                   handleRequestsSort();
                }}
-               className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:p-[10px] md:pl-0"
+               className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px] lg:pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.votes === votes.Default && <FaSort />}
@@ -358,15 +358,15 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                </div>
             </button>
          </div>
-         {currentUser && <div className="hidden md:block md:w-[100px]"></div>}
+         {currentUser && <div className="hidden lg:block lg:w-[100px]"></div>}
          {isCreator && (
-            <div className="bg-black w-full md:w-[100px]">
+            <div className="bg-black w-full lg:w-[100px]">
                <button
                   onClick={() => {
                      setIsWatchedFilterAscending(!isWatchedFilterAscending);
                      handleWatchedSort();
                   }}
-                  className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:p-[10px] md:pl-0"
+                  className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px] lg:pl-0"
                >
                   <div className="flex gap-[5px] items-center">
                      {filterOptions.watched === watched.Default && <FaSort />}
@@ -391,7 +391,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             .map((data) => (
                <div
                   key={data._id}
-                  className="row p-[10px] md:p-0 text-[16px]"
+                  className="flex justify-between items-start md:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
                   style={{
                      backgroundColor: data.isWatched
                         ? "rgb(0 0 0 / 40%)"
@@ -420,11 +420,11 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             >
                {({ loading }) =>
                   loading ? (
-                     <button className="bg-black px-[10px] py-[5px] mb-[15px]">
+                     <button className="bg-black px-[10px] py-[5px]">
                         Loading
                      </button>
                   ) : (
-                     <button className="bg-black px-[10px] py-[5px] mb-[15px]">
+                     <button className="bg-black px-[10px] py-[5px]">
                         Download PDF
                      </button>
                   )
