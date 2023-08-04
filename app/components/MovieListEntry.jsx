@@ -62,11 +62,11 @@ const MovieListEntry = ({
             </div>
             <div className="lg:w-[200px]">{data.data.Genre}</div>
             <div className="lg:w-[40px]">
-               <span className="inline md:hidden">Rating:</span>{" "}
+               <span className="inline lg:hidden">Rating:</span>{" "}
                {data.data.imdbRating}
             </div>
             <div className="lg:w-[40px]">
-               <span className="inline md:hidden">Requests:</span>{" "}
+               <span className="inline lg:hidden">Requests:</span>{" "}
                {data.voters.length}
             </div>
             {!data.isWatched && currentUser ? (

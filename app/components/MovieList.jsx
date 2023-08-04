@@ -391,7 +391,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             .map((data) => (
                <div
                   key={data._id}
-                  className="flex justify-between items-start md:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
+                  className="flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
                   style={{
                      backgroundColor: data.isWatched
                         ? "rgb(0 0 0 / 40%)"
