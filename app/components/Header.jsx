@@ -14,7 +14,7 @@ export async function Header() {
    const user = await getCurrentUser();
 
    return (
-      <header className="bg-black py-[20px] px-[16px] sm:p-[20px] sm:mt-[10px] w-full z-10">
+      <header className="bg-black py-[20px] px-[16px] sm:p-[20px] mt-[10px] w-full z-10">
          <div className="max-w-[1200px] mx-auto">
             <div className="flex items-center justify-between sm:gap-[25px]">
                <div className="flex items-center gap-[10px] sm:gap-[20px]">

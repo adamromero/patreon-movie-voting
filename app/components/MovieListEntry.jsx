@@ -30,12 +30,19 @@ const MovieListEntry = ({
 
    return (
       <>
-         <div>
+         <div className="relative">
             <a
                href={`https://www.imdb.com/title/${data.data.imdbID}`}
                title="Go to IMDB"
                target="_blank"
             >
+               {data.isWatched && (
+                  <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5]">
+                     <p className="text-[20px] md:text-[14px] text-shadow font-bold md:rotate-[315deg]">
+                        Watched
+                     </p>
+                  </div>
+               )}
                <img
                   className="img-poster"
                   src={data.data.Poster}
