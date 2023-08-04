@@ -14,10 +14,10 @@ export async function Header() {
    const user = await getCurrentUser();
 
    return (
-      <header className="bg-black py-[10px] mt-[10px] w-full z-10">
+      <header className="bg-black py-[8px] mt-[10px] w-full z-10">
          <div className="film-strip"></div>
          <div className="px-[16px]">
-            <div className="max-w-[1200px] mx-auto py-[10px]">
+            <div className="max-w-[1200px] mx-auto py-[8px]">
                <div className="flex items-center justify-between sm:gap-[25px]">
                   <div className="flex items-center gap-[10px] sm:gap-[20px]">
                      <div className="flex gap-[5px]">
