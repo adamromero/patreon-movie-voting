@@ -32,7 +32,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const [isWatchedFilterAscending, setIsWatchedFilterAscending] =
       useState(true);
    const [currentPage, setCurrentPage] = useState(1);
-   const [postsPerPage] = useState(20);
+   const [postsPerPage, setPostsPerPage] = useState(20);
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
@@ -431,7 +431,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          {moviesList.length ? (
             filteredMoviesList.length ? (
                <>
-                  <div className="sticky top-0 z-10 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[10px]">
+                  <div className="sticky top-0 z-10 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
                      <Pagination
                         postsPerPage={postsPerPage}
                         totalPosts={filteredMoviesList.length}
@@ -442,6 +442,23 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                         incrementPage={incrementPage}
                      />
                      <div>Results: {filteredMoviesList.length}</div>
+                     <div className="flex gap-[5px]">
+                        <label htmlFor="postsPerPage">Rows per page</label>
+                        <select
+                           className="text-black"
+                           name="postsPerPage"
+                           id="postsPerPage"
+                           value={postsPerPage}
+                           onChange={(e) =>
+                              setPostsPerPage(parseInt(e.target.value))
+                           }
+                        >
+                           <option value="10">10</option>
+                           <option value="20">20</option>
+                           <option value="50">50</option>
+                           <option value="100">100</option>
+                        </select>
+                     </div>
                   </div>
                   <div>
                      {tableHead}
