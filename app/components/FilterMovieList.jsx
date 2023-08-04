@@ -92,6 +92,7 @@ const FilterMovieList = () => {
                      <option value={genre.Drama}>Drama</option>
                      <option value={genre.Family}>Family</option>
                      <option value={genre.Fantasy}>Fantasy</option>
+                     <option value={genre.History}>History</option>
                      <option value={genre.Horror}>Horror</option>
                      <option value={genre.Mystery}>Mystery</option>
                      <option value={genre.Music}>Music</option>

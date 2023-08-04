@@ -10,6 +10,7 @@ export const genre = {
    Drama: "Drama",
    Family: "Family",
    Fantasy: "Fantasy",
+   History: "History",
    Horror: "Horror",
    Mystery: "Mystery",
    Music: "Music",

@@ -165,6 +165,10 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Fantasy)
          );
+      } else if (filterOptions.genre === genre.History) {
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Genre.includes(genre.History)
+         );
       } else if (filterOptions.genre === genre.Horror) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Horror)
