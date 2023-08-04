@@ -279,7 +279,20 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
       }));
    };
 
-   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+   const firstPage = () => setCurrentPage(1);
+   const lastPage = () =>
+      setCurrentPage(Math.ceil(filteredMoviesList.length / postsPerPage));
+   const decrementPage = () =>
+      setCurrentPage((pageNumber) =>
+         pageNumber > 1 ? pageNumber - 1 : pageNumber
+      );
+   const incrementPage = () => {
+      setCurrentPage((pageNumber) =>
+         pageNumber < Math.ceil(filteredMoviesList.length / postsPerPage)
+            ? pageNumber + 1
+            : pageNumber
+      );
+   };
 
    const tableHead = (
       <div className="flex flex-col sm:flex-row gap-[10px] md:gap-0 bg-transparent md:bg-black justify-between mb-[10px]">
@@ -414,27 +427,30 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                }
             </PDFDownloadLink>
          )}
-         <div className="mb-[5px]">Results: {filteredMoviesList.length}</div>
-         <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={filteredMoviesList.length}
-            currentPage={currentPage}
-            paginate={paginate}
-         />
+
          {filteredMoviesList.length ? (
-            <div>
-               {tableHead}
-               {tableBody}
-            </div>
+            <>
+               <div className="flex flex-col-reverse md:flex-row items-center gap-[10px] mb-[10px]">
+                  <Pagination
+                     postsPerPage={postsPerPage}
+                     totalPosts={filteredMoviesList.length}
+                     currentPage={currentPage}
+                     firstPage={firstPage}
+                     lastPage={lastPage}
+                     decrementPage={decrementPage}
+                     incrementPage={incrementPage}
+                  />
+                  <div>Results: {filteredMoviesList.length}</div>
+               </div>
+
+               <div>
+                  {tableHead}
+                  {tableBody}
+               </div>
+            </>
          ) : (
             <div className="loader loader--list"></div>
          )}
-         <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={filteredMoviesList.length}
-            currentPage={currentPage}
-            paginate={paginate}
-         />
       </>
    );
 };

@@ -1,27 +1,49 @@
 import React from "react";
+import {
+   MdKeyboardDoubleArrowLeft,
+   MdKeyboardDoubleArrowRight,
+   MdKeyboardArrowLeft,
+   MdKeyboardArrowRight,
+} from "react-icons/md";
 
-const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
-   const pageNumbers = [];
-   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-      pageNumbers.push(i);
-   }
-
+const Pagination = ({
+   postsPerPage,
+   totalPosts,
+   currentPage,
+   firstPage,
+   lastPage,
+   decrementPage,
+   incrementPage,
+}) => {
    return (
-      <nav className="mb-[10px]">
-         <ul className="flex gap-[5px]">
-            {pageNumbers.map((number) => (
-               <li key={number}>
-                  <button
-                     onClick={() => paginate(number)}
-                     className={`${
-                        currentPage === number ? "bg-black" : ""
-                     } px-[8px] rounded-[3px] hover:bg-black focus:bg-black`}
-                  >
-                     {number}
-                  </button>
-               </li>
-            ))}
-         </ul>
+      <nav className="flex items-center gap-[5px]">
+         <button
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
+            onClick={firstPage}
+         >
+            <MdKeyboardDoubleArrowLeft />
+         </button>
+         <button
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
+            onClick={decrementPage}
+         >
+            <MdKeyboardArrowLeft />
+         </button>
+         <div className="text-[16px] mx-[5px]">
+            {currentPage} of {Math.ceil(totalPosts / postsPerPage)}
+         </div>
+         <button
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
+            onClick={incrementPage}
+         >
+            <MdKeyboardArrowRight />
+         </button>
+         <button
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
+            onClick={lastPage}
+         >
+            <MdKeyboardDoubleArrowRight />
+         </button>
       </nav>
    );
 };

@@ -20,10 +20,10 @@ export async function Header() {
                <div className="flex items-center gap-[10px] sm:gap-[20px]">
                   <div className="flex gap-[5px]">
                      <a href="https://www.patreon.com/" target="_blank">
-                        <BiLogoPatreon className="text-white text-[20px] sm:text-[32px]" />
+                        <BiLogoPatreon className="text-white text-[22px] sm:text-[32px]" />
                      </a>
                      <a href="https://www.youtube.com/" target="_blank">
-                        <AiFillYoutube className="text-[red] text-[20px] sm:text-[32px]" />
+                        <AiFillYoutube className="text-[red] text-[22px] sm:text-[32px]" />
                      </a>
                   </div>
                   <div>
