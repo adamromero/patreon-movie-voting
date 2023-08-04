@@ -256,7 +256,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                     className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
                                     style={{ textShadow: "1px 1px 3px black" }}
                                  >
-                                    <div className="flex flex-col items-center">
+                                    <div className="flex flex-col items-center mt-[71px]">
                                        <IoMdAddCircleOutline
                                           className={`text-[50px] rotate-45 ${
                                              imdbIDCollection[movie.imdbID]
@@ -267,7 +267,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                        <div>
                                           {isMovieWatched(movie)
                                              ? "Watched"
-                                             : "Pending"}
+                                             : "Requested"}
                                        </div>
 
                                        {!isMovieWatched(movie) &&
@@ -293,7 +293,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                     </div>
                                  </div>
                                  <div
-                                    className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px]"
+                                    className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
                                     style={{ textShadow: "1px 1px 3px black" }}
                                  >
                                     {movie.Title} ({movie.Year})
@@ -302,11 +302,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                            ) : (
                               <div className="relative">
                                  <button
-                                    className={`block ${
-                                       disabledButtonStates[movie.imdbID]
-                                          ? "cursor-wait"
-                                          : ""
-                                    }`}
+                                    className="block"
                                     onClick={() => handleMovieSelection(movie)}
                                     disabled={
                                        disabledButtonStates[movie.imdbID]
@@ -330,12 +326,25 @@ const SearchTitlesModal = ({ currentUser }) => {
                                        }}
                                     >
                                        <div className="flex flex-col">
-                                          <IoMdAddCircleOutline className="text-[50px]" />
-                                          <div>Add</div>
+                                          <IoMdAddCircleOutline className="text-[50px] mx-auto" />
+                                          <div>
+                                             {disabledButtonStates[
+                                                movie.imdbID
+                                             ] ? (
+                                                <>
+                                                   <span className="loading-text">
+                                                      Loading
+                                                   </span>
+                                                   <span className="ellipsis"></span>
+                                                </>
+                                             ) : (
+                                                "Add"
+                                             )}
+                                          </div>
                                        </div>
                                     </div>
                                     <div
-                                       className="absolute top-0 left-0 right-0 text-white text-center text-[18px] font-black pt-[5px]"
+                                       className="absolute top-0 left-0 right-0 text-white text-center text-[18px] font-black pt-[5px] leading-5"
                                        style={{
                                           textShadow: "1px 1px 3px black",
                                        }}

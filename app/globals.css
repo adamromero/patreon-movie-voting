@@ -12,6 +12,30 @@ body {
    text-shadow: 2px 2px 2px black;
 }
 
+.loading-text {
+   display: flex;
+   align-items: center;
+   position: absolute;
+   left: 45px;
+}
+
+.loading-text::after {
+   content: "...";
+   animation: ellipsis 1s infinite;
+}
+
+@keyframes ellipsis {
+   0% {
+      content: ".";
+   }
+   33% {
+      content: "..";
+   }
+   66% {
+      content: "...";
+   }
+}
+
 .react-responsive-modal-root .react-responsive-modal-modal {
    background: black;
    border-radius: 10px;
