@@ -299,7 +299,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    };
 
    const tableHead = (
-      <div className="flex flex-col sm:flex-row gap-[10px] md:gap-0 bg-transparent md:bg-black justify-between mb-[10px]">
+      <div className="flex gap-[10px] md:gap-0 bg-transparent md:bg-black justify-between mb-[10px]">
          <div className="hidden md:block w-[75px]"></div>
          <div className="bg-black w-full md:w-[225px]">
             <button
@@ -307,7 +307,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                   setIsTitleFilterAscending(!isTitleFilterAscending);
                   handleTitleSort();
                }}
-               className="flex justify-center md:block w-full text-left p-[10px] pl-0"
+               className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:pl-0 md:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.alphabetical === alphabetical.Default && (
@@ -332,7 +332,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                   setIsRatingFilterAscending(!isRatingFilterAscending);
                   handleRatingsSort();
                }}
-               className="flex justify-center md:block w-full text-center md:text-left p-[10px] pl-0"
+               className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:p-[10px] md:pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.rating === rating.Default && <FaSort />}
@@ -348,7 +348,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                   setIsRequestFilterAscending(!isRequestFilterAscending);
                   handleRequestsSort();
                }}
-               className="flex justify-center md:block w-full text-left p-[10px] pl-0"
+               className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:p-[10px] md:pl-0"
             >
                <div className="flex gap-[5px] items-center">
                   {filterOptions.votes === votes.Default && <FaSort />}
@@ -366,7 +366,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                      setIsWatchedFilterAscending(!isWatchedFilterAscending);
                      handleWatchedSort();
                   }}
-                  className="flex justify-center md:block w-full text-left p-[10px] pl-0"
+                  className="flex justify-center md:block w-full text-[14px] sm:text-[16px] md:text-left px-[5px] py-[10px] sm:p-[10px] md:pl-0"
                >
                   <div className="flex gap-[5px] items-center">
                      {filterOptions.watched === watched.Default && <FaSort />}
