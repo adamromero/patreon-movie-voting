@@ -138,12 +138,6 @@ input:checked + .slider:before {
    left: 0;
    right: 0;
    top: 35%;
-   position: absolute;
-}
-
-.loader--list {
-   top: 50%;
-   position: static;
 }
 
 @keyframes spinner {

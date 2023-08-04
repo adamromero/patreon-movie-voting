@@ -227,7 +227,7 @@ const SearchTitlesModal = ({ currentUser }) => {
          </div>
          <div className="overflow-auto h-[75vh] relative no-scrollbar">
             {loading ? (
-               <div className="loader"></div>
+               <div className="loader absolute"></div>
             ) : (
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-[32px]">
                   {movies.length ? (

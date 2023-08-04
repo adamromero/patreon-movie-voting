@@ -473,7 +473,9 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
                <div>No results found</div>
             )
          ) : (
-            <div className="loader loader--list"></div>
+            <div className="relative flex justify-center items-center h-[100px] sm:h-[200px]">
+               <div className="loader relative"></div>
+            </div>
          )}
       </>
    );
