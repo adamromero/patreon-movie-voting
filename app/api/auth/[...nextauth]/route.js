@@ -14,6 +14,9 @@ export const nextAuthOptions = {
          },
       }),
    ],
+   pages: {
+      signIn: "/",
+   },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
       async jwt({ token, account, profile }) {
