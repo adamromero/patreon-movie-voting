@@ -300,7 +300,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                  </div>
                               </div>
                            ) : (
-                              <div className="relative parent-container">
+                              <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                  <button
                                     className="block"
                                     onClick={() => handleMovieSelection(movie)}
@@ -316,7 +316,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                           alt={movie.Title}
                                           width="175"
                                           height="285"
-                                          className="mx-auto"
+                                          className="w-full h-full object-cover mx-auto"
                                        />
                                     )}
                                     <div
