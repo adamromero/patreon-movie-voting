@@ -239,7 +239,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                     isMovieWatched(movie)
                                        ? "text-[#8d8d8d] cursor-not-allowed"
                                        : "text-white"
-                                 } relative`}
+                                 } relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden`}
                               >
                                  {movie.Poster === "N/A" ? (
                                     <div className="w-[175px] h-[285px] bg-slate-400 flex items-center justify-center mx-auto"></div>
@@ -249,14 +249,14 @@ const SearchTitlesModal = ({ currentUser }) => {
                                        alt={movie.Title}
                                        width="175"
                                        height="285"
-                                       className="mx-auto"
+                                       className="w-full h-full object-cover mx-auto"
                                     />
                                  )}
                                  <div
                                     className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
                                     style={{ textShadow: "1px 1px 3px black" }}
                                  >
-                                    <div className="flex flex-col items-center mt-[71px]">
+                                    <div className="flex flex-col items-center">
                                        <IoMdAddCircleOutline
                                           className={`text-[50px] rotate-45 ${
                                              imdbIDCollection[movie.imdbID]
@@ -300,7 +300,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                  </div>
                               </div>
                            ) : (
-                              <div className="relative">
+                              <div className="relative parent-container">
                                  <button
                                     className="block"
                                     onClick={() => handleMovieSelection(movie)}
@@ -328,18 +328,9 @@ const SearchTitlesModal = ({ currentUser }) => {
                                        <div className="flex flex-col">
                                           <IoMdAddCircleOutline className="text-[50px] mx-auto" />
                                           <div>
-                                             {disabledButtonStates[
-                                                movie.imdbID
-                                             ] ? (
-                                                <>
-                                                   <span className="loading-text">
-                                                      Loading
-                                                   </span>
-                                                   <span className="ellipsis"></span>
-                                                </>
-                                             ) : (
-                                                "Add"
-                                             )}
+                                             {disabledButtonStates[movie.imdbID]
+                                                ? "Pending"
+                                                : "Add"}
                                           </div>
                                        </div>
                                     </div>

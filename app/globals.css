@@ -18,7 +18,7 @@ body {
    text-shadow: 2px 2px 2px black;
 }
 
-.loading-text {
+/* .loading-text {
    display: flex;
    align-items: center;
    position: absolute;
@@ -40,7 +40,7 @@ body {
    66% {
       content: "...";
    }
-}
+} */
 
 .react-responsive-modal-root .react-responsive-modal-modal {
    background: black;
