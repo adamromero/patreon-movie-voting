@@ -38,7 +38,7 @@ const MovieListEntry = ({
             >
                {data.isWatched && (
                   <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5]">
-                     <p className="text-[20px] md:text-[14px] text-shadow font-bold md:rotate-[315deg]">
+                     <p className="text-[20px] lg:text-[14px] text-shadow font-bold lg:rotate-[315deg]">
                         Watched
                      </p>
                   </div>
@@ -88,18 +88,23 @@ const MovieListEntry = ({
                      </button>
                   )}
                </div>
-            ) : null}
+            ) : (
+               <div></div>
+            )}
             {isCreator && (
-               <div className="lg:w-[100px] mt-[10px] sm:mt-0">
-                  <div className="container">
-                     <label className="switch" htmlFor={`checkbox-${data._id}`}>
+               <div className="lg:w-[100px] mt-[10px] md:mt-0 relative">
+                  <div className="checkbox-container">
+                     <label
+                        className="checkbox"
+                        htmlFor={`checkbox-${data._id}`}
+                     >
                         <input
                            type="checkbox"
                            id={`checkbox-${data._id}`}
                            checked={!!watchedState[data._id]}
                            onChange={(e) => handleWatchSetting(e, data)}
                         />
-                        <div className="slider round"></div>
+                        <div className="checkmark"></div>
                      </label>
                   </div>
                </div>

@@ -14,7 +14,7 @@ export async function Header() {
    const user = await getCurrentUser();
 
    return (
-      <header className="bg-black py-[8px] mt-[10px] w-full z-10">
+      <header className="bg-black py-[6px] mt-[10px] w-full z-10">
          <div className="film-strip"></div>
          <div className="px-[16px]">
             <div className="max-w-[1200px] mx-auto py-[8px]">
