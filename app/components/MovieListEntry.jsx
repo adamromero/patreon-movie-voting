@@ -88,9 +88,9 @@ const MovieListEntry = ({
                      </button>
                   )}
                </div>
-            ) : (
+            ) : currentUser ? (
                <div></div>
-            )}
+            ) : null}
             {isCreator && (
                <div className="lg:w-[100px] mt-[10px] md:mt-0 relative">
                   <div className="checkbox-container">
