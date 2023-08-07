@@ -21,7 +21,13 @@ import Link from "next/link";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFFile from "./PDFFile";
 
-const MovieList = ({ currentUser, isCreator, searchTitle }) => {
+const MovieList = ({
+   currentUser,
+   isCreator,
+   searchTitle,
+   searchDirector,
+   searchActor,
+}) => {
    const moviesList = useRetrieveMovies();
    const { filterOptions, setFilterOptions } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
@@ -217,13 +223,34 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
          );
       }
 
+      if (searchDirector) {
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Director.toLowerCase().includes(
+               searchDirector.toLowerCase()
+            )
+         );
+      }
+
+      if (searchActor) {
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Actors.toLowerCase().includes(searchActor.toLowerCase())
+         );
+      }
+
       const initialPage =
          currentPage <= Math.ceil(filteredList.length / postsPerPage)
             ? currentPage
             : Math.ceil(filteredList.length / postsPerPage);
       setCurrentPage(initialPage > 0 ? initialPage : 1);
       setFilteredMoviesList(filteredList);
-   }, [moviesList, filterOptions, searchTitle, postsPerPage]);
+   }, [
+      moviesList,
+      filterOptions,
+      searchTitle,
+      searchDirector,
+      searchActor,
+      postsPerPage,
+   ]);
 
    useEffect(() => {
       const watchedStateObject = {};

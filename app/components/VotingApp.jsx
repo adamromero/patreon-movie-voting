@@ -8,6 +8,8 @@ import MovieCount from "./MovieCount";
 
 const VotingApp = ({ user }) => {
    const [searchTitle, setSearchTitle] = useState("");
+   const [searchDirector, setSearchDirector] = useState("");
+   const [searchActor, setSearchActor] = useState("");
 
    return (
       <div>
@@ -16,6 +18,10 @@ const VotingApp = ({ user }) => {
             <SearchMoviesList
                searchTitle={searchTitle}
                setSearchTitle={setSearchTitle}
+               searchDirector={searchDirector}
+               setSearchDirector={setSearchDirector}
+               searchActor={searchActor}
+               setSearchActor={setSearchActor}
             />
          </div>
          <MovieCount />
@@ -24,6 +30,8 @@ const VotingApp = ({ user }) => {
             currentUser={user && user.id}
             isCreator={user && user.creatorId === user.id}
             searchTitle={searchTitle}
+            searchDirector={searchDirector}
+            searchActor={searchActor}
          />
       </div>
    );
