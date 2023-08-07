@@ -15,7 +15,7 @@ export const nextAuthOptions = {
       }),
    ],
    pages: {
-      signIn: "/",
+      signIn: "/denied",
    },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
@@ -40,6 +40,7 @@ export const nextAuthOptions = {
          const findPledge = user.data.relationships.pledges.data.find(
             (pledge) => pledge.id === "129412053"
          );
+
          const isPledged = JSON.stringify(findPledge) !== "{}";
 
          if (token) {
