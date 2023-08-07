@@ -16,6 +16,7 @@ import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
+import Link from "next/link";
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFFile from "./PDFFile";
@@ -35,6 +36,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    const [postsPerPage, setPostsPerPage] = useState(20);
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+   const [isOpenList, setIsOpenList] = useState(false);
 
    useEffect(() => {
       let filteredList = [...moviesList];
@@ -221,7 +223,7 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
             : Math.ceil(filteredList.length / postsPerPage);
       setCurrentPage(initialPage > 0 ? initialPage : 1);
       setFilteredMoviesList(filteredList);
-   }, [moviesList, filterOptions, searchTitle]);
+   }, [moviesList, filterOptions, searchTitle, postsPerPage]);
 
    useEffect(() => {
       const watchedStateObject = {};
@@ -414,22 +416,44 @@ const MovieList = ({ currentUser, isCreator, searchTitle }) => {
    return (
       <>
          {isCreator && (
-            <PDFDownloadLink
-               document={<PDFFile moviesList={filteredMoviesList} />}
-               fileName="MovieList"
-            >
-               {({ loading }) =>
-                  loading ? (
-                     <button className="bg-black px-[10px] py-[5px]">
-                        Loading
-                     </button>
-                  ) : (
-                     <button className="bg-black px-[10px] py-[5px]">
-                        Download PDF
-                     </button>
-                  )
-               }
-            </PDFDownloadLink>
+            // <PDFDownloadLink
+            //    document={<PDFFile moviesList={moviesList} />}
+            //    fileName="movie-list"
+            // >
+            //    {({ loading }) =>
+            //       loading ? (
+            //          <button className="bg-black px-[10px] py-[5px]">
+            //             Loading
+            //          </button>
+            //       ) : (
+            //          <button className="bg-black px-[10px] py-[5px]">
+            //             Download PDF
+            //          </button>
+            //       )
+            //    }
+            // </PDFDownloadLink>
+            <div>
+               {/* <button onClick={() => setIsOpenList(!isOpenList)}>
+                  open list
+               </button>
+               {isOpenList && (
+                  <div>
+                     {filteredMoviesList.map((movies) => (
+                        <div key={movies._id}>
+                           <div
+                              style={{
+                                 textDecoration: movies.isWatched
+                                    ? "line-through"
+                                    : "",
+                              }}
+                           >
+                              {movies.data.Title} ({movies.data.Year})
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               )} */}
+            </div>
          )}
 
          {moviesList.length ? (
