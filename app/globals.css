@@ -39,7 +39,7 @@ body {
 .checkbox-container {
    height: 30px;
    width: 30px;
-   display: block;
+   display: inline-block;
    padding-left: 35px;
    margin-bottom: 12px;
    cursor: pointer;
@@ -54,6 +54,7 @@ body {
    .checkbox-container {
       height: initial;
       width: initial;
+      display: block;
    }
 }
 
@@ -63,6 +64,16 @@ body {
    cursor: pointer;
    height: 0;
    width: 0;
+   clip-path: inset(50%);
+   height: 1px;
+   overflow: hidden;
+   white-space: nowrap;
+   width: 1px;
+}
+
+input:focus-visible + .checkmark,
+input:hover + .checkmark {
+   background-color: #585858;
 }
 
 .checkbox-container .checkbox {
@@ -78,6 +89,7 @@ body {
    width: 30px;
    border: 2px solid #eee;
    border-radius: 3px;
+   transition: background-color 0.2s ease-in-out;
 }
 
 @media screen and (min-width: 960px) {
@@ -94,6 +106,10 @@ body {
 
 .checkbox-container input:checked ~ .checkmark:after {
    display: block;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+   background-color: #000;
 }
 
 .checkbox-container .checkmark:after {
