@@ -17,7 +17,7 @@ const SearchMoviesList = ({
                placeholder="Search requested movies"
                value={searchTitle}
                onChange={(e) => {
-                  const regex = /^[a-zA-Z0-9 ]+$/;
+                  const regex = /^[a-zA-Z0-9- ]+$/;
                   setSearchTitle(
                      regex.test(e.target.value) ? e.target.value : ""
                   );
@@ -37,7 +37,7 @@ const SearchMoviesList = ({
                placeholder="Search directors"
                value={searchDirector}
                onChange={(e) => {
-                  const regex = /^[a-zA-Z0-9 ]+$/;
+                  const regex = /^[a-zA-Z0-9- ]+$/;
                   setSearchDirector(
                      regex.test(e.target.value) ? e.target.value : ""
                   );
@@ -57,7 +57,7 @@ const SearchMoviesList = ({
                placeholder="Search actors"
                value={searchActor}
                onChange={(e) => {
-                  const regex = /^[a-zA-Z0-9 ]+$/;
+                  const regex = /^[a-zA-Z0-9- ]+$/;
                   setSearchActor(
                      regex.test(e.target.value) ? e.target.value : ""
                   );
