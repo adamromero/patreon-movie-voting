@@ -11,14 +11,16 @@ import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
-const SearchTitlesModal = ({ currentUser }) => {
+const SearchTitlesModal = ({ currentUser, onClose }) => {
    const mediumBreakPoint = 768;
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [inputTitle, setInputTitle] = useState("");
    const [inputYear, setInputYear] = useState("");
+   const [inputImdbID, setInputImdbID] = useState("");
    const [searchTitle, setSearchTitle] = useState("");
    const [searchYear, setSearchYear] = useState("");
+   const [searchImdbID, setSearchImdbID] = useState("");
    const [movies, setMovies] = useState([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
@@ -72,16 +74,28 @@ const SearchTitlesModal = ({ currentUser }) => {
 
    useEffect(() => {
       const fetchTitleByYear = async () => {
-         if (searchTitle && searchYear) {
+         if (searchImdbID) {
+            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&i=${searchImdbID}`;
+            const response = await fetch(API_URL);
+            const data = await response.json();
+
+            if (data.Response === "True") {
+               if (data.Type === "movie" || data.Type === "series") {
+                  clearSearchState(data);
+               }
+            } else {
+               setMovies([]);
+               setError(data.Error);
+            }
+            setLoading(false);
+         } else if (searchTitle && searchYear) {
             const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&t=${searchTitle}&y=${searchYear}`;
             const response = await fetch(API_URL);
             const data = await response.json();
 
             if (data.Response === "True") {
                if (data.Type === "movie" || data.Type === "series") {
-                  setMovies([data]);
-                  setInputTitle("");
-                  setInputYear("");
+                  clearSearchState(data);
                }
             } else {
                setMovies([]);
@@ -92,7 +106,7 @@ const SearchTitlesModal = ({ currentUser }) => {
       };
 
       fetchTitleByYear();
-   }, [searchTitle, searchYear]);
+   }, [searchTitle, searchYear, searchImdbID]);
 
    const handleWindowResize = useCallback(() => {
       setisTabletView(window.innerWidth >= mediumBreakPoint);
@@ -105,6 +119,16 @@ const SearchTitlesModal = ({ currentUser }) => {
          window.removeEventListener("resize", handleWindowResize);
       };
    }, [handleWindowResize]);
+
+   const clearSearchState = (data) => {
+      setMovies([data]);
+      setInputTitle("");
+      setInputYear("");
+      setInputImdbID("");
+      setSearchTitle("");
+      setSearchYear("");
+      setSearchImdbID("");
+   };
 
    const isMovieInList = (selectedMovie) => {
       return moviesList.filter(
@@ -129,6 +153,7 @@ const SearchTitlesModal = ({ currentUser }) => {
       e.preventDefault();
       if (inputTitle) setSearchTitle(inputTitle);
       if (inputYear) setSearchYear(inputYear);
+      if (inputImdbID) setSearchImdbID(inputImdbID);
    };
 
    const handleMovieSelection = async (movie) => {
@@ -163,6 +188,14 @@ const SearchTitlesModal = ({ currentUser }) => {
 
    return (
       <div>
+         <div className="flex justify-center mb-[10px]">
+            <button
+               className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+               onClick={onClose}
+            >
+               Close
+            </button>
+         </div>
          <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px]">
             <button
                onClick={() => setIsSearchByYear(!isSearchByYear)}
@@ -192,9 +225,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                   />
                </form>
             )}
-
             <div className="hidden md:block">or</div>
-
             {(!isSearchByYear || isTabletView) && (
                <form
                   onSubmit={(e) => handleTitleYearSubmit(e)}
@@ -215,6 +246,13 @@ const SearchTitlesModal = ({ currentUser }) => {
                         value={inputYear}
                         maxLength="4"
                         onChange={(e) => setInputYear(e.target.value)}
+                     />
+                     <input
+                        className="text-black w-[80px] py-[5px] px-[10px] w-full"
+                        type="text"
+                        placeholder="IMDB ID (optional)"
+                        value={inputImdbID}
+                        onChange={(e) => setInputImdbID(e.target.value)}
                      />
                   </div>
                   <input

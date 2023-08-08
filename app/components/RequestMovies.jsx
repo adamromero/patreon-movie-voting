@@ -19,7 +19,10 @@ const RequestMovies = ({ currentUser }) => {
             Request Movies
          </button>
          <Modal open={open} onClose={onCloseModal} center>
-            <SearchTitlesModal currentUser={currentUser} />
+            <SearchTitlesModal
+               currentUser={currentUser}
+               onClose={onCloseModal}
+            />
          </Modal>
       </>
    );

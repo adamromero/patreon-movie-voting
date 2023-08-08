@@ -9,10 +9,10 @@ const SearchMoviesList = ({
    setSearchActor,
 }) => {
    return (
-      <div className="flex flex-col md:flex-row gap-[10px] max-w-[850px]">
+      <div className="flex flex-col md:flex-row gap-[10px] max-w-[810px]">
          <div className="flex flex-1 gap-[5px]">
             <input
-               className="text-black px-[10px] py-[5px] w-full sm:w-[initial] md:w-full"
+               className="text-black px-[10px] py-[5px] w-full sm:w-[initial] md:w-full md:max-w-[200px]"
                type="text"
                placeholder="Search requested movies"
                value={searchTitle}
@@ -32,7 +32,7 @@ const SearchMoviesList = ({
          </div>
          <div className="flex flex-1 gap-[5px]">
             <input
-               className="text-black px-[10px] py-[5px] w-full sm:w-[initial] md:w-full"
+               className="text-black px-[10px] py-[5px] w-full sm:w-[initial] md:w-full md:max-w-[200px]"
                type="text"
                placeholder="Search directors"
                value={searchDirector}
@@ -52,7 +52,7 @@ const SearchMoviesList = ({
          </div>
          <div className="flex flex-1 gap-[5px]">
             <input
-               className="text-black px-[10px] py-[5px] w-full sm:w-[initial] md:w-full"
+               className="text-black px-[10px] py-[5px] w-full sm:w-[initial] md:w-full md:max-w-[200px]"
                type="text"
                placeholder="Search actors"
                value={searchActor}
