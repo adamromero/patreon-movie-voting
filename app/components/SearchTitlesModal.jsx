@@ -207,11 +207,11 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                Close
             </button>
          </div> */}
-         <div className="flex flex-col md:flex-row gap-2 items-center justify-center pb-[16px] mt-[35px] md:m-0">
-            <div className="flex flex-col gap-[10px]">
+         <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px] mt-[35px] md:mt-0 mr-0 md:mr-[35px]">
+            <div className="flex flex-col md:flex-row gap-[10px]">
                <div className="flex flex-col sm:flex-row flex gap-[10px]">
                   <form
-                     className="flex flex-1 md:flex-none gap-2 w-full md:w-[initial]"
+                     className="flex flex-1 gap-2 w-full"
                      onSubmit={(e) => handleTitleSubmit(e)}
                   >
                      <input
@@ -232,7 +232,7 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                   </form>
                   <form
                      onSubmit={(e) => handleImdbIDSubmit(e)}
-                     className="flex flex-1 md:flex-none gap-2 w-full md:w-[initial]"
+                     className="flex flex-1 gap-2 w-full"
                   >
                      <div className="flex w-full gap-[5px]">
                         <input
@@ -253,11 +253,11 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                <div>
                   <form
                      onSubmit={(e) => handleTitleYearSubmit(e)}
-                     className="flex gap-2 w-full md:w-[initial]"
+                     className="flex gap-2 w-full "
                   >
                      <div className="flex w-full gap-[5px]">
                         <input
-                           className="flex-1 w-full md:w-[initial] text-black py-[5px] px-[10px]"
+                           className="flex-1 w-full  text-black py-[5px] px-[10px]"
                            type="text"
                            placeholder="Title"
                            value={inputTitle}
