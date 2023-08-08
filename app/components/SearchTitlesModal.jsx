@@ -267,7 +267,7 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
             {loading ? (
                <div className="loader absolute"></div>
             ) : (
-               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-[32px]">
+               <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
                   {movies.length ? (
                      movies.map((movie) => (
                         <div className="mx-auto" key={movie.imdbID}>
