@@ -23,14 +23,15 @@ const UserSignIn = ({ user }) => {
                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                      className="flex items-center gap-[10px] p-0 sm:py-[8px] sm:px-[12px] sm:hover:bg-[#1a1a1a] sm:focus-visible:bg-[#1a1a1a] rounded-[5px]"
                   >
-                     <Image
-                        src={user.image}
-                        alt={user.name}
-                        width={40}
-                        height={40}
-                        className="rounded-full max-w-[40px]"
-                     />
-
+                     <div className="flex items-center w-[40px] h-[40px]">
+                        <Image
+                           src={user.image}
+                           alt={user.name}
+                           width={40}
+                           height={40}
+                           className="rounded-full"
+                        />
+                     </div>
                      <span className="hidden sm:block">{user.name}</span>
                   </button>
                   {isDropdownOpen && (
