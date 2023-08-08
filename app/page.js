@@ -5,7 +5,7 @@ import VotingApp from "./components/VotingApp";
 
 export default async function Home() {
    const user = await getCurrentUser();
-   if (user && !user.isPledged) {
+   if (user && !user.isAllowed) {
       redirect("/denied");
    }
 

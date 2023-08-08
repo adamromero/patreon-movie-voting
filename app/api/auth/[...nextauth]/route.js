@@ -36,20 +36,23 @@ export const nextAuthOptions = {
          const user = response.data;
          const { id } = user.data;
          const { first_name, full_name, image_url } = user.data.attributes;
-         const creator_id = user.included[0].relationships.creator.data.id;
+         //const creator_id = user.included[0].relationships.creator.data.id;
          const findPledge = user.data.relationships.pledges.data.find(
-            (pledge) => pledge.id === "129412053"
+            (pledge) => pledge.id === process.env.PLEDGE_ID
          );
 
          const isPledged = JSON.stringify(findPledge) !== "{}";
+         const isCreator = id === process.env.CREATOR_ID || true;
+         const isDev = id === process.env.DEV_ID;
+         const isAllowed = isPledged || isCreator || isDev;
 
          if (token) {
             session.user.id = id;
             session.user.firstName = first_name;
             session.user.name = full_name;
             session.user.image = image_url;
-            session.user.creatorId = creator_id;
-            session.user.isPledged = isPledged;
+            session.user.isCreator = isCreator;
+            session.user.isAllowed = isAllowed;
          }
 
          return session;

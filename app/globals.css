@@ -55,6 +55,7 @@ body {
       height: initial;
       width: initial;
       display: block;
+      margin: 0;
    }
 }
 
@@ -71,8 +72,7 @@ body {
    width: 1px;
 }
 
-input:focus-visible + .checkmark,
-input:hover + .checkmark {
+input:focus-visible + .checkmark {
    background-color: #585858;
 }
 
@@ -80,7 +80,6 @@ input:hover + .checkmark {
    cursor: pointer;
 }
 
-/* Create a custom checkbox */
 .checkmark {
    position: absolute;
    top: 0;
@@ -122,65 +121,6 @@ input:hover + .checkmark {
    -webkit-transform: rotate(45deg);
    -ms-transform: rotate(45deg);
    transform: rotate(45deg);
-}
-
-/* .switch {
-   display: inline-block;
-   height: 34px;
-   position: relative;
-   width: 60px;
-}
-
-.switch input {
-   clip: rect(0 0 0 0);
-   clip-path: inset(50%);
-   height: 1px;
-   overflow: hidden;
-   position: absolute;
-   white-space: nowrap;
-   width: 1px;
-}
-
-.slider {
-   background-color: #ccc;
-   bottom: 0;
-   cursor: pointer;
-   left: 0;
-   position: absolute;
-   right: 0;
-   top: 0;
-   transition: 0.4s;
-}
-
-.slider:before {
-   background-color: #fff;
-   bottom: 4px;
-   content: "";
-   height: 26px;
-   left: 4px;
-   position: absolute;
-   transition: 0.4s;
-   width: 26px;
-}
-
-input:checked + .slider {
-   background-color: #66bb6a;
-}
-
-input:checked + .slider:before {
-   transform: translateX(26px);
-}
-
-.slider.round {
-   border-radius: 34px;
-}
-
-.slider.round:before {
-   border-radius: 50%;
-} */
-
-.checkbox-container {
-   margin: 0 auto;
 }
 
 .no-scrollbar::-webkit-scrollbar {

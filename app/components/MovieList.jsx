@@ -46,6 +46,7 @@ const MovieList = ({
 
    useEffect(() => {
       let filteredList = [...moviesList];
+      setIsOpenList(true);
 
       if (filterOptions.watched === watched.Ascending) {
          //not watched first
@@ -442,9 +443,9 @@ const MovieList = ({
 
    return (
       <>
-         {isCreator && (
+         {isCreator && isOpenList && (
             // <PDFDownloadLink
-            //    document={<PDFFile moviesList={moviesList} />}
+            //    document={<PDFFile moviesList={filteredMoviesList} />}
             //    fileName="movie-list"
             // >
             //    {({ loading }) =>
@@ -459,28 +460,29 @@ const MovieList = ({
             //       )
             //    }
             // </PDFDownloadLink>
-            <div>
-               {/* <button onClick={() => setIsOpenList(!isOpenList)}>
-                  open list
-               </button>
-               {isOpenList && (
-                  <div>
-                     {filteredMoviesList.map((movies) => (
-                        <div key={movies._id}>
-                           <div
-                              style={{
-                                 textDecoration: movies.isWatched
-                                    ? "line-through"
-                                    : "",
-                              }}
-                           >
-                              {movies.data.Title} ({movies.data.Year})
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-               )} */}
-            </div>
+            <div></div>
+            // <div>
+            //    <button onClick={() => setIsOpenList(!isOpenList)}>
+            //       open list
+            //    </button>
+            //    {isOpenList && (
+            //       <div>
+            //          {filteredMoviesList.map((movies) => (
+            //             <div key={movies._id}>
+            //                <div
+            //                   style={{
+            //                      textDecoration: movies.isWatched
+            //                         ? "line-through"
+            //                         : "",
+            //                   }}
+            //                >
+            //                   {movies.data.Title} ({movies.data.Year})
+            //                </div>
+            //             </div>
+            //          ))}
+            //       </div>
+            //    )}
+            // </div>
          )}
 
          {moviesList.length ? (

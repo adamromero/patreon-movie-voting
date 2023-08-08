@@ -28,7 +28,7 @@ const VotingApp = ({ user }) => {
          <FilterMovieList />
          <MovieList
             currentUser={user && user.id}
-            isCreator={user && user.creatorId === user.id}
+            isCreator={user && user.isCreator}
             searchTitle={searchTitle}
             searchDirector={searchDirector}
             searchActor={searchActor}
