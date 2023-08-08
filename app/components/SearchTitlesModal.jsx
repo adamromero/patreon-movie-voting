@@ -199,15 +199,15 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
 
    return (
       <div>
-         <div className="flex justify-center mb-[10px]">
+         {/* <div className="flex justify-center mb-[10px]">
             <button
-               className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+               className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
                onClick={onClose}
             >
                Close
             </button>
-         </div>
-         <div className="flex flex-col md:flex-row gap-2 items-center justify-center pb-[16px]">
+         </div> */}
+         <div className="flex flex-col md:flex-row gap-2 items-center justify-center pb-[16px] mt-[35px] md:m-0">
             <div className="flex flex-col gap-[10px]">
                <div className="flex flex-col sm:flex-row flex gap-[10px]">
                   <form
@@ -225,7 +225,7 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                         onChange={(e) => setInput(e.target.value)}
                      />
                      <input
-                        className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
                         type="submit"
                         value="Search"
                      />
@@ -244,7 +244,7 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                         />
                      </div>
                      <input
-                        className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
                         type="submit"
                         value="Search"
                      />
@@ -273,7 +273,7 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                         />
                      </div>
                      <input
-                        className="bg-[#830483] text-white cursor-pointer py-1 px-3"
+                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
                         type="submit"
                         value="Search"
                      />

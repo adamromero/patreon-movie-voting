@@ -34,7 +34,7 @@ body {
 
 .react-responsive-modal-root .react-responsive-modal-closeButton {
    fill: white;
-   display: none;
+   /* display: none; */
 }
 
 .checkbox-container {
