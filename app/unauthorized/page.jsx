@@ -9,7 +9,7 @@ const UnauthorizedPage = () => {
          <div className="flex flex-col mb-[30px] sm:flex-row items-center gap-[15px]">
             <p>If you currently are not, please join here:</p>
             <a
-               className="max-w-[85px] w-full text-center bg-black px-[10px] py-[5px] text-[16px] block"
+               className="max-w-[85px] w-full text-center bg-black focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out px-[10px] py-[5px] text-[16px] block"
                href="/"
                target="_blank"
             >
@@ -17,7 +17,7 @@ const UnauthorizedPage = () => {
             </a>
          </div>
          <a
-            className="sm:max-w-[200px] w-full text-center bg-black px-[10px] py-[8px] text-[16px] block"
+            className="sm:max-w-[200px] w-full text-center bg-black focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out px-[10px] py-[8px] text-[16px] block"
             href="/"
          >
             Return Home
