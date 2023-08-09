@@ -439,48 +439,6 @@ const MovieList = ({ currentUser, isCreator }) => {
 
    return (
       <>
-         {isCreator && isOpenList && (
-            // <PDFDownloadLink
-            //    document={<PDFFile moviesList={filteredMoviesList} />}
-            //    fileName="movie-list"
-            // >
-            //    {({ loading }) =>
-            //       loading ? (
-            //          <button className="bg-black px-[10px] py-[5px]">
-            //             Loading
-            //          </button>
-            //       ) : (
-            //          <button className="bg-black px-[10px] py-[5px]">
-            //             Download PDF
-            //          </button>
-            //       )
-            //    }
-            // </PDFDownloadLink>
-            <div></div>
-            // <div>
-            //    <button onClick={() => setIsOpenList(!isOpenList)}>
-            //       open list
-            //    </button>
-            //    {isOpenList && (
-            //       <div>
-            //          {filteredMoviesList.map((movies) => (
-            //             <div key={movies._id}>
-            //                <div
-            //                   style={{
-            //                      textDecoration: movies.isWatched
-            //                         ? "line-through"
-            //                         : "",
-            //                   }}
-            //                >
-            //                   {movies.data.Title} ({movies.data.Year})
-            //                </div>
-            //             </div>
-            //          ))}
-            //       </div>
-            //    )}
-            // </div>
-         )}
-
          {moviesList.length ? (
             filteredMoviesList.length ? (
                <>
