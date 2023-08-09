@@ -9,7 +9,7 @@ export const nextAuthOptions = {
          clientSecret: process.env.PATREON_CLIENT_SECRET,
          authorization: {
             params: {
-               scope: "identity identity.memberships",
+               scope: "identity identity[email] identity.memberships",
             },
          },
       }),
@@ -36,15 +36,7 @@ export const nextAuthOptions = {
          const user = response.data;
          const { id } = user.data;
          const { first_name, full_name, image_url } = user.data.attributes;
-         //const creator_id = user.included[0].relationships.creator.data.id;
-         const findPledge = user.data.relationships.pledges.data.find(
-            (pledge) => pledge.id === process.env.PLEDGE_ID
-         );
-
-         const isPledged = JSON.stringify(findPledge) !== "{}";
-         const isCreator = id === process.env.CREATOR_ID || true;
-         const isDev = id === process.env.DEV_ID;
-         const isAllowed = isPledged || isCreator || isDev;
+         const isCreator = id === process.env.CREATOR_ID;
 
          if (token) {
             session.user.id = id;
@@ -52,11 +44,32 @@ export const nextAuthOptions = {
             session.user.name = full_name;
             session.user.image = image_url;
             session.user.isCreator = isCreator;
-            session.user.isAllowed = isAllowed;
          }
 
          return session;
       },
+
+      async signIn({ profile }) {
+         const profileData = profile.data;
+         const { id } = profileData;
+         const findPledge = profileData.relationships.pledges.data.find(
+            (pledge) => pledge.id === process.env.PLEDGE_ID
+         );
+
+         const jsonPledge = JSON.stringify(findPledge);
+         const isPledged =
+            typeof jsonPledge !== "undefined" && jsonPledge !== "{}";
+         const isCreator = id === process.env.CREATOR_ID;
+         const isDev = id === process.env.DEV_ID;
+         const isAllowedToSignIn = isPledged || isCreator || isDev;
+
+         if (isAllowedToSignIn) {
+            return true;
+         } else {
+            return "/denied";
+         }
+      },
+
       async redirect({ url, baseUrl }) {
          return baseUrl;
       },

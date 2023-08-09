@@ -1,13 +1,9 @@
 import Header from "./components/Header";
 import { getCurrentUser } from "@/lib/session";
-import { redirect } from "next/navigation";
 import VotingApp from "./components/VotingApp";
 
 export default async function Home() {
    const user = await getCurrentUser();
-   if (user && !user.isAllowed) {
-      redirect("/denied");
-   }
 
    return (
       <main>
