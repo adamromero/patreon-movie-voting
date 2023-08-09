@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
+import { MovieContext } from "@/context/MovieContext";
 
-const SearchMoviesList = ({
-   searchTitle,
-   setSearchTitle,
-   searchDirector,
-   setSearchDirector,
-   searchActor,
-   setSearchActor,
-}) => {
+const SearchMoviesList = () => {
+   const {
+      searchTitle,
+      setSearchTitle,
+      searchDirector,
+      setSearchDirector,
+      searchActor,
+      setSearchActor,
+   } = useContext(MovieContext);
+
    return (
       <div className="flex flex-col md:flex-row gap-[10px] max-w-[810px]">
          <div className="flex flex-1 gap-[5px]">

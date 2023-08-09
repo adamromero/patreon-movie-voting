@@ -16,6 +16,9 @@ export const MovieContext = createContext();
 
 export const MovieProvider = ({ children }) => {
    const [moviesList, setMoviesList] = useState([]);
+   const [searchTitle, setSearchTitle] = useState("");
+   const [searchDirector, setSearchDirector] = useState("");
+   const [searchActor, setSearchActor] = useState("");
    const [filterOptions, setFilterOptions] = useState({
       alphabetical: alphabetical.Default,
       votes: votes.Ascending,
@@ -181,6 +184,12 @@ export const MovieProvider = ({ children }) => {
             filterOptions,
             setFilterOptions,
             setMovieVoteToWatched,
+            searchTitle,
+            setSearchTitle,
+            searchDirector,
+            setSearchDirector,
+            searchActor,
+            setSearchActor,
          }}
       >
          {children}

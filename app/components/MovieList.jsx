@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { MovieContext } from "@/context/MovieContext";
 import {
    genre,
@@ -16,20 +16,16 @@ import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
-import Link from "next/link";
 
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PDFFile from "./PDFFile";
-
-const MovieList = ({
-   currentUser,
-   isCreator,
-   searchTitle,
-   searchDirector,
-   searchActor,
-}) => {
+const MovieList = ({ currentUser, isCreator }) => {
    const moviesList = useRetrieveMovies();
-   const { filterOptions, setFilterOptions } = useContext(MovieContext);
+   const {
+      filterOptions,
+      setFilterOptions,
+      searchTitle,
+      searchDirector,
+      searchActor,
+   } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [watchedState, setWatchedState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
