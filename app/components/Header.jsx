@@ -29,7 +29,7 @@ export async function Header() {
                         </a>
                      </div>
                      <div>
-                        <h1 className="text-[22px] sm:text-[35px] flex text-white whitespace-nowrap">
+                        <h1 className="text-[22px] sm:text-[32px] flex text-white whitespace-nowrap">
                            <span className={satisfy.className}>
                               Let My Patrons Decide
                            </span>
