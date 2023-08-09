@@ -15,7 +15,7 @@ export const nextAuthOptions = {
       }),
    ],
    pages: {
-      signIn: "/denied",
+      signIn: "/unauthorized",
    },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
@@ -66,7 +66,7 @@ export const nextAuthOptions = {
          if (isAllowedToSignIn) {
             return true;
          } else {
-            return "/denied";
+            return "/unauthorized";
          }
       },
 
