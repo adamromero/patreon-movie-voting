@@ -56,19 +56,21 @@ export const nextAuthOptions = {
             },
          });
 
-         const profileData = profile.data;
-         const { id } = profileData;
-
          let isPledged = false;
-         if (typeof response.data.included !== "undefined") {
-            const findPledge = response.data.included.find(
-               (items) =>
-                  items.type === "pledge" &&
-                  items.relationships.creator.data.id === process.env.CREATOR_ID
-            );
-            isPledged = findPledge.attributes.status === "valid";
+         const pledge = response?.included?.find(
+            (items) =>
+               items.type === "pledge" &&
+               items.relationships.creator.data.id === process.env.CREATOR_ID
+         );
+
+         if (pledge) {
+            const {
+               attributes: { status },
+            } = pledge;
+            isPledged = status === "valid";
          }
 
+         const { id } = profile.data;
          const isCreator = id === process.env.CREATOR_ID;
          const isDev = id === process.env.DEV_ID;
          const isAllowedToSignIn = isPledged || isCreator || isDev;
@@ -89,4 +91,3 @@ export const nextAuthOptions = {
 const handler = NextAuth(nextAuthOptions);
 
 export { handler as GET, handler as POST };
-//force vercel
