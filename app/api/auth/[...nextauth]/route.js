@@ -58,9 +58,9 @@ export const nextAuthOptions = {
 
          let isPledged = false;
          const pledge = response?.included?.find(
-            (items) =>
-               items.type === "pledge" &&
-               items.relationships.creator.data.id === process.env.CREATOR_ID
+            (item) =>
+               item.type === "pledge" &&
+               item.relationships.creator.data.id === process.env.CREATOR_ID
          );
 
          if (pledge) {
