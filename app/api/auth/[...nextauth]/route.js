@@ -59,22 +59,18 @@ export const nextAuthOptions = {
          const profileData = profile.data;
          const { id } = profileData;
 
-         let findPledge,
-            isPledged = false;
+         let isPledged = false;
          if (typeof response.data.included !== "undefined") {
-            findPledge = response.data.included.filter((items) => {
-               if (
+            const findPledge = response.data.included.find(
+               (items) =>
                   items.type === "pledge" &&
                   items.relationships.creator.data.id === process.env.CREATOR_ID
-               ) {
-                  return items;
-               }
-            });
-            isPledged = findPledge[0].attributes.status === "valid";
+            );
+            isPledged = findPledge.attributes.status === "valid";
          }
 
          const isCreator = id === process.env.CREATOR_ID;
-         const isDev = id === process.env.DEV_ID || true;
+         const isDev = id === process.env.DEV_ID;
          const isAllowedToSignIn = isPledged || isCreator || isDev;
 
          if (isAllowedToSignIn) {
