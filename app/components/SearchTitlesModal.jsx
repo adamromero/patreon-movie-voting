@@ -297,62 +297,68 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
                                        : "text-white"
                                  } relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden`}
                               >
-                                 {movie.Poster === "N/A" ? (
-                                    <div className="w-[175px] h-[285px] bg-slate-400 flex items-center justify-center mx-auto"></div>
-                                 ) : (
-                                    <img
-                                       src={movie.Poster}
-                                       alt={movie.Title}
-                                       width="175"
-                                       height="285"
-                                       className="w-full h-full object-cover mx-auto"
-                                    />
-                                 )}
-                                 <div
-                                    className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
-                                    style={{ textShadow: "1px 1px 3px black" }}
-                                 >
-                                    <div className="flex flex-col items-center">
-                                       <IoMdAddCircleOutline
-                                          className={`text-[50px] rotate-45 ${
-                                             imdbIDCollection[movie.imdbID]
-                                                ? "animate-rotation"
-                                                : ""
-                                          }`}
+                                 <div>
+                                    {movie.Poster === "N/A" ? (
+                                       <div className="w-[175px] h-[285px] bg-slate-400 flex items-center justify-center mx-auto"></div>
+                                    ) : (
+                                       <img
+                                          src={movie.Poster}
+                                          alt={movie.Title}
+                                          width="175"
+                                          height="285"
+                                          className="w-full h-full object-cover mx-auto"
                                        />
-                                       <div>
-                                          {isMovieWatched(movie)
-                                             ? "Watched"
-                                             : "Requested"}
-                                       </div>
+                                    )}
+                                    <div
+                                       className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
+                                       style={{
+                                          textShadow: "1px 1px 3px black",
+                                       }}
+                                    >
+                                       <div className="flex flex-col items-center">
+                                          <IoMdAddCircleOutline
+                                             className={`text-[50px] rotate-45 ${
+                                                imdbIDCollection[movie.imdbID]
+                                                   ? "animate-rotation"
+                                                   : ""
+                                             }`}
+                                          />
+                                          <div>
+                                             {isMovieWatched(movie)
+                                                ? "Watched"
+                                                : "Requested"}
+                                          </div>
 
-                                       {!isMovieWatched(movie) &&
-                                          (isMovieVotedByUser(movie) ? (
-                                             <button
-                                                onClick={() =>
-                                                   handleRemoveVote(movie)
-                                                }
-                                                className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                                             >
-                                                Retract
-                                             </button>
-                                          ) : (
-                                             <button
-                                                onClick={() =>
-                                                   handleCastVote(movie)
-                                                }
-                                                className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                                             >
-                                                Request
-                                             </button>
-                                          ))}
+                                          {!isMovieWatched(movie) &&
+                                             (isMovieVotedByUser(movie) ? (
+                                                <button
+                                                   onClick={() =>
+                                                      handleRemoveVote(movie)
+                                                   }
+                                                   className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                >
+                                                   Retract
+                                                </button>
+                                             ) : (
+                                                <button
+                                                   onClick={() =>
+                                                      handleCastVote(movie)
+                                                   }
+                                                   className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                >
+                                                   Request
+                                                </button>
+                                             ))}
+                                       </div>
                                     </div>
-                                 </div>
-                                 <div
-                                    className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
-                                    style={{ textShadow: "1px 1px 3px black" }}
-                                 >
-                                    {movie.Title} ({movie.Year})
+                                    <div
+                                       className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
+                                       style={{
+                                          textShadow: "1px 1px 3px black",
+                                       }}
+                                    >
+                                       {movie.Title} ({movie.Year})
+                                    </div>
                                  </div>
                               </div>
                            ) : (

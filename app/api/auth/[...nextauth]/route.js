@@ -49,18 +49,32 @@ export const nextAuthOptions = {
          return session;
       },
 
-      async signIn({ profile }) {
+      async signIn({ account, profile }) {
+         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
+            headers: {
+               Authorization: `Bearer ${account.access_token}`,
+            },
+         });
+
          const profileData = profile.data;
          const { id } = profileData;
-         const findPledge = profileData.relationships.pledges.data.find(
-            (pledge) => pledge.id === process.env.PLEDGE_ID
-         );
 
-         const jsonPledge = JSON.stringify(findPledge);
-         const isPledged =
-            typeof jsonPledge !== "undefined" && jsonPledge !== "{}";
+         let findPledge,
+            isPledged = false;
+         if (typeof response.data.included !== "undefined") {
+            findPledge = response.data.included.filter((items) => {
+               if (
+                  items.type === "pledge" &&
+                  items.relationships.creator.data.id === process.env.CREATOR_ID
+               ) {
+                  return items;
+               }
+            });
+            isPledged = findPledge[0].attributes.status === "valid";
+         }
+
          const isCreator = id === process.env.CREATOR_ID;
-         const isDev = id === process.env.DEV_ID;
+         const isDev = id === process.env.DEV_ID || true;
          const isAllowedToSignIn = isPledged || isCreator || isDev;
 
          if (isAllowedToSignIn) {

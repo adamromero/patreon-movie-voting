@@ -480,7 +480,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                <div>No results found</div>
             )
          ) : (
-            <div className="relative flex justify-center items-center h-[100px] sm:h-[200px]">
+            <div className="relative flex justify-center items-center h-[100px] sm:h-[200px] mb-[100px]">
                <div className="loader relative"></div>
             </div>
          )}
