@@ -1,17 +1,11 @@
 "use client";
 
-import React, {
-   useState,
-   useEffect,
-   useContext,
-   useRef,
-   useCallback,
-} from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
-const SearchTitlesModal = ({ currentUser, onClose }) => {
+const SearchTitlesModal = ({ currentUser }) => {
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [inputTitle, setInputTitle] = useState("");
@@ -199,14 +193,6 @@ const SearchTitlesModal = ({ currentUser, onClose }) => {
 
    return (
       <div>
-         {/* <div className="flex justify-center mb-[10px]">
-            <button
-               className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
-               onClick={onClose}
-            >
-               Close
-            </button>
-         </div> */}
          <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px] mt-[35px] md:mt-0 mr-0 md:mr-[35px]">
             <div className="flex flex-col md:flex-row gap-[10px]">
                <div className="flex flex-col sm:flex-row flex gap-[10px]">

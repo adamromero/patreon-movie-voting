@@ -31,7 +31,7 @@ const FilterMovieListTags = () => {
          {filterOptions.genre !== "All" && (
             <button
                onClick={handleGenreFilterRemove}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer"
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterOptions.genre}
             </button>
@@ -39,7 +39,7 @@ const FilterMovieListTags = () => {
          {filterOptions.type !== "All" && (
             <button
                onClick={handleTypeFilterRemove}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer"
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterOptions.type}
             </button>
@@ -47,7 +47,7 @@ const FilterMovieListTags = () => {
          {filterOptions.status !== "All" && (
             <button
                onClick={handleStatusFilterRemove}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer"
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterOptions.status}
             </button>
