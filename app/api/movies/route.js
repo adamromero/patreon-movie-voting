@@ -24,6 +24,7 @@ export async function POST(req, res) {
    } catch (error) {
       return NextResponse.json({
          error: "Unable to post movie selection to the database.",
+         details: error.message,
       });
    }
 }
