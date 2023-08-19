@@ -1,5 +1,5 @@
-//import connectDB from "@/lib/connectDB";
-import connectDB from "@/lib/mongodb";
+import connectDB from "@/lib/connectDB";
+//import connectDB from "@/lib/mongodb";
 import Movie from "@/models/movieModel";
 import { NextResponse } from "next/server";
 
