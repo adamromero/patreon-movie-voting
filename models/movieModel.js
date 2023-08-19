@@ -26,10 +26,6 @@ const movieSchema = new mongoose.Schema({
          type: String,
          required: true,
       },
-      Plot: {
-         type: String,
-         required: true,
-      },
       Poster: {
          type: String,
          required: true,

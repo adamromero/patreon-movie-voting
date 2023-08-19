@@ -1,5 +1,7 @@
 import NextAuth from "next-auth/next";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
+import clientPromise from "@/lib/mongodb";
 import axios from "axios";
 
 export const nextAuthOptions = {
@@ -14,6 +16,13 @@ export const nextAuthOptions = {
          },
       }),
    ],
+   adapter: MongoDBAdapter(clientPromise),
+   session: {
+      strategy: "jwt",
+   },
+   jwt: {
+      secret: process.env.JWT_SECRET,
+   },
    pages: {
       signIn: "/unauthorized",
    },
