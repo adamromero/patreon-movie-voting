@@ -29,36 +29,33 @@ export const nextAuthOptions = {
    },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
-      async jwt({ token, account, profile }) {
+      async jwt({ token, account }) {
          if (account) {
             token.accessToken = account.access_token;
-            //token.id = profile.id;
          }
          return token;
       },
       async session({ token, session }) {
-         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
-            headers: {
-               Authorization: `Bearer ${token.accessToken}`,
-            },
-         });
+         // const response = await axios.get(process.env.PATREON_PROFILE_URL, {
+         //    headers: {
+         //       Authorization: `Bearer ${token.accessToken}`,
+         //    },
+         // });
 
-         console.log("session 1: ", session);
+         // console.log("session 1: ", session);
 
-         const user = response.data;
-         const { id } = user.data;
-         const { first_name } = user.data.attributes;
-         const isCreator = id === process.env.CREATOR_ID;
+         // const user = response.data;
+         // const { id } = user.data;
+         // const { first_name } = user.data.attributes;
+         // const isCreator = id === process.env.CREATOR_ID;
 
-         if (token) {
-            session.user.id = id;
-            session.user.firstName = first_name;
-            //session.user.name = full_name;
-            //session.user.image = image_url;
-            session.user.isCreator = isCreator;
-         }
+         // if (token) {
+         //    session.user.id = id;
+         //    session.user.firstName = first_name;
+         //    session.user.isCreator = isCreator;
+         // }
 
-         console.log("session 2: ", session);
+         // console.log("session 2: ", session);
 
          return session;
       },
