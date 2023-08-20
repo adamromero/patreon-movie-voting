@@ -17,19 +17,19 @@ export const nextAuthOptions = {
          },
       }),
    ],
-   // adapter: MongoDBAdapter(clientPromise),
-   // session: {
-   //    strategy: "jwt",
-   // },
-   // jwt: {
-   //    secret: process.env.JWT_SECRET,
-   // },
+   adapter: MongoDBAdapter(clientPromise),
+   session: {
+      strategy: "jwt",
+   },
+   jwt: {
+      secret: process.env.JWT_SECRET,
+   },
    pages: {
       signIn: "/unauthorized",
    },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
-      async jwt({ token, account, profile, user }) {
+      async jwt({ token, account, profile }) {
          if (account) {
             token.accessToken = account.access_token;
             token.id = profile.id;
