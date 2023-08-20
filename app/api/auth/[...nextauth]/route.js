@@ -2,7 +2,7 @@ import NextAuth from "next-auth/next";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
-import User from "@/models/userModel";
+//import User from "@/models/userModel";
 import axios from "axios";
 
 export const nextAuthOptions = {
