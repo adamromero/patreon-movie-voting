@@ -47,9 +47,11 @@ export const nextAuthOptions = {
          const { first_name } = user.data.attributes;
          const isCreator = id === process.env.CREATOR_ID;
 
-         session.user.id = id;
-         session.user.firstName = first_name;
-         session.user.isCreator = isCreator;
+         if (user) {
+            session.user.id = id;
+            session.user.firstName = first_name;
+            session.user.isCreator = isCreator;
+         }
 
          return session;
       },
