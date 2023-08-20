@@ -2,6 +2,7 @@ import NextAuth from "next-auth/next";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
+import User from "@/models/userModel";
 import axios from "axios";
 
 export const nextAuthOptions = {
@@ -16,19 +17,19 @@ export const nextAuthOptions = {
          },
       }),
    ],
-   adapter: MongoDBAdapter(clientPromise),
-   session: {
-      strategy: "jwt",
-   },
-   jwt: {
-      secret: process.env.JWT_SECRET,
-   },
+   // adapter: MongoDBAdapter(clientPromise),
+   // session: {
+   //    strategy: "jwt",
+   // },
+   // jwt: {
+   //    secret: process.env.JWT_SECRET,
+   // },
    pages: {
       signIn: "/unauthorized",
    },
    secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
-      async jwt({ token, account, profile }) {
+      async jwt({ token, account, profile, user }) {
          if (account) {
             token.accessToken = account.access_token;
             token.id = profile.id;
@@ -57,7 +58,6 @@ export const nextAuthOptions = {
 
          return session;
       },
-
       async signIn({ account, profile }) {
          const response = await axios.get(process.env.PATREON_PROFILE_URL, {
             headers: {
@@ -90,7 +90,6 @@ export const nextAuthOptions = {
             return "/unauthorized";
          }
       },
-
       async redirect({ url, baseUrl }) {
          return baseUrl;
       },
