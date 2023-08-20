@@ -24,10 +24,10 @@ export const nextAuthOptions = {
    jwt: {
       secret: process.env.JWT_SECRET,
    },
+   secret: process.env.NEXTAUTH_SECRET,
    pages: {
       signIn: "/unauthorized",
    },
-   secret: process.env.NEXTAUTH_SECRET,
    callbacks: {
       async jwt({ token, account }) {
          if (account) {
@@ -56,11 +56,14 @@ export const nextAuthOptions = {
          return session;
       },
       async signIn({ account, profile }) {
-         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
-            headers: {
-               Authorization: `Bearer ${account.access_token}`,
-            },
-         });
+         const response = await axios.get(
+            process.env.PATREON_PROFILE_URL_FIELDS,
+            {
+               headers: {
+                  Authorization: `Bearer ${account.access_token}`,
+               },
+            }
+         );
 
          let isPledged = false;
          const pledge = response?.included?.find(
