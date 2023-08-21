@@ -45,14 +45,11 @@ export const nextAuthOptions = {
          return session;
       },
       async signIn({ account, profile }) {
-         const response = await axios.get(
-            process.env.PATREON_PROFILE_URL_FIELDS,
-            {
-               headers: {
-                  Authorization: `Bearer ${account.access_token}`,
-               },
-            }
-         );
+         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
+            headers: {
+               Authorization: `Bearer ${account.access_token}`,
+            },
+         });
 
          let isPledged = false;
          const pledge = response?.included?.find(
