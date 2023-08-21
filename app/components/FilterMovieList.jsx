@@ -73,10 +73,10 @@ const FilterMovieList = () => {
                <FilterMovieListTags />
             </div>
             <div className="flex gap-[10px]">
-               <div className="flex flex-col flex-1 sm:flex-none">
+               <div className="flex flex-col flex-1 md:flex-none">
                   <label htmlFor="genre">{genre.Name}</label>
                   <select
-                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full md:w-[125px] p-[5px]"
                      name="genreFilter"
                      id="genre"
                      value={filterOptions.genre}
@@ -104,10 +104,10 @@ const FilterMovieList = () => {
                      <option value={genre.War}>War</option>
                   </select>
                </div>
-               <div className="flex flex-col flex-1 sm:flex-none">
+               <div className="flex flex-col flex-1 md:flex-none">
                   <label htmlFor="type">{type.Name}</label>
                   <select
-                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full md:w-[125px] p-[5px]"
                      name="typeFilter"
                      id="type"
                      value={filterOptions.type}
@@ -118,10 +118,10 @@ const FilterMovieList = () => {
                      <option value={type.Series}>Series</option>
                   </select>
                </div>
-               <div className="flex flex-col flex-1 sm:flex-none">
+               <div className="flex flex-col flex-1 md:flex-none">
                   <label htmlFor="status">{status.Name}</label>
                   <select
-                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full md:w-[125px] p-[5px]"
                      name="statusFilter"
                      id="status"
                      value={filterOptions.status}
@@ -140,10 +140,10 @@ const FilterMovieList = () => {
                <FilterMovieListSortTags />
             </div>
             <div className="flex gap-[10px]">
-               <div className="flex flex-col flex-1 sm:flex-none">
+               <div className="flex flex-col flex-1 md:flex-none">
                   <label htmlFor="chronological">{chronological.Name}</label>
                   <select
-                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full md:w-[125px] p-[5px]"
                      name="chronologicalFilter"
                      id="chronological"
                      value={filterOptions.chronological}
@@ -154,10 +154,10 @@ const FilterMovieList = () => {
                      <option value={chronological.Newer}>Newer</option>
                   </select>
                </div>
-               <div className="flex flex-col flex-1 sm:flex-none">
+               <div className="flex flex-col flex-1 md:flex-none">
                   <label htmlFor="added">{added.Name}</label>
                   <select
-                     className="bg-white text-black w-full sm:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full md:w-[125px] p-[5px]"
                      name="addedFilter"
                      id="added"
                      value={filterOptions.added}
