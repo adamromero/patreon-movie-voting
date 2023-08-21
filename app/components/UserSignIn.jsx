@@ -47,7 +47,7 @@ const UserSignIn = ({ user }) => {
             ) : (
                <button
                   onClick={() => signIn("patreon")}
-                  className="flex items-center gap-[3px] bg-white py-[8px] px-[10px] text-black rounded-sm"
+                  className="flex items-center gap-[3px] bg-white py-[8px] px-[10px] my-[6px] text-black rounded-sm"
                >
                   <BiLogoPatreon className="text-[#ff424d] text-[20px] md:text-[28px]" />
                   <span className="hidden md:inline">Connect with Patreon</span>

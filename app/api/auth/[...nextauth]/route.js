@@ -3,7 +3,6 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
 //import User from "@/models/userModel";
-import axios from "axios";
 
 export const nextAuthOptions = {
    providers: [
@@ -45,14 +44,15 @@ export const nextAuthOptions = {
          return session;
       },
       async signIn({ account, profile }) {
-         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
+         const response = await fetch(process.env.PATREON_PROFILE_URL, {
             headers: {
                Authorization: `Bearer ${account.access_token}`,
             },
          });
+         const user = await response.json();
 
          let isPledged = false;
-         const pledge = response?.included?.find(
+         const pledge = user?.included?.find(
             (item) =>
                item.type === "pledge" &&
                item.relationships.creator.data.id === process.env.CREATOR_ID
@@ -67,8 +67,9 @@ export const nextAuthOptions = {
 
          const { id } = profile.data;
          const isCreator = id === process.env.CREATOR_ID;
-         const isDev = id === process.env.DEV_ID;
-         const isAllowedToSignIn = isPledged || isCreator || isDev;
+         //const isDev = id === process.env.DEV_ID;
+         //const isAllowedToSignIn = isPledged || isCreator || isDev;
+         const isAllowedToSignIn = isPledged || isCreator;
 
          if (isAllowedToSignIn) {
             return true;
