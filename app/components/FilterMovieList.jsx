@@ -149,7 +149,7 @@ const FilterMovieList = () => {
                      value={filterOptions.chronological}
                      onChange={handleChronologicalSort}
                   >
-                     <option value={chronological.Default}>All</option>
+                     <option value={chronological.Default}>Default</option>
                      <option value={chronological.Older}>Older</option>
                      <option value={chronological.Newer}>Newer</option>
                   </select>
@@ -163,7 +163,7 @@ const FilterMovieList = () => {
                      value={filterOptions.added}
                      onChange={handleAddedSort}
                   >
-                     <option value={added.Default}>All</option>
+                     <option value={added.Default}>Default</option>
                      <option value={added.Older}>Older</option>
                      <option value={added.Newer}>Newer</option>
                   </select>
