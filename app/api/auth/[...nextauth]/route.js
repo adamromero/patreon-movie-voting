@@ -29,7 +29,10 @@ export const nextAuthOptions = {
       signIn: "/unauthorized",
    },
    callbacks: {
-      async jwt({ token }) {
+      async jwt({ token, profile }) {
+         if (profile) {
+            token.id = profile.data.id;
+         }
          return token;
       },
       async session({ token, session }) {
@@ -40,7 +43,6 @@ export const nextAuthOptions = {
             session.user.firstName = firstName;
             session.user.isCreator = isCreator;
          }
-
          return session;
       },
       async signIn({ account, profile }) {
@@ -78,7 +80,7 @@ export const nextAuthOptions = {
             return "/unauthorized";
          }
       },
-      async redirect({ url, baseUrl }) {
+      async redirect({ baseUrl }) {
          return baseUrl;
       },
    },
