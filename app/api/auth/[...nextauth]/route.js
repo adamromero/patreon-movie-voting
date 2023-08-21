@@ -32,6 +32,7 @@ export const nextAuthOptions = {
       async jwt({ token, account }) {
          if (account) {
             token.accessToken = account.access_token;
+            token.id = "59013466";
          }
          return token;
       },
@@ -42,13 +43,13 @@ export const nextAuthOptions = {
             },
          });
 
-         const user = response.data;
-         const { id } = user.data;
+         //const user = response.data;
+         //const { id } = user.data;
          //const { first_name } = user.data.attributes;
          const isCreator = id === process.env.CREATOR_ID;
 
-         if (user) {
-            session.user.id = id;
+         if (user && token) {
+            session.user.id = token.id;
             //session.user.firstName = first_name;
             session.user.isCreator = isCreator;
          }
