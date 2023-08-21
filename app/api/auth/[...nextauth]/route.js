@@ -32,16 +32,15 @@ export const nextAuthOptions = {
       async jwt({ token, profile }) {
          if (profile) {
             token.id = profile.data.id;
+            token.firstName = profile.data.attributes.first_name;
          }
          return token;
       },
       async session({ token, session }) {
          if (token) {
-            const firstName = token.name.split(" ")[0];
-            const isCreator = token.id === process.env.CREATOR_ID;
             session.user.id = token.id;
-            session.user.firstName = firstName;
-            session.user.isCreator = isCreator;
+            session.user.firstName = token.firstName;
+            session.user.isCreator = token.id === process.env.CREATOR_ID;
          }
          return session;
       },
