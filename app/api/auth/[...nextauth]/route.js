@@ -46,9 +46,9 @@ export const nextAuthOptions = {
          //const user = response.data;
          //const { id } = user.data;
          //const { first_name } = user.data.attributes;
-         const isCreator = id === process.env.CREATOR_ID;
+         const isCreator = token.id === process.env.CREATOR_ID;
 
-         if (user && token) {
+         if (token) {
             session.user.id = token.id;
             //session.user.firstName = first_name;
             session.user.isCreator = isCreator;
