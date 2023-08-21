@@ -67,8 +67,6 @@ export const nextAuthOptions = {
 
          const { id } = profile.data;
          const isCreator = id === process.env.CREATOR_ID;
-         //const isDev = id === process.env.DEV_ID;
-         //const isAllowedToSignIn = isPledged || isCreator || isDev;
          const isAllowedToSignIn = isPledged || isCreator;
 
          if (isAllowedToSignIn) {

@@ -357,7 +357,9 @@ const SearchTitlesModal = ({ currentUser }) => {
                                     }
                                  >
                                     {movie.Poster === "N/A" ? (
-                                       <div className="w-[175px] h-[285px] bg-slate-400 flex items-center justify-center mx-auto"></div>
+                                       <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
+                                          Missing Image
+                                       </div>
                                     ) : (
                                        <img
                                           src={movie.Poster}
