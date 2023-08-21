@@ -29,27 +29,15 @@ export const nextAuthOptions = {
       signIn: "/unauthorized",
    },
    callbacks: {
-      async jwt({ token, account }) {
-         if (account) {
-            token.accessToken = account.access_token;
-         }
+      async jwt({ token }) {
          return token;
       },
       async session({ token, session }) {
-         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
-            headers: {
-               Authorization: `Bearer ${token.accessToken}`,
-            },
-         });
-
-         const user = response.data;
-         if (user) {
-            const { id } = user.data;
-            const { first_name } = user.data.attributes;
-            const isCreator = id === process.env.CREATOR_ID;
-
-            session.user.id = id;
-            session.user.firstName = first_name;
+         if (token) {
+            const firstName = token.name.split(" ")[0];
+            const isCreator = token.id === process.env.CREATOR_ID;
+            session.user.id = token.id;
+            session.user.firstName = firstName;
             session.user.isCreator = isCreator;
          }
 
