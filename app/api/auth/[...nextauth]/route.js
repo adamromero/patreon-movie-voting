@@ -32,25 +32,24 @@ export const nextAuthOptions = {
       async jwt({ token, account }) {
          if (account) {
             token.accessToken = account.access_token;
-            token.id = "59013466";
          }
          return token;
       },
       async session({ token, session }) {
-         // const response = await axios.get(process.env.PATREON_PROFILE_URL, {
-         //    headers: {
-         //       Authorization: `Bearer ${token.accessToken}`,
-         //    },
-         // });
+         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
+            headers: {
+               Authorization: `Bearer ${token.accessToken}`,
+            },
+         });
 
-         //const user = response.data;
-         //const { id } = user.data;
-         //const { first_name } = user.data.attributes;
-         const isCreator = token.id === process.env.CREATOR_ID;
+         const user = response.data;
+         if (user) {
+            const { id } = user.data;
+            const { first_name } = user.data.attributes;
+            const isCreator = id === process.env.CREATOR_ID;
 
-         if (token) {
-            session.user.id = token.id;
-            //session.user.firstName = first_name;
+            session.user.id = id;
+            session.user.firstName = first_name;
             session.user.isCreator = isCreator;
          }
 
