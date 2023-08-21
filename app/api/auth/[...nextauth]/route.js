@@ -37,11 +37,11 @@ export const nextAuthOptions = {
          return token;
       },
       async session({ token, session }) {
-         const response = await axios.get(process.env.PATREON_PROFILE_URL, {
-            headers: {
-               Authorization: `Bearer ${token.accessToken}`,
-            },
-         });
+         // const response = await axios.get(process.env.PATREON_PROFILE_URL, {
+         //    headers: {
+         //       Authorization: `Bearer ${token.accessToken}`,
+         //    },
+         // });
 
          //const user = response.data;
          //const { id } = user.data;
