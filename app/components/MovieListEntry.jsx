@@ -70,11 +70,11 @@ const MovieListEntry = ({
                {data.voters.length}
             </div>
             {!data.isWatched && currentUser ? (
-               <div className="mt-[10px] sm:mt-0">
+               <div className="mt-[10px] md:mt-0 lg:w-[70px]">
                   {data.voters.filter((voter) => voter === currentUser)
                      .length ? (
                      <button
-                        className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        className="bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                         onClick={() => handleRemoveVote(data._id, data.voters)}
                      >
                         Retract
@@ -89,10 +89,10 @@ const MovieListEntry = ({
                   )}
                </div>
             ) : currentUser ? (
-               <div></div>
+               <div className="lg:w-[70px]"></div>
             ) : null}
             {isCreator && (
-               <div className="lg:w-[100px] mt-[10px] md:mt-0 relative">
+               <div className="lg:w-[70px] mt-[10px] md:mt-0 relative">
                   <div className="checkbox-container">
                      <label
                         className="checkbox"

@@ -321,7 +321,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                    onClick={() =>
                                                       handleRemoveVote(movie)
                                                    }
-                                                   className="bg-[#858585] hover:bg-[#585858] focus-visible:bg-[#585858] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                   className="bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                                                 >
                                                    Retract
                                                 </button>

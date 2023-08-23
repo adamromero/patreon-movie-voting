@@ -34,10 +34,10 @@ body {
 
 .react-responsive-modal-root .react-responsive-modal-closeButton {
    fill: white;
-   /* display: none; */
 }
 
 .checkbox-container {
+   position: relative;
    height: 30px;
    width: 30px;
    display: inline-block;
