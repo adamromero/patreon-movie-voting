@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import Image from "next/image";
 import { MovieContext } from "@/context/MovieContext";
 
 const MovieListEntry = ({
@@ -46,8 +47,6 @@ const MovieListEntry = ({
                <img
                   className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
                   src={data.data.Poster}
-                  // width={50}
-                  // height={205}
                   alt={data.data.Title}
                />
             </a>

@@ -301,7 +301,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                           textShadow: "1px 1px 3px black",
                                        }}
                                     >
-                                       <div className="flex flex-col items-center">
+                                       <div className="flex flex-col items-center mt-[35px]">
                                           <IoMdAddCircleOutline
                                              className={`text-[50px] rotate-45 ${
                                                 imdbIDCollection[movie.imdbID]

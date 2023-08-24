@@ -44,6 +44,11 @@ export const nextAuthOptions = {
          return session;
       },
       async signIn({ account, profile }) {
+         const { id } = profile.data;
+         if (id === process.env.CREATOR_ID) {
+            return true;
+         }
+
          const response = await fetch(process.env.PATREON_PROFILE_URL, {
             headers: {
                Authorization: `Bearer ${account.access_token}`,
@@ -51,25 +56,21 @@ export const nextAuthOptions = {
          });
          const user = await response.json();
 
-         let isPledged = false;
          const pledge = user?.included?.find(
             (item) =>
                item.type === "pledge" &&
                item.relationships.creator.data.id === process.env.CREATOR_ID
          );
 
+         let isUserPledged = false;
          if (pledge) {
             const {
                attributes: { status },
             } = pledge;
-            isPledged = status === "valid";
+            isUserPledged = status === "valid";
          }
 
-         const { id } = profile.data;
-         const isCreator = id === process.env.CREATOR_ID;
-         const isAllowedToSignIn = isPledged || isCreator;
-
-         if (isAllowedToSignIn) {
+         if (isUserPledged) {
             return true;
          } else {
             return "/unauthorized";

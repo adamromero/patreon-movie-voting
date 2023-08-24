@@ -21,14 +21,14 @@ const UserSignIn = ({ user }) => {
                   <button
                      ref={ref}
                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                     className="flex items-center gap-[10px] p-0 sm:py-[8px] sm:px-[12px] sm:hover:bg-[#1a1a1a] sm:focus-visible:bg-[#1a1a1a] rounded-[5px]"
+                     className="flex items-center gap-[10px] p-0 sm:py-[5px] sm:px-[8px] sm:hover:bg-[#1a1a1a] sm:focus-visible:bg-[#1a1a1a] rounded-[5px]"
                   >
-                     <div className="flex items-center w-[40px] h-[40px]">
+                     <div className="flex items-center w-[35px] h-[35px]">
                         <Image
                            src={user.image}
                            alt={user.name}
-                           width={40}
-                           height={40}
+                           width={35}
+                           height={35}
                            className="rounded-full"
                         />
                      </div>
@@ -47,7 +47,7 @@ const UserSignIn = ({ user }) => {
             ) : (
                <button
                   onClick={() => signIn("patreon")}
-                  className="flex items-center gap-[3px] bg-white py-[8px] px-[10px] my-[6px] text-black rounded-sm"
+                  className="flex items-center gap-[3px] bg-white py-[8px] px-[10px] text-black rounded-sm"
                >
                   <BiLogoPatreon className="text-[#ff424d] text-[20px] md:text-[28px]" />
                   <span className="hidden md:inline">Connect with Patreon</span>
