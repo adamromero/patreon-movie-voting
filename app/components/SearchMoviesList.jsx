@@ -17,7 +17,7 @@ const SearchMoviesList = () => {
             <input
                className="text-black px-[10px] py-[5px] w-full md:max-w-[200px]"
                type="text"
-               placeholder="Search requested movies"
+               placeholder="Search titles"
                value={searchTitle}
                onChange={(e) => {
                   const regex = /^[a-zA-Z0-9- ]+$/;
