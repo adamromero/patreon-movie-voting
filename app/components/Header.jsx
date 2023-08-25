@@ -25,13 +25,15 @@ export async function Header() {
                            href="https://www.patreon.com/jenmurray"
                            target="_blank"
                         >
-                           <BiLogoPatreon className="text-white text-[22px] sm:text-[32px]" />
+                           <BiLogoPatreon className="text-white text-[28px] sm:text-[32px]" />
                         </a>
                         <a
                            href="https://www.youtube.com/@jenmurrayxo"
                            target="_blank"
+                           className="relative"
                         >
-                           <AiFillYoutube className="text-[red] text-[22px] sm:text-[32px]" />
+                           <div className="absolute  top-[10px] left-[11px] w-[10px] h-[10px] bg-[white]"></div>
+                           <AiFillYoutube className="relative text-[red] text-[28px] sm:text-[32px]" />
                         </a>
                      </div>
                      <div>
