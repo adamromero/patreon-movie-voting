@@ -56,13 +56,16 @@ export const nextAuthOptions = {
          });
          const user = await response.json();
 
-         console.log(user);
+         //console.log(user);
 
          const pledge = user?.included?.find(
             (item) =>
                item.type === "pledge" &&
                item.relationships.creator.data.id === process.env.CREATOR_ID
          );
+
+         console.log(pledge.relationships.creator.data.id);
+         console.log(pledge);
 
          let isUserPledged = false;
          if (pledge) {
