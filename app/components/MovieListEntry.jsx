@@ -56,7 +56,7 @@ const MovieListEntry = ({
                isCreator ? "pr-0" : "md:pr-[16px]"
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
-            <div className="lg:w-[225px]">
+            <div className="lg:w-[250px] leading-4">
                {data.data.Title} ({data.data.Year})
             </div>
             <div className="lg:w-[200px]">{data.data.Genre}</div>

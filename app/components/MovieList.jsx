@@ -326,7 +326,7 @@ const MovieList = ({ currentUser, isCreator }) => {
 
    const tableHead = (
       <div className="flex gap-[5px] sm:gap-[10px] lg:gap-0 bg-transparent lg:bg-black justify-between mb-[10px] lg:pl-[50px]">
-         <div className="bg-black w-full lg:w-[265px]">
+         <div className="bg-black w-full lg:w-[295px]">
             <button
                onClick={() => {
                   setIsTitleFilterAscending(!isTitleFilterAscending);
