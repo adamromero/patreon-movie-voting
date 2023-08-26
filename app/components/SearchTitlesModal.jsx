@@ -179,6 +179,7 @@ const SearchTitlesModal = ({ currentUser }) => {
       return moviesList.find((movie) => {
          if (movie.data.imdbID === selectedMovie.imdbID) {
             removeMovieVote(movie._id, movie.voters, currentUser);
+            setDisabledButtonStates({ [selectedMovie.imdbID]: false });
          }
       });
    };
