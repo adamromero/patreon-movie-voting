@@ -301,7 +301,13 @@ const SearchTitlesModal = ({ currentUser }) => {
                                           textShadow: "1px 1px 3px black",
                                        }}
                                     >
-                                       <div className="flex flex-col items-center mt-[35px] z-10">
+                                       <div
+                                          className={`${
+                                             isMovieWatched(movie)
+                                                ? ""
+                                                : "mt-[35px]"
+                                          } flex flex-col items-center z-10`}
+                                       >
                                           <IoMdAddCircleOutline
                                              className={`text-[50px] rotate-45 ${
                                                 imdbIDCollection[movie.imdbID]
@@ -314,7 +320,6 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                 ? "Watched"
                                                 : "Requested"}
                                           </div>
-
                                           {!isMovieWatched(movie) &&
                                              (isMovieVotedByUser(movie) ? (
                                                 <button
