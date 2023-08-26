@@ -9,11 +9,12 @@ import MovieCount from "./MovieCount";
 const VotingApp = ({ user }) => {
    return (
       <div>
-         <div className="flex flex-col gap-[10px] mb-[15px]">
+         <div className="flex flex-col my-[15px]">
             {user && <RequestMovies currentUser={user && user.id} />}
+            <MovieCount />
             <SearchMoviesList />
          </div>
-         <MovieCount />
+
          <FilterMovieList />
          <MovieList
             currentUser={user && user.id}

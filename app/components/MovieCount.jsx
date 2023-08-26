@@ -5,7 +5,7 @@ const MovieCount = () => {
    const moviesList = useRetrieveMovies();
 
    return (
-      <div className="flex gap-3 mb-[15px]">
+      <div className="flex gap-3 my-[6px]">
          <div>Total count: {moviesList.length}</div>
          <div>
             Not watched: {moviesList.filter((movie) => !movie.isWatched).length}
