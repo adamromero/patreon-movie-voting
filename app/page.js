@@ -18,7 +18,7 @@ export default async function Home() {
                      </h2>
                   </div>
                ) : (
-                  <div className="mb-[20px] text-[16px] sm:text-[18px]">
+                  <div className="text-[16px] sm:text-[18px]">
                      <p>
                         Connect with your Patreon account to request movies and
                         vote.

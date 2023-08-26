@@ -11,7 +11,7 @@ const RequestMovies = ({ currentUser }) => {
    const onCloseModal = () => setOpen(false);
 
    return (
-      <>
+      <div className="mb-[15px]">
          <button
             onClick={onOpenModal}
             className="max-w-[200px] bg-[black] focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
@@ -21,7 +21,7 @@ const RequestMovies = ({ currentUser }) => {
          <Modal open={open} onClose={onCloseModal} center>
             <SearchTitlesModal currentUser={currentUser} />
          </Modal>
-      </>
+      </div>
    );
 };
 
