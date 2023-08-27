@@ -67,7 +67,7 @@ export const nextAuthOptions = {
 
          console.log(
             "pledge relationships creator: ",
-            pledge.relationships.creator
+            pledge?.relationships?.creator
          );
 
          let isUserPledged = false;
