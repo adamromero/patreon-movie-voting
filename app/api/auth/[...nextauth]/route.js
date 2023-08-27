@@ -55,22 +55,12 @@ export const nextAuthOptions = {
          });
          const user = await response.json();
 
-         console.log("user: ", user);
-
-         console.log("relationships: ", user?.data?.relationships);
-
-         const pledge = user?.included?.find(
-            (item) =>
+         const pledge = user?.included?.find((item) => {
+            return (
                item.type === "pledge" &&
                item.relationships.creator.data.id === process.env.CREATOR_ID
-         );
-
-         console.log("pledge: ", pledge);
-
-         console.log(
-            "pledge relationships creator: ",
-            pledge?.relationships?.creator
-         );
+            );
+         });
 
          let isUserPledged = false;
          if (pledge) {
@@ -79,8 +69,6 @@ export const nextAuthOptions = {
             } = pledge;
             isUserPledged = status === "valid";
          }
-
-         console.log("is user pledged: ", isUserPledged);
 
          if (isUserPledged) {
             return true;
