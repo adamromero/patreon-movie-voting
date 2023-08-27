@@ -57,6 +57,8 @@ export const nextAuthOptions = {
 
          console.log("user: ", user);
 
+         console.log("relationships: ", user?.data?.relationships);
+
          const pledge = user?.included?.find(
             (item) =>
                item.type === "pledge" &&
