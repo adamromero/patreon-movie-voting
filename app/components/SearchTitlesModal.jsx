@@ -144,7 +144,7 @@ const SearchTitlesModal = ({ currentUser }) => {
    const handleTitleSubmit = (e) => {
       e.preventDefault();
       if (input) {
-         setTitle(input);
+         setTitle(encodeURIComponent(input));
       }
    };
 
@@ -157,7 +157,7 @@ const SearchTitlesModal = ({ currentUser }) => {
 
    const handleTitleYearSubmit = (e) => {
       e.preventDefault();
-      if (inputTitle) setSearchTitle(inputTitle);
+      if (inputTitle) setSearchTitle(encodeURIComponent(inputTitle));
       if (inputYear) setSearchYear(inputYear);
    };
 
