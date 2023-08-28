@@ -38,7 +38,9 @@ export const MovieProvider = ({ children }) => {
    };
 
    const createMovieVote = async (movie, currentUser) => {
-      const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&t=${movie.Title}&y=${movie.Year}`;
+      const API_URL = `https://www.omdbapi.com/?apikey=${
+         process.env.NEXT_PUBLIC_OMDB_API_KEY
+      }&t=${encodeURIComponent(movie.Title)}&y=${movie.Year}`;
       const response = await fetch(API_URL);
       const movieData = await response.json();
 
