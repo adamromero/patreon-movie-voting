@@ -144,20 +144,24 @@ const SearchTitlesModal = ({ currentUser }) => {
    const handleTitleSubmit = (e) => {
       e.preventDefault();
       if (input) {
-         setTitle(encodeURIComponent(input));
+         setTitle(encodeURIComponent(input.trim()));
       }
    };
 
    const handleImdbIDSubmit = (e) => {
       e.preventDefault();
       const regex = /^[t0-9]+$/;
-      if (inputImdbID)
-         setSearchImdbID(regex.test(inputImdbID) ? inputImdbID : "");
+      if (inputImdbID) {
+         const inputImdbIDTrimmed = inputImdbID.trim();
+         setSearchImdbID(
+            regex.test(inputImdbIDTrimmed) ? inputImdbIDTrimmed : ""
+         );
+      }
    };
 
    const handleTitleYearSubmit = (e) => {
       e.preventDefault();
-      if (inputTitle) setSearchTitle(encodeURIComponent(inputTitle));
+      if (inputTitle) setSearchTitle(encodeURIComponent(inputTitle.trim()));
       if (inputYear) setSearchYear(inputYear);
    };
 
