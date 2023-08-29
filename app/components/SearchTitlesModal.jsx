@@ -210,7 +210,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                         type="text"
                         name=""
                         id=""
-                        placeholder="Search Titles"
+                        placeholder="Search titles"
                         value={input}
                         ref={inputRef}
                         onChange={(e) => setInput(e.target.value)}
