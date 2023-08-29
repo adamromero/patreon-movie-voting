@@ -18,6 +18,8 @@ import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
 
 const MovieList = ({ currentUser, isCreator }) => {
+   const defaultCurrentPage = 1;
+   const defaultRowsPerPage = 50;
    const moviesList = useRetrieveMovies();
    const {
       filterOptions,
@@ -34,8 +36,8 @@ const MovieList = ({ currentUser, isCreator }) => {
    const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
    const [isWatchedFilterAscending, setIsWatchedFilterAscending] =
       useState(true);
-   const [currentPage, setCurrentPage] = useState(1);
-   const [postsPerPage, setPostsPerPage] = useState(20);
+   const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
+   const [postsPerPage, setPostsPerPage] = useState(defaultRowsPerPage);
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
    const [isOpenList, setIsOpenList] = useState(false);
