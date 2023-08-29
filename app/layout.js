@@ -12,7 +12,7 @@ const lato = Lato({
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-   title: "Let My Patrons Decide",
+   title: "Patron Movie Requests",
    description:
       "A movie voting app for the Jen Murray movie reaction channel on Patreon",
    other: {

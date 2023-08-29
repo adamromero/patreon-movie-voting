@@ -3,11 +3,13 @@ import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import UserSignIn from "./UserSignIn";
 import { getCurrentUser } from "@/lib/session";
-import { Satisfy } from "next/font/google";
-
-const satisfy = Satisfy({
-   subsets: ["latin"],
-   weight: "400",
+import localFont from "next/font/local";
+const breathing = localFont({
+   src: [
+      { path: "../../public/fonts/Breathing.ttf" },
+      { path: "../../public/fonts/Breathing.woff" },
+      { path: "../../public/fonts/Breathing.woff2" },
+   ],
 });
 
 export async function Header() {
@@ -37,9 +39,9 @@ export async function Header() {
                         </a>
                      </div>
                      <div>
-                        <h1 className="text-[22px] sm:text-[28px] flex text-white whitespace-nowrap">
-                           <span className={satisfy.className}>
-                              Let My Patrons Decide
+                        <h1 className="text-[18px] sm:text-[22px] flex text-white whitespace-nowrap">
+                           <span className={`${breathing.className} font-bold`}>
+                              Patron Movie Requests
                            </span>
                         </h1>
                      </div>
