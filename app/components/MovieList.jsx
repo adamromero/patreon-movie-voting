@@ -158,6 +158,10 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Crime)
          );
+      } else if (filterOptions.genre === genre.Documentary) {
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Genre.includes(genre.Documentary)
+         );
       } else if (filterOptions.genre === genre.Drama) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Drama)
@@ -197,6 +201,10 @@ const MovieList = ({ currentUser, isCreator }) => {
       } else if (filterOptions.genre === genre.Romance) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Romance)
+         );
+      } else if (filterOptions.genre === genre.Short) {
+         filteredList = filteredList.filter((movie) =>
+            movie.data.Genre.includes(genre.Short)
          );
       } else if (filterOptions.genre === genre.Sport) {
          filteredList = filteredList.filter((movie) =>

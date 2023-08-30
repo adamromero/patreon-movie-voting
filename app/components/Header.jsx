@@ -39,10 +39,10 @@ export async function Header() {
                         </a>
                      </div>
                      <div>
-                        <h1 className="text-[18px] sm:text-[22px] flex text-white whitespace-nowrap">
-                           <span className={`${breathing.className} font-bold`}>
-                              Patron Movie Requests
-                           </span>
+                        <h1
+                           className={`${breathing.className} font-bold text-[18px] sm:text-[22px] flex text-white whitespace-nowrap mt-[5px]`}
+                        >
+                           Patron Movie Requests
                         </h1>
                      </div>
                   </div>
