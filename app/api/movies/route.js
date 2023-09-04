@@ -21,9 +21,16 @@ export async function POST(req, res) {
    const user = await getCurrentUser();
    if (user) {
       try {
-         const selectedMovie = await req.json();
-         const movie = await Movie.create(selectedMovie);
-         return NextResponse.json(movie);
+         const findMovie = await Movie.findOne({ _id: movieId });
+         if (!findMovie) {
+            const selectedMovie = await req.json();
+            const movie = await Movie.create(selectedMovie);
+            return NextResponse.json(movie);
+         } else {
+            return NextResponse.json({
+               message: "Movie already exists in the database.",
+            });
+         }
       } catch (error) {
          return NextResponse.json({
             error: "Unable to post movie selection to the database.",

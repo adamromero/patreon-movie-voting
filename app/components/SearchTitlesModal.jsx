@@ -324,7 +324,14 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             <div className="flex flex-col mt-[67px] items-center z-10">
+                                             <div
+                                                className={`flex flex-col ${
+                                                   getPatreonLink(movie) ||
+                                                   getYouTubeLink(movie)
+                                                      ? "mt-[67px]"
+                                                      : ""
+                                                } items-center z-10`}
+                                             >
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
                                                       imdbIDCollection[
@@ -336,26 +343,30 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                 />
                                                 <div>On Channel</div>
                                                 <div className="flex flex-col gap-[4px] max-w-[60px] w-full">
-                                                   <a
-                                                      className="bg-[black] text-[white] flex justify-center p-[2px] border-[#585858] border-[1px]"
-                                                      href={getPatreonLink(
-                                                         movie
-                                                      )}
-                                                      title="Watch Full Length"
-                                                      target="_blank"
-                                                   >
-                                                      <BiLogoPatreon />
-                                                   </a>
-                                                   <a
-                                                      className="bg-[red] text-[white] flex justify-center p-[2px]"
-                                                      href={getYouTubeLink(
-                                                         movie
-                                                      )}
-                                                      title="Watch on YouTube"
-                                                      target="_blank"
-                                                   >
-                                                      <AiFillYoutube />
-                                                   </a>
+                                                   {getPatreonLink(movie) && (
+                                                      <a
+                                                         className="bg-[black] text-[white] flex justify-center p-[2px] border-[#585858] border-[1px]"
+                                                         href={getPatreonLink(
+                                                            movie
+                                                         )}
+                                                         title="Watch Full Length"
+                                                         target="_blank"
+                                                      >
+                                                         <BiLogoPatreon />
+                                                      </a>
+                                                   )}
+                                                   {getYouTubeLink(movie) && (
+                                                      <a
+                                                         className="bg-[red] text-[white] flex justify-center p-[2px]"
+                                                         href={getYouTubeLink(
+                                                            movie
+                                                         )}
+                                                         title="Watch on YouTube"
+                                                         target="_blank"
+                                                      >
+                                                         <AiFillYoutube />
+                                                      </a>
+                                                   )}
                                                 </div>
                                              </div>
                                           </div>

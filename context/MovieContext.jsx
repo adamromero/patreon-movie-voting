@@ -196,8 +196,6 @@ export const MovieProvider = ({ children }) => {
          return movie._id === movieId ? updatedMovieVote : movie;
       });
 
-      console.log(updatedMoviesList);
-
       try {
          const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
