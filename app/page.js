@@ -4,8 +4,11 @@ import VotingApp from "./components/VotingApp";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
-   redirect("/maintenance");
    const user = await getCurrentUser();
+
+   if (user && !user.isCreator) {
+      redirect("/maintenance");
+   }
 
    return (
       <main>
