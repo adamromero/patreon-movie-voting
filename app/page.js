@@ -1,10 +1,10 @@
 import Header from "./components/Header";
 import { getCurrentUser } from "@/lib/session";
 import VotingApp from "./components/VotingApp";
-//import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-   //redirect("/maintenance");
+   redirect("/maintenance");
    const user = await getCurrentUser();
 
    return (
