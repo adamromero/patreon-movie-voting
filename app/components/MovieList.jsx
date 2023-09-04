@@ -435,6 +435,12 @@ const MovieList = ({ currentUser, isCreator }) => {
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Seen</div>
                </div>
+               <div className="hidden lg:block w-[80px]">
+                  <div className="w-full text-left p-[10px]">Blacklist</div>
+               </div>
+               <div className="hidden lg:block w-[80px]">
+                  <div className="w-full text-left p-[10px]">Delete</div>
+               </div>
             </>
          )}
       </div>

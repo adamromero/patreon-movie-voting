@@ -21,14 +21,18 @@ export async function POST(req, res) {
    const user = await getCurrentUser();
    if (user) {
       try {
-         const findMovie = await Movie.findOne({ _id: movieId });
+         const selectedMovie = await req.json();
+         const selectedMovieID = selectedMovie.data.imdbID;
+         const findMovie = await Movie.findOne({
+            "data.imdbID": selectedMovieID,
+         });
+
          if (!findMovie) {
-            const selectedMovie = await req.json();
             const movie = await Movie.create(selectedMovie);
             return NextResponse.json(movie);
          } else {
             return NextResponse.json({
-               message: "Movie already exists in the database.",
+               error: "Movie is already added to the database.",
             });
          }
       } catch (error) {

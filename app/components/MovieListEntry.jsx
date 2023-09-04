@@ -3,6 +3,8 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
+import { MdDangerous } from "react-icons/md";
 import { MovieContext } from "@/context/MovieContext";
 
 const MovieListEntry = ({
@@ -19,6 +21,12 @@ const MovieListEntry = ({
    const onOpenModal = () => setOpen(true);
    const onCloseModal = () => setOpen(false);
 
+   const [openDelete, setOpenDelete] = useState(false);
+   const onOpenDeleteModal = () => setOpenDelete(true);
+   const onCloseDeleteModal = () => setOpenDelete(false);
+
+   const [removeMovieId, setRemoveMovieId] = useState();
+
    const [watchedMovieData, setWatchedMovieData] = useState({});
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
    const [youTubeReactionLink, setYouTubeReactionLink] = useState("");
@@ -29,6 +37,7 @@ const MovieListEntry = ({
       setMovieVoteToWatched,
       setMovieVoteToSeen,
       setWatchedMovieLinks,
+      removeMovieVoteOverride,
    } = useContext(MovieContext);
 
    const handleCastVote = async (movieId, voters) => {
@@ -225,7 +234,51 @@ const MovieListEntry = ({
                   )}
                </>
             )}
+            {isCreator && (
+               <>
+                  <div className="hidden lg:block lg:w-[35px] text-center">
+                     <button className="text-[white] text-[30px]">
+                        <MdDangerous />
+                     </button>
+                  </div>
+                  <div className="hidden lg:block lg:w-[75px] text-center">
+                     <button
+                        onClick={() => {
+                           onOpenDeleteModal();
+                           setRemoveMovieId(data._id);
+                        }}
+                        className="text-[red] text-[30px]"
+                     >
+                        <AiFillDelete />
+                     </button>
+                  </div>
+               </>
+            )}
          </div>
+         <Modal
+            open={openDelete}
+            onClose={onCloseDeleteModal}
+            center
+            classNames={{ modal: "delete-movie-modal" }}
+         >
+            <div className="text-center">
+               Confirm you want to remove this movie?
+            </div>
+            <div className="flex justify-between items-center max-w-[200px] w-full mx-auto h-[60px]">
+               <button
+                  onClick={() => removeMovieVoteOverride(removeMovieId)}
+                  className="bg-[#830483] py-[5px] px-[10px]"
+               >
+                  Confirm
+               </button>
+               <button
+                  onClick={onCloseDeleteModal}
+                  className="bg-[#585858] py-[5px] px-[10px]"
+               >
+                  Cancel
+               </button>
+            </div>
+         </Modal>
          <Modal
             classNames={{
                modal: "reaction-link-modal",

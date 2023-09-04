@@ -99,6 +99,27 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
+   const removeMovieVoteOverride = async (movieId) => {
+      console.log("movieID: ", movieId);
+      try {
+         const response = await fetch(`/api/movies/${movieId}`, {
+            method: "DELETE",
+            headers: {
+               Accept: "application/json",
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(movieId),
+         });
+         const deletedMovie = await response.json();
+         const updatedMoviesList = moviesList.filter(
+            (movie) => movie._id !== deletedMovie._id
+         );
+         setMoviesList(updatedMoviesList);
+      } catch (e) {
+         return e;
+      }
+   };
+
    const removeMovieVote = async (movieId, voters, currentUser) => {
       const newVoters = voters.filter((voter) => voter !== currentUser);
       const removeMovieVote = moviesList.find((movie) => movie._id === movieId);
@@ -254,6 +275,7 @@ export const MovieProvider = ({ children }) => {
             setSearchDirector,
             searchActor,
             setSearchActor,
+            removeMovieVoteOverride,
          }}
       >
          {children}

@@ -24,6 +24,11 @@ body {
    margin: 0;
 }
 
+.react-responsive-modal-root .delete-movie-modal {
+   height: 130px;
+   max-width: 400px;
+}
+
 .react-responsive-modal-root .request-movies-modal {
    max-width: 1000px;
 }
