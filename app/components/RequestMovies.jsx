@@ -18,7 +18,14 @@ const RequestMovies = ({ currentUser }) => {
          >
             Request Movies
          </button>
-         <Modal open={open} onClose={onCloseModal} center>
+         <Modal
+            classNames={{
+               modal: "request-movies-modal",
+            }}
+            open={open}
+            onClose={onCloseModal}
+            center
+         >
             <SearchTitlesModal currentUser={currentUser} />
          </Modal>
       </div>

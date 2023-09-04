@@ -48,6 +48,20 @@ const movieSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   hasSeen: {
+      type: Boolean,
+      default: false,
+   },
+   links: {
+      patreon: {
+         type: String,
+         default: "",
+      },
+      youtube: {
+         type: String,
+         default: "",
+      },
+   },
    createdAt: {
       type: Date,
       default: Date.now,

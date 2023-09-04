@@ -29,32 +29,34 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchActor,
    } = useContext(MovieContext);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
+
+   //movies watched on the channel
    const [watchedState, setWatchedState] = useState({});
+
+   //movies watched off the channel
+   const [seenState, setSeenState] = useState({});
+
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(false);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
    const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
-   const [isWatchedFilterAscending, setIsWatchedFilterAscending] =
-      useState(true);
    const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
    const [postsPerPage, setPostsPerPage] = useState(defaultRowsPerPage);
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-   const [isOpenList, setIsOpenList] = useState(false);
 
    useEffect(() => {
       let filteredList = [...moviesList];
-      setIsOpenList(true);
 
-      if (filterOptions.watched === watched.Ascending) {
-         //not watched first
-         filteredList = filteredList.sort((a, b) => b.isWatched - a.isWatched);
-      } else if (filterOptions.watched === watched.Descending) {
-         //watched first
-         filteredList = filteredList.sort((a, b) => a.isWatched - b.isWatched);
-      } else {
-         setIsWatchedFilterAscending(true);
-      }
+      // if (filterOptions.watched === watched.Ascending) {
+      //    //not watched first
+      //    filteredList = filteredList.sort((a, b) => b.isWatched - a.isWatched);
+      // } else if (filterOptions.watched === watched.Descending) {
+      //    //watched first
+      //    filteredList = filteredList.sort((a, b) => a.isWatched - b.isWatched);
+      // } else {
+      //    setIsWatchedFilterAscending(true);
+      // }
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
@@ -220,10 +222,14 @@ const MovieList = ({ currentUser, isCreator }) => {
          );
       }
 
-      if (filterOptions.status === status.Watched) {
+      if (filterOptions.status === status.Seen) {
+         filteredList = filteredList.filter((movie) => movie.hasSeen);
+      } else if (filterOptions.status === status.Watched) {
          filteredList = filteredList.filter((movie) => movie.isWatched);
       } else if (filterOptions.status === status.Unwatched) {
-         filteredList = filteredList.filter((movie) => !movie.isWatched);
+         filteredList = filteredList.filter(
+            (movie) => !movie.hasSeen && !movie.isWatched
+         );
       }
 
       if (searchTitle) {
@@ -263,10 +269,13 @@ const MovieList = ({ currentUser, isCreator }) => {
 
    useEffect(() => {
       const watchedStateObject = {};
+      const seenStateObject = {};
       filteredMoviesList.forEach((movie) => {
          watchedStateObject[movie._id] = movie.isWatched;
+         seenStateObject[movie._id] = movie.hasSeen;
       });
       setWatchedState(watchedStateObject);
+      setSeenState(seenStateObject);
    }, [filteredMoviesList]);
 
    const handleTitleSort = () => {
@@ -307,19 +316,19 @@ const MovieList = ({ currentUser, isCreator }) => {
       }));
    };
 
-   const handleWatchedSort = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         chronological: chronological.Default,
-         added: added.Default,
-         rating: rating.Default,
-         watched: isWatchedFilterAscending
-            ? watched.Ascending
-            : watched.Descending,
-      }));
-   };
+   // const handleWatchedSort = () => {
+   //    setFilterOptions((prevOptions) => ({
+   //       ...prevOptions,
+   //       alphabetical: alphabetical.Default,
+   //       votes: votes.Default,
+   //       chronological: chronological.Default,
+   //       added: added.Default,
+   //       rating: rating.Default,
+   //       watched: isWatchedFilterAscending
+   //          ? watched.Ascending
+   //          : watched.Descending,
+   //    }));
+   // };
 
    const firstPage = () => setCurrentPage(1);
    const lastPage = () =>
@@ -397,26 +406,36 @@ const MovieList = ({ currentUser, isCreator }) => {
          </div>
          {currentUser && <div className="hidden lg:block lg:w-[100px]"></div>}
          {isCreator && (
-            <div className="bg-black w-full lg:w-[100px]">
-               <button
-                  onClick={() => {
-                     setIsWatchedFilterAscending(!isWatchedFilterAscending);
-                     handleWatchedSort();
-                  }}
-                  className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
-               >
-                  <div className="flex gap-[5px] items-center">
-                     {filterOptions.watched === watched.Default && <FaSort />}
-                     {filterOptions.watched === watched.Ascending && (
-                        <FaSortUp />
-                     )}
-                     {filterOptions.watched === watched.Descending && (
-                        <FaSortDown />
-                     )}
-                     Watched
-                  </div>
-               </button>
-            </div>
+            <>
+               {/* <div className="bg-black w-full lg:w-[100px]">
+                  <button
+                     onClick={() => {
+                        setIsWatchedFilterAscending(!isWatchedFilterAscending);
+                        handleWatchedSort();
+                     }}
+                     className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
+                  >
+                     <div className="flex gap-[5px] items-center">
+                        {filterOptions.watched === watched.Default && (
+                           <FaSort />
+                        )}
+                        {filterOptions.watched === watched.Ascending && (
+                           <FaSortUp />
+                        )}
+                        {filterOptions.watched === watched.Descending && (
+                           <FaSortDown />
+                        )}
+                        Channel
+                     </div>
+                  </button>
+               </div> */}
+               <div className="hidden lg:block w-[80px]">
+                  <div className="w-full text-left p-[10px]">Channel</div>
+               </div>
+               <div className="hidden lg:block w-[80px]">
+                  <div className="w-full text-left p-[10px]">Seen</div>
+               </div>
+            </>
          )}
       </div>
    );
@@ -430,9 +449,10 @@ const MovieList = ({ currentUser, isCreator }) => {
                   key={data._id}
                   className="flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
                   style={{
-                     backgroundColor: data.isWatched
-                        ? "rgb(0 0 0 / 40%)"
-                        : "#000",
+                     backgroundColor:
+                        data.isWatched || data.hasSeen
+                           ? "rgb(0 0 0 / 40%)"
+                           : "#000",
                      position: "relative",
                   }}
                >
@@ -442,6 +462,8 @@ const MovieList = ({ currentUser, isCreator }) => {
                      isCreator={isCreator}
                      watchedState={watchedState}
                      setWatchedState={setWatchedState}
+                     seenState={seenState}
+                     setSeenState={setSeenState}
                   />
                </div>
             ))}

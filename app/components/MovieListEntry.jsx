@@ -1,5 +1,8 @@
-import React, { useContext } from "react";
-import Image from "next/image";
+import React, { useState, useContext } from "react";
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
+import { BiLogoPatreon } from "react-icons/bi";
+import { AiFillYoutube } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
 
 const MovieListEntry = ({
@@ -8,9 +11,25 @@ const MovieListEntry = ({
    isCreator,
    watchedState,
    setWatchedState,
+   seenState,
+   setSeenState,
 }) => {
-   const { castMovieVote, removeMovieVote, setMovieVoteToWatched } =
-      useContext(MovieContext);
+   const [open, setOpen] = useState(false);
+
+   const onOpenModal = () => setOpen(true);
+   const onCloseModal = () => setOpen(false);
+
+   const [watchedMovieData, setWatchedMovieData] = useState({});
+   const [patreonReactionLink, setPatreonReactionLink] = useState("");
+   const [youTubeReactionLink, setYouTubeReactionLink] = useState("");
+
+   const {
+      castMovieVote,
+      removeMovieVote,
+      setMovieVoteToWatched,
+      setMovieVoteToSeen,
+      setWatchedMovieLinks,
+   } = useContext(MovieContext);
 
    const handleCastVote = async (movieId, voters) => {
       castMovieVote(movieId, voters, currentUser);
@@ -29,6 +48,24 @@ const MovieListEntry = ({
       }));
    };
 
+   const handleSeenSetting = (e, data) => {
+      const isChecked = e.target.checked;
+      setMovieVoteToSeen(data._id, isChecked);
+      setSeenState((prevState) => ({
+         ...prevState,
+         [data._id]: isChecked,
+      }));
+   };
+
+   const handleLinkUpdate = (e) => {
+      e.preventDefault();
+      const links = {
+         patreon: patreonReactionLink,
+         youtube: youTubeReactionLink,
+      };
+      setWatchedMovieLinks(watchedMovieData.id, links);
+   };
+
    return (
       <>
          <div className="relative">
@@ -37,10 +74,11 @@ const MovieListEntry = ({
                title="Go to IMDB"
                target="_blank"
             >
-               {data.isWatched && (
+               {(data.isWatched || data.hasSeen) && (
                   <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5]">
-                     <p className="text-[20px] lg:text-[14px] text-shadow font-bold lg:rotate-[315deg]">
-                        Watched
+                     <p className="text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px]">
+                        {data.isWatched && <>On Channel</>}
+                        {data.hasSeen && <>Seen</>}
                      </p>
                   </div>
                )}
@@ -57,7 +95,29 @@ const MovieListEntry = ({
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
             <div className="lg:w-[250px] leading-4">
-               {data.data.Title} ({data.data.Year})
+               {isCreator && data.isWatched ? (
+                  <button
+                     className="text-left py-[5px]"
+                     onClick={() => {
+                        onOpenModal();
+                        setPatreonReactionLink(data.links.patreon);
+                        setYouTubeReactionLink(data.links.youtube);
+                        setWatchedMovieData({
+                           id: data._id,
+                           title: data.data.Title,
+                           poster: data.data.Poster,
+                           year: data.data.Year,
+                        });
+                     }}
+                     title="Click to Edit Links"
+                  >
+                     {data.data.Title} ({data.data.Year})
+                  </button>
+               ) : (
+                  <>
+                     {data.data.Title} ({data.data.Year})
+                  </>
+               )}
             </div>
             <div className="lg:w-[200px]">{data.data.Genre}</div>
             <div className="lg:w-[40px]">
@@ -68,7 +128,7 @@ const MovieListEntry = ({
                <span className="inline lg:hidden">Requests:</span>{" "}
                {data.voters.length}
             </div>
-            {!data.isWatched && currentUser ? (
+            {!data.isWatched && !data.hasSeen && currentUser ? (
                <div className="mt-[10px] md:mt-0 lg:w-[70px]">
                   {data.voters.filter((voter) => voter === currentUser)
                      .length ? (
@@ -88,27 +148,131 @@ const MovieListEntry = ({
                   )}
                </div>
             ) : currentUser ? (
-               <div className="lg:w-[70px]"></div>
+               <>
+                  {!data.isWatched ? (
+                     <div className="hidden lg:block lg:w-[70px]"></div>
+                  ) : (
+                     <div className="w-[70px]">
+                        <div className="flex flex-col gap-[8px]">
+                           {data?.links?.youtube && (
+                              <a
+                                 className="flex justify-center items-center gap-[2px] bg-[red] text-[18px] p-[3px]"
+                                 href={data.links.youtube}
+                                 title="Watch on YouTube"
+                                 target="_blank"
+                              >
+                                 <AiFillYoutube />
+                              </a>
+                           )}
+                           {data?.links?.patreon && (
+                              <a
+                                 className="flex justify-center items-center gap-[2px] bg-[black] text-[18px] p-[3px]"
+                                 href={data.links.patreon}
+                                 title="Watch Full Length"
+                                 target="_blank"
+                              >
+                                 <BiLogoPatreon />
+                              </a>
+                           )}
+                        </div>
+                     </div>
+                  )}
+               </>
             ) : null}
             {isCreator && (
-               <div className="lg:w-[70px] mt-[10px] md:mt-0 relative">
-                  <div className="checkbox-container">
-                     <label
-                        className="checkbox"
-                        htmlFor={`checkbox-${data._id}`}
-                     >
-                        <input
-                           type="checkbox"
-                           id={`checkbox-${data._id}`}
-                           checked={!!watchedState[data._id]}
-                           onChange={(e) => handleWatchSetting(e, data)}
-                        />
-                        <div className="checkmark"></div>
-                     </label>
-                  </div>
-               </div>
+               <>
+                  {data.hasSeen ? (
+                     <div className="hidden lg:block lg:w-[35px] mt-[10px] md:mt-0 relative"></div>
+                  ) : (
+                     <div className="lg:w-[35px] mt-[10px] md:mt-0 relative">
+                        <div className="block lg:hidden">Channel</div>
+                        <div className="checkbox-container">
+                           <label
+                              className="checkbox"
+                              htmlFor={`checkbox-${data._id}`}
+                           >
+                              <input
+                                 type="checkbox"
+                                 id={`checkbox-${data._id}`}
+                                 checked={!!watchedState[data._id]}
+                                 onChange={(e) => handleWatchSetting(e, data)}
+                              />
+                              <div className="checkmark"></div>
+                           </label>
+                        </div>
+                     </div>
+                  )}
+                  {data.isWatched ? (
+                     <div className="lg:w-[60px] mt-[10px] md:mt-0 relative"></div>
+                  ) : (
+                     <div className="lg:w-[60px] mt-[10px] md:mt-0 relative">
+                        <div className="block lg:hidden">Seen</div>
+                        <div className="checkbox-container">
+                           <label
+                              className="checkbox"
+                              htmlFor={`checkbox2-${data._id}`}
+                           >
+                              <input
+                                 type="checkbox"
+                                 id={`checkbox2-${data._id}`}
+                                 checked={!!seenState[data._id]}
+                                 onChange={(e) => handleSeenSetting(e, data)}
+                              />
+                              <div className="checkmark"></div>
+                           </label>
+                        </div>
+                     </div>
+                  )}
+               </>
             )}
          </div>
+         <Modal
+            classNames={{
+               modal: "reaction-link-modal",
+            }}
+            open={open}
+            onClose={onCloseModal}
+            center
+         >
+            <h2 className="mb-[10px] text-[18px] font-bold">
+               {watchedMovieData.title} ({watchedMovieData.year})
+            </h2>
+            <div className="flex gap-[15px]">
+               <img
+                  className="h-[180px]"
+                  src={watchedMovieData.poster}
+                  alt={watchedMovieData.title}
+               />
+
+               <div className="flex flex-col flex-1 max-w-[500px]">
+                  <form
+                     className="flex flex-col gap-[15px]"
+                     onSubmit={handleLinkUpdate}
+                  >
+                     <input
+                        className="w-full px-[8px] py-[5px] text-[black]"
+                        type="text"
+                        placeholder="YouTube Reaction Link"
+                        value={youTubeReactionLink}
+                        onChange={(e) => setYouTubeReactionLink(e.target.value)}
+                     />
+                     <input
+                        className="w-full px-[8px] py-[5px] text-[black]"
+                        type="text"
+                        placeholder="Patreon Full Length Reaction Link"
+                        value={patreonReactionLink}
+                        onChange={(e) => setPatreonReactionLink(e.target.value)}
+                     />
+                     <button
+                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-[5px] max-w-[115px]"
+                        type="submit"
+                     >
+                        Submit
+                     </button>
+                  </form>
+               </div>
+            </div>
+         </Modal>
       </>
    );
 };

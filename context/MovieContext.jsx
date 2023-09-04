@@ -48,6 +48,8 @@ export const MovieProvider = ({ children }) => {
          data: movieData,
          voters: [currentUser],
          isWatched: false,
+         hasSeen: false,
+         links: { patreon: "", youtube: "" },
       };
 
       const config = {
@@ -175,6 +177,66 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
+   const setMovieVoteToSeen = async (movieId, isChecked) => {
+      const selectedMovieVote = moviesList.find(
+         (movie) => movie._id === movieId
+      );
+      const updatedMovieVote = { ...selectedMovieVote, hasSeen: isChecked };
+
+      const config = {
+         method: "PUT",
+         headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify(updatedMovieVote),
+      };
+
+      const updatedMoviesList = moviesList.map((movie) => {
+         return movie._id === movieId ? updatedMovieVote : movie;
+      });
+
+      console.log(updatedMoviesList);
+
+      try {
+         const response = await fetch(`/api/movies/${movieId}`, config);
+         const data = await response.json();
+         setMoviesList(updatedMoviesList);
+         return data;
+      } catch (e) {
+         return e;
+      }
+   };
+
+   const setWatchedMovieLinks = async (movieId, links) => {
+      const selectedMovieVote = moviesList.find(
+         (movie) => movie._id === movieId
+      );
+      const updatedMovieVote = { ...selectedMovieVote, links };
+
+      const config = {
+         method: "PUT",
+         headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify(updatedMovieVote),
+      };
+
+      const updatedMoviesList = moviesList.map((movie) => {
+         return movie._id === movieId ? updatedMovieVote : movie;
+      });
+
+      try {
+         const response = await fetch(`/api/movies/${movieId}`, config);
+         const data = await response.json();
+         setMoviesList(updatedMoviesList);
+         return data;
+      } catch (e) {
+         return e;
+      }
+   };
+
    return (
       <MovieContext.Provider
          value={{
@@ -186,6 +248,8 @@ export const MovieProvider = ({ children }) => {
             filterOptions,
             setFilterOptions,
             setMovieVoteToWatched,
+            setMovieVoteToSeen,
+            setWatchedMovieLinks,
             searchTitle,
             setSearchTitle,
             searchDirector,

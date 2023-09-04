@@ -18,13 +18,13 @@ const Pagination = ({
    return (
       <nav className="flex items-center gap-[5px]">
          <button
-            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] lg:focus-visible:bg-black/[.4]"
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
             onClick={firstPage}
          >
             <MdKeyboardDoubleArrowLeft />
          </button>
          <button
-            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] lg:focus-visible:bg-black/[.4]"
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
             onClick={decrementPage}
          >
             <MdKeyboardArrowLeft />
@@ -33,13 +33,13 @@ const Pagination = ({
             {currentPage} of {Math.ceil(totalPosts / postsPerPage)}
          </div>
          <button
-            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] lg:focus-visible:bg-black/[.4]"
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
             onClick={incrementPage}
          >
             <MdKeyboardArrowRight />
          </button>
          <button
-            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] lg:focus-visible:bg-black/[.4]"
+            className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"
             onClick={lastPage}
          >
             <MdKeyboardDoubleArrowRight />

@@ -27,7 +27,8 @@ export const genre = {
 export const status = {
    Name: "Status",
    Default: "All",
-   Watched: "Watched",
+   Seen: "Seen",
+   Watched: "On Channel",
    Unwatched: "Unwatched",
 };
 

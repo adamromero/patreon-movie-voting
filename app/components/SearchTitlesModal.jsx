@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { BiLogoPatreon } from "react-icons/bi";
+import { AiFillYoutube } from "react-icons/ai";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ currentUser }) => {
@@ -139,6 +141,24 @@ const SearchTitlesModal = ({ currentUser }) => {
       return moviesList.find(
          (movie) => movie.data.imdbID === selectedMovie.imdbID
       ).isWatched;
+   };
+
+   const isMovieSeen = (selectedMovie) => {
+      return moviesList.find(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).hasSeen;
+   };
+
+   const getPatreonLink = (selectedMovie) => {
+      return moviesList.find(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).links.patreon;
+   };
+
+   const getYouTubeLink = (selectedMovie) => {
+      return moviesList.find(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).links.youtube;
    };
 
    const handleTitleSubmit = (e) => {
@@ -283,6 +303,73 @@ const SearchTitlesModal = ({ currentUser }) => {
                            {isMovieInList(movie) ? (
                               <>
                                  {isMovieWatched(movie) ? (
+                                    <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
+                                       <div>
+                                          {movie.Poster === "N/A" ? (
+                                             <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
+                                                Missing Image
+                                             </div>
+                                          ) : (
+                                             <img
+                                                src={movie.Poster}
+                                                alt={movie.Title}
+                                                width="175"
+                                                height="285"
+                                                className="w-full h-full object-cover mx-auto"
+                                             />
+                                          )}
+                                          <div
+                                             className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
+                                             style={{
+                                                textShadow: "1px 1px 3px black",
+                                             }}
+                                          >
+                                             <div className="flex flex-col mt-[67px] items-center z-10">
+                                                <IoMdAddCircleOutline
+                                                   className={`text-[50px] rotate-45 ${
+                                                      imdbIDCollection[
+                                                         movie.imdbID
+                                                      ]
+                                                         ? "animate-rotation"
+                                                         : ""
+                                                   }`}
+                                                />
+                                                <div>On Channel</div>
+                                                <div className="flex flex-col gap-[4px] max-w-[60px] w-full">
+                                                   <a
+                                                      className="bg-[black] text-[white] flex justify-center p-[2px] border-[#585858] border-[1px]"
+                                                      href={getPatreonLink(
+                                                         movie
+                                                      )}
+                                                      title="Watch Full Length"
+                                                      target="_blank"
+                                                   >
+                                                      <BiLogoPatreon />
+                                                   </a>
+                                                   <a
+                                                      className="bg-[red] text-[white] flex justify-center p-[2px]"
+                                                      href={getYouTubeLink(
+                                                         movie
+                                                      )}
+                                                      title="Watch on YouTube"
+                                                      target="_blank"
+                                                   >
+                                                      <AiFillYoutube />
+                                                   </a>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div
+                                             className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
+                                             style={{
+                                                textShadow: "1px 1px 3px black",
+                                             }}
+                                          >
+                                             {movie.Title} ({movie.Year})
+                                          </div>
+                                       </div>
+                                    </div>
+                                 ) : isMovieSeen(movie) ? (
                                     <div className="text-[#8d8d8d] cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
                                           {movie.Poster === "N/A" ? (
@@ -304,7 +391,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             <div className="flex flex-col items-center z-10">
+                                             <div className="flex flex-col mt-[6px] items-center z-10">
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
                                                       imdbIDCollection[
@@ -314,7 +401,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                                          : ""
                                                    }`}
                                                 />
-                                                <div>Watched</div>
+                                                <div>Seen</div>
                                              </div>
                                           </div>
                                           <div
