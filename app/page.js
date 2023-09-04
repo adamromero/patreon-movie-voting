@@ -20,8 +20,8 @@ export default async function Home() {
                ) : (
                   <div className="text-[16px] sm:text-[18px]">
                      <p>
-                        Connect with your Patreon account to request movies and
-                        vote.
+                        Connect with your Patreon account in the top right
+                        corner to request movies and vote.
                      </p>
                      <p>You must be a current patron of this channel.</p>
                   </div>
