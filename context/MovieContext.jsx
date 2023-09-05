@@ -100,7 +100,6 @@ export const MovieProvider = ({ children }) => {
    };
 
    const removeMovieVoteOverride = async (movieId) => {
-      console.log("movieID: ", movieId);
       try {
          const response = await fetch(`/api/movies/${movieId}`, {
             method: "DELETE",
