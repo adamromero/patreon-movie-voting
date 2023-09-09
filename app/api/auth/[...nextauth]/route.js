@@ -4,25 +4,25 @@ import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
 
 export const nextAuthOptions = {
-   adapter: MongoDBAdapter(clientPromise),
-   jwt: {
-      secret: process.env.JWT_SECRET,
-   },
-   secret: process.env.NEXTAUTH_SECRET,
-   session: {
-      strategy: "jwt",
-   },
    providers: [
       PatreonProvider({
          clientId: process.env.PATREON_CLIENT_ID,
          clientSecret: process.env.PATREON_CLIENT_SECRET,
          authorization: {
             params: {
-               scope: "identity identity[email]	identity.memberships",
+               scope: "identity identity[email] identity.memberships",
             },
          },
       }),
    ],
+   adapter: MongoDBAdapter(clientPromise),
+   jwt: {
+      secret: process.env.JWT_SECRET,
+   },
+   session: {
+      strategy: "jwt",
+   },
+   secret: process.env.NEXTAUTH_SECRET,
    pages: {
       signIn: "/unauthorized",
    },
