@@ -28,8 +28,8 @@ const SearchTitlesModal = ({ user }) => {
       createMovieVote,
       castMovieVote,
       removeMovieVote,
-      checkIfUserUnderRequestLimit,
-      isUserUnderRequestLimit,
+      //checkIfUserUnderRequestLimit,
+      //isUserUnderRequestLimit,
    } = useContext(MovieContext);
 
    const inputRef = useRef(null);
@@ -42,9 +42,11 @@ const SearchTitlesModal = ({ user }) => {
    //    setIsButtonDisabled(false);
    //  }, 1000);
 
+   const isUserUnderRequestLimit = true;
+
    useEffect(() => {
       //if (!isCreator) {
-      checkIfUserUnderRequestLimit(currentUser, isProducer);
+      //checkIfUserUnderRequestLimit(currentUser, isProducer);
       //}
    }, [title, searchTitle, searchYear, searchImdbID]);
 

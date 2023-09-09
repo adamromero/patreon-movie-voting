@@ -21,7 +21,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
    if (user) {
       ({ id, isProducer, isCreator } = user);
       //if (!isCreator) {
-      checkIfUserUnderRequestLimit(id, isProducer);
+      //checkIfUserUnderRequestLimit(id, isProducer);
       //}
    }
 
