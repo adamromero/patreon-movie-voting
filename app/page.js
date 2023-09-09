@@ -13,7 +13,7 @@ export default async function Home() {
    const isProducer = user && user.isProducer;
    const isCreator = user && user.isCreator;
 
-   const response = await fetch("http://localhost:3000/api/moviesbydate");
+   const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
    const requestedMoviesThisMonth = await response.json();
    const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
       (movie) => movie.requester === userId
