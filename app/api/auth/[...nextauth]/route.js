@@ -28,9 +28,22 @@ export const nextAuthOptions = {
    },
    callbacks: {
       async jwt({ token, profile }) {
+         const pledge = profile?.included?.find((item) => {
+            return (
+               item.type === "pledge" &&
+               item.relationships.creator.data.id === process.env.CREATOR_ID
+            );
+         });
+
+         let isProducer = false;
+         if (pledge) {
+            isProducer = pledge.attributes.amount_cents === 1900;
+         }
+
          if (profile) {
             token.id = profile.data.id;
             token.firstName = profile.data.attributes.first_name;
+            token.isProducer = isProducer;
          }
          return token;
       },
@@ -38,13 +51,16 @@ export const nextAuthOptions = {
          if (token) {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
-            session.user.isCreator = token.id === process.env.CREATOR_ID;
+            session.user.isCreator =
+               token.id === process.env.CREATOR_ID ||
+               token.id === process.env.DEV_ID;
+            session.user.isProducer = token.isProducer;
          }
          return session;
       },
       async signIn({ account, profile }) {
          const { id } = profile.data;
-         if (id === process.env.CREATOR_ID) {
+         if (id === process.env.CREATOR_ID || id === process.env.DEV_ID) {
             return true;
          }
 

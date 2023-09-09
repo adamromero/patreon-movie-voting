@@ -22,13 +22,14 @@ const MovieList = ({ currentUser, isCreator }) => {
    const defaultRowsPerPage = 50;
    const moviesList = useRetrieveMovies();
    const {
+      filteredMoviesList,
+      setFilteredMoviesList,
       filterOptions,
       setFilterOptions,
       searchTitle,
       searchDirector,
       searchActor,
    } = useContext(MovieContext);
-   const [filteredMoviesList, setFilteredMoviesList] = useState([]);
 
    //movies watched on the channel
    const [watchedState, setWatchedState] = useState({});
@@ -60,11 +61,11 @@ const MovieList = ({ currentUser, isCreator }) => {
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
-            (a, b) => b.voters.length - a.voters.length
+            (a, b) => b?.voters?.length - a?.voters?.length
          );
       } else if (filterOptions.votes === votes.Descending) {
          filteredList = filteredList.sort(
-            (a, b) => a.voters.length - b.voters.length
+            (a, b) => a?.voters?.length - b?.voters?.length
          );
       } else {
          setIsRequestFilterAscending(true);
@@ -226,7 +227,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) => movie.hasSeen);
       } else if (filterOptions.status === status.Watched) {
          filteredList = filteredList.filter((movie) => movie.isWatched);
-      } else if (filterOptions.status === status.Unwatched) {
+      } else if (filterOptions.status === status.Unseen) {
          filteredList = filteredList.filter(
             (movie) => !movie.hasSeen && !movie.isWatched
          );
@@ -407,36 +408,11 @@ const MovieList = ({ currentUser, isCreator }) => {
          {currentUser && <div className="hidden lg:block lg:w-[100px]"></div>}
          {isCreator && (
             <>
-               {/* <div className="bg-black w-full lg:w-[100px]">
-                  <button
-                     onClick={() => {
-                        setIsWatchedFilterAscending(!isWatchedFilterAscending);
-                        handleWatchedSort();
-                     }}
-                     className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
-                  >
-                     <div className="flex gap-[5px] items-center">
-                        {filterOptions.watched === watched.Default && (
-                           <FaSort />
-                        )}
-                        {filterOptions.watched === watched.Ascending && (
-                           <FaSortUp />
-                        )}
-                        {filterOptions.watched === watched.Descending && (
-                           <FaSortDown />
-                        )}
-                        Channel
-                     </div>
-                  </button>
-               </div> */}
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Channel</div>
                </div>
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Seen</div>
-               </div>
-               <div className="hidden lg:block w-[80px]">
-                  <div className="w-full text-left p-[10px]">Blacklist</div>
                </div>
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Delete</div>

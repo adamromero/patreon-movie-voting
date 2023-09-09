@@ -6,8 +6,9 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
+import debounce from "lodash.debounce";
 
-const SearchTitlesModal = ({ currentUser }) => {
+const SearchTitlesModal = ({ user }) => {
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [inputTitle, setInputTitle] = useState("");
@@ -20,13 +21,32 @@ const SearchTitlesModal = ({ currentUser }) => {
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
    const moviesList = useRetrieveMovies();
-   const { createMovieVote, castMovieVote, removeMovieVote } =
-      useContext(MovieContext);
+   const currentUser = user.id;
+   const { isCreator, isProducer } = user;
+
+   const {
+      createMovieVote,
+      castMovieVote,
+      removeMovieVote,
+      checkIfUserUnderRequestLimit,
+      isUserUnderRequestLimit,
+   } = useContext(MovieContext);
+
    const inputRef = useRef(null);
    const [imdbIDCollection, setImdbIDCollection] = useState({});
    const [disabledButtonStates, setDisabledButtonStates] = useState({});
 
    const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
+
+   // const debouncedButtonClick = debounce(() => {
+   //    setIsButtonDisabled(false);
+   //  }, 1000);
+
+   useEffect(() => {
+      //if (!isCreator) {
+      checkIfUserUnderRequestLimit(currentUser, isProducer);
+      //}
+   }, [title, searchTitle, searchYear, searchImdbID]);
 
    useEffect(() => {
       const fetchMovieTitles = async () => {
@@ -133,7 +153,7 @@ const SearchTitlesModal = ({ currentUser }) => {
 
    const isMovieInList = (selectedMovie) => {
       return moviesList.filter(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
+         (movie) => movie?.data?.imdbID === selectedMovie.imdbID
       ).length;
    };
 
@@ -221,26 +241,28 @@ const SearchTitlesModal = ({ currentUser }) => {
          <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px] mt-[35px] md:mt-0 mr-0 md:mr-[35px]">
             <div className="flex flex-col md:flex-row gap-[10px]">
                <div className="flex flex-col sm:flex-row flex gap-[10px]">
-                  <form
-                     className="flex flex-1 gap-2 w-full"
-                     onSubmit={(e) => handleTitleSubmit(e)}
-                  >
-                     <input
-                        className="text-black w-full py-[5px] px-[10px]"
-                        type="text"
-                        name=""
-                        id=""
-                        placeholder="Search titles"
-                        value={input}
-                        ref={inputRef}
-                        onChange={(e) => setInput(e.target.value)}
-                     />
-                     <input
-                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
-                        type="submit"
-                        value="Search"
-                     />
-                  </form>
+                  {(isCreator || isProducer || true) && (
+                     <form
+                        className="flex flex-1 gap-2 w-full"
+                        onSubmit={(e) => handleTitleSubmit(e)}
+                     >
+                        <input
+                           className="text-black w-full py-[5px] px-[10px]"
+                           type="text"
+                           name=""
+                           id=""
+                           placeholder="Search titles"
+                           value={input}
+                           ref={inputRef}
+                           onChange={(e) => setInput(e.target.value)}
+                        />
+                        <input
+                           className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
+                           type="submit"
+                           value="Search"
+                        />
+                     </form>
+                  )}
                   <form
                      onSubmit={(e) => handleTitleYearSubmit(e)}
                      className="flex flex-1 gap-2 w-full "
@@ -491,7 +513,7 @@ const SearchTitlesModal = ({ currentUser }) => {
                                     </div>
                                  )}
                               </>
-                           ) : (
+                           ) : isUserUnderRequestLimit ? (
                               <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                  <button
                                     className="block"
@@ -537,6 +559,49 @@ const SearchTitlesModal = ({ currentUser }) => {
                                        {movie.Title} ({movie.Year})
                                     </div>
                                  </button>
+                              </div>
+                           ) : (
+                              <div className="cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
+                                 <div>
+                                    {movie.Poster === "N/A" ? (
+                                       <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
+                                          Missing Image
+                                       </div>
+                                    ) : (
+                                       <img
+                                          src={movie.Poster}
+                                          alt={movie.Title}
+                                          width="175"
+                                          height="285"
+                                          className="w-full h-full object-cover mx-auto"
+                                       />
+                                    )}
+                                    <div
+                                       className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
+                                       style={{
+                                          textShadow: "1px 1px 3px black",
+                                       }}
+                                    >
+                                       <div className="flex flex-col mt-[6px] items-center z-10">
+                                          <IoMdAddCircleOutline
+                                             className={`text-[50px] rotate-45 ${
+                                                imdbIDCollection[movie.imdbID]
+                                                   ? "animate-rotation"
+                                                   : ""
+                                             }`}
+                                          />
+                                          <div>Limit Reached</div>
+                                       </div>
+                                    </div>
+                                    <div
+                                       className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
+                                       style={{
+                                          textShadow: "1px 1px 3px black",
+                                       }}
+                                    >
+                                       {movie.Title} ({movie.Year})
+                                    </div>
+                                 </div>
                               </div>
                            )}
                         </div>

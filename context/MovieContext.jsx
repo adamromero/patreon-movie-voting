@@ -16,6 +16,7 @@ export const MovieContext = createContext();
 
 export const MovieProvider = ({ children }) => {
    const [moviesList, setMoviesList] = useState([]);
+   const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [searchTitle, setSearchTitle] = useState("");
    const [searchDirector, setSearchDirector] = useState("");
    const [searchActor, setSearchActor] = useState("");
@@ -27,9 +28,24 @@ export const MovieProvider = ({ children }) => {
       added: added.Default,
       type: type.Default,
       genre: genre.Default,
-      status: status.Unwatched,
+      status: status.Unseen,
       watched: watched.Default,
    });
+   const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
+
+   const checkIfUserUnderRequestLimit = async (id, isProducer) => {
+      const response = await fetch("/api/moviesbydate");
+      const requestedMoviesThisMonth = await response.json();
+
+      const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
+         (movie) => movie.requester === id
+      );
+
+      const requestLimit = isProducer ? 3 : 1;
+      setIsUserUnderRequestLimit(
+         currentUsersMonthlyRequests.length < requestLimit
+      );
+   };
 
    const getMovieVotes = async () => {
       const response = await fetch(`/api/movies`);
@@ -50,6 +66,7 @@ export const MovieProvider = ({ children }) => {
          isWatched: false,
          hasSeen: false,
          links: { patreon: "", youtube: "" },
+         requester: currentUser,
       };
 
       const config = {
@@ -62,12 +79,15 @@ export const MovieProvider = ({ children }) => {
       };
 
       try {
-         const response = await fetch(`/api/movies`, config);
+         const response = await fetch("/api/movies", config);
          const data = await response.json();
-         setMoviesList((movies) => [...movies, data]);
+         if (!data.error) {
+            setMoviesList((movies) => [...movies, data]);
+         }
+
          return data;
       } catch (e) {
-         return e;
+         return null;
       }
    };
 
@@ -139,6 +159,7 @@ export const MovieProvider = ({ children }) => {
             const updatedMoviesList = moviesList.filter(
                (movie) => movie._id !== deletedMovie._id
             );
+
             setMoviesList(updatedMoviesList);
          } catch (e) {
             return e;
@@ -259,6 +280,8 @@ export const MovieProvider = ({ children }) => {
       <MovieContext.Provider
          value={{
             moviesList,
+            filteredMoviesList,
+            setFilteredMoviesList,
             getMovieVotes,
             createMovieVote,
             castMovieVote,
@@ -275,6 +298,9 @@ export const MovieProvider = ({ children }) => {
             searchActor,
             setSearchActor,
             removeMovieVoteOverride,
+            checkIfUserUnderRequestLimit,
+            isUserUnderRequestLimit,
+            setIsUserUnderRequestLimit,
          }}
       >
          {children}

@@ -29,7 +29,7 @@ export const status = {
    Default: "All",
    Seen: "Seen",
    Watched: "On Channel",
-   Unwatched: "Unwatched",
+   Unseen: "Unseen",
 };
 
 export const type = {

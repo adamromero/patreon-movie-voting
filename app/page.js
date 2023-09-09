@@ -5,33 +5,73 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
    const user = await getCurrentUser();
-
    if (user && !user.isCreator) {
       redirect("/maintenance");
    }
+
+   const userId = user && user.id;
+   const isProducer = user && user.isProducer;
+   const isCreator = user && user.isCreator;
+
+   const response = await fetch("http://localhost:3000/api/moviesbydate");
+   const requestedMoviesThisMonth = await response.json();
+   const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
+      (movie) => movie.requester === userId
+   );
+   const requestLimit = isProducer ? 3 : 1;
+   const isUnderRequestLimit =
+      currentUsersMonthlyRequests.length < requestLimit;
 
    return (
       <main>
          <Header />
          <div className="flex flex-col justify-between p-[16px]">
             <div className="max-w-[1200px] w-full mx-auto">
-               {user ? (
-                  <div className="mb-[15px]">
-                     <h2 className="text-[16px] sm:text-[18px]">
-                        Hi {user.firstName ? user.firstName : user.name}! Begin
-                        voting and requesting movies.
-                     </h2>
-                  </div>
-               ) : (
-                  <div className="text-[16px] sm:text-[18px]">
-                     <p>
-                        Connect with your Patreon account in the top right
-                        corner to request movies and vote.
-                     </p>
-                     <p>You must be a current patron of this channel.</p>
-                  </div>
-               )}
-               <VotingApp user={user} />
+               <div className="text-[16px] sm:text-[18px]">
+                  {user ? (
+                     <>
+                        <h2>
+                           Hi {user.firstName ? user.firstName : user.name}!{" "}
+                           {isUnderRequestLimit && (
+                              <>Begin voting and requesting movies.</>
+                           )}
+                        </h2>
+                        <div>
+                           {isUnderRequestLimit ? (
+                              `You have a limit of ${
+                                 user && user.isProducer
+                                    ? "3 new requests"
+                                    : "1 new request"
+                              } per month.`
+                           ) : (
+                              <>
+                                 <div>
+                                    You have reached your monthly request limit
+                                    and cannot make new requests until next
+                                    month.
+                                 </div>
+                                 <div>
+                                    You may continue to vote on movies currently
+                                    in the list.
+                                 </div>
+                              </>
+                           )}
+                        </div>
+                     </>
+                  ) : (
+                     <div className="text-[16px] sm:text-[18px]">
+                        <p>
+                           Connect with your Patreon account in the top right
+                           corner to request movies and vote.
+                        </p>
+                        <p>You must be a current patron of this channel.</p>
+                     </div>
+                  )}
+               </div>
+               <VotingApp
+                  user={user}
+                  isUnderRequestLimit={isUnderRequestLimit}
+               />
             </div>
          </div>
       </main>
