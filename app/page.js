@@ -9,18 +9,20 @@ export default async function Home() {
       redirect("/maintenance");
    }
 
-   const userId = user && user.id;
-   const isProducer = user && user.isProducer;
-   const isCreator = user && user.isCreator;
+   // const userId = user && user.id;
+   // const isProducer = user && user.isProducer;
+   // const isCreator = user && user.isCreator;
 
-   const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
-   const requestedMoviesThisMonth = await response.json();
-   const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-      (movie) => movie.requester === userId
-   );
-   const requestLimit = isProducer ? 3 : 1;
-   const isUnderRequestLimit =
-      currentUsersMonthlyRequests.length < requestLimit;
+   // const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
+   // const requestedMoviesThisMonth = await response.json();
+   // const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
+   //    (movie) => movie.requester === userId
+   // );
+   // const requestLimit = isProducer ? 3 : 1;
+   // const isUnderRequestLimit =
+   //    currentUsersMonthlyRequests.length < requestLimit;
+
+   const isUnderRequestLimit = true;
 
    return (
       <main>
