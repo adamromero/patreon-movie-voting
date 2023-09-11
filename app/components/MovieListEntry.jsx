@@ -4,7 +4,6 @@ import { Modal } from "react-responsive-modal";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
-import { MdDangerous } from "react-icons/md";
 import { MovieContext } from "@/context/MovieContext";
 
 const MovieListEntry = ({

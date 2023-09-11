@@ -9,20 +9,19 @@ export default async function Home() {
       redirect("/maintenance");
    }
 
-   // const userId = user && user.id;
-   // const isProducer = user && user.isProducer;
-   // const isCreator = user && user.isCreator;
+   const userId = user && user.id;
+   const isProducer = user && user.isProducer;
+   const isCreator = user && user.isCreator;
 
-   // const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
-   // const requestedMoviesThisMonth = await response.json();
-   // const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-   //    (movie) => movie.requester === userId
-   // );
-   // const requestLimit = isProducer ? 3 : 1;
-   // const isUnderRequestLimit =
-   //    currentUsersMonthlyRequests.length < requestLimit;
-
-   const isUnderRequestLimit = true;
+   const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
+   const requestedMoviesThisMonth = await response.json();
+   const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
+      (movie) =>
+         movie.requester === userId && !movie.isWatched && !movie.hasSeen
+   );
+   const requestLimit = isProducer ? 3 : 1;
+   const isUnderRequestLimit =
+      currentUsersMonthlyRequests.length < requestLimit;
 
    return (
       <main>
@@ -34,13 +33,10 @@ export default async function Home() {
                      <>
                         <h2>
                            Hi {user.firstName ? user.firstName : user.name}!{" "}
-                           {isUnderRequestLimit && (
-                              <>Begin voting and requesting movies.</>
-                           )}
                         </h2>
                         <div>
                            {isUnderRequestLimit ? (
-                              `You have a limit of ${
+                              `Begin voting and requesting movies. You have a limit of ${
                                  user && user.isProducer
                                     ? "3 new requests"
                                     : "1 new request"

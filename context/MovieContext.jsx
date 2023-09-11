@@ -32,13 +32,14 @@ export const MovieProvider = ({ children }) => {
       watched: watched.Default,
    });
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
+   const [disableButton, setDisableButton] = useState(false);
 
    const checkIfUserUnderRequestLimit = async (id, isProducer) => {
       const response = await fetch("/api/moviesbydate");
       const requestedMoviesThisMonth = await response.json();
 
       const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-         (movie) => movie.requester === id
+         (movie) => movie.requester === id && !movie.isWatched && !movie.hasSeen
       );
 
       const requestLimit = isProducer ? 3 : 1;
@@ -54,6 +55,7 @@ export const MovieProvider = ({ children }) => {
    };
 
    const createMovieVote = async (movie, currentUser) => {
+      setDisableButton(true);
       const API_URL = `https://www.omdbapi.com/?apikey=${
          process.env.NEXT_PUBLIC_OMDB_API_KEY
       }&t=${encodeURIComponent(movie.Title)}&y=${movie.Year}`;
@@ -80,14 +82,20 @@ export const MovieProvider = ({ children }) => {
 
       try {
          const response = await fetch("/api/movies", config);
-         const data = await response.json();
-         if (!data.error) {
-            setMoviesList((movies) => [...movies, data]);
+         const postedMovie = await response.json();
+         const findMovie = moviesList.find(
+            (movie) => movie.data.imdbID === postedMovie.data.imdbID
+         );
+
+         if (!postedMovie.error && !findMovie) {
+            setMoviesList((movies) => [...movies, postedMovie]);
          }
 
-         return data;
+         return postedMovie;
       } catch (e) {
          return null;
+      } finally {
+         setDisableButton(false);
       }
    };
 
@@ -301,6 +309,7 @@ export const MovieProvider = ({ children }) => {
             checkIfUserUnderRequestLimit,
             isUserUnderRequestLimit,
             setIsUserUnderRequestLimit,
+            disableButton,
          }}
       >
          {children}

@@ -39,8 +39,6 @@ export async function DELETE(req, res) {
          const movieId = await req.json();
          const movie = await Movie.findOneAndDelete({ _id: movieId });
 
-         console.log("movie: ", movie);
-
          if (!movie) {
             return NextResponse.json({
                error: "Movie does not exist in the database",

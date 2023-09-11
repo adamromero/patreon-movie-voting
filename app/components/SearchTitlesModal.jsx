@@ -28,8 +28,9 @@ const SearchTitlesModal = ({ user }) => {
       createMovieVote,
       castMovieVote,
       removeMovieVote,
-      //checkIfUserUnderRequestLimit,
-      //isUserUnderRequestLimit,
+      checkIfUserUnderRequestLimit,
+      isUserUnderRequestLimit,
+      disableButton,
    } = useContext(MovieContext);
 
    const inputRef = useRef(null);
@@ -42,13 +43,11 @@ const SearchTitlesModal = ({ user }) => {
    //    setIsButtonDisabled(false);
    //  }, 1000);
 
-   const isUserUnderRequestLimit = true;
-
    useEffect(() => {
       //if (!isCreator) {
-      //checkIfUserUnderRequestLimit(currentUser, isProducer);
+      checkIfUserUnderRequestLimit(currentUser, isProducer);
       //}
-   }, [title, searchTitle, searchYear, searchImdbID]);
+   }, [moviesList]);
 
    useEffect(() => {
       const fetchMovieTitles = async () => {
@@ -243,28 +242,26 @@ const SearchTitlesModal = ({ user }) => {
          <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px] mt-[35px] md:mt-0 mr-0 md:mr-[35px]">
             <div className="flex flex-col md:flex-row gap-[10px]">
                <div className="flex flex-col sm:flex-row flex gap-[10px]">
-                  {(isCreator || isProducer || true) && (
-                     <form
-                        className="flex flex-1 gap-2 w-full"
-                        onSubmit={(e) => handleTitleSubmit(e)}
-                     >
-                        <input
-                           className="text-black w-full py-[5px] px-[10px]"
-                           type="text"
-                           name=""
-                           id=""
-                           placeholder="Search titles"
-                           value={input}
-                           ref={inputRef}
-                           onChange={(e) => setInput(e.target.value)}
-                        />
-                        <input
-                           className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
-                           type="submit"
-                           value="Search"
-                        />
-                     </form>
-                  )}
+                  <form
+                     className="flex flex-1 gap-2 w-full"
+                     onSubmit={(e) => handleTitleSubmit(e)}
+                  >
+                     <input
+                        className="text-black w-full py-[5px] px-[10px]"
+                        type="text"
+                        name=""
+                        id=""
+                        placeholder="Search titles"
+                        value={input}
+                        ref={inputRef}
+                        onChange={(e) => setInput(e.target.value)}
+                     />
+                     <input
+                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
+                        type="submit"
+                        value="Search"
+                     />
+                  </form>
                   <form
                      onSubmit={(e) => handleTitleYearSubmit(e)}
                      className="flex flex-1 gap-2 w-full "
@@ -520,9 +517,7 @@ const SearchTitlesModal = ({ user }) => {
                                  <button
                                     className="block"
                                     onClick={() => handleMovieSelection(movie)}
-                                    disabled={
-                                       disabledButtonStates[movie.imdbID]
-                                    }
+                                    disabled={disableButton}
                                  >
                                     {movie.Poster === "N/A" ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
@@ -549,6 +544,13 @@ const SearchTitlesModal = ({ user }) => {
                                              {disabledButtonStates[movie.imdbID]
                                                 ? "Pending"
                                                 : "Add"}
+                                             {/* {postError
+                                                ? "Limit Reached"
+                                                : disabledButtonStates[
+                                                     movie.imdbID
+                                                  ]
+                                                ? "Pending"
+                                                : "Add"} */}
                                           </div>
                                        </div>
                                     </div>

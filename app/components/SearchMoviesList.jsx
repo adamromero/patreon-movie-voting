@@ -22,7 +22,7 @@ const SearchMoviesList = () => {
                   placeholder="Search titles"
                   value={searchTitle}
                   onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:"!?'-/]+$/;
+                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
                      setSearchTitle(
                         regex.test(e.target.value) ? e.target.value : ""
                      );
@@ -42,7 +42,7 @@ const SearchMoviesList = () => {
                   placeholder="Search directors"
                   value={searchDirector}
                   onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:"!?'-/]+$/;
+                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
                      setSearchDirector(
                         regex.test(e.target.value) ? e.target.value : ""
                      );
@@ -59,10 +59,10 @@ const SearchMoviesList = () => {
                <input
                   className="text-black px-[10px] py-[5px] w-full md:max-w-[200px]"
                   type="text"
-                  placeholder="Search actors"
+                  placeholder="Search top actors"
                   value={searchActor}
                   onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:"!?'-/]+$/;
+                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
                      setSearchActor(
                         regex.test(e.target.value) ? e.target.value : ""
                      );

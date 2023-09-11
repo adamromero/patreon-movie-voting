@@ -1,14 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import SearchTitlesModal from "./SearchTitlesModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import { MovieContext } from "@/context/MovieContext";
 
 const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
    // const [open, setOpen] = useState(false);
 
    // const onOpenModal = () => setOpen(true);
    // const onCloseModal = () => setOpen(false);
+   const { isUserUnderRequestLimit } = useContext(MovieContext);
 
    return (
       <>
@@ -18,6 +20,7 @@ const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
          >
             Request Movies
          </button>
+
          <Modal
             classNames={{
                modal: "request-movies-modal",
