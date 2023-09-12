@@ -7,10 +7,11 @@ connectDB();
 
 function isDateInCurrentMonth(dateToCheck) {
    const currentDate = new Date();
+   const date = new Date(dateToCheck);
 
    return (
-      dateToCheck.getFullYear() === currentDate.getFullYear() &&
-      dateToCheck.getMonth() === currentDate.getMonth()
+      date.getFullYear() === currentDate.getFullYear() &&
+      date.getMonth() === currentDate.getMonth()
    );
 }
 
@@ -22,6 +23,9 @@ export async function GET(req, res) {
             return movie;
          }
       });
+
+      console.log("moviesthismonth: ", moviesThisMonth);
+
       return NextResponse.json(moviesThisMonth);
    } catch (error) {
       return NextResponse.json({
