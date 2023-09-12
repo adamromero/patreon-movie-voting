@@ -4,17 +4,6 @@ import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
 
 export const nextAuthOptions = {
-   providers: [
-      PatreonProvider({
-         clientId: process.env.PATREON_CLIENT_ID,
-         clientSecret: process.env.PATREON_CLIENT_SECRET,
-         authorization: {
-            params: {
-               scope: "identity identity[email] identity.memberships",
-            },
-         },
-      }),
-   ],
    adapter: MongoDBAdapter(clientPromise),
    jwt: {
       secret: process.env.JWT_SECRET,
@@ -26,6 +15,17 @@ export const nextAuthOptions = {
    pages: {
       signIn: "/unauthorized",
    },
+   providers: [
+      PatreonProvider({
+         clientId: process.env.PATREON_CLIENT_ID,
+         clientSecret: process.env.PATREON_CLIENT_SECRET,
+         authorization: {
+            params: {
+               scope: "identity identity.memberships",
+            },
+         },
+      }),
+   ],
    callbacks: {
       async jwt({ token, profile }) {
          const pledge = profile?.included?.find((item) => {
@@ -51,48 +51,46 @@ export const nextAuthOptions = {
          if (token) {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
-            session.user.isCreator =
-               token.id === process.env.CREATOR_ID ||
-               token.id === process.env.DEV_ID;
+            session.user.isCreator = token.id === process.env.CREATOR_ID;
             session.user.isProducer = token.isProducer;
          }
          return session;
       },
       async signIn({ account, profile }) {
          const { id } = profile.data;
-         if (id === process.env.CREATOR_ID || id === process.env.DEV_ID) {
+         if (id === process.env.CREATOR_ID) {
             return true;
          }
 
-         return "/maintenance";
+         //return "/maintenance";
 
-         // const response = await fetch(process.env.PATREON_PROFILE_URL, {
-         //    headers: {
-         //       Authorization: `Bearer ${account.access_token}`,
-         //    },
-         // });
-         // const user = await response.json();
+         const response = await fetch(process.env.PATREON_PROFILE_URL, {
+            headers: {
+               Authorization: `Bearer ${account.access_token}`,
+            },
+         });
+         const user = await response.json();
 
-         // const pledge = user?.included?.find((item) => {
-         //    return (
-         //       item.type === "pledge" &&
-         //       item.relationships.creator.data.id === process.env.CREATOR_ID
-         //    );
-         // });
+         const pledge = user?.included?.find((item) => {
+            return (
+               item.type === "pledge" &&
+               item.relationships.creator.data.id === process.env.CREATOR_ID
+            );
+         });
 
-         // let isUserPledged = false;
-         // if (pledge) {
-         //    const {
-         //       attributes: { status },
-         //    } = pledge;
-         //    isUserPledged = status === "valid";
-         // }
+         let isUserPledged = false;
+         if (pledge) {
+            const {
+               attributes: { status },
+            } = pledge;
+            isUserPledged = status === "valid";
+         }
 
-         // if (isUserPledged) {
-         //    return true;
-         // } else {
-         //    return "/unauthorized";
-         // }
+         if (isUserPledged) {
+            return true;
+         } else {
+            return "/unauthorized";
+         }
       },
       async redirect({ baseUrl }) {
          return baseUrl;
