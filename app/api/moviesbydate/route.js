@@ -1,7 +1,6 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/session";
 
 connectDB();
 
@@ -25,8 +24,6 @@ export async function GET(req, res) {
             return movie;
          }
       });
-
-      console.log("moviesthismonth: ", moviesThisMonth);
 
       return NextResponse.json(moviesThisMonth);
    } catch (error) {

@@ -23,9 +23,6 @@ export default async function Home() {
    const isUnderRequestLimit =
       currentUsersMonthlyRequests.length < requestLimit;
 
-   console.log("current user requests month: ", currentUsersMonthlyRequests);
-   console.log("is under limit: ", isUnderRequestLimit);
-
    return (
       <main>
          <Header />
