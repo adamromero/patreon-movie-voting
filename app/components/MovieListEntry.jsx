@@ -90,11 +90,17 @@ const MovieListEntry = ({
                      </p>
                   </div>
                )}
-               <img
-                  className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
-                  src={data?.data?.Poster}
-                  alt={data?.data?.Title}
-               />
+               {data?.data?.Poster !== "N/A" ? (
+                  <img
+                     className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
+                     src={data?.data?.Poster}
+                     alt={data?.data?.Title}
+                  />
+               ) : (
+                  <div className="bg-[#585858] w-[100px] h-[150px] lg:w-[50px] lg:h-[75px] text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px] flex items-center">
+                     Missing Image
+                  </div>
+               )}
             </a>
          </div>
          <div
