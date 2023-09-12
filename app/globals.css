@@ -148,16 +148,24 @@ input:focus-visible + .checkmark {
 
 .loader {
    margin: auto;
-   border: 20px solid #eaf0f6;
+   border: 15px solid #eaf0f6;
    border-radius: 50%;
-   border-top: 20px solid #830483;
-   width: 200px;
-   height: 200px;
+   border-top: 15px solid #830483;
+   width: 180px;
+   height: 180px;
    animation: spinner 1s linear infinite;
    transform: translate(-50%, -50%);
    left: 0;
    right: 0;
    top: 35%;
+}
+
+.button-loader {
+   width: 24px;
+   height: 24px;
+   position: relative;
+   border: 2px solid #eaf0f6;
+   border-top: 2px solid #830483;
 }
 
 @keyframes spinner {

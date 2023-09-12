@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 export default async function Home() {
    const user = await getCurrentUser();
    if (user && !user.isCreator) {
-      redirect("/maintenance");
+      //redirect("/maintenance");
    }
 
    const userId = user && user.id;

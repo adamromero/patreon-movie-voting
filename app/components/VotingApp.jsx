@@ -15,7 +15,8 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
    const onOpenModal = () => setOpen(true);
    const onCloseModal = () => setOpen(false);
 
-   const [hideRequestButton, setHideRequestButton] = useState(false);
+   const [disableRequestButton, setDisableRequestButton] =
+      useState(isUnderRequestLimit);
 
    let id, isProducer, isCreator;
    if (user) {
@@ -30,9 +31,9 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
 
    useEffect(() => {
       if (!isUserUnderRequestLimit && !open) {
-         setHideRequestButton(true);
+         setDisableRequestButton(true);
       } else {
-         setHideRequestButton(false);
+         setDisableRequestButton(false);
       }
    }, [open, isUserUnderRequestLimit]);
 
@@ -60,7 +61,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
 
             <div className="flex-1 mb-[15px]">
                {moviesList.length ? (
-                  !hideRequestButton ? (
+                  !disableRequestButton ? (
                      <RequestMovies
                         user={user}
                         open={open}
@@ -72,7 +73,11 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
                         Limit Reached
                      </div>
                   )
-               ) : null}
+               ) : (
+                  <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
+                     <div className="loader button-loader"></div>
+                  </div>
+               )}
             </div>
 
             <SearchMoviesList />
