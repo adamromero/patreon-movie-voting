@@ -25,6 +25,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
    useEffect(() => {
       //if (!isCreator) {
       checkIfUserUnderRequestLimit(id, isProducer);
+      console.log("use effect user under request on voting comp");
       //}
    }, [moviesList]);
 

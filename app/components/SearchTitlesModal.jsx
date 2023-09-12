@@ -46,6 +46,7 @@ const SearchTitlesModal = ({ user }) => {
    useEffect(() => {
       //if (!isCreator) {
       checkIfUserUnderRequestLimit(currentUser, isProducer);
+      console.log("use effect user under request on search titles modal comp");
       //}
    }, [moviesList]);
 
