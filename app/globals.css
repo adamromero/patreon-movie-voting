@@ -66,9 +66,7 @@ body {
 
 @media screen and (min-width: 960px) {
    .checkbox-container {
-      height: initial;
-      width: initial;
-      display: block;
+      display: flex;
       margin: 0;
    }
 }
@@ -103,12 +101,6 @@ input:focus-visible + .checkmark {
    border: 2px solid #eee;
    border-radius: 3px;
    transition: background-color 0.2s ease-in-out;
-}
-
-@media screen and (min-width: 960px) {
-   .checkmark {
-      top: -15px;
-   }
 }
 
 .checkmark:after {

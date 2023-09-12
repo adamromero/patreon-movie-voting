@@ -237,11 +237,6 @@ const MovieListEntry = ({
             )}
             {isCreator && (
                <>
-                  {/* <div className="hidden lg:block lg:w-[35px] text-center">
-                     <button className="text-[white] text-[30px]">
-                        <MdDangerous />
-                     </button>
-                  </div> */}
                   <div className="hidden lg:block lg:w-[75px] text-center">
                      <button
                         onClick={() => {
