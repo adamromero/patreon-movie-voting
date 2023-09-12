@@ -40,15 +40,27 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
    return (
       <>
          <div className="flex flex-col my-[15px]">
-            {/* {user && (
+            {user && (
                <div className="flex max-w-[430px]">
                   <div className="flex-1 mb-[15px]">
-                     <RequestMovies
-                        user={user}
-                        open={open}
-                        onOpenModal={onOpenModal}
-                        onCloseModal={onCloseModal}
-                     />
+                     {moviesList.length ? (
+                        !disableRequestButton ? (
+                           <RequestMovies
+                              user={user}
+                              open={open}
+                              onOpenModal={onOpenModal}
+                              onCloseModal={onCloseModal}
+                           />
+                        ) : (
+                           <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
+                              Limit Reached
+                           </div>
+                        )
+                     ) : (
+                        <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
+                           <div className="loader button-loader"></div>
+                        </div>
+                     )}
                   </div>
 
                   {user && isCreator && false && (
@@ -57,28 +69,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
                      </div>
                   )}
                </div>
-            )} */}
-
-            <div className="flex-1 mb-[15px]">
-               {moviesList.length ? (
-                  !disableRequestButton ? (
-                     <RequestMovies
-                        user={user}
-                        open={open}
-                        onOpenModal={onOpenModal}
-                        onCloseModal={onCloseModal}
-                     />
-                  ) : (
-                     <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                        Limit Reached
-                     </div>
-                  )
-               ) : (
-                  <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                     <div className="loader button-loader"></div>
-                  </div>
-               )}
-            </div>
+            )}
 
             <SearchMoviesList />
          </div>
