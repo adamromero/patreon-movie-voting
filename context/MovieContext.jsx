@@ -39,7 +39,8 @@ export const MovieProvider = ({ children }) => {
       const requestedMoviesThisMonth = await response.json();
 
       const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-         (movie) => movie.requester === id && !movie.isWatched && !movie.hasSeen
+         (movie) =>
+            movie.requester === id && !movie.hasReacted && !movie.hasSeen
       );
 
       const requestLimit = isProducer ? 3 : 1;
@@ -65,7 +66,7 @@ export const MovieProvider = ({ children }) => {
       const newMovieVote = {
          data: movieData,
          voters: [currentUser],
-         isWatched: false,
+         hasReacted: false,
          hasSeen: false,
          links: { patreon: "", youtube: "" },
          requester: currentUser,
@@ -201,7 +202,7 @@ export const MovieProvider = ({ children }) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );
-      const updatedMovieVote = { ...selectedMovieVote, isWatched: isChecked };
+      const updatedMovieVote = { ...selectedMovieVote, hasReacted: isChecked };
 
       const config = {
          method: "PUT",

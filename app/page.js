@@ -17,7 +17,7 @@ export default async function Home() {
    const requestedMoviesThisMonth = await response.json();
    const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
       (movie) =>
-         movie.requester === userId && !movie.isWatched && !movie.hasSeen
+         movie.requester === userId && !movie.hasReacted && !movie.hasSeen
    );
    const requestLimit = isProducer ? 3 : 1;
    const isUnderRequestLimit =

@@ -51,12 +51,12 @@ const MovieList = ({ currentUser, isCreator }) => {
 
       // if (filterOptions.watched === watched.Ascending) {
       //    //not watched first
-      //    filteredList = filteredList.sort((a, b) => b.isWatched - a.isWatched);
+      //    filteredList = filteredList.sort((a, b) => b.hasReacted - a.hasReacted);
       // } else if (filterOptions.watched === watched.Descending) {
       //    //watched first
-      //    filteredList = filteredList.sort((a, b) => a.isWatched - b.isWatched);
+      //    filteredList = filteredList.sort((a, b) => a.hasReacted - b.hasReacted);
       // } else {
-      //    setIsWatchedFilterAscending(true);
+      //    sethasReactedFilterAscending(true);
       // }
 
       if (filterOptions.votes === votes.Ascending) {
@@ -226,10 +226,10 @@ const MovieList = ({ currentUser, isCreator }) => {
       if (filterOptions.status === status.Seen) {
          filteredList = filteredList.filter((movie) => movie.hasSeen);
       } else if (filterOptions.status === status.Watched) {
-         filteredList = filteredList.filter((movie) => movie.isWatched);
+         filteredList = filteredList.filter((movie) => movie.hasReacted);
       } else if (filterOptions.status === status.Unseen) {
          filteredList = filteredList.filter(
-            (movie) => !movie.hasSeen && !movie.isWatched
+            (movie) => !movie.hasSeen && !movie.hasReacted
          );
       }
 
@@ -272,7 +272,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       const watchedStateObject = {};
       const seenStateObject = {};
       filteredMoviesList.forEach((movie) => {
-         watchedStateObject[movie._id] = movie.isWatched;
+         watchedStateObject[movie._id] = movie.hasReacted;
          seenStateObject[movie._id] = movie.hasSeen;
       });
       setWatchedState(watchedStateObject);
@@ -325,7 +325,7 @@ const MovieList = ({ currentUser, isCreator }) => {
    //       chronological: chronological.Default,
    //       added: added.Default,
    //       rating: rating.Default,
-   //       watched: isWatchedFilterAscending
+   //       watched: hasReactedFilterAscending
    //          ? watched.Ascending
    //          : watched.Descending,
    //    }));
@@ -432,7 +432,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                   className="flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
                   style={{
                      backgroundColor:
-                        data.isWatched || data.hasSeen
+                        data.hasReacted || data.hasSeen
                            ? "rgb(0 0 0 / 40%)"
                            : "#000",
                      position: "relative",

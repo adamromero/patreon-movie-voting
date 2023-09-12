@@ -37,7 +37,7 @@ export async function POST(req, res) {
 
          const existingDocument = await Movie.find({
             requester: selectedMovie.requester,
-            isWatched: false,
+            hasReacted: false,
             hasSeen: false,
             createdAt: { $gte: currentMonthStart, $lte: currentMonthEnd },
          });

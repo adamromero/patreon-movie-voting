@@ -44,7 +44,7 @@ const movieSchema = new mongoose.Schema({
       },
    },
    voters: [{ type: String }],
-   isWatched: {
+   hasReacted: {
       type: Boolean,
       default: false,
    },

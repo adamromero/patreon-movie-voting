@@ -82,10 +82,10 @@ const MovieListEntry = ({
                title="Go to IMDB"
                target="_blank"
             >
-               {(data?.isWatched || data?.hasSeen) && (
+               {(data?.hasReacted || data?.hasSeen) && (
                   <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5]">
                      <p className="text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px]">
-                        {data?.isWatched && <>On Channel</>}
+                        {data?.hasReacted && <>On Channel</>}
                         {data?.hasSeen && <>Seen</>}
                      </p>
                   </div>
@@ -103,7 +103,7 @@ const MovieListEntry = ({
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
             <div className="lg:w-[250px] leading-4">
-               {isCreator && data?.isWatched ? (
+               {isCreator && data?.hasReacted ? (
                   <button
                      className="text-left py-[5px]"
                      onClick={() => {
@@ -136,7 +136,7 @@ const MovieListEntry = ({
                <span className="inline lg:hidden">Requests:</span>{" "}
                {data?.voters?.length}
             </div>
-            {!data?.isWatched && !data?.hasSeen && currentUser ? (
+            {!data?.hasReacted && !data?.hasSeen && currentUser ? (
                <div className="mt-[10px] md:mt-0 lg:w-[70px]">
                   {data?.voters?.filter((voter) => voter === currentUser)
                      .length ? (
@@ -159,7 +159,7 @@ const MovieListEntry = ({
                </div>
             ) : currentUser ? (
                <>
-                  {!data?.isWatched ? (
+                  {!data?.hasReacted ? (
                      <div className="hidden lg:block lg:w-[70px]"></div>
                   ) : (
                      <div className="w-[70px]">
@@ -212,7 +212,7 @@ const MovieListEntry = ({
                         </div>
                      </div>
                   )}
-                  {data?.isWatched ? (
+                  {data?.hasReacted ? (
                      <div className="lg:w-[35px] mt-[10px] md:mt-0 relative"></div>
                   ) : (
                      <div className="lg:w-[35px] mt-[10px] md:mt-0 relative">

@@ -158,10 +158,10 @@ const SearchTitlesModal = ({ user }) => {
       ).length;
    };
 
-   const isMovieWatched = (selectedMovie) => {
+   const isMovieReacted = (selectedMovie) => {
       return moviesList.find(
          (movie) => movie.data.imdbID === selectedMovie.imdbID
-      ).isWatched;
+      ).hasReacted;
    };
 
    const isMovieSeen = (selectedMovie) => {
@@ -323,7 +323,7 @@ const SearchTitlesModal = ({ user }) => {
                         <div className="mx-auto" key={movie.imdbID}>
                            {isMovieInList(movie) ? (
                               <>
-                                 {isMovieWatched(movie) ? (
+                                 {isMovieReacted(movie) ? (
                                     <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
                                           {movie.Poster === "N/A" ? (
