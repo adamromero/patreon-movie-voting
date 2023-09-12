@@ -5,6 +5,8 @@ import { getCurrentUser } from "@/lib/session";
 
 connectDB();
 
+export const revalidate = 0;
+
 function isDateInCurrentMonth(dateToCheck) {
    const currentDate = new Date();
    const date = new Date(dateToCheck);
