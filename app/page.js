@@ -35,9 +35,18 @@ export default async function Home() {
                         ) : (
                            <div>
                               {isUnderRequestLimit ? (
-                                 `Begin voting and requesting movies. You have a limit of ${
-                                    user && user.isProducer ? "3" : "2"
-                                 } new requests per month.`
+                                 <>
+                                    <div>
+                                       Begin voting and requesting movies. You
+                                       have a limit of{" "}
+                                       {user && user.isProducer ? "3" : "2"}
+                                       <strong> new</strong> requests per month.
+                                    </div>
+                                    <div>
+                                       You may make as many request votes as you
+                                       would like in the list below.
+                                    </div>
+                                 </>
                               ) : (
                                  <>
                                     <div>
