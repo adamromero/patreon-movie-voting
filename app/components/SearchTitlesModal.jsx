@@ -39,14 +39,10 @@ const SearchTitlesModal = ({ user }) => {
 
    const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
 
-   // const debouncedButtonClick = debounce(() => {
-   //    setIsButtonDisabled(false);
-   //  }, 1000);
-
    useEffect(() => {
-      //if (!isCreator) {
-      checkIfUserUnderRequestLimit(currentUser, isProducer);
-      //}
+      if (!isCreator) {
+         checkIfUserUnderRequestLimit(currentUser, isProducer);
+      }
    }, [moviesList]);
 
    useEffect(() => {

@@ -24,9 +24,9 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
    }
 
    useEffect(() => {
-      //if (!isCreator) {
-      checkIfUserUnderRequestLimit(id, isProducer);
-      //}
+      if (!isCreator) {
+         checkIfUserUnderRequestLimit(id, isProducer);
+      }
    }, [moviesList]);
 
    useEffect(() => {
@@ -63,7 +63,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
                      )}
                   </div>
 
-                  {isCreator && (
+                  {isCreator && false && (
                      <div className="flex-1 mb-[15px]">
                         <CopyableList />
                      </div>

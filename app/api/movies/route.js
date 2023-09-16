@@ -44,7 +44,7 @@ export async function POST(req, res) {
 
          const numberOfRequests = existingDocument.length + 1;
          const requestLimit = user.isProducer ? 3 : 2;
-         if (numberOfRequests <= requestLimit) {
+         if (numberOfRequests <= requestLimit || user.isCreator) {
             const movie = await Movie.findOneAndUpdate(
                { "data.imdbID": selectedMovie.data.imdbID },
                { $setOnInsert: selectedMovie },

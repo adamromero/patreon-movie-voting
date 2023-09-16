@@ -30,27 +30,31 @@ export default async function Home() {
                         <h2>
                            Hi {user.firstName ? user.firstName : user.name}!{" "}
                         </h2>
-                        <div>
-                           {isUnderRequestLimit ? (
-                              `Begin voting and requesting movies. You have a limit of ${
-                                 user && user.isProducer
-                                    ? "3 new requests"
-                                    : "2 new request"
-                              } per month.`
-                           ) : (
-                              <>
-                                 <div>
-                                    You have reached your monthly request limit
-                                    and cannot make new requests until next
-                                    month.
-                                 </div>
-                                 <div>
-                                    You may continue to vote on movies currently
-                                    in the list.
-                                 </div>
-                              </>
-                           )}
-                        </div>
+                        {user && user.isCreator ? (
+                           <div>Begin voting and requesting movies.</div>
+                        ) : (
+                           <div>
+                              {isUnderRequestLimit ? (
+                                 `Begin voting and requesting movies. You have a limit of ${
+                                    user && user.isProducer
+                                       ? "3 new requests"
+                                       : "2 new request"
+                                 } per month.`
+                              ) : (
+                                 <>
+                                    <div>
+                                       You have reached your monthly request
+                                       limit and cannot make new requests until
+                                       next month.
+                                    </div>
+                                    <div>
+                                       You may continue to vote on movies
+                                       currently in the list.
+                                    </div>
+                                 </>
+                              )}
+                           </div>
+                        )}
                      </>
                   ) : (
                      <div className="text-[16px] sm:text-[18px]">
