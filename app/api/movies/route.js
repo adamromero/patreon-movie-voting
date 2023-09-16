@@ -43,7 +43,7 @@ export async function POST(req, res) {
          });
 
          const numberOfRequests = existingDocument.length + 1;
-         const requestLimit = user.isProducer ? 3 : 1;
+         const requestLimit = user.isProducer ? 3 : 2;
          if (numberOfRequests <= requestLimit) {
             const movie = await Movie.findOneAndUpdate(
                { "data.imdbID": selectedMovie.data.imdbID },

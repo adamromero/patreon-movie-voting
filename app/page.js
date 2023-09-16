@@ -1,13 +1,9 @@
 import Header from "./components/Header";
 import { getCurrentUser } from "@/lib/session";
 import VotingApp from "./components/VotingApp";
-import { redirect } from "next/navigation";
 
 export default async function Home() {
    const user = await getCurrentUser();
-   if (user && !user.isCreator) {
-      //redirect("/maintenance");
-   }
 
    const userId = user && user.id;
    const isProducer = user && user.isProducer;
@@ -19,7 +15,7 @@ export default async function Home() {
       (movie) =>
          movie.requester === userId && !movie.hasReacted && !movie.hasSeen
    );
-   const requestLimit = isProducer ? 3 : 1;
+   const requestLimit = isProducer ? 3 : 2;
    const isUnderRequestLimit =
       currentUsersMonthlyRequests.length < requestLimit;
 
@@ -39,7 +35,7 @@ export default async function Home() {
                               `Begin voting and requesting movies. You have a limit of ${
                                  user && user.isProducer
                                     ? "3 new requests"
-                                    : "1 new request"
+                                    : "2 new request"
                               } per month.`
                            ) : (
                               <>

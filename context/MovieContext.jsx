@@ -43,7 +43,7 @@ export const MovieProvider = ({ children }) => {
             movie.requester === id && !movie.hasReacted && !movie.hasSeen
       );
 
-      const requestLimit = isProducer ? 3 : 1;
+      const requestLimit = isProducer ? 3 : 2;
       setIsUserUnderRequestLimit(
          currentUsersMonthlyRequests.length < requestLimit
       );

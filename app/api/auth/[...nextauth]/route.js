@@ -62,8 +62,6 @@ export const nextAuthOptions = {
             return true;
          }
 
-         //return "/maintenance";
-
          const response = await fetch(process.env.PATREON_PROFILE_URL, {
             headers: {
                Authorization: `Bearer ${account.access_token}`,

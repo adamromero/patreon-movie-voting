@@ -63,7 +63,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
                      )}
                   </div>
 
-                  {user && isCreator && false && (
+                  {isCreator && (
                      <div className="flex-1 mb-[15px]">
                         <CopyableList />
                      </div>
