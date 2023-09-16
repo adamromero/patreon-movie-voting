@@ -36,10 +36,8 @@ export default async function Home() {
                            <div>
                               {isUnderRequestLimit ? (
                                  `Begin voting and requesting movies. You have a limit of ${
-                                    user && user.isProducer
-                                       ? "3 new requests"
-                                       : "2 new request"
-                                 } per month.`
+                                    user && user.isProducer ? "3" : "2"
+                                 } new requests per month.`
                               ) : (
                                  <>
                                     <div>
