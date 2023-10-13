@@ -5,13 +5,13 @@ import clientPromise from "@/lib/mongodb";
 
 export const nextAuthOptions = {
    adapter: MongoDBAdapter(clientPromise),
+   secret: process.env.NEXTAUTH_SECRET,
    jwt: {
       secret: process.env.JWT_SECRET,
    },
    session: {
       strategy: "jwt",
    },
-   secret: process.env.NEXTAUTH_SECRET,
    pages: {
       signIn: "/unauthorized",
    },
@@ -35,6 +35,8 @@ export const nextAuthOptions = {
             );
          });
 
+         console.log(pledge);
+
          let isProducer = false;
          if (pledge) {
             isProducer = pledge.attributes.amount_cents === 1900;
@@ -52,7 +54,8 @@ export const nextAuthOptions = {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
             session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer = token.isProducer;
+            session.user.isProducer =
+               token.isProducer || token.id === process.env.DEV_ID;
          }
          return session;
       },
