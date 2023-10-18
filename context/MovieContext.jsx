@@ -28,7 +28,7 @@ export const MovieProvider = ({ children }) => {
       added: added.Default,
       type: type.Default,
       genre: genre.Default,
-      status: status.Unseen,
+      status: status.Default,
       watched: watched.Default,
    });
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);

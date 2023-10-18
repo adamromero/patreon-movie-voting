@@ -4,6 +4,7 @@ import { Modal } from "react-responsive-modal";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
 
 const MovieListEntry = ({
@@ -163,7 +164,7 @@ const MovieListEntry = ({
                      </button>
                   )}
                </div>
-            ) : currentUser ? (
+            ) : (
                <>
                   {!data?.hasReacted ? (
                      <div className="hidden lg:block lg:w-[70px]"></div>
@@ -194,7 +195,7 @@ const MovieListEntry = ({
                      </div>
                   )}
                </>
-            ) : null}
+            )}
             {isCreator && (
                <>
                   {data?.hasSeen ? (

@@ -405,7 +405,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                </div>
             </button>
          </div>
-         {currentUser && <div className="hidden lg:block lg:w-[100px]"></div>}
+         <div className="hidden lg:block lg:w-[100px]"></div>
          {isCreator && (
             <>
                <div className="hidden lg:block w-[80px]">
