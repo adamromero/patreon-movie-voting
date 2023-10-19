@@ -6,7 +6,6 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
-import debounce from "lodash.debounce";
 
 const SearchTitlesModal = ({ user }) => {
    const [input, setInput] = useState("");
@@ -360,18 +359,6 @@ const SearchTitlesModal = ({ user }) => {
                                                 />
                                                 <div>On Channel</div>
                                                 <div className="flex flex-col gap-[4px] max-w-[60px] w-full">
-                                                   {getPatreonLink(movie) && (
-                                                      <a
-                                                         className="bg-[black] text-[white] flex justify-center p-[2px] border-[#585858] border-[1px]"
-                                                         href={getPatreonLink(
-                                                            movie
-                                                         )}
-                                                         title="Watch Full Length"
-                                                         target="_blank"
-                                                      >
-                                                         <BiLogoPatreon />
-                                                      </a>
-                                                   )}
                                                    {getYouTubeLink(movie) && (
                                                       <a
                                                          className="bg-[red] text-[white] flex justify-center p-[2px]"
@@ -382,6 +369,18 @@ const SearchTitlesModal = ({ user }) => {
                                                          target="_blank"
                                                       >
                                                          <AiFillYoutube />
+                                                      </a>
+                                                   )}
+                                                   {getPatreonLink(movie) && (
+                                                      <a
+                                                         className="bg-[black] text-[white] flex justify-center p-[2px] border-[#585858] border-[1px]"
+                                                         href={getPatreonLink(
+                                                            movie
+                                                         )}
+                                                         title="Watch Full Length"
+                                                         target="_blank"
+                                                      >
+                                                         <BiLogoPatreon />
                                                       </a>
                                                    )}
                                                 </div>
