@@ -69,7 +69,7 @@ const FilterMovieList = () => {
       <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 md:flex-row gap-[10px] w-full text-white flex">
          <div>
             <div className="flex gap-[4px] mb-[5px] items-center">
-               <div>Filters:</div>
+               <div>Filter By:</div>
                <FilterMovieListTags />
             </div>
             <div className="flex gap-[10px]">
@@ -139,7 +139,7 @@ const FilterMovieList = () => {
          </div>
          <div>
             <div className="flex gap-[4px] mb-[5px] items-center">
-               <div>Sorting: </div>
+               <div>Sort By: </div>
                <FilterMovieListSortTags />
             </div>
             <div className="flex gap-[10px]">

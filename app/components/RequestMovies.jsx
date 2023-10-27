@@ -6,12 +6,6 @@ import { Modal } from "react-responsive-modal";
 import { MovieContext } from "@/context/MovieContext";
 
 const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
-   // const [open, setOpen] = useState(false);
-
-   // const onOpenModal = () => setOpen(true);
-   // const onCloseModal = () => setOpen(false);
-   const { isUserUnderRequestLimit } = useContext(MovieContext);
-
    return (
       <>
          <button

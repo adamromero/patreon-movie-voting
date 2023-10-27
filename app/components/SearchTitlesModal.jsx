@@ -5,6 +5,8 @@ import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
+import { BiSolidUpvote } from "react-icons/bi";
+import { BiSolidDownvote } from "react-icons/bi";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ user }) => {
@@ -163,6 +165,12 @@ const SearchTitlesModal = ({ user }) => {
       return moviesList.find(
          (movie) => movie.data.imdbID === selectedMovie.imdbID
       ).hasSeen;
+   };
+
+   const getMovieVoteTotal = (selectedMovie) => {
+      return moviesList.find(
+         (movie) => movie.data.imdbID === selectedMovie.imdbID
+      ).voters.length;
    };
 
    const getPatreonLink = (selectedMovie) => {
@@ -358,7 +366,7 @@ const SearchTitlesModal = ({ user }) => {
                                                    }`}
                                                 />
                                                 <div>On Channel</div>
-                                                <div className="flex flex-col gap-[4px] max-w-[60px] w-full">
+                                                <div className="flex flex-col gap-[4px] max-w-[80px] w-full">
                                                    {getYouTubeLink(movie) && (
                                                       <a
                                                          className="bg-[red] text-[white] flex justify-center p-[2px]"
@@ -463,7 +471,7 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             <div className="mt-[35px] flex flex-col items-center z-10">
+                                             <div className="mt-[59px] flex flex-col items-center z-10">
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
                                                       imdbIDCollection[
@@ -474,12 +482,18 @@ const SearchTitlesModal = ({ user }) => {
                                                    }`}
                                                 />
                                                 <div>Requested</div>
+                                                <div className="text-[16px] mb-[10px] leading-[16px]">
+                                                   {getMovieVoteTotal(movie)}{" "}
+                                                   {getMovieVoteTotal(movie) > 1
+                                                      ? "requests"
+                                                      : "request"}
+                                                </div>
                                                 {isMovieVotedByUser(movie) ? (
                                                    <button
                                                       onClick={() =>
                                                          handleRemoveVote(movie)
                                                       }
-                                                      className="bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                      className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                                                    >
                                                       Retract
                                                    </button>
@@ -488,7 +502,7 @@ const SearchTitlesModal = ({ user }) => {
                                                       onClick={() =>
                                                          handleCastVote(movie)
                                                       }
-                                                      className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                                                      className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                                                    >
                                                       Request
                                                    </button>
