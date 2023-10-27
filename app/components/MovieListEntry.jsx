@@ -4,9 +4,6 @@ import { Modal } from "react-responsive-modal";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
-import { BiSolidUpvote } from "react-icons/bi";
-import { BiSolidDownvote } from "react-icons/bi";
-
 import { MovieContext } from "@/context/MovieContext";
 
 const MovieListEntry = ({
@@ -134,29 +131,7 @@ const MovieListEntry = ({
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
             <div className="lg:w-[250px] leading-4">
-               {/* {isCreator && data?.hasReacted ? (
-                  <button
-                     className="text-left py-[5px]"
-                     onClick={() => {
-                        onOpenLinkUpdateModal();
-                        setPatreonReactionLink(data?.links?.patreon);
-                        setYouTubeReactionLink(data?.links?.youtube);
-                        setWatchedMovieData({
-                           id: data?._id,
-                           title: data?.data?.Title,
-                           poster: data?.data?.Poster,
-                           year: data?.data?.Year,
-                        });
-                     }}
-                     title="Click to Edit Links"
-                  >
-                     {data?.data?.Title} ({data?.data?.Year})
-                  </button>
-               ) : (
-                  <> */}
                {data?.data?.Title} ({data?.data?.Year})
-               {/* </>
-               )} */}
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
             <div className="lg:w-[40px]">
@@ -207,7 +182,7 @@ const MovieListEntry = ({
                            )}
                            {data?.links?.patreon && (
                               <a
-                                 className="flex justify-center items-center gap-[2px] bg-[black] text-[18px] p-[3px] border-[#585858] border-[1px]"
+                                 className="flex justify-center items-center gap-[2px] bg-[black] text-[18px] p-[3px]"
                                  href={data?.links?.patreon}
                                  title="Watch Full Length"
                                  target="_blank"
