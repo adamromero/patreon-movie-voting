@@ -139,7 +139,7 @@ const MovieListEntry = ({
                {data?.data?.imdbRating}
             </div>
             <div className="lg:w-[40px]">
-               <span className="inline lg:hidden">Votes:</span>{" "}
+               <span className="inline lg:hidden">Requests:</span>{" "}
                {data?.voters?.length}
             </div>
             {!data?.hasReacted && !data?.hasSeen && currentUser ? (
