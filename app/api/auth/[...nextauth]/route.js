@@ -38,7 +38,8 @@ export const nextAuthOptions = {
          let isProducer = false;
          if (pledge) {
             isProducer =
-               pledge.relationships.reward.data.id === PRODUCER_TIER_ID;
+               pledge.relationships.reward.data.id ===
+               process.env.PRODUCER_TIER_ID;
          }
 
          if (profile) {
