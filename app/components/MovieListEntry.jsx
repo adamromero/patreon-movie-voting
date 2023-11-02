@@ -277,7 +277,7 @@ const MovieListEntry = ({
                <img
                   src={data?.data?.Poster}
                   alt={data?.data?.Title}
-                  className="h-[275px] mx-auto"
+                  className="h-[200px] sm:h-[275px] mx-auto"
                />
                <div className="flex flex-1 flex-col">
                   <div>
