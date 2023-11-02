@@ -37,7 +37,8 @@ export const nextAuthOptions = {
 
          let isProducer = false;
          if (pledge) {
-            isProducer = pledge.attributes.amount_cents >= 1900;
+            isProducer =
+               pledge.relationships.reward.data.id === PRODUCER_TIER_ID;
          }
 
          if (profile) {
