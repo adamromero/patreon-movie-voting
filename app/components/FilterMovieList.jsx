@@ -86,7 +86,6 @@ const FilterMovieList = () => {
                      <option value={genre.Action}>Action</option>
                      <option value={genre.Adventure}>Adventure</option>
                      <option value={genre.Animation}>Animation</option>
-                     <option value={genre.Biography}>Biography</option>
                      <option value={genre.Comedy}>Comedy</option>
                      <option value={genre.Crime}>Crime</option>
                      <option value={genre.Documentary}>Documentary</option>
@@ -99,8 +98,6 @@ const FilterMovieList = () => {
                      <option value={genre.Music}>Music</option>
                      <option value={genre.Romance}>Romance</option>
                      <option value={genre.SciFi}>Sci-Fi</option>
-                     <option value={genre.Short}>Short</option>
-                     <option value={genre.Sport}>Sport</option>
                      <option value={genre.Thriller}>Thriller</option>
                      <option value={genre.Western}>Western</option>
                      <option value={genre.War}>War</option>

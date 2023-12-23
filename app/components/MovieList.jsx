@@ -16,11 +16,13 @@ import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
+//import finalData from "../finaldata.json";
 
 const MovieList = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
    const moviesList = useRetrieveMovies();
+   //const moviesList = finalData;
    const {
       filteredMoviesList,
       setFilteredMoviesList,
@@ -29,6 +31,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchTitle,
       searchDirector,
       searchActor,
+      searchComposer,
    } = useContext(MovieContext);
 
    //movies watched on the channel
@@ -149,10 +152,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Animation)
          );
-      } else if (filterOptions.genre === genre.Biography) {
-         filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Biography)
-         );
       } else if (filterOptions.genre === genre.Comedy) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Comedy)
@@ -205,14 +204,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Romance)
          );
-      } else if (filterOptions.genre === genre.Short) {
-         filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Short)
-         );
-      } else if (filterOptions.genre === genre.Sport) {
-         filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Sport)
-         );
       } else if (filterOptions.genre === genre.War) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.War)
@@ -253,6 +244,14 @@ const MovieList = ({ currentUser, isCreator }) => {
          );
       }
 
+      if (searchComposer) {
+         filteredList = filteredList.filter((movie) =>
+            movie?.data?.Composer?.toLowerCase().includes(
+               searchComposer.toLowerCase()
+            )
+         );
+      }
+
       const initialPage =
          currentPage <= Math.ceil(filteredList.length / postsPerPage)
             ? currentPage
@@ -265,6 +264,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchTitle,
       searchDirector,
       searchActor,
+      searchComposer,
       postsPerPage,
    ]);
 

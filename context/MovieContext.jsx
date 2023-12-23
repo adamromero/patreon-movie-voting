@@ -20,6 +20,7 @@ export const MovieProvider = ({ children }) => {
    const [searchTitle, setSearchTitle] = useState("");
    const [searchDirector, setSearchDirector] = useState("");
    const [searchActor, setSearchActor] = useState("");
+   const [searchComposer, setSearchComposer] = useState("");
    const [filterOptions, setFilterOptions] = useState({
       alphabetical: alphabetical.Default,
       votes: votes.Ascending,
@@ -32,6 +33,7 @@ export const MovieProvider = ({ children }) => {
       watched: watched.Default,
    });
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
+   const [requestsRemaining, setRequestsRemaining] = useState();
    const [disableButton, setDisableButton] = useState(false);
 
    const checkIfUserUnderRequestLimit = async (id, isProducer) => {
@@ -47,6 +49,7 @@ export const MovieProvider = ({ children }) => {
       setIsUserUnderRequestLimit(
          currentUsersMonthlyRequests.length < requestLimit
       );
+      setRequestsRemaining(requestLimit - currentUsersMonthlyRequests.length);
    };
 
    const getMovieVotes = async () => {
@@ -57,11 +60,123 @@ export const MovieProvider = ({ children }) => {
 
    const createMovieVote = async (movie, currentUser) => {
       setDisableButton(true);
-      const API_URL = `https://www.omdbapi.com/?apikey=${
-         process.env.NEXT_PUBLIC_OMDB_API_KEY
-      }&t=${encodeURIComponent(movie.Title)}&y=${movie.Year}`;
-      const response = await fetch(API_URL);
-      const movieData = await response.json();
+
+      let data,
+         genres,
+         title,
+         year,
+         release,
+         director,
+         composer,
+         actors,
+         runtime,
+         rated,
+         imdbID;
+
+      if (movie.media_type === "movie") {
+         const NEW_API_URL = `https://api.themoviedb.org/3/movie/${movie.id}?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const response = await fetch(NEW_API_URL);
+         data = await response.json();
+         genres = data.genres.map((genre) =>
+            genre.name === "Science Fiction" ? "Sci-Fi" : genre.name
+         );
+         title = data.title;
+         year = data.release_date.split("-")[0];
+         release = data.release_date;
+         imdbID = data.imdb_id;
+         runtime = data.runtime;
+
+         const creditUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const creditResponse = await fetch(creditUrl);
+         const creditData = await creditResponse.json();
+
+         director = creditData.crew
+            .filter((credit) => credit.job === "Director")
+            .map((credit) => credit.name);
+
+         const composerArray = creditData.crew
+            .filter(
+               (credit) =>
+                  credit.job === "Original Music Composer" ||
+                  credit.job === "Music"
+            )
+            .map((credit) => credit.name);
+         composer = [...new Set(composerArray)];
+
+         actors = creditData.cast.slice(0, 10).map((actor) => actor.name);
+
+         const releaseUrl = `https://api.themoviedb.org/3/movie/${movie.id}/release_dates?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const releaseResponse = await fetch(releaseUrl);
+         const releaseData = await releaseResponse.json();
+
+         rated = releaseData.results
+            .find((release) => release.iso_3166_1 === "US")
+            .release_dates.filter(
+               (dates) => dates.certification !== ""
+            )[0].certification;
+      } else if (movie.media_type === "tv") {
+         const NEW_API_URL = `https://api.themoviedb.org/3/tv/${movie.id}?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const response = await fetch(NEW_API_URL);
+         data = await response.json();
+         genres = data.genres.map((genre) =>
+            genre.name === "Science Fiction" ? "Sci-Fi" : genre.name
+         );
+         title = data.name;
+         year = data.first_air_date.split("-")[0];
+         release = data.first_air_date;
+         runtime = data.episode_run_time[0];
+         director = data.created_by.map((credit) => credit.name);
+
+         const externalIDUrl = `https://api.themoviedb.org/3/tv/${movie.id}/external_ids?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const externalIDResponse = await fetch(externalIDUrl);
+         const externalIDData = await externalIDResponse.json();
+         imdbID = externalIDData.imdb_id;
+
+         const creditUrl = `https://api.themoviedb.org/3/tv/${movie.id}/credits?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const creditResponse = await fetch(creditUrl);
+         const creditData = await creditResponse.json();
+
+         const composerArray = creditData.crew
+            .filter(
+               (credit) =>
+                  credit.job === "Original Music Composer" ||
+                  credit.job === "Music"
+            )
+            .map((credit) => credit.name);
+         composer = [...new Set(composerArray)];
+
+         actors = creditData.cast.slice(0, 10).map((actor) => actor.name);
+
+         const releaseUrl = `https://api.themoviedb.org/3/tv/${movie.id}/content_ratings?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const releaseResponse = await fetch(releaseUrl);
+         const releaseData = await releaseResponse.json();
+
+         const findUSRating = releaseData.results.find(
+            (release) => release.iso_3166_1 === "US"
+         );
+         rated = findUSRating
+            ? findUSRating.rating
+            : releaseData.results[0].rating;
+      }
+
+      const movieData = {
+         id: data.id,
+         Type: movie.media_type === "tv" ? "series" : movie.media_type,
+         Title: title,
+         Year: year,
+         Rated: rated,
+         Genre: genres.join(", "),
+         Director: director.join(", "),
+         Actors: actors.join(", "),
+         Poster: data.poster_path,
+         Backdrop: data.backdrop_path,
+         imdbRating: "",
+         imdbID,
+         Rating: data.vote_average,
+         Release: release,
+         Runtime: runtime,
+         Composer: composer.join(", "),
+      };
 
       const newMovieVote = {
          data: movieData,
@@ -71,6 +186,8 @@ export const MovieProvider = ({ children }) => {
          links: { patreon: "", youtube: "" },
          requester: currentUser,
       };
+
+      console.log(newMovieVote);
 
       const config = {
          method: "POST",
@@ -306,10 +423,13 @@ export const MovieProvider = ({ children }) => {
             setSearchDirector,
             searchActor,
             setSearchActor,
+            searchComposer,
+            setSearchComposer,
             removeMovieVoteOverride,
             checkIfUserUnderRequestLimit,
             isUserUnderRequestLimit,
             setIsUserUnderRequestLimit,
+            requestsRemaining,
             disableButton,
          }}
       >

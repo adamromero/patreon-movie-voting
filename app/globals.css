@@ -25,7 +25,8 @@ body {
 }
 
 .react-responsive-modal-root .more-info-modal {
-   max-width: 650px;
+   max-width: 925px;
+   padding: 0;
 }
 
 .react-responsive-modal-root .delete-movie-modal {
