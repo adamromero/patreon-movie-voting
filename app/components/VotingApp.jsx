@@ -48,7 +48,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
                isUnderRequestLimit && !isCreator ? "mb-[15px]" : "my-[15px]"
             }`}
          >
-            {isUnderRequestLimit && !isCreator && (
+            {user && isUnderRequestLimit && !isCreator && (
                <div className="text-[16px] sm:text-[18px] mb-[15px]">
                   You have {requestsRemaining} <strong> new</strong>{" "}
                   {requestsRemaining > 1 ? "requests" : "request"} remaining
