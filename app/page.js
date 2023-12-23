@@ -51,16 +51,16 @@ export default async function Home() {
                                        <div>
                                           Since {seenRequests.length} of your
                                           requests this month was marked as
-                                          "Seen", you get an extra{" "}
+                                          &quot;Seen&quot;, you get an extra{" "}
                                           {seenRequests.length}.
                                        </div>
                                     )}
                                     {channelRequests.length > 0 && (
                                        <div>
                                           Since {channelRequests.length} of your
-                                          requests this month was marked as "On
-                                          Channel", you get an extra{" "}
-                                          {channelRequests.length}.
+                                          requests this month was marked as
+                                          &quot;On Channel&quot;, you get an
+                                          extra {channelRequests.length}.
                                        </div>
                                     )}
                                  </>
