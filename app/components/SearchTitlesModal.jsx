@@ -38,9 +38,7 @@ const SearchTitlesModal = ({ user }) => {
    const [movieIDCollection, setMovieIDCollection] = useState({});
    const [disabledButtonStates, setDisabledButtonStates] = useState({});
 
-   const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
-
-   const NEW_API_URL = `https://api.themoviedb.org/3/search/multi?query=${title}&include_adult=false&language=en-US&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+   const API_URL = `https://api.themoviedb.org/3/search/multi?query=${title}&include_adult=false&language=en-US&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
 
    useEffect(() => {
       if (!isCreator) {
@@ -54,27 +52,8 @@ const SearchTitlesModal = ({ user }) => {
             setLoading(true);
             inputRef.current.blur();
 
-            const response = await fetch(NEW_API_URL);
+            const response = await fetch(API_URL);
             const data = await response.json();
-            // if (data.Response === "True") {
-            //    const titles = data.Search.filter(
-            //       (title) => title.Type === "movie" || title.Type === "series"
-            //    );
-            //    setMovies(titles);
-
-            //    const ids = data.Search.map((entry) => entry.imdbID);
-            //    const result = ids.reduce((obj, num) => {
-            //       obj[num] = false;
-            //       return obj;
-            //    }, {});
-
-            //    setMovieIDCollection(result);
-            //    setDisabledButtonStates(result);
-            //    setInput("");
-            // } else {
-            //    setMovies([]);
-            //    setError(data.Error);
-            // }
 
             if (data.results.length) {
                const titles = data.results.filter(
@@ -82,7 +61,6 @@ const SearchTitlesModal = ({ user }) => {
                      title.release_date !== "" &&
                      (title.media_type === "movie" || title.media_type === "tv")
                );
-               //console.log(titles);
                setMovies(titles);
                const ids = data.results.map((entry) => entry.imdbID);
                const result = ids.reduce((obj, num) => {
@@ -109,55 +87,57 @@ const SearchTitlesModal = ({ user }) => {
 
    useEffect(() => {
       const fetchTitleByYear = async () => {
-         if (searchImdbID) {
-            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&i=${searchImdbID}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
+         if (searchTitle && searchYear) {
+            const API_URL_FILM = `https://api.themoviedb.org/3/search/movie?query=${searchTitle}&include_adult=false&language=en-US&primary_release_year=${searchYear}&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+            const responseFilm = await fetch(API_URL_FILM);
+            const dataFilm = await responseFilm.json();
+            let finalResult;
 
-            if (data.Response === "True") {
-               if (data.Type === "movie" || data.Type === "series") {
-                  clearSearchState(data);
-               }
+            if (dataFilm.total_results) {
+               finalResult = { ...dataFilm.results[0], media_type: "movie" };
             } else {
-               setMovies([]);
-               setError(data.Error);
-            }
-            setLoading(false);
-         } else if (searchTitle && searchYear) {
-            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&t=${searchTitle}&y=${searchYear}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
+               const API_URL_TV = `https://api.themoviedb.org/3/search/tv?query=${searchTitle}&include_adult=false&language=en-US&page=1&year=${searchYear}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+               const responseTV = await fetch(API_URL_TV);
+               const dataTV = await responseTV.json();
 
-            if (data.Response === "True") {
-               if (data.Type === "movie" || data.Type === "series") {
-                  clearSearchState(data);
+               if (dataTV.total_results) {
+                  finalResult = { ...dataTV.results[0], media_type: "tv" };
+               } else {
+                  setMovies([]);
+                  setError("Movie not found!");
                }
-            } else {
-               setMovies([]);
-               setError(data.Error);
             }
+
+            clearSearchState(finalResult);
             setLoading(false);
          }
       };
 
       fetchTitleByYear();
-   }, [searchTitle, searchYear, searchImdbID]);
+   }, [searchTitle, searchYear]);
 
    useEffect(() => {
       const fetchByImdbID = async () => {
          if (searchImdbID) {
-            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&i=${searchImdbID}`;
+            const API_URL = `https://api.themoviedb.org/3/find/${searchImdbID}?external_source=imdb_id&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
             const response = await fetch(API_URL);
             const data = await response.json();
+            const { movie_results } = data;
+            const results = movie_results[0];
 
-            if (data.Response === "True") {
-               if (data.Type === "movie" || data.Type === "series") {
-                  clearSearchState(data);
+            if (movie_results.length) {
+               if (
+                  results.release_date !== "" &&
+                  (results.media_type === "movie" ||
+                     results.media_type === "tv")
+               ) {
+                  clearSearchState(results);
                }
             } else {
                setMovies([]);
-               setError(data.Error);
+               setError("Movie not found!");
             }
+
             setLoading(false);
          }
       };

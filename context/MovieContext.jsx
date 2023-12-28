@@ -161,7 +161,7 @@ export const MovieProvider = ({ children }) => {
 
       const movieData = {
          id: data.id,
-         Type: movie.media_type === "tv" ? "series" : movie.media_type,
+         Type: movie.media_type,
          Title: title,
          Year: year,
          Rated: rated,
@@ -186,8 +186,6 @@ export const MovieProvider = ({ children }) => {
          links: { patreon: "", youtube: "" },
          requester: currentUser,
       };
-
-      console.log(newMovieVote);
 
       const config = {
          method: "POST",

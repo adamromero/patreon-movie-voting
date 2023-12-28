@@ -33,7 +33,7 @@ export const type = {
    Name: "Type",
    Default: "All",
    Movie: "Movie",
-   Series: "Series",
+   Series: "TV",
 };
 
 export const chronological = {
