@@ -112,11 +112,15 @@ const MovieList = ({ currentUser, isCreator }) => {
 
       if (filterOptions.chronological === chronological.Older) {
          filteredList = filteredList.sort(
-            (a, b) => parseInt(a.data.Year) - parseInt(b.data.Year)
+            (a, b) =>
+               new Date(a.data.Release ? a.data.Release : "1900-01-01") -
+               new Date(b.data.Release ? b.data.Release : "1900-01-01")
          );
       } else if (filterOptions.chronological === chronological.Newer) {
          filteredList = filteredList.sort(
-            (a, b) => parseInt(b.data.Year) - parseInt(a.data.Year)
+            (a, b) =>
+               new Date(b.data.Release ? b.data.Release : "1900-01-01") -
+               new Date(a.data.Release ? a.data.Release : "1900-01-01")
          );
       }
 

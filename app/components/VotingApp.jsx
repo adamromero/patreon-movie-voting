@@ -59,7 +59,7 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
             {user && (
                <div className="flex max-w-[430px]">
                   <div className="flex-1 mb-[15px]">
-                     {moviesList.length || true ? (
+                     {moviesList.length ? (
                         !disableRequestButton ? (
                            <RequestMovies
                               user={user}

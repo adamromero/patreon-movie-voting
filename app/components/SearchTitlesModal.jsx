@@ -176,33 +176,51 @@ const SearchTitlesModal = ({ user }) => {
    };
 
    const isMovieInList = (selectedMovie) => {
-      return moviesList.filter((movie) => movie?.data?.id === selectedMovie.id)
-         .length;
+      return moviesList.filter(
+         (movie) =>
+            movie?.data?.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+      ).length;
    };
 
    const isMovieReacted = (selectedMovie) => {
-      return moviesList.find((movie) => movie.data.id === selectedMovie.id)
-         .hasReacted;
+      return moviesList.find(
+         (movie) =>
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+      ).hasReacted;
    };
 
    const isMovieSeen = (selectedMovie) => {
-      return moviesList.find((movie) => movie.data.id === selectedMovie.id)
-         .hasSeen;
+      return moviesList.find(
+         (movie) =>
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+      ).hasSeen;
    };
 
    const getMovieVoteTotal = (selectedMovie) => {
-      return moviesList.find((movie) => movie.data.id === selectedMovie.id)
-         .voters.length;
+      return moviesList.find(
+         (movie) =>
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+      ).voters.length;
    };
 
    const getPatreonLink = (selectedMovie) => {
-      return moviesList.find((movie) => movie.data.id === selectedMovie.id)
-         .links.patreon;
+      return moviesList.find(
+         (movie) =>
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+      ).links.patreon;
    };
 
    const getYouTubeLink = (selectedMovie) => {
-      return moviesList.find((movie) => movie.data.id === selectedMovie.id)
-         .links.youtube;
+      return moviesList.find(
+         (movie) =>
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+      ).links.youtube;
    };
 
    const handleTitleSubmit = (e) => {
@@ -237,7 +255,10 @@ const SearchTitlesModal = ({ user }) => {
 
    const isMovieVotedByUser = (selectedMovie) => {
       return moviesList.find((movie) => {
-         if (movie.data.id === selectedMovie.id) {
+         if (
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+         ) {
             return movie.voters.filter((voter) => voter === currentUser).length;
          }
       });
@@ -245,7 +266,10 @@ const SearchTitlesModal = ({ user }) => {
 
    const handleRemoveVote = (selectedMovie) => {
       return moviesList.find((movie) => {
-         if (movie.data.id === selectedMovie.id) {
+         if (
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+         ) {
             removeMovieVote(movie._id, movie.voters, currentUser);
             setDisabledButtonStates({ [selectedMovie.id]: false });
          }
@@ -254,7 +278,10 @@ const SearchTitlesModal = ({ user }) => {
 
    const handleCastVote = (selectedMovie) => {
       return moviesList.find((movie) => {
-         if (movie.data.id === selectedMovie.id) {
+         if (
+            movie.data.id === selectedMovie.id &&
+            movie?.data?.Type === selectedMovie.media_type
+         ) {
             castMovieVote(movie._id, movie.voters, currentUser);
          }
       });

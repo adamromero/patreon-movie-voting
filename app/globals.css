@@ -29,6 +29,12 @@ body {
    padding: 0;
 }
 
+@media screen and (max-width: 639px) {
+   .react-responsive-modal-root .more-info-modal {
+      background-image: none !important;
+   }
+}
+
 .react-responsive-modal-root .delete-movie-modal {
    height: 130px;
    max-width: 400px;

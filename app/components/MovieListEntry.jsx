@@ -115,7 +115,7 @@ const MovieListEntry = ({
                {data?.data?.Poster !== "N/A" ? (
                   <img
                      className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
-                     src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${data?.data?.Poster}`}
+                     src={`https://image.tmdb.org/t/p/w200${data?.data?.Poster}`}
                      alt={data?.data?.Title}
                   />
                ) : (
@@ -265,18 +265,13 @@ const MovieListEntry = ({
             classNames={{ modal: "more-info-modal" }}
             styles={{
                modal: {
-                  background: `url(https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/${data?.data?.Backdrop})`,
+                  background: `url(https://image.tmdb.org/t/p/w1920_and_h800_multi_faces${data?.data?.Backdrop})`,
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
                },
             }}
          >
-            <div
-               className="p-[20px]"
-               style={{
-                  background: "rgba(0, 0, 0, .85)",
-               }}
-            >
+            <div className="p-[20px] bg-black sm:bg-black/[.85]">
                <div className="py-[30px]">
                   <a
                      href={`https://www.imdb.com/title/${data?.data?.imdbID}`}
@@ -290,36 +285,44 @@ const MovieListEntry = ({
                         {data?.data?.Rated}
                      </span>
                      <span className="text-[13px]">
-                        {data?.data?.Runtime} mins.
+                        {data?.data?.Runtime && `${data?.data?.Runtime} mins.`}
                      </span>
                   </h2>
                   <div className="flex gap-[20px] flex-col xs:flex-row">
                      <img
-                        src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${data?.data?.Poster}`}
+                        src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`}
                         alt={data?.data?.Title}
-                        className="h-[200px] sm:h-[275px] mx-auto"
+                        className="h-[200px] sm:h-[275px] mx-auto sm:w-[183px]"
                      />
                      <div className="flex flex-1 flex-col">
-                        <div>
-                           <span className="font-bold">Genre:</span>{" "}
-                           {data?.data?.Genre}
-                        </div>
-                        <div>
-                           <span className="font-bold">Cast:</span>{" "}
-                           {data?.data?.Actors}
-                        </div>
-                        <div>
-                           <span className="font-bold">
-                              {data?.data?.Type === "movie"
-                                 ? "Director: "
-                                 : "Creator: "}
-                           </span>{" "}
-                           {data?.data?.Director}
-                        </div>
-                        <div>
-                           <span className="font-bold">Composer:</span>{" "}
-                           {data?.data?.Composer}
-                        </div>
+                        {data?.data?.Genre && (
+                           <div>
+                              <span className="font-bold">Genre:</span>{" "}
+                              {data?.data?.Genre}
+                           </div>
+                        )}
+                        {data?.data?.Actors && (
+                           <div>
+                              <span className="font-bold">Cast:</span>{" "}
+                              {data?.data?.Actors}
+                           </div>
+                        )}
+                        {data?.data?.Director && (
+                           <div>
+                              <span className="font-bold">
+                                 {data?.data?.Type === "movie"
+                                    ? "Director: "
+                                    : "Creator: "}
+                              </span>{" "}
+                              {data?.data?.Director}
+                           </div>
+                        )}
+                        {data?.data?.Composer && (
+                           <div>
+                              <span className="font-bold">Composer:</span>{" "}
+                              {data?.data?.Composer}
+                           </div>
+                        )}
                         <div>
                            <span className="font-bold">IMDB Rating:</span>{" "}
                            {data?.data?.imdbRating}
