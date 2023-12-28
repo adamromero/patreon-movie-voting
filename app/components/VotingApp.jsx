@@ -45,7 +45,11 @@ const VotingApp = ({ user, isUnderRequestLimit }) => {
       <>
          <div
             className={`flex flex-col ${
-               isUnderRequestLimit && !isCreator ? "mb-[15px]" : "my-[15px]"
+               user
+                  ? isUnderRequestLimit && !isCreator
+                     ? "mb-[15px]"
+                     : "my-[15px]"
+                  : "my-[15px]"
             }`}
          >
             {user && isUnderRequestLimit && !isCreator && (

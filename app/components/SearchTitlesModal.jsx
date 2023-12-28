@@ -5,8 +5,6 @@ import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
-import { BiSolidUpvote } from "react-icons/bi";
-import { BiSolidDownvote } from "react-icons/bi";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ user }) => {
@@ -91,24 +89,25 @@ const SearchTitlesModal = ({ user }) => {
             const API_URL_FILM = `https://api.themoviedb.org/3/search/movie?query=${searchTitle}&include_adult=false&language=en-US&primary_release_year=${searchYear}&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
             const responseFilm = await fetch(API_URL_FILM);
             const dataFilm = await responseFilm.json();
-            let finalResult;
 
             if (dataFilm.total_results) {
-               finalResult = { ...dataFilm.results[0], media_type: "movie" };
+               clearSearchState({
+                  ...dataFilm.results[0],
+                  media_type: "movie",
+               });
             } else {
                const API_URL_TV = `https://api.themoviedb.org/3/search/tv?query=${searchTitle}&include_adult=false&language=en-US&page=1&year=${searchYear}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
                const responseTV = await fetch(API_URL_TV);
                const dataTV = await responseTV.json();
 
                if (dataTV.total_results) {
-                  finalResult = { ...dataTV.results[0], media_type: "tv" };
+                  clearSearchState({ ...dataTV.results[0], media_type: "tv" });
                } else {
                   setMovies([]);
                   setError("Movie not found!");
                }
             }
 
-            clearSearchState(finalResult);
             setLoading(false);
          }
       };
@@ -158,48 +157,48 @@ const SearchTitlesModal = ({ user }) => {
    const isMovieInList = (selectedMovie) => {
       return moviesList.filter(
          (movie) =>
-            movie?.data?.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie?.data?.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).length;
    };
 
    const isMovieReacted = (selectedMovie) => {
       return moviesList.find(
          (movie) =>
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).hasReacted;
    };
 
    const isMovieSeen = (selectedMovie) => {
       return moviesList.find(
          (movie) =>
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).hasSeen;
    };
 
    const getMovieVoteTotal = (selectedMovie) => {
       return moviesList.find(
          (movie) =>
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).voters.length;
    };
 
    const getPatreonLink = (selectedMovie) => {
       return moviesList.find(
          (movie) =>
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).links.patreon;
    };
 
    const getYouTubeLink = (selectedMovie) => {
       return moviesList.find(
          (movie) =>
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).links.youtube;
    };
 
@@ -228,16 +227,16 @@ const SearchTitlesModal = ({ user }) => {
    };
 
    const handleMovieSelection = async (movie) => {
-      setMovieIDCollection({ [movie.id]: true });
-      setDisabledButtonStates({ [movie.id]: true });
+      setMovieIDCollection({ [movie?.id]: true });
+      setDisabledButtonStates({ [movie?.id]: true });
       createMovieVote(movie, currentUser);
    };
 
    const isMovieVotedByUser = (selectedMovie) => {
       return moviesList.find((movie) => {
          if (
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
          ) {
             return movie.voters.filter((voter) => voter === currentUser).length;
          }
@@ -247,11 +246,11 @@ const SearchTitlesModal = ({ user }) => {
    const handleRemoveVote = (selectedMovie) => {
       return moviesList.find((movie) => {
          if (
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
          ) {
             removeMovieVote(movie._id, movie.voters, currentUser);
-            setDisabledButtonStates({ [selectedMovie.id]: false });
+            setDisabledButtonStates({ [selectedMovie?.id]: false });
          }
       });
    };
@@ -259,8 +258,8 @@ const SearchTitlesModal = ({ user }) => {
    const handleCastVote = (selectedMovie) => {
       return moviesList.find((movie) => {
          if (
-            movie.data.id === selectedMovie.id &&
-            movie?.data?.Type === selectedMovie.media_type
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
          ) {
             castMovieVote(movie._id, movie.voters, currentUser);
          }
@@ -350,23 +349,23 @@ const SearchTitlesModal = ({ user }) => {
                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
                   {movies.length ? (
                      movies.map((movie) => (
-                        <div className="mx-auto" key={movie.id}>
+                        <div className="mx-auto" key={movie?.id}>
                            {isMovieInList(movie) ? (
                               <>
                                  {isMovieReacted(movie) ? (
                                     <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
-                                          {!movie.poster_path ? (
+                                          {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
                                                 Missing Image
                                              </div>
                                           ) : (
                                              <img
-                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`}
+                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
                                                 alt={
-                                                   movie.media_type === "movie"
-                                                      ? movie.title
-                                                      : movie.name
+                                                   movie?.media_type === "movie"
+                                                      ? movie?.title
+                                                      : movie?.name
                                                 }
                                                 width="175"
                                                 height="285"
@@ -390,7 +389,7 @@ const SearchTitlesModal = ({ user }) => {
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
                                                       movieIDCollection[
-                                                         movie.id
+                                                         movie?.id
                                                       ]
                                                          ? "animate-rotation"
                                                          : ""
@@ -431,15 +430,15 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             {movie.media_type === "movie"
-                                                ? movie.title
-                                                : movie.name}{" "}
+                                             {movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name}{" "}
                                              (
-                                             {movie.media_type === "movie"
-                                                ? movie.release_date.split(
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
                                                      "-"
                                                   )[0]
-                                                : movie.first_air_date.split(
+                                                : movie?.first_air_date.split(
                                                      "-"
                                                   )[0]}
                                              )
@@ -449,17 +448,17 @@ const SearchTitlesModal = ({ user }) => {
                                  ) : isMovieSeen(movie) ? (
                                     <div className="text-[#8d8d8d] cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
-                                          {!movie.poster_path ? (
+                                          {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
                                                 Missing Image
                                              </div>
                                           ) : (
                                              <img
-                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`}
+                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
                                                 alt={
-                                                   movie.media_type === "movie"
-                                                      ? movie.title
-                                                      : movie.name
+                                                   movie?.media_type === "movie"
+                                                      ? movie?.title
+                                                      : movie?.name
                                                 }
                                                 width="175"
                                                 height="285"
@@ -476,7 +475,7 @@ const SearchTitlesModal = ({ user }) => {
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
                                                       movieIDCollection[
-                                                         movie.id
+                                                         movie?.id
                                                       ]
                                                          ? "animate-rotation"
                                                          : ""
@@ -491,15 +490,15 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             {movie.media_type === "movie"
-                                                ? movie.title
-                                                : movie.name}{" "}
+                                             {movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name}{" "}
                                              (
-                                             {movie.media_type === "movie"
-                                                ? movie.release_date.split(
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
                                                      "-"
                                                   )[0]
-                                                : movie.first_air_date.split(
+                                                : movie?.first_air_date.split(
                                                      "-"
                                                   )[0]}
                                              )
@@ -509,17 +508,17 @@ const SearchTitlesModal = ({ user }) => {
                                  ) : (
                                     <div className="text-white relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
-                                          {!movie.poster_path ? (
+                                          {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
                                                 Missing Image
                                              </div>
                                           ) : (
                                              <img
-                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`}
+                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
                                                 alt={
-                                                   movie.media_type === "movie"
-                                                      ? movie.title
-                                                      : movie.name
+                                                   movie?.media_type === "movie"
+                                                      ? movie?.title
+                                                      : movie?.name
                                                 }
                                                 width="175"
                                                 height="285"
@@ -536,7 +535,7 @@ const SearchTitlesModal = ({ user }) => {
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
                                                       movieIDCollection[
-                                                         movie.id
+                                                         movie?.id
                                                       ]
                                                          ? "animate-rotation"
                                                          : ""
@@ -576,15 +575,15 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             {movie.media_type === "movie"
-                                                ? movie.title
-                                                : movie.name}{" "}
+                                             {movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name}{" "}
                                              (
-                                             {movie.media_type === "movie"
-                                                ? movie.release_date.split(
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
                                                      "-"
                                                   )[0]
-                                                : movie.first_air_date.split(
+                                                : movie?.first_air_date.split(
                                                      "-"
                                                   )[0]}
                                              )
@@ -600,17 +599,17 @@ const SearchTitlesModal = ({ user }) => {
                                     onClick={() => handleMovieSelection(movie)}
                                     disabled={disableButton}
                                  >
-                                    {!movie.poster_path ? (
+                                    {!movie?.poster_path ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
                                           Missing Image
                                        </div>
                                     ) : (
                                        <img
-                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`}
+                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
                                           alt={
-                                             movie.media_type === "movie"
-                                                ? movie.title
-                                                : movie.name
+                                             movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name
                                           }
                                           width="175"
                                           height="285"
@@ -626,7 +625,7 @@ const SearchTitlesModal = ({ user }) => {
                                        <div className="flex flex-col">
                                           <IoMdAddCircleOutline className="text-[50px] mx-auto" />
                                           <div>
-                                             {disabledButtonStates[movie.id]
+                                             {disabledButtonStates[movie?.id]
                                                 ? "Pending"
                                                 : "Add"}
                                           </div>
@@ -638,13 +637,13 @@ const SearchTitlesModal = ({ user }) => {
                                           textShadow: "1px 1px 3px black",
                                        }}
                                     >
-                                       {movie.media_type === "movie"
-                                          ? movie.title
-                                          : movie.name}{" "}
+                                       {movie?.media_type === "movie"
+                                          ? movie?.title
+                                          : movie?.name}{" "}
                                        (
-                                       {movie.media_type === "movie"
-                                          ? movie.release_date.split("-")[0]
-                                          : movie.first_air_date.split("-")[0]}
+                                       {movie?.media_type === "movie"
+                                          ? movie?.release_date.split("-")[0]
+                                          : movie?.first_air_date.split("-")[0]}
                                        )
                                     </div>
                                  </button>
@@ -652,17 +651,17 @@ const SearchTitlesModal = ({ user }) => {
                            ) : (
                               <div className="cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                  <div>
-                                    {!movie.poster_path ? (
+                                    {!movie?.poster_path ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
                                           Missing Image
                                        </div>
                                     ) : (
                                        <img
-                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie.poster_path}`}
+                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
                                           alt={
-                                             movie.media_type === "movie"
-                                                ? movie.title
-                                                : movie.name
+                                             movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name
                                           }
                                           width="175"
                                           height="285"
@@ -678,7 +677,7 @@ const SearchTitlesModal = ({ user }) => {
                                        <div className="flex flex-col mt-[6px] items-center z-10">
                                           <IoMdAddCircleOutline
                                              className={`text-[50px] rotate-45 ${
-                                                movieIDCollection[movie.id]
+                                                movieIDCollection[movie?.id]
                                                    ? "animate-rotation"
                                                    : ""
                                              }`}
@@ -692,13 +691,13 @@ const SearchTitlesModal = ({ user }) => {
                                           textShadow: "1px 1px 3px black",
                                        }}
                                     >
-                                       {movie.media_type === "movie"
-                                          ? movie.title
-                                          : movie.name}{" "}
+                                       {movie?.media_type === "movie"
+                                          ? movie?.title
+                                          : movie?.name}{" "}
                                        (
-                                       {movie.media_type === "movie"
-                                          ? movie.release_date.split("-")[0]
-                                          : movie.first_air_date.split("-")[0]}
+                                       {movie?.media_type === "movie"
+                                          ? movie?.release_date.split("-")[0]
+                                          : movie?.first_air_date.split("-")[0]}
                                        )
                                     </div>
                                  </div>
