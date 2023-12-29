@@ -83,7 +83,7 @@ export const MovieProvider = ({ children }) => {
          title = data.title;
          year = data.release_date.split("-")[0];
          release = data.release_date;
-         imdbID = data.imdb_id;
+         imdbID = data.imdb_id ? data.imdb_id : "";
          runtime = data.runtime;
 
          const creditUrl = `https://api.themoviedb.org/3/movie/${movie.id}/credits?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
@@ -109,11 +109,19 @@ export const MovieProvider = ({ children }) => {
          const releaseResponse = await fetch(releaseUrl);
          const releaseData = await releaseResponse.json();
 
-         rated = releaseData.results
-            .find((release) => release.iso_3166_1 === "US")
-            .release_dates.filter(
+         const usRelease = releaseData.results?.find(
+            (release) => release.iso_3166_1 === "US"
+         );
+
+         if (usRelease) {
+            const filteredDates = usRelease.release_dates?.filter(
                (dates) => dates.certification !== ""
-            )[0]?.certification;
+            );
+
+            if (filteredDates && filteredDates.length > 0) {
+               rated = filteredDates[0].certification;
+            }
+         }
       } else if (movie.media_type === "tv") {
          const NEW_API_URL = `https://api.themoviedb.org/3/tv/${movie.id}?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const response = await fetch(NEW_API_URL);
@@ -130,7 +138,7 @@ export const MovieProvider = ({ children }) => {
          const externalIDUrl = `https://api.themoviedb.org/3/tv/${movie.id}/external_ids?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const externalIDResponse = await fetch(externalIDUrl);
          const externalIDData = await externalIDResponse.json();
-         imdbID = externalIDData.imdb_id;
+         imdbID = externalIDData.imdb_id ? externalIDData.imdb_id : "";
 
          const creditUrl = `https://api.themoviedb.org/3/tv/${movie.id}/credits?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const creditResponse = await fetch(creditUrl);
@@ -161,22 +169,23 @@ export const MovieProvider = ({ children }) => {
 
       const movieData = {
          id: data.id,
-         Type: movie.media_type,
+         Type: movie.media_type ? movie.media_type : "",
          Title: title,
          Year: year,
          Rated: rated,
          Genre: genres.join(", "),
          Director: director.join(", "),
          Actors: actors.join(", "),
-         Poster: data.poster_path,
-         Backdrop: data.backdrop_path,
-         imdbRating: "",
+         Poster: data.poster_path ? data.poster_path : "",
+         Backdrop: data.backdrop_path ? data.backdrop_path : "",
          imdbID,
-         Rating: data.vote_average,
+         Rating: data.vote_average ? data.vote_average : "",
          Release: release,
          Runtime: runtime,
          Composer: composer.join(", "),
       };
+
+      console.log(movieData);
 
       const newMovieVote = {
          data: movieData,

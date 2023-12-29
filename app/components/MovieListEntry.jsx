@@ -139,7 +139,11 @@ const MovieListEntry = ({
                {data?.data?.Poster ? (
                   <img
                      className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
-                     src={`https://image.tmdb.org/t/p/w200${data?.data?.Poster}`}
+                     src={
+                        data?.data?.Poster.includes("media-amazon")
+                           ? data?.data?.Poster
+                           : `https://image.tmdb.org/t/p/w200${data?.data?.Poster}`
+                     }
                      alt={data?.data?.Title}
                   />
                ) : (
@@ -317,12 +321,16 @@ const MovieListEntry = ({
                            `${data?.data?.Runtime} mins.`}
                      </span>
                   </h2>
-                  <div className="flex gap-[20px] flex-col sm:flex-row">
+                  <div className="flex gap-[20px] flex-col xs:flex-row">
                      {data?.data?.Poster ? (
                         <img
-                           src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`}
+                           src={
+                              data?.data?.Poster.includes("media-amazon")
+                                 ? data?.data?.Poster
+                                 : `https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`
+                           }
                            alt={data?.data?.Title}
-                           className="h-[200px] sm:h-[275px] mx-auto sm:w-[183px]"
+                           className="h-[200px] xs:h-[275px] mx-auto xs:w-[183px]"
                         />
                      ) : (
                         <div className="flex justify-center items-center bg-[#585858] h-[200px] w-[135px] sm:h-[275px] sm:w-[183px] mx-auto">
@@ -339,7 +347,14 @@ const MovieListEntry = ({
                         {data?.data?.Actors && (
                            <div>
                               <span className="font-bold">Cast:</span>{" "}
-                              {data?.data?.Actors}
+                              <span className="hidden sm:inline">
+                                 {data?.data?.Actors}
+                              </span>
+                              <span className="inline sm:hidden">
+                                 {data?.data?.Actors.split(",")
+                                    .slice(0, 3)
+                                    .join(", ")}
+                              </span>
                            </div>
                         )}
                         {data?.data?.Director && (
