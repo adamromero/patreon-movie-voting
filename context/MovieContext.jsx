@@ -185,8 +185,6 @@ export const MovieProvider = ({ children }) => {
          Composer: composer.join(", "),
       };
 
-      console.log(movieData);
-
       const newMovieVote = {
          data: movieData,
          voters: [currentUser],
@@ -326,7 +324,11 @@ export const MovieProvider = ({ children }) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );
-      const updatedMovieVote = { ...selectedMovieVote, hasReacted: isChecked };
+      const updatedMovieVote = {
+         ...selectedMovieVote,
+         hasReacted: isChecked,
+         publishedAt: isChecked ? new Date() : null,
+      };
 
       const config = {
          method: "PUT",
