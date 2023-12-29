@@ -23,12 +23,7 @@ const SearchMoviesList = () => {
                   type="text"
                   placeholder="Search titles"
                   value={searchTitle}
-                  onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
-                     setSearchTitle(
-                        regex.test(e.target.value) ? e.target.value : ""
-                     );
-                  }}
+                  onChange={(e) => setSearchTitle(e.target.value)}
                />
                <button
                   onClick={() => setSearchTitle("")}
@@ -43,12 +38,7 @@ const SearchMoviesList = () => {
                   type="text"
                   placeholder="Search directors"
                   value={searchDirector}
-                  onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
-                     setSearchDirector(
-                        regex.test(e.target.value) ? e.target.value : ""
-                     );
-                  }}
+                  onChange={(e) => setSearchDirector(e.target.value)}
                />
                <button
                   onClick={() => setSearchDirector("")}
@@ -63,12 +53,7 @@ const SearchMoviesList = () => {
                   type="text"
                   placeholder="Search top actors"
                   value={searchActor}
-                  onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
-                     setSearchActor(
-                        regex.test(e.target.value) ? e.target.value : ""
-                     );
-                  }}
+                  onChange={(e) => setSearchActor(e.target.value)}
                />
                <button
                   onClick={() => setSearchActor("")}
@@ -83,12 +68,7 @@ const SearchMoviesList = () => {
                   type="text"
                   placeholder="Search composers"
                   value={searchComposer}
-                  onChange={(e) => {
-                     const regex = /^[A-Za-z0-9\s,:&"!?'-/]+$/;
-                     setSearchComposer(
-                        regex.test(e.target.value) ? e.target.value : ""
-                     );
-                  }}
+                  onChange={(e) => setSearchComposer(e.target.value)}
                />
                <button
                   onClick={() => setSearchComposer("")}
