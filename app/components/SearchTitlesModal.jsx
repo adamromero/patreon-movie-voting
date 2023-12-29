@@ -122,15 +122,19 @@ const SearchTitlesModal = ({ user }) => {
             const API_URL = `https://api.themoviedb.org/3/find/${searchImdbID}?external_source=imdb_id&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
             const response = await fetch(API_URL);
             const data = await response.json();
-            const { movie_results } = data;
-            const results = movie_results[0];
+            const { movie_results, tv_results } = data;
 
             if (movie_results.length) {
+               const results = movie_results[0];
                if (
                   results.release_date !== "" &&
-                  (results.media_type === "movie" ||
-                     results.media_type === "tv")
+                  results.media_type === "movie"
                ) {
+                  clearSearchState(results);
+               }
+            } else if (tv_results.length) {
+               const results = tv_results[0];
+               if (results.release_date !== "" && results.media_type === "tv") {
                   clearSearchState(results);
                }
             } else {

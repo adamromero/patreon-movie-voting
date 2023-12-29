@@ -136,7 +136,7 @@ const MovieListEntry = ({
                      </p>
                   </div>
                )}
-               {data?.data?.Poster !== "N/A" ? (
+               {data?.data?.Poster ? (
                   <img
                      className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
                      src={`https://image.tmdb.org/t/p/w200${data?.data?.Poster}`}
