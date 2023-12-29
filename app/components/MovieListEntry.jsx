@@ -5,6 +5,7 @@ import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
+import { FaRegImage } from "react-icons/fa6";
 
 const MovieListEntry = ({
    data,
@@ -77,12 +78,35 @@ const MovieListEntry = ({
       setWatchedMovieLinks(watchedMovieData.id, links);
    };
 
-   const convertDateFormat = (date) => {
-      const originalDate = new Date(date);
-      const month = originalDate.getMonth() + 1;
-      const day = originalDate.getDate();
-      const year = originalDate.getFullYear();
-      return `${month}-${day}-${year}`;
+   const convertDateFormat = (date, releaseDate) => {
+      const months = [
+         "January",
+         "February",
+         "March",
+         "April",
+         "May",
+         "June",
+         "July",
+         "August",
+         "September",
+         "October",
+         "November",
+         "December",
+      ];
+      let originalDate, month, day, year;
+      if (releaseDate) {
+         month = date?.split("-")[1];
+         day = date?.split("-")[2];
+         year = date?.split("-")[0];
+         originalDate = new Date(`${month}-${day}-${year}`);
+      }
+
+      originalDate = new Date(date);
+      month = originalDate.getMonth();
+      day = originalDate.getDate();
+      year = originalDate.getFullYear();
+
+      return `${months[month]} ${day}, ${year}`;
    };
 
    return (
@@ -119,8 +143,8 @@ const MovieListEntry = ({
                      alt={data?.data?.Title}
                   />
                ) : (
-                  <div className="bg-[#585858] w-[100px] h-[150px] lg:w-[50px] lg:h-[75px] text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px] flex items-center">
-                     Missing Image
+                  <div className="flex justify-center items-center bg-[#585858] w-[100px] h-[150px] lg:w-[50px] lg:h-[75px] text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px] flex items-center">
+                     <FaRegImage className="text-[20px]" />
                   </div>
                )}
             </button>
@@ -131,7 +155,8 @@ const MovieListEntry = ({
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
             <div className="lg:w-[250px] leading-4">
-               {data?.data?.Title} ({data?.data?.Year})
+               {data?.data?.Title}{" "}
+               {data?.data?.Year && <>({data?.data?.Year})</>}
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
             <div className="lg:w-[40px]">
@@ -280,20 +305,30 @@ const MovieListEntry = ({
                      Go to IMDB
                   </a>
                   <h2 className="flex gap-[10px] items-center mb-[10px] text-[18px] font-bold">
-                     {data?.data?.Title} ({data?.data?.Year}){" "}
-                     <span className="text-[13px] border-[1px] pl-[3px] pr-[4px] whitespace-nowrap">
-                        {data?.data?.Rated}
-                     </span>
+                     {data?.data?.Title}{" "}
+                     {data?.data?.Year && <>({data?.data?.Year})</>}{" "}
+                     {data?.data?.Rated && (
+                        <span className="text-[13px] border-[1px] pl-[3px] pr-[4px] whitespace-nowrap">
+                           {data?.data?.Rated}
+                        </span>
+                     )}
                      <span className="text-[13px]">
-                        {data?.data?.Runtime && `${data?.data?.Runtime} mins.`}
+                        {data?.data?.Runtime > 0 &&
+                           `${data?.data?.Runtime} mins.`}
                      </span>
                   </h2>
                   <div className="flex gap-[20px] flex-col sm:flex-row">
-                     <img
-                        src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`}
-                        alt={data?.data?.Title}
-                        className="h-[200px] sm:h-[275px] mx-auto sm:w-[183px]"
-                     />
+                     {data?.data?.Poster ? (
+                        <img
+                           src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`}
+                           alt={data?.data?.Title}
+                           className="h-[200px] sm:h-[275px] mx-auto sm:w-[183px]"
+                        />
+                     ) : (
+                        <div className="flex justify-center items-center bg-[#585858] h-[200px] w-[135px] sm:h-[275px] sm:w-[183px] mx-auto">
+                           <FaRegImage className="text-[40px]" />
+                        </div>
+                     )}
                      <div className="flex flex-1 flex-col">
                         {data?.data?.Genre && (
                            <div>
@@ -329,18 +364,21 @@ const MovieListEntry = ({
                               {data?.data?.Rating.toFixed(1)}
                            </div>
                         )}
-
-                        <div>
-                           <span className="font-bold">Released:</span>{" "}
-                           {data?.data?.Release}
-                        </div>
+                        {data?.data?.Release && (
+                           <div>
+                              <span className="font-bold">Released:</span>{" "}
+                              {convertDateFormat(data?.data?.Release, true)}
+                           </div>
+                        )}
+                        {data?.createdAt && (
+                           <div>
+                              <span className="font-bold">Requested:</span>{" "}
+                              {convertDateFormat(data?.createdAt, false)}
+                           </div>
+                        )}
                         <div>
                            <span className="font-bold">Requests:</span>{" "}
                            {data?.voters?.length}
-                        </div>
-                        <div>
-                           <span className="font-bold">Requested:</span>{" "}
-                           {convertDateFormat(data?.createdAt)}
                         </div>
                         <div>
                            <span className="font-bold">Status:</span>{" "}

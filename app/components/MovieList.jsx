@@ -16,13 +16,12 @@ import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
-//import finalData from "../finaldata.json";
 
 const MovieList = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
    const moviesList = useRetrieveMovies();
-   //const moviesList = finalData;
+
    const {
       filteredMoviesList,
       setFilteredMoviesList,
@@ -51,16 +50,6 @@ const MovieList = ({ currentUser, isCreator }) => {
 
    useEffect(() => {
       let filteredList = [...moviesList];
-
-      // if (filterOptions.watched === watched.Ascending) {
-      //    //not watched first
-      //    filteredList = filteredList.sort((a, b) => b.hasReacted - a.hasReacted);
-      // } else if (filterOptions.watched === watched.Descending) {
-      //    //watched first
-      //    filteredList = filteredList.sort((a, b) => a.hasReacted - b.hasReacted);
-      // } else {
-      //    sethasReactedFilterAscending(true);
-      // }
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
@@ -320,20 +309,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
    };
-
-   // const handleWatchedSort = () => {
-   //    setFilterOptions((prevOptions) => ({
-   //       ...prevOptions,
-   //       alphabetical: alphabetical.Default,
-   //       votes: votes.Default,
-   //       chronological: chronological.Default,
-   //       added: added.Default,
-   //       rating: rating.Default,
-   //       watched: hasReactedFilterAscending
-   //          ? watched.Ascending
-   //          : watched.Descending,
-   //    }));
-   // };
 
    const firstPage = () => setCurrentPage(1);
    const lastPage = () =>

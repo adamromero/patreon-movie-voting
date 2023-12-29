@@ -5,6 +5,7 @@ import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
+import { FaRegImage } from "react-icons/fa6";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ user }) => {
@@ -357,7 +358,7 @@ const SearchTitlesModal = ({ user }) => {
                                        <div>
                                           {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                Missing Image
+                                                <FaRegImage className="text-[40px]" />
                                              </div>
                                           ) : (
                                              <img
@@ -433,15 +434,21 @@ const SearchTitlesModal = ({ user }) => {
                                              {movie?.media_type === "movie"
                                                 ? movie?.title
                                                 : movie?.name}{" "}
-                                             (
-                                             {movie?.media_type === "movie"
-                                                ? movie?.release_date.split(
-                                                     "-"
-                                                  )[0]
-                                                : movie?.first_air_date.split(
-                                                     "-"
-                                                  )[0]}
-                                             )
+                                             {(movie?.release_date ||
+                                                movie?.first_air_date) && (
+                                                <>
+                                                   (
+                                                   {movie?.media_type ===
+                                                   "movie"
+                                                      ? movie?.release_date.split(
+                                                           "-"
+                                                        )[0]
+                                                      : movie?.first_air_date.split(
+                                                           "-"
+                                                        )[0]}
+                                                   )
+                                                </>
+                                             )}
                                           </div>
                                        </div>
                                     </div>
@@ -450,7 +457,7 @@ const SearchTitlesModal = ({ user }) => {
                                        <div>
                                           {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                Missing Image
+                                                <FaRegImage className="text-[40px]" />
                                              </div>
                                           ) : (
                                              <img
@@ -493,15 +500,21 @@ const SearchTitlesModal = ({ user }) => {
                                              {movie?.media_type === "movie"
                                                 ? movie?.title
                                                 : movie?.name}{" "}
-                                             (
-                                             {movie?.media_type === "movie"
-                                                ? movie?.release_date.split(
-                                                     "-"
-                                                  )[0]
-                                                : movie?.first_air_date.split(
-                                                     "-"
-                                                  )[0]}
-                                             )
+                                             {(movie?.release_date ||
+                                                movie?.first_air_date) && (
+                                                <>
+                                                   (
+                                                   {movie?.media_type ===
+                                                   "movie"
+                                                      ? movie?.release_date.split(
+                                                           "-"
+                                                        )[0]
+                                                      : movie?.first_air_date.split(
+                                                           "-"
+                                                        )[0]}
+                                                   )
+                                                </>
+                                             )}
                                           </div>
                                        </div>
                                     </div>
@@ -510,7 +523,7 @@ const SearchTitlesModal = ({ user }) => {
                                        <div>
                                           {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                Missing Image
+                                                <FaRegImage className="text-[40px]" />
                                              </div>
                                           ) : (
                                              <img
@@ -578,15 +591,21 @@ const SearchTitlesModal = ({ user }) => {
                                              {movie?.media_type === "movie"
                                                 ? movie?.title
                                                 : movie?.name}{" "}
-                                             (
-                                             {movie?.media_type === "movie"
-                                                ? movie?.release_date.split(
-                                                     "-"
-                                                  )[0]
-                                                : movie?.first_air_date.split(
-                                                     "-"
-                                                  )[0]}
-                                             )
+                                             {(movie?.release_date ||
+                                                movie?.first_air_date) && (
+                                                <>
+                                                   (
+                                                   {movie?.media_type ===
+                                                   "movie"
+                                                      ? movie?.release_date.split(
+                                                           "-"
+                                                        )[0]
+                                                      : movie?.first_air_date.split(
+                                                           "-"
+                                                        )[0]}
+                                                   )
+                                                </>
+                                             )}
                                           </div>
                                        </div>
                                     </div>
@@ -601,7 +620,7 @@ const SearchTitlesModal = ({ user }) => {
                                  >
                                     {!movie?.poster_path ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                          Missing Image
+                                          <FaRegImage className="text-[40px]" />
                                        </div>
                                     ) : (
                                        <img
@@ -640,11 +659,20 @@ const SearchTitlesModal = ({ user }) => {
                                        {movie?.media_type === "movie"
                                           ? movie?.title
                                           : movie?.name}{" "}
-                                       (
-                                       {movie?.media_type === "movie"
-                                          ? movie?.release_date.split("-")[0]
-                                          : movie?.first_air_date.split("-")[0]}
-                                       )
+                                       {(movie?.release_date ||
+                                          movie?.first_air_date) && (
+                                          <>
+                                             (
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
+                                                     "-"
+                                                  )[0]
+                                                : movie?.first_air_date.split(
+                                                     "-"
+                                                  )[0]}
+                                             )
+                                          </>
+                                       )}
                                     </div>
                                  </button>
                               </div>
@@ -653,7 +681,7 @@ const SearchTitlesModal = ({ user }) => {
                                  <div>
                                     {!movie?.poster_path ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                          Missing Image
+                                          <FaRegImage className="text-[40px]" />
                                        </div>
                                     ) : (
                                        <img
@@ -694,11 +722,20 @@ const SearchTitlesModal = ({ user }) => {
                                        {movie?.media_type === "movie"
                                           ? movie?.title
                                           : movie?.name}{" "}
-                                       (
-                                       {movie?.media_type === "movie"
-                                          ? movie?.release_date.split("-")[0]
-                                          : movie?.first_air_date.split("-")[0]}
-                                       )
+                                       {(movie?.release_date ||
+                                          movie?.first_air_date) && (
+                                          <>
+                                             (
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
+                                                     "-"
+                                                  )[0]
+                                                : movie?.first_air_date.split(
+                                                     "-"
+                                                  )[0]}
+                                             )
+                                          </>
+                                       )}
                                     </div>
                                  </div>
                               </div>

@@ -16,10 +16,10 @@ const SearchMoviesList = () => {
    return (
       <>
          <div className="mb-[2px]">Search requested movies</div>
-         <div className="flex flex-col md:flex-row gap-[10px] w-full md:max-w-[1000px]">
+         <div className="flex flex-col lg:flex-row gap-[10px] w-full lg:max-w-[1000px]">
             <div className="flex flex-1 gap-[5px]">
                <input
-                  className="text-black px-[10px] py-[5px] w-full md:max-w-[200px]"
+                  className="text-black px-[10px] py-[5px] w-full lg:max-w-[200px]"
                   type="text"
                   placeholder="Search titles"
                   value={searchTitle}
@@ -39,7 +39,7 @@ const SearchMoviesList = () => {
             </div>
             <div className="flex flex-1 gap-[5px]">
                <input
-                  className="text-black px-[10px] py-[5px] w-full md:max-w-[200px]"
+                  className="text-black px-[10px] py-[5px] w-full lg:max-w-[200px]"
                   type="text"
                   placeholder="Search directors"
                   value={searchDirector}
@@ -59,7 +59,7 @@ const SearchMoviesList = () => {
             </div>
             <div className="flex flex-1 gap-[5px]">
                <input
-                  className="text-black px-[10px] py-[5px] w-full md:max-w-[200px]"
+                  className="text-black px-[10px] py-[5px] w-full lg:max-w-[200px]"
                   type="text"
                   placeholder="Search top actors"
                   value={searchActor}
@@ -79,7 +79,7 @@ const SearchMoviesList = () => {
             </div>
             <div className="flex flex-1 gap-[5px]">
                <input
-                  className="text-black px-[10px] py-[5px] w-full md:max-w-[200px]"
+                  className="text-black px-[10px] py-[5px] w-full lg:max-w-[200px]"
                   type="text"
                   placeholder="Search composers"
                   value={searchComposer}

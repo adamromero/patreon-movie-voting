@@ -113,7 +113,7 @@ export const MovieProvider = ({ children }) => {
             .find((release) => release.iso_3166_1 === "US")
             .release_dates.filter(
                (dates) => dates.certification !== ""
-            )[0].certification;
+            )[0]?.certification;
       } else if (movie.media_type === "tv") {
          const NEW_API_URL = `https://api.themoviedb.org/3/tv/${movie.id}?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const response = await fetch(NEW_API_URL);
@@ -156,7 +156,7 @@ export const MovieProvider = ({ children }) => {
          );
          rated = findUSRating
             ? findUSRating.rating
-            : releaseData.results[0].rating;
+            : releaseData?.results[0]?.rating;
       }
 
       const movieData = {
