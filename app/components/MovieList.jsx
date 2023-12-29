@@ -97,14 +97,14 @@ const MovieList = ({ currentUser, isCreator }) => {
       if (filterOptions.rating === rating.Ascending) {
          filteredList = filteredList.sort(
             (a, b) =>
-               parseFloat(b.data.imdbRating !== "N/A" ? b.data.imdbRating : 0) -
-               parseFloat(a.data.imdbRating !== "N/A" ? a.data.imdbRating : 0)
+               parseFloat(b.data.Rating ? b.data.Rating : 0) -
+               parseFloat(a.data.Rating ? a.data.Rating : 0)
          );
       } else if (filterOptions.rating === rating.Descending) {
          filteredList = filteredList.sort(
             (a, b) =>
-               parseFloat(a.data.imdbRating !== "N/A" ? a.data.imdbRating : 0) -
-               parseFloat(b.data.imdbRating !== "N/A" ? b.data.imdbRating : 0)
+               parseFloat(a.data.Rating ? a.data.Rating : 0) -
+               parseFloat(b.data.Rating ? b.data.Rating : 0)
          );
       } else {
          setIsRatingFilterAscending(true);

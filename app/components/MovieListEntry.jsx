@@ -136,7 +136,7 @@ const MovieListEntry = ({
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Rating:</span>{" "}
-               {data?.data?.imdbRating}
+               {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : "N/A"}
             </div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Requests:</span>{" "}
@@ -281,14 +281,14 @@ const MovieListEntry = ({
                   </a>
                   <h2 className="flex gap-[10px] items-center mb-[10px] text-[18px] font-bold">
                      {data?.data?.Title} ({data?.data?.Year}){" "}
-                     <span className="text-[13px] border-[1px] pl-[3px] pr-[4px]">
+                     <span className="text-[13px] border-[1px] pl-[3px] pr-[4px] whitespace-nowrap">
                         {data?.data?.Rated}
                      </span>
                      <span className="text-[13px]">
                         {data?.data?.Runtime && `${data?.data?.Runtime} mins.`}
                      </span>
                   </h2>
-                  <div className="flex gap-[20px] flex-col xs:flex-row">
+                  <div className="flex gap-[20px] flex-col sm:flex-row">
                      <img
                         src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`}
                         alt={data?.data?.Title}
@@ -323,10 +323,13 @@ const MovieListEntry = ({
                               {data?.data?.Composer}
                            </div>
                         )}
-                        <div>
-                           <span className="font-bold">IMDB Rating:</span>{" "}
-                           {data?.data?.imdbRating}
-                        </div>
+                        {data?.data?.Rating > 0 && (
+                           <div>
+                              <span className="font-bold">TMDB Rating:</span>{" "}
+                              {data?.data?.Rating.toFixed(1)}
+                           </div>
+                        )}
+
                         <div>
                            <span className="font-bold">Released:</span>{" "}
                            {data?.data?.Release}
