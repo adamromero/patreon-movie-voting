@@ -140,17 +140,20 @@ export const MovieProvider = ({ children }) => {
          const externalIDData = await externalIDResponse.json();
          imdbID = externalIDData.imdb_id ? externalIDData.imdb_id : "";
 
-         const creditUrl = `https://api.themoviedb.org/3/tv/${movie.id}/credits?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+         const creditUrl = `https://api.themoviedb.org/3/tv/${movie.id}/aggregate_credits?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const creditResponse = await fetch(creditUrl);
          const creditData = await creditResponse.json();
 
          const composerArray = creditData.crew
-            .filter(
-               (credit) =>
-                  credit.job === "Original Music Composer" ||
-                  credit.job === "Music"
+            .filter((person) =>
+               person.jobs.some(
+                  (credit) =>
+                     credit.job === "Original Music Composer" ||
+                     credit.job === "Music"
+               )
             )
-            .map((credit) => credit.name);
+            .map((person) => person.name);
+
          composer = [...new Set(composerArray)];
 
          actors = creditData.cast.slice(0, 10).map((actor) => actor.name);

@@ -57,7 +57,9 @@ const SearchTitlesModal = ({ user }) => {
             if (data.results.length) {
                const titles = data.results.filter(
                   (title) =>
-                     title.release_date !== "" &&
+                     hasBeenReleased(
+                        title.release_date || title.first_air_date
+                     ) &&
                      (title.media_type === "movie" || title.media_type === "tv")
                );
                setMovies(titles);
@@ -127,14 +129,21 @@ const SearchTitlesModal = ({ user }) => {
             if (movie_results.length) {
                const results = movie_results[0];
                if (
-                  results.release_date !== "" &&
+                  hasBeenReleased(
+                     results.release_date || results.first_air_date
+                  ) &&
                   results.media_type === "movie"
                ) {
                   clearSearchState(results);
                }
             } else if (tv_results.length) {
                const results = tv_results[0];
-               if (results.release_date !== "" && results.media_type === "tv") {
+               if (
+                  hasBeenReleased(
+                     results.release_date || results.first_air_date
+                  ) &&
+                  results.media_type === "tv"
+               ) {
                   clearSearchState(results);
                }
             } else {
@@ -269,6 +278,18 @@ const SearchTitlesModal = ({ user }) => {
             castMovieVote(movie._id, movie.voters, currentUser);
          }
       });
+   };
+
+   const hasBeenReleased = (date) => {
+      if (date) {
+         const month = date.split("-")[1];
+         const day = date.split("-")[2];
+         const year = date.split("-")[0];
+         const releaseDate = new Date(`${month}-${day}-${year}`);
+         return releaseDate <= new Date();
+      }
+
+      return false;
    };
 
    return (
