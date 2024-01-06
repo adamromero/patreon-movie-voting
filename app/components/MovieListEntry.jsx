@@ -6,6 +6,7 @@ import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
 import { FaRegImage } from "react-icons/fa6";
+import { IoIosWarning } from "react-icons/io";
 
 const MovieListEntry = ({
    data,
@@ -32,7 +33,10 @@ const MovieListEntry = ({
 
    const [watchedMovieData, setWatchedMovieData] = useState({});
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
-   const [youTubeReactionLink, setYouTubeReactionLink] = useState("");
+   const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
+
+   const [youtubeLinkWarning, setYouTubeLinkWarning] = useState("");
+   const [patreonLinkWarning, setPatreonLinkWarning] = useState("");
 
    const {
       castMovieVote,
@@ -71,10 +75,40 @@ const MovieListEntry = ({
 
    const handleLinkUpdate = (e) => {
       e.preventDefault();
-      const links = {
-         patreon: patreonReactionLink,
-         youtube: youTubeReactionLink,
+
+      const processLink = (regex, link, setLinkWarning) => {
+         if (regex.test(link)) {
+            setLinkWarning("");
+            return link;
+         } else {
+            setLinkWarning(
+               "Hi Jen! That link is incorrect, please review. ☝️🤓"
+            );
+            return "";
+         }
       };
+
+      const validYouTubeLinkPattern =
+         /^(https?:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/watch\?v=)?([\w-]{11})?$/i;
+      const validPatreonLinkPattern =
+         /^https:\/\/www\.patreon\.com\/posts\/.*$|^$/;
+
+      const updatedYouTubeLink = processLink(
+         validYouTubeLinkPattern,
+         youtubeReactionLink,
+         setYouTubeLinkWarning
+      );
+      const updatedPatreonLink = processLink(
+         validPatreonLinkPattern,
+         patreonReactionLink,
+         setPatreonLinkWarning
+      );
+
+      const links = {
+         youtube: updatedYouTubeLink,
+         patreon: updatedPatreonLink,
+      };
+
       setWatchedMovieLinks(watchedMovieData.id, links);
    };
 
@@ -437,9 +471,9 @@ const MovieListEntry = ({
                               className="w-full px-[8px] py-[5px] text-[black]"
                               type="text"
                               placeholder="YouTube Reaction Link"
-                              value={youTubeReactionLink}
+                              value={youtubeReactionLink}
                               onChange={(e) =>
-                                 setYouTubeReactionLink(e.target.value)
+                                 setYouTubeReactionLink(e.target.value.trim())
                               }
                            />
                            <input
@@ -448,7 +482,7 @@ const MovieListEntry = ({
                               placeholder="Patreon Full Length Reaction Link"
                               value={patreonReactionLink}
                               onChange={(e) =>
-                                 setPatreonReactionLink(e.target.value)
+                                 setPatreonReactionLink(e.target.value.trim())
                               }
                            />
                            <button
@@ -457,6 +491,22 @@ const MovieListEntry = ({
                            >
                               Submit
                            </button>
+                           {(youtubeLinkWarning || patreonLinkWarning) && (
+                              <div>
+                                 {youtubeLinkWarning && (
+                                    <div className="flex items-center gap-[5px] text-[red]">
+                                       <AiFillYoutube className="text-[20px]" />
+                                       {youtubeLinkWarning}
+                                    </div>
+                                 )}
+                                 {patreonLinkWarning && (
+                                    <div className="flex items-center gap-[5px] text-[white]">
+                                       <BiLogoPatreon className="text-[20px]" />
+                                       {patreonLinkWarning}
+                                    </div>
+                                 )}
+                              </div>
+                           )}
                         </form>
                      </div>
                   )}
