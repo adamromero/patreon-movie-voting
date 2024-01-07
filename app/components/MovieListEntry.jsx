@@ -81,17 +81,14 @@ const MovieListEntry = ({
             setLinkWarning("");
             return link;
          } else {
-            setLinkWarning(
-               "Hi Jen! That link is incorrect, please review. ☝️🤓"
-            );
+            setLinkWarning("Hi Jen! That link is incorrect, try again. ☝️🤓");
             return "";
          }
       };
 
       const validYouTubeLinkPattern =
-         /^(https?:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/watch\?v=)?([\w-]{11})?$/i;
-      const validPatreonLinkPattern =
-         /^https:\/\/www\.patreon\.com\/posts\/.*$|^$/;
+         /^https:\/\/(www\.)?youtu\.be\/.*$|^https:\/\/(www\.)?youtube\.com\/.*$|^$/;
+      const validPatreonLinkPattern = /^$|^https:\/\/www\.patreon\.com.*$/;
 
       const updatedYouTubeLink = processLink(
          validYouTubeLinkPattern,
