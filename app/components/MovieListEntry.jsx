@@ -364,7 +364,7 @@ const MovieListEntry = ({
                                  : `https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`
                            }
                            alt={data?.data?.Title}
-                           className="h-[200px] xs:h-[275px] mx-auto xs:w-[183px]"
+                           className="h-[200px] sm:h-[275px] mx-auto"
                         />
                      ) : (
                         <div className="flex justify-center items-center bg-[#585858] h-[200px] w-[135px] sm:h-[275px] sm:w-[183px] mx-auto">
