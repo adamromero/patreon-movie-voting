@@ -21,6 +21,7 @@ const MovieList = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
    const moviesList = useRetrieveMovies();
+
    const {
       filteredMoviesList,
       setFilteredMoviesList,
@@ -29,6 +30,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchTitle,
       searchDirector,
       searchActor,
+      searchComposer,
    } = useContext(MovieContext);
 
    //movies watched on the channel
@@ -48,16 +50,6 @@ const MovieList = ({ currentUser, isCreator }) => {
 
    useEffect(() => {
       let filteredList = [...moviesList];
-
-      // if (filterOptions.watched === watched.Ascending) {
-      //    //not watched first
-      //    filteredList = filteredList.sort((a, b) => b.hasReacted - a.hasReacted);
-      // } else if (filterOptions.watched === watched.Descending) {
-      //    //watched first
-      //    filteredList = filteredList.sort((a, b) => a.hasReacted - b.hasReacted);
-      // } else {
-      //    sethasReactedFilterAscending(true);
-      // }
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
@@ -94,14 +86,14 @@ const MovieList = ({ currentUser, isCreator }) => {
       if (filterOptions.rating === rating.Ascending) {
          filteredList = filteredList.sort(
             (a, b) =>
-               parseFloat(b.data.imdbRating !== "N/A" ? b.data.imdbRating : 0) -
-               parseFloat(a.data.imdbRating !== "N/A" ? a.data.imdbRating : 0)
+               parseFloat(b.data.Rating ? b.data.Rating : 0) -
+               parseFloat(a.data.Rating ? a.data.Rating : 0)
          );
       } else if (filterOptions.rating === rating.Descending) {
          filteredList = filteredList.sort(
             (a, b) =>
-               parseFloat(a.data.imdbRating !== "N/A" ? a.data.imdbRating : 0) -
-               parseFloat(b.data.imdbRating !== "N/A" ? b.data.imdbRating : 0)
+               parseFloat(a.data.Rating ? a.data.Rating : 0) -
+               parseFloat(b.data.Rating ? b.data.Rating : 0)
          );
       } else {
          setIsRatingFilterAscending(true);
@@ -109,11 +101,15 @@ const MovieList = ({ currentUser, isCreator }) => {
 
       if (filterOptions.chronological === chronological.Older) {
          filteredList = filteredList.sort(
-            (a, b) => parseInt(a.data.Year) - parseInt(b.data.Year)
+            (a, b) =>
+               new Date(a.data.Release ? a.data.Release : "1900-01-01") -
+               new Date(b.data.Release ? b.data.Release : "1900-01-01")
          );
       } else if (filterOptions.chronological === chronological.Newer) {
          filteredList = filteredList.sort(
-            (a, b) => parseInt(b.data.Year) - parseInt(a.data.Year)
+            (a, b) =>
+               new Date(b.data.Release ? b.data.Release : "1900-01-01") -
+               new Date(a.data.Release ? a.data.Release : "1900-01-01")
          );
       }
 
@@ -148,10 +144,6 @@ const MovieList = ({ currentUser, isCreator }) => {
       } else if (filterOptions.genre === genre.Animation) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Animation)
-         );
-      } else if (filterOptions.genre === genre.Biography) {
-         filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Biography)
          );
       } else if (filterOptions.genre === genre.Comedy) {
          filteredList = filteredList.filter((movie) =>
@@ -205,14 +197,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Romance)
          );
-      } else if (filterOptions.genre === genre.Short) {
-         filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Short)
-         );
-      } else if (filterOptions.genre === genre.Sport) {
-         filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Sport)
-         );
       } else if (filterOptions.genre === genre.War) {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.War)
@@ -253,6 +237,14 @@ const MovieList = ({ currentUser, isCreator }) => {
          );
       }
 
+      if (searchComposer) {
+         filteredList = filteredList.filter((movie) =>
+            movie?.data?.Composer?.toLowerCase().includes(
+               searchComposer.toLowerCase()
+            )
+         );
+      }
+
       const initialPage =
          currentPage <= Math.ceil(filteredList.length / postsPerPage)
             ? currentPage
@@ -265,6 +257,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchTitle,
       searchDirector,
       searchActor,
+      searchComposer,
       postsPerPage,
    ]);
 
@@ -316,20 +309,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
    };
-
-   // const handleWatchedSort = () => {
-   //    setFilterOptions((prevOptions) => ({
-   //       ...prevOptions,
-   //       alphabetical: alphabetical.Default,
-   //       votes: votes.Default,
-   //       chronological: chronological.Default,
-   //       added: added.Default,
-   //       rating: rating.Default,
-   //       watched: hasReactedFilterAscending
-   //          ? watched.Ascending
-   //          : watched.Descending,
-   //    }));
-   // };
 
    const firstPage = () => setCurrentPage(1);
    const lastPage = () =>

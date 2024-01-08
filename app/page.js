@@ -22,6 +22,13 @@ export default async function Home() {
    const isUnderRequestLimit =
       currentUsersMonthlyRequests.length < requestLimit;
 
+   const seenRequests = requestedMoviesThisMonth.filter(
+      (movie) => movie.requester === userId && movie.hasSeen
+   );
+   const channelRequests = requestedMoviesThisMonth.filter(
+      (movie) => movie.requester === userId && movie.hasReacted
+   );
+
    return (
       <main>
          <Header />
@@ -41,14 +48,24 @@ export default async function Home() {
                                  <>
                                     <div>
                                        Begin voting and requesting movies. You
-                                       have a limit of{" "}
-                                       {user && user.isProducer ? "3" : "2"}
-                                       <strong> new</strong> requests per month.
+                                       may vote on as many requests as you like.
                                     </div>
-                                    <div>
-                                       You may make as many request votes as you
-                                       would like in the list below.
-                                    </div>
+                                    {seenRequests.length > 0 && (
+                                       <div>
+                                          Since {seenRequests.length} of your
+                                          requests this month was marked as
+                                          &quot;Seen&quot;, you get an extra{" "}
+                                          {seenRequests.length}.
+                                       </div>
+                                    )}
+                                    {channelRequests.length > 0 && (
+                                       <div>
+                                          Since {channelRequests.length} of your
+                                          requests this month was marked as
+                                          &quot;On Channel&quot;, you get an
+                                          extra {channelRequests.length}.
+                                       </div>
+                                    )}
                                  </>
                               ) : (
                                  <>

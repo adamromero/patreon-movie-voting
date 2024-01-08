@@ -5,8 +5,7 @@ import { MovieContext } from "@/context/MovieContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
-import { BiSolidUpvote } from "react-icons/bi";
-import { BiSolidDownvote } from "react-icons/bi";
+import { FaRegImage } from "react-icons/fa6";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ user }) => {
@@ -35,10 +34,10 @@ const SearchTitlesModal = ({ user }) => {
    } = useContext(MovieContext);
 
    const inputRef = useRef(null);
-   const [imdbIDCollection, setImdbIDCollection] = useState({});
+   const [movieIDCollection, setMovieIDCollection] = useState({});
    const [disabledButtonStates, setDisabledButtonStates] = useState({});
 
-   const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&s=${title}`;
+   const API_URL = `https://api.themoviedb.org/3/search/multi?query=${title}&include_adult=false&language=en-US&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
 
    useEffect(() => {
       if (!isCreator) {
@@ -51,27 +50,33 @@ const SearchTitlesModal = ({ user }) => {
          if (title) {
             setLoading(true);
             inputRef.current.blur();
+
             const response = await fetch(API_URL);
             const data = await response.json();
-            if (data.Response === "True") {
-               const titles = data.Search.filter(
-                  (title) => title.Type === "movie" || title.Type === "series"
+
+            if (data.results.length) {
+               const titles = data.results.filter(
+                  (title) =>
+                     hasBeenReleased(
+                        title.release_date || title.first_air_date
+                     ) &&
+                     (title.media_type === "movie" || title.media_type === "tv")
                );
                setMovies(titles);
-
-               const ids = data.Search.map((entry) => entry.imdbID);
+               const ids = data.results.map((entry) => entry.imdbID);
                const result = ids.reduce((obj, num) => {
                   obj[num] = false;
                   return obj;
                }, {});
 
-               setImdbIDCollection(result);
+               setMovieIDCollection(result);
                setDisabledButtonStates(result);
                setInput("");
             } else {
                setMovies([]);
-               setError(data.Error);
+               setError("Movie not found!");
             }
+
             setLoading(false);
          }
       };
@@ -83,55 +88,69 @@ const SearchTitlesModal = ({ user }) => {
 
    useEffect(() => {
       const fetchTitleByYear = async () => {
-         if (searchImdbID) {
-            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&i=${searchImdbID}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
+         if (searchTitle && searchYear) {
+            const API_URL_FILM = `https://api.themoviedb.org/3/search/movie?query=${searchTitle}&include_adult=false&language=en-US&primary_release_year=${searchYear}&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+            const responseFilm = await fetch(API_URL_FILM);
+            const dataFilm = await responseFilm.json();
 
-            if (data.Response === "True") {
-               if (data.Type === "movie" || data.Type === "series") {
-                  clearSearchState(data);
-               }
+            if (dataFilm.total_results) {
+               clearSearchState({
+                  ...dataFilm.results[0],
+                  media_type: "movie",
+               });
             } else {
-               setMovies([]);
-               setError(data.Error);
-            }
-            setLoading(false);
-         } else if (searchTitle && searchYear) {
-            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&t=${searchTitle}&y=${searchYear}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
+               const API_URL_TV = `https://api.themoviedb.org/3/search/tv?query=${searchTitle}&include_adult=false&language=en-US&page=1&year=${searchYear}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+               const responseTV = await fetch(API_URL_TV);
+               const dataTV = await responseTV.json();
 
-            if (data.Response === "True") {
-               if (data.Type === "movie" || data.Type === "series") {
-                  clearSearchState(data);
+               if (dataTV.total_results) {
+                  clearSearchState({ ...dataTV.results[0], media_type: "tv" });
+               } else {
+                  setMovies([]);
+                  setError("Movie not found!");
                }
-            } else {
-               setMovies([]);
-               setError(data.Error);
             }
+
             setLoading(false);
          }
       };
 
       fetchTitleByYear();
-   }, [searchTitle, searchYear, searchImdbID]);
+   }, [searchTitle, searchYear]);
 
    useEffect(() => {
       const fetchByImdbID = async () => {
          if (searchImdbID) {
-            const API_URL = `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}&i=${searchImdbID}`;
+            const API_URL = `https://api.themoviedb.org/3/find/${searchImdbID}?external_source=imdb_id&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
             const response = await fetch(API_URL);
             const data = await response.json();
+            const { movie_results, tv_results } = data;
 
-            if (data.Response === "True") {
-               if (data.Type === "movie" || data.Type === "series") {
-                  clearSearchState(data);
+            if (movie_results.length) {
+               const results = movie_results[0];
+               if (
+                  hasBeenReleased(
+                     results.release_date || results.first_air_date
+                  ) &&
+                  results.media_type === "movie"
+               ) {
+                  clearSearchState(results);
+               }
+            } else if (tv_results.length) {
+               const results = tv_results[0];
+               if (
+                  hasBeenReleased(
+                     results.release_date || results.first_air_date
+                  ) &&
+                  results.media_type === "tv"
+               ) {
+                  clearSearchState(results);
                }
             } else {
                setMovies([]);
-               setError(data.Error);
+               setError("Movie not found!");
             }
+
             setLoading(false);
          }
       };
@@ -151,37 +170,49 @@ const SearchTitlesModal = ({ user }) => {
 
    const isMovieInList = (selectedMovie) => {
       return moviesList.filter(
-         (movie) => movie?.data?.imdbID === selectedMovie.imdbID
+         (movie) =>
+            movie?.data?.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).length;
    };
 
    const isMovieReacted = (selectedMovie) => {
       return moviesList.find(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
+         (movie) =>
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).hasReacted;
    };
 
    const isMovieSeen = (selectedMovie) => {
       return moviesList.find(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
+         (movie) =>
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).hasSeen;
    };
 
    const getMovieVoteTotal = (selectedMovie) => {
       return moviesList.find(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
+         (movie) =>
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).voters.length;
    };
 
    const getPatreonLink = (selectedMovie) => {
       return moviesList.find(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
+         (movie) =>
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).links.patreon;
    };
 
    const getYouTubeLink = (selectedMovie) => {
       return moviesList.find(
-         (movie) => movie.data.imdbID === selectedMovie.imdbID
+         (movie) =>
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
       ).links.youtube;
    };
 
@@ -210,14 +241,17 @@ const SearchTitlesModal = ({ user }) => {
    };
 
    const handleMovieSelection = async (movie) => {
-      setImdbIDCollection({ [movie.imdbID]: true });
-      setDisabledButtonStates({ [movie.imdbID]: true });
+      setMovieIDCollection({ [movie?.id]: true });
+      setDisabledButtonStates({ [movie?.id]: true });
       createMovieVote(movie, currentUser);
    };
 
    const isMovieVotedByUser = (selectedMovie) => {
       return moviesList.find((movie) => {
-         if (movie.data.imdbID === selectedMovie.imdbID) {
+         if (
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
+         ) {
             return movie.voters.filter((voter) => voter === currentUser).length;
          }
       });
@@ -225,19 +259,37 @@ const SearchTitlesModal = ({ user }) => {
 
    const handleRemoveVote = (selectedMovie) => {
       return moviesList.find((movie) => {
-         if (movie.data.imdbID === selectedMovie.imdbID) {
+         if (
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
+         ) {
             removeMovieVote(movie._id, movie.voters, currentUser);
-            setDisabledButtonStates({ [selectedMovie.imdbID]: false });
+            setDisabledButtonStates({ [selectedMovie?.id]: false });
          }
       });
    };
 
    const handleCastVote = (selectedMovie) => {
       return moviesList.find((movie) => {
-         if (movie.data.imdbID === selectedMovie.imdbID) {
+         if (
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
+         ) {
             castMovieVote(movie._id, movie.voters, currentUser);
          }
       });
+   };
+
+   const hasBeenReleased = (date) => {
+      if (date) {
+         const month = date.split("-")[1];
+         const day = date.split("-")[2];
+         const year = date.split("-")[0];
+         const releaseDate = new Date(`${month}-${day}-${year}`);
+         return releaseDate <= new Date();
+      }
+
+      return false;
    };
 
    return (
@@ -323,20 +375,24 @@ const SearchTitlesModal = ({ user }) => {
                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
                   {movies.length ? (
                      movies.map((movie) => (
-                        <div className="mx-auto" key={movie.imdbID}>
+                        <div className="mx-auto" key={movie?.id}>
                            {isMovieInList(movie) ? (
                               <>
                                  {isMovieReacted(movie) ? (
                                     <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
-                                          {movie.Poster === "N/A" ? (
+                                          {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                Missing Image
+                                                <FaRegImage className="text-[40px]" />
                                              </div>
                                           ) : (
                                              <img
-                                                src={movie.Poster}
-                                                alt={movie.Title}
+                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
+                                                alt={
+                                                   movie?.media_type === "movie"
+                                                      ? movie?.title
+                                                      : movie?.name
+                                                }
                                                 width="175"
                                                 height="285"
                                                 className="w-full h-full object-cover mx-auto"
@@ -358,8 +414,8 @@ const SearchTitlesModal = ({ user }) => {
                                              >
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
-                                                      imdbIDCollection[
-                                                         movie.imdbID
+                                                      movieIDCollection[
+                                                         movie?.id
                                                       ]
                                                          ? "animate-rotation"
                                                          : ""
@@ -400,21 +456,42 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             {movie.Title} ({movie.Year})
+                                             {movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name}{" "}
+                                             {(movie?.release_date ||
+                                                movie?.first_air_date) && (
+                                                <>
+                                                   (
+                                                   {movie?.media_type ===
+                                                   "movie"
+                                                      ? movie?.release_date.split(
+                                                           "-"
+                                                        )[0]
+                                                      : movie?.first_air_date.split(
+                                                           "-"
+                                                        )[0]}
+                                                   )
+                                                </>
+                                             )}
                                           </div>
                                        </div>
                                     </div>
                                  ) : isMovieSeen(movie) ? (
                                     <div className="text-[#8d8d8d] cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
-                                          {movie.Poster === "N/A" ? (
+                                          {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                Missing Image
+                                                <FaRegImage className="text-[40px]" />
                                              </div>
                                           ) : (
                                              <img
-                                                src={movie.Poster}
-                                                alt={movie.Title}
+                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
+                                                alt={
+                                                   movie?.media_type === "movie"
+                                                      ? movie?.title
+                                                      : movie?.name
+                                                }
                                                 width="175"
                                                 height="285"
                                                 className="w-full h-full object-cover mx-auto"
@@ -429,8 +506,8 @@ const SearchTitlesModal = ({ user }) => {
                                              <div className="flex flex-col mt-[6px] items-center z-10">
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
-                                                      imdbIDCollection[
-                                                         movie.imdbID
+                                                      movieIDCollection[
+                                                         movie?.id
                                                       ]
                                                          ? "animate-rotation"
                                                          : ""
@@ -445,21 +522,42 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             {movie.Title} ({movie.Year})
+                                             {movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name}{" "}
+                                             {(movie?.release_date ||
+                                                movie?.first_air_date) && (
+                                                <>
+                                                   (
+                                                   {movie?.media_type ===
+                                                   "movie"
+                                                      ? movie?.release_date.split(
+                                                           "-"
+                                                        )[0]
+                                                      : movie?.first_air_date.split(
+                                                           "-"
+                                                        )[0]}
+                                                   )
+                                                </>
+                                             )}
                                           </div>
                                        </div>
                                     </div>
                                  ) : (
                                     <div className="text-white relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
-                                          {movie.Poster === "N/A" ? (
+                                          {!movie?.poster_path ? (
                                              <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                Missing Image
+                                                <FaRegImage className="text-[40px]" />
                                              </div>
                                           ) : (
                                              <img
-                                                src={movie.Poster}
-                                                alt={movie.Title}
+                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
+                                                alt={
+                                                   movie?.media_type === "movie"
+                                                      ? movie?.title
+                                                      : movie?.name
+                                                }
                                                 width="175"
                                                 height="285"
                                                 className="w-full h-full object-cover mx-auto"
@@ -474,8 +572,8 @@ const SearchTitlesModal = ({ user }) => {
                                              <div className="mt-[59px] flex flex-col items-center z-10">
                                                 <IoMdAddCircleOutline
                                                    className={`text-[50px] rotate-45 ${
-                                                      imdbIDCollection[
-                                                         movie.imdbID
+                                                      movieIDCollection[
+                                                         movie?.id
                                                       ]
                                                          ? "animate-rotation"
                                                          : ""
@@ -515,7 +613,24 @@ const SearchTitlesModal = ({ user }) => {
                                                 textShadow: "1px 1px 3px black",
                                              }}
                                           >
-                                             {movie.Title} ({movie.Year})
+                                             {movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name}{" "}
+                                             {(movie?.release_date ||
+                                                movie?.first_air_date) && (
+                                                <>
+                                                   (
+                                                   {movie?.media_type ===
+                                                   "movie"
+                                                      ? movie?.release_date.split(
+                                                           "-"
+                                                        )[0]
+                                                      : movie?.first_air_date.split(
+                                                           "-"
+                                                        )[0]}
+                                                   )
+                                                </>
+                                             )}
                                           </div>
                                        </div>
                                     </div>
@@ -528,14 +643,18 @@ const SearchTitlesModal = ({ user }) => {
                                     onClick={() => handleMovieSelection(movie)}
                                     disabled={disableButton}
                                  >
-                                    {movie.Poster === "N/A" ? (
+                                    {!movie?.poster_path ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                          Missing Image
+                                          <FaRegImage className="text-[40px]" />
                                        </div>
                                     ) : (
                                        <img
-                                          src={movie.Poster}
-                                          alt={movie.Title}
+                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
+                                          alt={
+                                             movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name
+                                          }
                                           width="175"
                                           height="285"
                                           className="w-full h-full object-cover mx-auto"
@@ -550,16 +669,9 @@ const SearchTitlesModal = ({ user }) => {
                                        <div className="flex flex-col">
                                           <IoMdAddCircleOutline className="text-[50px] mx-auto" />
                                           <div>
-                                             {disabledButtonStates[movie.imdbID]
+                                             {disabledButtonStates[movie?.id]
                                                 ? "Pending"
                                                 : "Add"}
-                                             {/* {postError
-                                                ? "Limit Reached"
-                                                : disabledButtonStates[
-                                                     movie.imdbID
-                                                  ]
-                                                ? "Pending"
-                                                : "Add"} */}
                                           </div>
                                        </div>
                                     </div>
@@ -569,21 +681,41 @@ const SearchTitlesModal = ({ user }) => {
                                           textShadow: "1px 1px 3px black",
                                        }}
                                     >
-                                       {movie.Title} ({movie.Year})
+                                       {movie?.media_type === "movie"
+                                          ? movie?.title
+                                          : movie?.name}{" "}
+                                       {(movie?.release_date ||
+                                          movie?.first_air_date) && (
+                                          <>
+                                             (
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
+                                                     "-"
+                                                  )[0]
+                                                : movie?.first_air_date.split(
+                                                     "-"
+                                                  )[0]}
+                                             )
+                                          </>
+                                       )}
                                     </div>
                                  </button>
                               </div>
                            ) : (
                               <div className="cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                  <div>
-                                    {movie.Poster === "N/A" ? (
+                                    {!movie?.poster_path ? (
                                        <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                          Missing Image
+                                          <FaRegImage className="text-[40px]" />
                                        </div>
                                     ) : (
                                        <img
-                                          src={movie.Poster}
-                                          alt={movie.Title}
+                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
+                                          alt={
+                                             movie?.media_type === "movie"
+                                                ? movie?.title
+                                                : movie?.name
+                                          }
                                           width="175"
                                           height="285"
                                           className="w-full h-full object-cover mx-auto"
@@ -598,7 +730,7 @@ const SearchTitlesModal = ({ user }) => {
                                        <div className="flex flex-col mt-[6px] items-center z-10">
                                           <IoMdAddCircleOutline
                                              className={`text-[50px] rotate-45 ${
-                                                imdbIDCollection[movie.imdbID]
+                                                movieIDCollection[movie?.id]
                                                    ? "animate-rotation"
                                                    : ""
                                              }`}
@@ -612,7 +744,23 @@ const SearchTitlesModal = ({ user }) => {
                                           textShadow: "1px 1px 3px black",
                                        }}
                                     >
-                                       {movie.Title} ({movie.Year})
+                                       {movie?.media_type === "movie"
+                                          ? movie?.title
+                                          : movie?.name}{" "}
+                                       {(movie?.release_date ||
+                                          movie?.first_air_date) && (
+                                          <>
+                                             (
+                                             {movie?.media_type === "movie"
+                                                ? movie?.release_date.split(
+                                                     "-"
+                                                  )[0]
+                                                : movie?.first_air_date.split(
+                                                     "-"
+                                                  )[0]}
+                                             )
+                                          </>
+                                       )}
                                     </div>
                                  </div>
                               </div>

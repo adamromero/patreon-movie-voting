@@ -4,7 +4,6 @@ export const genre = {
    Action: "Action",
    Adventure: "Adventure",
    Animation: "Animation",
-   Biography: "Biography",
    Comedy: "Comedy",
    Crime: "Crime",
    Documentary: "Documentary",
@@ -17,8 +16,6 @@ export const genre = {
    Music: "Music",
    Romance: "Romance",
    SciFi: "Sci-Fi",
-   Short: "Short",
-   Sport: "Sport",
    Thriller: "Thriller",
    Western: "Western",
    War: "War",
@@ -36,7 +33,7 @@ export const type = {
    Name: "Type",
    Default: "All",
    Movie: "Movie",
-   Series: "Series",
+   Series: "TV",
 };
 
 export const chronological = {

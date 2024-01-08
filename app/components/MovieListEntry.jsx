@@ -5,6 +5,8 @@ import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
+import { FaRegImage } from "react-icons/fa6";
+import { IoIosWarning } from "react-icons/io";
 
 const MovieListEntry = ({
    data,
@@ -31,7 +33,10 @@ const MovieListEntry = ({
 
    const [watchedMovieData, setWatchedMovieData] = useState({});
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
-   const [youTubeReactionLink, setYouTubeReactionLink] = useState("");
+   const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
+
+   const [youtubeLinkWarning, setYouTubeLinkWarning] = useState("");
+   const [patreonLinkWarning, setPatreonLinkWarning] = useState("");
 
    const {
       castMovieVote,
@@ -70,19 +75,69 @@ const MovieListEntry = ({
 
    const handleLinkUpdate = (e) => {
       e.preventDefault();
-      const links = {
-         patreon: patreonReactionLink,
-         youtube: youTubeReactionLink,
+
+      const processLink = (regex, link, setLinkWarning) => {
+         if (regex.test(link)) {
+            setLinkWarning("");
+            return link;
+         } else {
+            setLinkWarning("Hi Jen! That link is incorrect, try again. ☝️🤓");
+            return "";
+         }
       };
+
+      const validYouTubeLinkPattern =
+         /^https:\/\/(www\.)?youtu\.be\/.*$|^https:\/\/(www\.)?youtube\.com\/.*$|^$/;
+      const validPatreonLinkPattern = /^$|^https:\/\/www\.patreon\.com.*$/;
+
+      const updatedYouTubeLink = processLink(
+         validYouTubeLinkPattern,
+         youtubeReactionLink,
+         setYouTubeLinkWarning
+      );
+      const updatedPatreonLink = processLink(
+         validPatreonLinkPattern,
+         patreonReactionLink,
+         setPatreonLinkWarning
+      );
+
+      const links = {
+         youtube: updatedYouTubeLink,
+         patreon: updatedPatreonLink,
+      };
+
       setWatchedMovieLinks(watchedMovieData.id, links);
    };
 
-   const convertDateFormat = (date) => {
-      const originalDate = new Date(date);
-      const month = originalDate.getMonth() + 1;
-      const day = originalDate.getDate();
-      const year = originalDate.getFullYear();
-      return `${month}-${day}-${year}`;
+   const convertDateFormat = (date, releaseDate) => {
+      const months = [
+         "January",
+         "February",
+         "March",
+         "April",
+         "May",
+         "June",
+         "July",
+         "August",
+         "September",
+         "October",
+         "November",
+         "December",
+      ];
+      let originalDate, month, day, year;
+      if (releaseDate) {
+         month = date?.split("-")[1];
+         day = date?.split("-")[2];
+         year = date?.split("-")[0];
+         originalDate = new Date(`${month}-${day}-${year}`);
+      }
+
+      originalDate = new Date(date);
+      month = originalDate.getMonth();
+      day = originalDate.getDate();
+      year = originalDate.getFullYear();
+
+      return `${months[month]} ${day}, ${year}`;
    };
 
    return (
@@ -112,15 +167,19 @@ const MovieListEntry = ({
                      </p>
                   </div>
                )}
-               {data?.data?.Poster !== "N/A" ? (
+               {data?.data?.Poster ? (
                   <img
                      className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
-                     src={data?.data?.Poster}
+                     src={
+                        data?.data?.Poster.includes("media-amazon")
+                           ? data?.data?.Poster
+                           : `https://image.tmdb.org/t/p/w200${data?.data?.Poster}`
+                     }
                      alt={data?.data?.Title}
                   />
                ) : (
-                  <div className="bg-[#585858] w-[100px] h-[150px] lg:w-[50px] lg:h-[75px] text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px] flex items-center">
-                     Missing Image
+                  <div className="flex justify-center items-center bg-[#585858] w-[100px] h-[150px] lg:w-[50px] lg:h-[75px] text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px] flex items-center">
+                     <FaRegImage className="text-[20px]" />
                   </div>
                )}
             </button>
@@ -131,12 +190,13 @@ const MovieListEntry = ({
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
             <div className="lg:w-[250px] leading-4">
-               {data?.data?.Title} ({data?.data?.Year})
+               {data?.data?.Title}{" "}
+               {data?.data?.Year && <>({data?.data?.Year})</>}
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Rating:</span>{" "}
-               {data?.data?.imdbRating}
+               {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : "N/A"}
             </div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Requests:</span>{" "}
@@ -263,112 +323,192 @@ const MovieListEntry = ({
             onClose={onCloseMoreInfoModal}
             center
             classNames={{ modal: "more-info-modal" }}
+            styles={{
+               modal: {
+                  background: `url(https://image.tmdb.org/t/p/w1920_and_h800_multi_faces${data?.data?.Backdrop})`,
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+               },
+            }}
          >
-            <a
-               href={`https://www.imdb.com/title/${data?.data?.imdbID}`}
-               target="_blank"
-            >
-               Go to IMDB
-            </a>
-            <h2 className="mb-[10px] text-[18px] font-bold">
-               {data?.data?.Title} ({data?.data?.Year})
-            </h2>
-            <div className="flex gap-[20px] flex-col xs:flex-row">
-               <img
-                  src={data?.data?.Poster}
-                  alt={data?.data?.Title}
-                  className="h-[200px] sm:h-[275px] mx-auto"
-               />
-               <div className="flex flex-1 flex-col">
-                  <div>
-                     <span className="font-bold">Genre:</span>{" "}
-                     {data?.data?.Genre}
-                  </div>
-                  <div>
-                     <span className="font-bold">Cast:</span>{" "}
-                     {data?.data?.Actors}
-                  </div>
-                  <div>
-                     <span className="font-bold">Director:</span>{" "}
-                     {data?.data?.Director}
-                  </div>
-                  <div>
-                     <span className="font-bold">Rated:</span>{" "}
-                     {data?.data?.Rated}
-                  </div>
-                  <div>
-                     <span className="font-bold">IMDB Rating:</span>{" "}
-                     {data?.data?.imdbRating}
-                  </div>
-                  <div>
-                     <span className="font-bold">Requests:</span>{" "}
-                     {data?.voters?.length}
-                  </div>
-                  <div>
-                     <span className="font-bold">Requested:</span>{" "}
-                     {convertDateFormat(data?.createdAt)}
-                  </div>
-                  <div>
-                     <span className="font-bold">Status:</span>{" "}
-                     {data?.hasSeen
-                        ? "Seen"
-                        : data?.hasReacted
-                        ? "On Channel"
-                        : "Unseen"}
-                  </div>
-                  <div className="flex flex-col gap-[5px] max-w-[100px] mt-[10px]">
-                     {data?.links?.youtube && (
-                        <a
-                           className="flex justify-center items-center gap-[2px] bg-[red] text-[25px] p-[3px]"
-                           href={data?.links?.youtube}
-                           title="Watch on YouTube"
-                           target="_blank"
-                        >
-                           <AiFillYoutube />
-                        </a>
+            <div className="p-[20px] bg-black sm:bg-black/[.85]">
+               <div className="sm:py-[30px]">
+                  <a
+                     href={`https://www.imdb.com/title/${data?.data?.imdbID}`}
+                     target="_blank"
+                  >
+                     Go to IMDB
+                  </a>
+                  <h2 className="flex gap-[10px] items-center mb-[10px] text-[18px] font-bold">
+                     {data?.data?.Title}{" "}
+                     {data?.data?.Year && <>({data?.data?.Year})</>}{" "}
+                     {data?.data?.Rated && (
+                        <span className="text-[13px] border-[1px] pl-[3px] pr-[4px] whitespace-nowrap">
+                           {data?.data?.Rated}
+                        </span>
                      )}
-                     {data?.links?.patreon && (
-                        <a
-                           className="flex justify-center items-center gap-[2px] bg-[black] text-[25px] p-[3px] border-[#585858] border-[1px]"
-                           href={data?.links?.patreon}
-                           title="Watch Full Length"
-                           target="_blank"
-                        >
-                           <BiLogoPatreon />
-                        </a>
+                     <span className="text-[13px]">
+                        {data?.data?.Runtime > 0 &&
+                           `${data?.data?.Runtime} mins.`}
+                     </span>
+                  </h2>
+                  <div className="flex gap-[20px] flex-col xs:flex-row">
+                     {data?.data?.Poster ? (
+                        <img
+                           src={
+                              data?.data?.Poster.includes("media-amazon")
+                                 ? data?.data?.Poster
+                                 : `https://image.tmdb.org/t/p/w300_and_h450_bestv2${data?.data?.Poster}`
+                           }
+                           alt={data?.data?.Title}
+                           className="h-[200px] sm:h-[275px] mx-auto"
+                        />
+                     ) : (
+                        <div className="flex justify-center items-center bg-[#585858] h-[200px] w-[135px] sm:h-[275px] sm:w-[183px] mx-auto">
+                           <FaRegImage className="text-[40px]" />
+                        </div>
                      )}
+                     <div className="flex flex-1 flex-col">
+                        {data?.data?.Genre && (
+                           <div>
+                              <span className="font-bold">Genre:</span>{" "}
+                              {data?.data?.Genre}
+                           </div>
+                        )}
+                        {data?.data?.Actors && (
+                           <div>
+                              <span className="font-bold">Cast:</span>{" "}
+                              <span className="hidden sm:inline">
+                                 {data?.data?.Actors}
+                              </span>
+                              <span className="inline sm:hidden">
+                                 {data?.data?.Actors.split(",")
+                                    .slice(0, 3)
+                                    .join(", ")}
+                              </span>
+                           </div>
+                        )}
+                        {data?.data?.Director && (
+                           <div>
+                              <span className="font-bold">
+                                 {data?.data?.Type === "movie"
+                                    ? "Director: "
+                                    : "Creator: "}
+                              </span>{" "}
+                              {data?.data?.Director}
+                           </div>
+                        )}
+                        {data?.data?.Composer && (
+                           <div>
+                              <span className="font-bold">Composer:</span>{" "}
+                              {data?.data?.Composer}
+                           </div>
+                        )}
+                        {data?.data?.Rating > 0 && (
+                           <div>
+                              <span className="font-bold">TMDB Rating:</span>{" "}
+                              {data?.data?.Rating.toFixed(1)}
+                           </div>
+                        )}
+                        {data?.data?.Release && (
+                           <div>
+                              <span className="font-bold">Released:</span>{" "}
+                              {convertDateFormat(data?.data?.Release, true)}
+                           </div>
+                        )}
+                        {data?.createdAt && (
+                           <div>
+                              <span className="font-bold">Requested:</span>{" "}
+                              {convertDateFormat(data?.createdAt, false)}
+                           </div>
+                        )}
+                        <div>
+                           <span className="font-bold">Requests:</span>{" "}
+                           {data?.voters?.length}
+                        </div>
+                        <div>
+                           <span className="font-bold">Status:</span>{" "}
+                           {data?.hasSeen
+                              ? "Seen"
+                              : data?.hasReacted
+                              ? "On Channel"
+                              : "Unseen"}
+                        </div>
+                        <div className="flex flex-col gap-[5px] max-w-[100px] mt-[10px]">
+                           {data?.links?.youtube && (
+                              <a
+                                 className="flex justify-center items-center gap-[2px] bg-[red] text-[25px] p-[3px]"
+                                 href={data?.links?.youtube}
+                                 title="Watch on YouTube"
+                                 target="_blank"
+                              >
+                                 <AiFillYoutube />
+                              </a>
+                           )}
+                           {data?.links?.patreon && (
+                              <a
+                                 className="flex justify-center items-center gap-[2px] bg-[black] text-[25px] p-[3px] border-[#585858] border-[1px]"
+                                 href={data?.links?.patreon}
+                                 title="Watch Full Length"
+                                 target="_blank"
+                              >
+                                 <BiLogoPatreon />
+                              </a>
+                           )}
+                        </div>
+                     </div>
                   </div>
+                  {isCreator && data?.hasReacted && (
+                     <div className="flex flex-col flex-1 mt-[20px]">
+                        <form
+                           className="flex flex-col gap-[15px]"
+                           onSubmit={handleLinkUpdate}
+                        >
+                           <input
+                              className="w-full px-[8px] py-[5px] text-[black]"
+                              type="text"
+                              placeholder="YouTube Reaction Link"
+                              value={youtubeReactionLink}
+                              onChange={(e) =>
+                                 setYouTubeReactionLink(e.target.value.trim())
+                              }
+                           />
+                           <input
+                              className="w-full px-[8px] py-[5px] text-[black]"
+                              type="text"
+                              placeholder="Patreon Full Length Reaction Link"
+                              value={patreonReactionLink}
+                              onChange={(e) =>
+                                 setPatreonReactionLink(e.target.value.trim())
+                              }
+                           />
+                           <button
+                              className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-[5px] max-w-[115px]"
+                              type="submit"
+                           >
+                              Submit
+                           </button>
+                           {(youtubeLinkWarning || patreonLinkWarning) && (
+                              <div>
+                                 {youtubeLinkWarning && (
+                                    <div className="flex items-center gap-[5px] text-[red]">
+                                       <AiFillYoutube className="text-[20px]" />
+                                       {youtubeLinkWarning}
+                                    </div>
+                                 )}
+                                 {patreonLinkWarning && (
+                                    <div className="flex items-center gap-[5px] text-[white]">
+                                       <BiLogoPatreon className="text-[20px]" />
+                                       {patreonLinkWarning}
+                                    </div>
+                                 )}
+                              </div>
+                           )}
+                        </form>
+                     </div>
+                  )}
                </div>
             </div>
-            {isCreator && data?.hasReacted && (
-               <div className="flex flex-col flex-1 mt-[20px]">
-                  <form
-                     className="flex flex-col gap-[15px]"
-                     onSubmit={handleLinkUpdate}
-                  >
-                     <input
-                        className="w-full px-[8px] py-[5px] text-[black]"
-                        type="text"
-                        placeholder="YouTube Reaction Link"
-                        value={youTubeReactionLink}
-                        onChange={(e) => setYouTubeReactionLink(e.target.value)}
-                     />
-                     <input
-                        className="w-full px-[8px] py-[5px] text-[black]"
-                        type="text"
-                        placeholder="Patreon Full Length Reaction Link"
-                        value={patreonReactionLink}
-                        onChange={(e) => setPatreonReactionLink(e.target.value)}
-                     />
-                     <button
-                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-[5px] max-w-[115px]"
-                        type="submit"
-                     >
-                        Submit
-                     </button>
-                  </form>
-               </div>
-            )}
          </Modal>
 
          <Modal
