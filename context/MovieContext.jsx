@@ -98,7 +98,8 @@ export const MovieProvider = ({ children }) => {
             .filter(
                (credit) =>
                   credit.job === "Original Music Composer" ||
-                  credit.job === "Music"
+                  credit.job === "Music" ||
+                  credit.job === "Conductor"
             )
             .map((credit) => credit.name);
          composer = [...new Set(composerArray)];
