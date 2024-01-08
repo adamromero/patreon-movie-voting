@@ -353,7 +353,7 @@ const MovieListEntry = ({
                      </span>
                   </h2>
                   <div className="flex gap-[20px] flex-col xs:flex-row">
-                     <div className="w-[135px] sm:w-[185px]">
+                     <div className="w-[135px] sm:w-[185px] mx-auto">
                         {data?.data?.Poster ? (
                            <img
                               src={
