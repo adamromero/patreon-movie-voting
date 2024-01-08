@@ -330,7 +330,6 @@ export const MovieProvider = ({ children }) => {
       const updatedMovieVote = {
          ...selectedMovieVote,
          hasReacted: isChecked,
-         publishedAt: isChecked ? new Date() : null,
       };
 
       const config = {

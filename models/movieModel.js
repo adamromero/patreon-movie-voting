@@ -90,9 +90,6 @@ const movieSchema = new mongoose.Schema({
       type: String,
       default: "",
    },
-   publishedAt: {
-      type: Date,
-   },
    createdAt: {
       type: Date,
       default: Date.now,
