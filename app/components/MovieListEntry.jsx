@@ -6,12 +6,13 @@ import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
 import { FaRegImage } from "react-icons/fa6";
-import { IoIosWarning } from "react-icons/io";
 
 const MovieListEntry = ({
    data,
    currentUser,
    isCreator,
+   ranking,
+   isRankingOn,
    watchedState,
    setWatchedState,
    seenState,
@@ -20,10 +21,6 @@ const MovieListEntry = ({
    const [moreInfoOpen, setMoreInfoOpen] = useState(false);
    const onOpenMoreInfoModal = () => setMoreInfoOpen(true);
    const onCloseMoreInfoModal = () => setMoreInfoOpen(false);
-
-   const [linkUpdateOpen, setLinkUpdateOpen] = useState(false);
-   const onOpenLinkUpdateModal = () => setLinkUpdateOpen(true);
-   const onCloseLinkUpdateModal = () => setLinkUpdateOpen(false);
 
    const [openDelete, setOpenDelete] = useState(false);
    const onOpenDeleteModal = () => setOpenDelete(true);
@@ -168,15 +165,26 @@ const MovieListEntry = ({
                   </div>
                )}
                {data?.data?.Poster ? (
-                  <img
-                     className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
-                     src={
-                        data?.data?.Poster.includes("media-amazon")
-                           ? data?.data?.Poster
-                           : `https://image.tmdb.org/t/p/w200${data?.data?.Poster}`
-                     }
-                     alt={data?.data?.Title}
-                  />
+                  <div className="relative">
+                     {isRankingOn && (
+                        <span
+                           className="absolute w-full h-full items-center justify-center hidden lg:flex"
+                           style={{ background: "rgba(0,0,0,.75)" }}
+                        >
+                           {ranking}
+                        </span>
+                     )}
+
+                     <img
+                        className="w-[100px] h-[150px] lg:w-[50px] lg:h-[75px]"
+                        src={
+                           data?.data?.Poster.includes("media-amazon")
+                              ? data?.data?.Poster
+                              : `https://image.tmdb.org/t/p/w200${data?.data?.Poster}`
+                        }
+                        alt={data?.data?.Title}
+                     />
+                  </div>
                ) : (
                   <div className="flex justify-center items-center bg-[#585858] w-[100px] h-[150px] lg:w-[50px] lg:h-[75px] text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px] flex items-center">
                      <FaRegImage className="text-[20px]" />
@@ -189,11 +197,14 @@ const MovieListEntry = ({
                isCreator ? "pr-0" : "md:pr-[16px]"
             } flex flex-col justify-between flex-1 gap-[5px] md:grid md:grid-cols-2 md:gap-[30px] lg:flex lg:items-center lg:flex-row`}
          >
-            <div className="lg:w-[250px] leading-4">
+            <div className="lg:w-[250px] leading-4 flex items-baseline md:items-center gap-[5px]">
                {data?.data?.Title}{" "}
                {data?.data?.Year && <>({data?.data?.Year})</>}
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
+            <div className="lg:hidden">
+               <span>Rank:</span> {ranking}
+            </div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Rating:</span>{" "}
                {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : "N/A"}

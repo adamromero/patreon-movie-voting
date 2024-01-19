@@ -150,7 +150,8 @@ export const MovieProvider = ({ children }) => {
                person.jobs.some(
                   (credit) =>
                      credit.job === "Original Music Composer" ||
-                     credit.job === "Music"
+                     credit.job === "Music" ||
+                     credit.job === "Conductor"
                )
             )
             .map((person) => person.name);
