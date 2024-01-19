@@ -447,7 +447,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          {moviesList.length ? (
             filteredMoviesList.length ? (
                <>
-                  <div className="sticky top-0 z-10 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
+                  <div className="sticky top-0 z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
                      <Pagination
                         postsPerPage={postsPerPage}
                         totalPosts={filteredMoviesList.length}

@@ -168,7 +168,7 @@ const MovieListEntry = ({
                   <div className="relative">
                      {isRankingOn && (
                         <span
-                           className="absolute w-full h-full items-center justify-center hidden lg:flex z-50"
+                           className="absolute w-full h-full items-center justify-center hidden lg:flex z-20"
                            style={{ background: "rgba(0,0,0,.75)" }}
                         >
                            {ranking}
