@@ -157,7 +157,7 @@ const MovieListEntry = ({
                }}
             >
                {(data?.hasReacted || data?.hasSeen) && (
-                  <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5]">
+                  <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5] z-10">
                      <p className="text-[20px] lg:text-[14px] text-shadow font-bold text-center leading-[16px]">
                         {data?.hasReacted && <>On Channel</>}
                         {data?.hasSeen && <>Seen</>}
@@ -168,7 +168,7 @@ const MovieListEntry = ({
                   <div className="relative">
                      {isRankingOn && (
                         <span
-                           className="absolute w-full h-full items-center justify-center hidden lg:flex"
+                           className="absolute w-full h-full items-center justify-center hidden lg:flex z-50"
                            style={{ background: "rgba(0,0,0,.75)" }}
                         >
                            {ranking}
