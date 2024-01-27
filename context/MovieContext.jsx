@@ -71,15 +71,27 @@ export const MovieProvider = ({ children }) => {
          actors,
          runtime,
          rated,
-         imdbID;
+         imdbID,
+         studio;
 
       if (movie.media_type === "movie") {
          const NEW_API_URL = `https://api.themoviedb.org/3/movie/${movie.id}?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const response = await fetch(NEW_API_URL);
          data = await response.json();
+
          genres = data.genres.map((genre) =>
             genre.name === "Science Fiction" ? "Sci-Fi" : genre.name
          );
+
+         studio = data.production_companies
+            .filter((company) => company.origin_country === "US")
+            .map((company) => company.name)
+            .join(", ");
+
+         if (!studio.length && data.production_companies.length) {
+            studio = data.production_companies[0]?.name;
+         }
+
          title = data.title;
          year = data.release_date.split("-")[0];
          release = data.release_date;
@@ -127,9 +139,20 @@ export const MovieProvider = ({ children }) => {
          const NEW_API_URL = `https://api.themoviedb.org/3/tv/${movie.id}?language=en-US&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
          const response = await fetch(NEW_API_URL);
          data = await response.json();
+
          genres = data.genres.map((genre) =>
             genre.name === "Science Fiction" ? "Sci-Fi" : genre.name
          );
+
+         studio = data.production_companies
+            .filter((company) => company.origin_country === "US")
+            .map((company) => company.name)
+            .join(", ");
+
+         if (!studio.length && data.production_companies.length) {
+            studio = data.production_companies[0]?.name;
+         }
+
          title = data.name;
          year = data.first_air_date.split("-")[0];
          release = data.first_air_date;
@@ -188,6 +211,7 @@ export const MovieProvider = ({ children }) => {
          Release: release,
          Runtime: runtime,
          Composer: composer.join(", "),
+         Studio: studio,
       };
 
       const newMovieVote = {
@@ -214,11 +238,9 @@ export const MovieProvider = ({ children }) => {
          const findMovie = moviesList.find(
             (movie) => movie.data.imdbID === postedMovie.data.imdbID
          );
-
          if (!postedMovie.error && !findMovie) {
             setMoviesList((movies) => [...movies, postedMovie]);
          }
-
          return postedMovie;
       } catch (e) {
          return null;
