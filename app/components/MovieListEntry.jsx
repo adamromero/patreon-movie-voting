@@ -350,7 +350,7 @@ const MovieListEntry = ({
                   >
                      Go to IMDB
                   </a>
-                  <h2 className="flex gap-[10px] items-center mb-[10px] text-[18px] font-bold">
+                  <h2 className="flex gap-[10px] items-center text-[18px] font-bold">
                      {data?.data?.Title}{" "}
                      {data?.data?.Year && <>({data?.data?.Year})</>}{" "}
                      {data?.data?.Rated && (
@@ -363,7 +363,10 @@ const MovieListEntry = ({
                            `${data?.data?.Runtime} mins.`}
                      </span>
                   </h2>
-                  <div className="flex gap-[20px] flex-col xs:flex-row">
+                  {data?.data?.Studio && (
+                     <div className="text-[12px]">{data?.data?.Studio}</div>
+                  )}
+                  <div className="flex gap-[20px] flex-col xs:flex-row mt-[10px]">
                      <div className="w-[135px] sm:w-[185px] mx-auto">
                         {data?.data?.Poster ? (
                            <img
