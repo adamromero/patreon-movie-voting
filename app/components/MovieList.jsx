@@ -14,6 +14,7 @@ import {
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
+import { AiOutlineNumber } from "react-icons/ai";
 import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
 
@@ -47,6 +48,7 @@ const MovieList = ({ currentUser, isCreator }) => {
    const [postsPerPage, setPostsPerPage] = useState(defaultRowsPerPage);
    const indexOfLastPost = currentPage * postsPerPage;
    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+   const [isRankingOn, setIsRankingOn] = useState(false);
 
    useEffect(() => {
       let filteredList = [...moviesList];
@@ -326,8 +328,15 @@ const MovieList = ({ currentUser, isCreator }) => {
    };
 
    const tableHead = (
-      <div className="flex gap-[5px] sm:gap-[10px] lg:gap-0 bg-transparent lg:bg-black justify-between mb-[10px] lg:pl-[50px]">
-         <div className="bg-black w-full lg:w-[295px]">
+      <div className="flex gap-[5px] sm:gap-[10px] lg:gap-0 bg-transparent lg:bg-black justify-between mb-[10px]">
+         <div className="flex bg-black w-full lg:w-[345px]">
+            <button
+               className="hidden lg:flex w-[50px] px-[17px] items-center justify-center cursor-pointer"
+               onClick={() => setIsRankingOn(!isRankingOn)}
+               title={isRankingOn ? "Turn off ranking" : "Turn on ranking"}
+            >
+               <AiOutlineNumber className={isRankingOn ? "border-[1px]" : ""} />
+            </button>
             <button
                onClick={() => {
                   setIsTitleFilterAscending(!isTitleFilterAscending);
@@ -405,7 +414,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       <div>
          {filteredMoviesList
             .slice(indexOfFirstPost, indexOfLastPost)
-            .map((data) => (
+            .map((data, index) => (
                <div
                   key={data._id}
                   className="relative flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
@@ -421,6 +430,8 @@ const MovieList = ({ currentUser, isCreator }) => {
                      data={data}
                      currentUser={currentUser}
                      isCreator={isCreator}
+                     ranking={index + 1 + postsPerPage * (currentPage - 1)}
+                     isRankingOn={isRankingOn}
                      watchedState={watchedState}
                      setWatchedState={setWatchedState}
                      seenState={seenState}
@@ -436,7 +447,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          {moviesList.length ? (
             filteredMoviesList.length ? (
                <>
-                  <div className="sticky top-0 z-10 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
+                  <div className="sticky top-0 z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
                      <Pagination
                         postsPerPage={postsPerPage}
                         totalPosts={filteredMoviesList.length}
