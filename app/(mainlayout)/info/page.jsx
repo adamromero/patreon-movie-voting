@@ -10,8 +10,9 @@ const InfoPage = () => {
                same as the weekly Patreon polls, except the film and series
                options are all contributed by patrons. As with the weekly polls,
                please vote for every film or series you want to see a reaction
-               to. If you've already requested something currently in the list,
-               you have the option of retracting it, just like in the polls.
+               to. If you&#39;ve already requested something currently in the
+               list, you have the option of retracting it, just like in the
+               polls.
             </p>
             <br />
             <p className="text-[18px] md:text-[20px]">
@@ -20,8 +21,9 @@ const InfoPage = () => {
                there is no limit on adding a request (upvoting) on a movie or
                series already in the list. New requests are limited at 3 per
                month for producers, the limit is 2 for all other tiers. You will
-               get an extra 1 for every new request that was marked as "On
-               Channel" or "Seen" during the same month it was added.
+               get an extra 1 for every new request that was marked as &#34;On
+               Channel&#34; or &#34;Seen&#34; during the same month it was
+               added.
             </p>
             <br />
             <p className="text-[18px] md:text-[20px]">
@@ -51,8 +53,9 @@ const InfoPage = () => {
                <img src="/allow.png" alt="" />
                <br />
                <p>
-                  After clicking "Allow", you should be redirected back to the
-                  request list with your username in the top right corner.
+                  After clicking &#34;Allow&#34;, you should be redirected back
+                  to the request list with your username in the top right
+                  corner.
                </p>
             </div>
             <br />
@@ -60,8 +63,8 @@ const InfoPage = () => {
             <h2 className="font-bold">Vote on requests</h2>
             <p>
                To vote on a currently requested title, click request. The
-               retract button will appear after you've cast a vote if you change
-               your mind.
+               retract button will appear after you&#39;ve cast a vote if you
+               change your mind.
             </p>
             <p>
                <strong>Important note: </strong> If you add a new request and
@@ -88,7 +91,8 @@ const InfoPage = () => {
             </p>
             <p>
                You can filter by genre, type (movie or series), or status. The
-               "Seen" status refers to what Jen has seen off the channel.
+               &#34;Seen&#34; status refers to what Jen has seen off the
+               channel.
             </p>
             <p>
                You can also sort by title, rating, request count (set by
