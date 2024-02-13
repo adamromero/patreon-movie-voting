@@ -21,8 +21,8 @@ const InfoPage = () => {
                there is no limit on adding a request (upvoting) on a movie or
                series already in the list. New requests are limited at 3 per
                month for producers, the limit is 2 for all other tiers. You will
-               get an extra 1 for every new request that was marked as &#34;On
-               Channel&#34; or &#34;Seen&#34; during the same month it was
+               get an extra 1 for every new request that was marked as &quot;On
+               Channel&quot; or &quot;Seen&quot; during the same month it was
                added.
             </p>
             <br />
@@ -53,8 +53,8 @@ const InfoPage = () => {
                <img src="/allow.png" alt="" />
                <br />
                <p>
-                  After clicking &#34;Allow&#34;, you should be redirected back
-                  to the request list with your username in the top right
+                  After clicking &quot;Allow&quot;, you should be redirected
+                  back to the request list with your username in the top right
                   corner.
                </p>
             </div>
@@ -91,7 +91,7 @@ const InfoPage = () => {
             </p>
             <p>
                You can filter by genre, type (movie or series), or status. The
-               &#34;Seen&#34; status refers to what Jen has seen off the
+               &quot;Seen&quot; status refers to what Jen has seen off the
                channel.
             </p>
             <p>
