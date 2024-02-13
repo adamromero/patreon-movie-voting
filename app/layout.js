@@ -1,8 +1,5 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
-import { NextAuthProvider } from "./provider";
-import { MovieProvider } from "@/context/MovieContext";
-import { Lato } from "next/font/google";
+import { Inter, Lato } from "next/font/google";
 
 const lato = Lato({
    subsets: ["latin"],
@@ -23,11 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
    return (
       <html lang="en">
-         <body className={lato.className}>
-            <NextAuthProvider>
-               <MovieProvider>{children}</MovieProvider>
-            </NextAuthProvider>
-         </body>
+         <body className={lato.className}>{children}</body>
       </html>
    );
 }
