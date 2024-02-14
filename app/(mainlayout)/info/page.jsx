@@ -1,21 +1,22 @@
 import React from "react";
+import Image from "next/image";
 
 const InfoPage = () => {
    return (
       <div className="flex flex-col justify-between p-[16px] pt-[32px]">
          <div className="max-w-[1200px] w-full mx-auto md:text-[18px]">
-            <p className="text-[18px] md:text-[20px]">
+            <p>
                The purpose of this app is to compile a list of requests and give
                Jen an idea on where most of the interest is. It functions the
                same as the weekly Patreon polls, except the film and series
                options are all contributed by patrons. As with the weekly polls,
                please vote for every film or series you want to see a reaction
-               to. If you&#39;ve already requested something currently in the
+               to. If you&apos;ve already requested something currently in the
                list, you have the option of retracting it, just like in the
                polls.
             </p>
             <br />
-            <p className="text-[18px] md:text-[20px]">
+            <p>
                There is a monthly limit on adding{" "}
                <strong className="underline">new</strong> requests to the list,
                there is no limit on adding a request (upvoting) on a movie or
@@ -26,9 +27,7 @@ const InfoPage = () => {
                added.
             </p>
             <br />
-            <p className="text-[18px] md:text-[20px]">
-               Thank you for taking the time to submit requests!
-            </p>
+            <p>Thank you for taking the time to submit requests!</p>
             <br />
 
             <h1 className="text-[24px] font-bold">How to Use</h1>
@@ -41,7 +40,12 @@ const InfoPage = () => {
             <h2 className="font-bold">Link your Patreon Account</h2>
             <div>
                Step 1: Click here to connect your Patreon account.
-               <img src="/connectpatreon.png" alt="" />
+               <Image
+                  src="/connectpatreon.png"
+                  width={372}
+                  height={117}
+                  alt=""
+               />
                Step 2: Allow access
                <p>
                   You should be brought to a prompt that will ask your
@@ -50,7 +54,7 @@ const InfoPage = () => {
                   to verify membership.
                </p>
                <br />
-               <img src="/allow.png" alt="" />
+               <Image src="/allow.png" width={365} height={275} alt="" />
                <br />
                <p>
                   After clicking &quot;Allow&quot;, you should be redirected
@@ -63,7 +67,7 @@ const InfoPage = () => {
             <h2 className="font-bold">Vote on requests</h2>
             <p>
                To vote on a currently requested title, click request. The
-               retract button will appear after you&#39;ve cast a vote if you
+               retract button will appear after you&apos;ve cast a vote if you
                change your mind.
             </p>
             <p>
@@ -78,8 +82,8 @@ const InfoPage = () => {
             </p>
 
             <div className="flex">
-               <img src="/requestvote.png" alt="" />
-               <img src="/retract.png" alt="" />
+               <Image src="/requestvote.png" width={82} height={50} alt="" />
+               <Image src="/retract.png" width={82} height={50} alt="" />
             </div>
 
             <br />
@@ -103,7 +107,7 @@ const InfoPage = () => {
 
             <h2 className="font-bold">Make a new request.</h2>
             <p>Click this button at the top to open the request popup.</p>
-            <img src="/requestbutton.png" alt="" />
+            <Image src="/requestbutton.png" width={205} height={43} alt="" />
             <br />
             <p>You can search by title, title and year, or by IMDB ID</p>
             <p>
@@ -116,7 +120,7 @@ const InfoPage = () => {
                for all other tiers.
             </p>
             <br />
-            <img src="/requestmodal.png" alt="" />
+            <Image src="/requestmodal.png" width={740} height={513} alt="" />
 
             <br />
             <h2 className="font-bold">Information popup</h2>
@@ -124,8 +128,8 @@ const InfoPage = () => {
                To see additional information about titles in the list, click the
                poster image.
             </p>
-            <img src="/poster.png" alt="" />
-            <img src="/infopopup.png" alt="" />
+            <Image src="/poster.png" width={323} height={89} alt="" />
+            <Image src="/infopopup.png" width={707} height={352} alt="" />
          </div>
       </div>
    );
