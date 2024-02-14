@@ -7,13 +7,11 @@ const InfoPage = () => {
          <div className="max-w-[1200px] w-full mx-auto md:text-[18px]">
             <p>
                The purpose of this app is to compile a list of requests and give
-               Jen an idea on where most of the interest is. It functions the
-               same as the weekly Patreon polls, except the film and series
+               Jen an idea on where most of the interest is. The film and series
                options are all contributed by patrons. As with the weekly polls,
                please vote for every film or series you want to see a reaction
                to. If you&apos;ve already requested something currently in the
-               list, you have the option of retracting it, just like in the
-               polls.
+               list, you have the option of retracting it.
             </p>
             <br />
             <p>
