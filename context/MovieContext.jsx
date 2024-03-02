@@ -35,6 +35,8 @@ export const MovieProvider = ({ children }) => {
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
    const [requestsRemaining, setRequestsRemaining] = useState();
    const [disableButton, setDisableButton] = useState(false);
+   const [isRankingOn, setIsRankingOn] = useState(false);
+   const [rankedMovies, setRankedMovies] = useState([]);
 
    const checkIfUserUnderRequestLimit = async (id, isProducer) => {
       const response = await fetch("/api/moviesbydate");
@@ -56,6 +58,17 @@ export const MovieProvider = ({ children }) => {
       const response = await fetch(`/api/movies`);
       const movies = await response.json();
       setMoviesList(movies);
+
+      const sortedMovies = movies
+         .filter((movie) => !movie.hasSeen && !movie.hasReacted)
+         .sort((a, b) => b.voters.length - a.voters.length);
+
+      const rankedMoviesObject = sortedMovies.reduce((acc, movie, index) => {
+         acc[movie.data.imdbID] = index + 1;
+         return acc;
+      }, {});
+
+      setRankedMovies(rankedMoviesObject);
    };
 
    const createMovieVote = async (movie, currentUser) => {
@@ -241,6 +254,7 @@ export const MovieProvider = ({ children }) => {
          if (!postedMovie.error && !findMovie) {
             setMoviesList((movies) => [...movies, postedMovie]);
          }
+
          return postedMovie;
       } catch (e) {
          return null;
@@ -271,6 +285,18 @@ export const MovieProvider = ({ children }) => {
          const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
          setMoviesList(updatedMoviesList);
+
+         const sortedMovies = updatedMoviesList
+            .filter((movie) => !movie.hasSeen && !movie.hasReacted)
+            .sort((a, b) => b.voters.length - a.voters.length);
+
+         const rankedMoviesObject = sortedMovies.reduce((acc, movie, index) => {
+            acc[movie.data.imdbID] = index + 1;
+            return acc;
+         }, {});
+
+         setRankedMovies(rankedMoviesObject);
+
          return data;
       } catch (e) {
          return e;
@@ -292,6 +318,17 @@ export const MovieProvider = ({ children }) => {
             (movie) => movie._id !== deletedMovie._id
          );
          setMoviesList(updatedMoviesList);
+
+         const sortedMovies = updatedMoviesList
+            .filter((movie) => !movie.hasSeen && !movie.hasReacted)
+            .sort((a, b) => b.voters.length - a.voters.length);
+
+         const rankedMoviesObject = sortedMovies.reduce((acc, movie, index) => {
+            acc[movie.data.imdbID] = index + 1;
+            return acc;
+         }, {});
+
+         setRankedMovies(rankedMoviesObject);
       } catch (e) {
          return e;
       }
@@ -340,6 +377,21 @@ export const MovieProvider = ({ children }) => {
             const response = await fetch(`/api/movies/${movieId}`, config);
             const data = await response.json();
             setMoviesList(updatedMoviesList);
+
+            const sortedMovies = updatedMoviesList
+               .filter((movie) => !movie.hasSeen && !movie.hasReacted)
+               .sort((a, b) => b.voters.length - a.voters.length);
+
+            const rankedMoviesObject = sortedMovies.reduce(
+               (acc, movie, index) => {
+                  acc[movie.data.imdbID] = index + 1;
+                  return acc;
+               },
+               {}
+            );
+
+            setRankedMovies(rankedMoviesObject);
+
             return data;
          } catch (e) {
             return e;
@@ -347,43 +399,32 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
-   const setMovieVoteToWatched = async (movieId, isChecked) => {
+   const setMovieStatus = async (movieId, status) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );
+
+      let channel = false,
+         seen = false,
+         rewatch = false;
+      if (status === "channel") {
+         channel = true;
+      } else if (status === "seen") {
+         seen = true;
+      } else if (status === "rewatch") {
+         rewatch = true;
+      } else if (status === "unseen") {
+         channel = false;
+         seen = false;
+         rewatch = false;
+      }
+
       const updatedMovieVote = {
          ...selectedMovieVote,
-         hasReacted: isChecked,
+         hasReacted: channel,
+         hasSeen: seen,
+         isRewatch: rewatch,
       };
-
-      const config = {
-         method: "PUT",
-         headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify(updatedMovieVote),
-      };
-
-      const updatedMoviesList = moviesList.map((movie) => {
-         return movie._id === movieId ? updatedMovieVote : movie;
-      });
-
-      try {
-         const response = await fetch(`/api/movies/${movieId}`, config);
-         const data = await response.json();
-         setMoviesList(updatedMoviesList);
-         return data;
-      } catch (e) {
-         return e;
-      }
-   };
-
-   const setMovieVoteToSeen = async (movieId, isChecked) => {
-      const selectedMovieVote = moviesList.find(
-         (movie) => movie._id === movieId
-      );
-      const updatedMovieVote = { ...selectedMovieVote, hasSeen: isChecked };
 
       const config = {
          method: "PUT",
@@ -444,13 +485,15 @@ export const MovieProvider = ({ children }) => {
             filteredMoviesList,
             setFilteredMoviesList,
             getMovieVotes,
+            isRankingOn,
+            setIsRankingOn,
+            rankedMovies,
             createMovieVote,
             castMovieVote,
             removeMovieVote,
             filterOptions,
             setFilterOptions,
-            setMovieVoteToWatched,
-            setMovieVoteToSeen,
+            setMovieStatus,
             setWatchedMovieLinks,
             searchTitle,
             setSearchTitle,

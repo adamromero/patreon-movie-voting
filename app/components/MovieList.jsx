@@ -32,13 +32,14 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchDirector,
       searchActor,
       searchComposer,
+      rankedMovies,
    } = useContext(MovieContext);
 
-   //movies watched on the channel
-   const [watchedState, setWatchedState] = useState({});
-
-   //movies watched off the channel
+   const [channelState, setChannelState] = useState({});
    const [seenState, setSeenState] = useState({});
+   const [rewatchState, setRewatchState] = useState({});
+
+   const [requestStatus, setRequestStatus] = useState({});
 
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(false);
@@ -211,11 +212,13 @@ const MovieList = ({ currentUser, isCreator }) => {
 
       if (filterOptions.status === status.Seen) {
          filteredList = filteredList.filter((movie) => movie.hasSeen);
-      } else if (filterOptions.status === status.Watched) {
+      } else if (filterOptions.status === status.OnChannel) {
          filteredList = filteredList.filter((movie) => movie.hasReacted);
+      } else if (filterOptions.status === status.Rewatch) {
+         filteredList = filteredList.filter((movie) => movie.isRewatch);
       } else if (filterOptions.status === status.Unseen) {
          filteredList = filteredList.filter(
-            (movie) => !movie.hasSeen && !movie.hasReacted
+            (movie) => !movie.hasSeen && !movie.hasReacted && !movie.isRewatch
          );
       }
 
@@ -264,14 +267,30 @@ const MovieList = ({ currentUser, isCreator }) => {
    ]);
 
    useEffect(() => {
-      const watchedStateObject = {};
+      const channelStateObject = {};
       const seenStateObject = {};
+      const rewatchStateObject = {};
+
+      const requestStateObject = {};
+
       filteredMoviesList.forEach((movie) => {
-         watchedStateObject[movie._id] = movie.hasReacted;
+         channelStateObject[movie._id] = movie.hasReacted;
          seenStateObject[movie._id] = movie.hasSeen;
+         rewatchStateObject[movie._id] = movie.isRewatch;
+
+         requestStateObject[movie._id] = {
+            hasReacted: movie.hasReacted,
+            hasSeen: movie.hasSeen,
+            isRewatch: movie.isRewatch,
+            isUnseen: !movie.hasReacted && !movie.hasSeen && !movie.isRewatch,
+         };
       });
-      setWatchedState(watchedStateObject);
+
+      setChannelState(channelStateObject);
       setSeenState(seenStateObject);
+      setRewatchState(rewatchStateObject);
+
+      setRequestStatus(requestStateObject);
    }, [filteredMoviesList]);
 
    const handleTitleSort = () => {
@@ -396,12 +415,12 @@ const MovieList = ({ currentUser, isCreator }) => {
          <div className="hidden lg:block lg:w-[100px]"></div>
          {isCreator && (
             <>
-               <div className="hidden lg:block w-[80px]">
+               {/* <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Channel</div>
                </div>
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Seen</div>
-               </div>
+               </div> */}
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Delete</div>
                </div>
@@ -432,10 +451,14 @@ const MovieList = ({ currentUser, isCreator }) => {
                      isCreator={isCreator}
                      ranking={index + 1 + postsPerPage * (currentPage - 1)}
                      isRankingOn={isRankingOn}
-                     watchedState={watchedState}
-                     setWatchedState={setWatchedState}
+                     channelState={channelState}
+                     setChannelState={setChannelState}
                      seenState={seenState}
                      setSeenState={setSeenState}
+                     rewatchState={rewatchState}
+                     setRewatchState={setRewatchState}
+                     requestStatus={requestStatus}
+                     setRequestStatus={setRequestStatus}
                   />
                </div>
             ))}
@@ -482,7 +505,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                   </div>
                </>
             ) : (
-               <div>No results found</div>
+               <div className="text-[18px]">No results found</div>
             )
          ) : (
             <div className="relative flex justify-center items-center h-[100px] sm:h-[200px] mb-[100px]">

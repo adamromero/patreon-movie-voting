@@ -25,8 +25,9 @@ export const status = {
    Name: "Status",
    Default: "All",
    Seen: "Seen",
-   Watched: "On Channel",
+   OnChannel: "On Channel",
    Unseen: "Unseen",
+   Rewatch: "Rewatch",
 };
 
 export const type = {

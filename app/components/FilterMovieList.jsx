@@ -128,6 +128,7 @@ const FilterMovieList = () => {
                   >
                      <option value="All">All</option>
                      <option value={status.Seen}>Seen</option>
+                     <option value={status.Rewatch}>Rewatch</option>
                      <option value={status.Watched}>On Channel</option>
                      <option value={status.Unseen}>Unseen</option>
                   </select>

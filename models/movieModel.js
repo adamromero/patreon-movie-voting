@@ -80,6 +80,10 @@ const movieSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   isRewatch: {
+      type: Boolean,
+      default: false,
+   },
    links: {
       patreon: {
          type: String,

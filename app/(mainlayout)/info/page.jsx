@@ -94,7 +94,9 @@ const InfoPage = () => {
             <p>
                You can filter by genre, type (movie or series), or status. The
                &quot;Seen&quot; status refers to what Jen has seen off the
-               channel.
+               channel. The &quot;Rewatch with Friend?&quot; status is for
+               movies Jen has seen before but is considering rewatching with a
+               friend.
             </p>
             <p>
                You can also sort by title, rating, request count (set by
