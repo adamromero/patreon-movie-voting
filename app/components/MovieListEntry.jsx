@@ -403,10 +403,10 @@ const MovieListEntry = ({
                                  !data.isRewatch &&
                                  "Unseen"}
                            </div>
-                           <div className="flex flex-col gap-[5px] max-w-[100px] mt-[10px]">
+                           <div className="flex gap-[5px] max-w-[200px] mt-[10px]">
                               {data?.links?.youtube && (
                                  <a
-                                    className="flex justify-center items-center gap-[2px] bg-[red] text-[25px] p-[3px]"
+                                    className="flex flex-1 justify-center items-center max-w-[98px] gap-[2px] bg-[red] text-[25px] p-[3px]"
                                     href={data?.links?.youtube}
                                     title="Watch on YouTube"
                                     target="_blank"
@@ -416,7 +416,7 @@ const MovieListEntry = ({
                               )}
                               {data?.links?.patreon && (
                                  <a
-                                    className="flex justify-center items-center gap-[2px] bg-[black] text-[25px] p-[3px] border-[#585858] border-[1px]"
+                                    className="flex flex-1 justify-center items-center max-w-[98px] gap-[2px] bg-[black] text-[25px] p-[3px] border-[#585858] border-[1px]"
                                     href={data?.links?.patreon}
                                     title="Watch Full Length"
                                     target="_blank"
@@ -433,7 +433,7 @@ const MovieListEntry = ({
             {isCreator && (
                <div className="flex flex-col flex-1">
                   <div className="film-strip mt-[10px]"></div>
-                  <div className="p-[20px]">
+                  <div className="p-[15px]">
                      <div className="flex justify-between max-w-[400px] mx-auto">
                         <div className="flex flex-col items-center">
                            <div className="leading-[16px] mb-[8px]">
@@ -531,7 +531,7 @@ const MovieListEntry = ({
                      {data?.hasReacted && (
                         <div className="flex flex-col flex-1 mt-[20px]">
                            <form
-                              className="flex flex-col gap-[15px]"
+                              className="flex flex-col gap-[10px]"
                               onSubmit={handleLinkUpdate}
                            >
                               <input
