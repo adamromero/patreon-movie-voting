@@ -8,10 +8,10 @@ const InfoPage = () => {
             <p>
                The purpose of this app is to compile a list of requests and give
                Jen an idea of where most of the interest is. The film and series
-               options are all contributed by patrons. As with the weekly polls,
-               please vote for every film or series you want to see a reaction
-               to. If you&apos;ve already requested something currently in the
-               list, you have the option of retracting it.
+               submissions are all contributed by patrons. As with the weekly
+               polls, please vote for every film or series you want to see a
+               reaction to. If you&apos;ve already requested something currently
+               in the list, you have the option of retracting it.
             </p>
             <br />
             <p>
