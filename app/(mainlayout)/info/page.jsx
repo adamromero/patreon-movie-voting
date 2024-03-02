@@ -15,7 +15,7 @@ const InfoPage = () => {
             </p>
             <br />
             <p>
-               There is a monthly limit on adding{" "}
+               There is a monthly limit on submitting{" "}
                <strong className="underline">new</strong> requests to the list,
                there is no limit on adding a request (upvoting) on a movie or
                series already in the list. New requests are limited at 3 per
