@@ -293,7 +293,7 @@ const MovieListEntry = ({
                }}
             >
                <div className="p-[20px] bg-black sm:bg-black/[.85]">
-                  <div className="sm:py-[30px]">
+                  <div className="sm:pt-[20px]">
                      <a
                         href={`https://www.imdb.com/title/${data?.data?.imdbID}`}
                         target="_blank"
