@@ -28,7 +28,7 @@ export const status = {
    OnChannel: "On Channel",
    Unseen: "Unseen",
    Rewatch: "Rewatch",
-   InProgress: "In Progress",
+   AllRequests: "All Requests",
 };
 
 export const type = {

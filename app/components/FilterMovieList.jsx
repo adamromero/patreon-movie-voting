@@ -131,7 +131,7 @@ const FilterMovieList = () => {
                      <option value={status.Seen}>Seen</option>
                      <option value={status.Rewatch}>Rewatch</option>
                      <option value={status.Unseen}>Unseen</option>
-                     <option value={status.InProgress}>In Progress</option>
+                     <option value={status.AllRequests}>All Requests</option>
                   </select>
                </div>
             </div>

@@ -220,7 +220,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter(
             (movie) => !movie.hasSeen && !movie.hasReacted && !movie.isRewatch
          );
-      } else if (filterOptions.status === status.InProgress) {
+      } else if (filterOptions.status === status.AllRequests) {
          filteredList = filteredList.filter(
             (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
          );
