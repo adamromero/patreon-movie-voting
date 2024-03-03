@@ -34,13 +34,13 @@ export default async function Home() {
                   <>
                      <h2>Hi {user.firstName ? user.firstName : user.name}! </h2>
                      {user && user.isCreator ? (
-                        <div>Begin voting and requesting movies.</div>
+                        <div>Begin requesting movies and shows.</div>
                      ) : (
                         <div>
                            {isUnderRequestLimit ? (
                               <>
                                  <div>
-                                    Begin voting and requesting movies. You may
+                                    Begin requesting movies and shows. You may
                                     vote on as many requests as you like.
                                  </div>
                                  {seenRequests.length > 0 && (

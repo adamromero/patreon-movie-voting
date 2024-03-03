@@ -151,13 +151,13 @@ const MovieListEntry = ({
                      <p
                         className={`text-[20px] text-shadow font-bold text-center ${
                            data?.isRewatch
-                              ? "leading-[22px] lg:leading-[13px] lg:text-[12px]"
+                              ? "leading-[22px] px-[2px] lg:leading-[13px] lg:text-[12px]"
                               : "leading-[16px] lg:text-[14px]"
                         }`}
                      >
                         {data?.hasReacted && <>On Channel</>}
                         {data?.hasSeen && <>Seen</>}
-                        {data?.isRewatch && <>Rewatch with Friend?</>}
+                        {data?.isRewatch && <>Rewatch with Friend</>}
                      </p>
                   </div>
                )}
@@ -397,7 +397,7 @@ const MovieListEntry = ({
                               <span className="font-bold">Status:</span>{" "}
                               {data?.hasSeen && "Seen"}
                               {data?.hasReacted && "On Channel"}
-                              {data?.isRewatch && "Rewatch with Friend?"}
+                              {data?.isRewatch && "Rewatch with Friend"}
                               {!data?.hasSeen &&
                                  !data.hasReacted &&
                                  !data.isRewatch &&

@@ -12,7 +12,7 @@ const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
             onClick={onOpenModal}
             className="max-w-[200px] w-full bg-[black] focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
          >
-            Request Movies
+            Submit Requests
          </button>
 
          <Modal
