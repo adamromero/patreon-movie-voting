@@ -28,6 +28,7 @@ export const status = {
    OnChannel: "On Channel",
    Unseen: "Unseen",
    Rewatch: "Rewatch",
+   InProgress: "In Progress",
 };
 
 export const type = {
