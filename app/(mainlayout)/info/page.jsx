@@ -106,7 +106,7 @@ const InfoPage = () => {
 
             <h2 className="font-bold">Make a new request.</h2>
             <p>Click this button at the top to open the request popup.</p>
-            <Image src="/requestbutton.png" width={205} height={43} alt="" />
+            <Image src="/submit_button.png" width={205} height={43} alt="" />
             <br />
             <p>You can search by title, title and year, or by IMDB ID</p>
             <p>
