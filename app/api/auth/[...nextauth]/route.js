@@ -35,6 +35,8 @@ export const nextAuthOptions = {
             );
          });
 
+         console.log(pledge);
+
          let isProducer = false;
          if (pledge) {
             isProducer =
