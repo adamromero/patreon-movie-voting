@@ -35,10 +35,12 @@ export const nextAuthOptions = {
             );
          });
 
-         console.log(pledge);
-
          let isProducer = false;
          if (pledge) {
+            console.log(profile?.data?.attributes?.full_name);
+            console.log(pledge.relationships);
+            console.log(pledge);
+
             isProducer =
                pledge.attributes.amount_cents >= 1600 ||
                pledge.relationships.reward.data.id ===
