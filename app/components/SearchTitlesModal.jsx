@@ -192,6 +192,14 @@ const SearchTitlesModal = ({ user }) => {
       ).hasSeen;
    };
 
+   const isMovieRewatch = (selectedMovie) => {
+      return moviesList.find(
+         (movie) =>
+            movie.data.id === selectedMovie?.id &&
+            movie.data.Type === selectedMovie?.media_type
+      ).isRewatch;
+   };
+
    const getMovieVoteTotal = (selectedMovie) => {
       return moviesList.find(
          (movie) =>
@@ -377,7 +385,7 @@ const SearchTitlesModal = ({ user }) => {
                      movies.map((movie) => (
                         <div className="mx-auto" key={movie?.id}>
                            {isMovieInList(movie) ? (
-                              <>
+                              <div>
                                  {isMovieReacted(movie) ? (
                                     <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                        <div>
@@ -579,7 +587,11 @@ const SearchTitlesModal = ({ user }) => {
                                                          : ""
                                                    }`}
                                                 />
-                                                <div>Requested</div>
+                                                <div>
+                                                   {isMovieRewatch(movie)
+                                                      ? "Rewatch"
+                                                      : "Requested"}
+                                                </div>
                                                 <div className="text-[16px] mb-[10px] leading-[16px]">
                                                    {getMovieVoteTotal(movie)}{" "}
                                                    {getMovieVoteTotal(movie) > 1
@@ -635,7 +647,7 @@ const SearchTitlesModal = ({ user }) => {
                                        </div>
                                     </div>
                                  )}
-                              </>
+                              </div>
                            ) : isUserUnderRequestLimit ? (
                               <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
                                  <button
