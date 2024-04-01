@@ -22,7 +22,8 @@ const InfoPage = () => {
                month for producers, the limit is 2 for all other tiers. You will
                get an extra 1 for every new request that was marked as &quot;On
                Channel&quot; or &quot;Seen&quot; during the same month it was
-               added.
+               added. The request limit will reset at the first of the month at
+               12:00am UTC time.
             </p>
             <br />
             <p>Thank you for taking the time to submit requests!</p>
