@@ -59,11 +59,12 @@ export const nextAuthOptions = {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
             session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer = token.isProducer;
+            session.user.isProducer =
+               token.isProducer || token.id === process.env.DEV_ID;
          }
          return session;
       },
-      async signIn({ account, profile }) {
+      async signIn({ user, account, profile }) {
          const { id } = profile.data;
          if (id === process.env.CREATOR_ID) {
             return true;
@@ -74,14 +75,25 @@ export const nextAuthOptions = {
                Authorization: `Bearer ${account.access_token}`,
             },
          });
-         const user = await response.json();
+         const userResponse = await response.json();
 
-         const pledge = user?.included?.find((item) => {
+         const pledge = userResponse?.included?.find((item) => {
             return (
                item.type === "pledge" &&
                item.relationships.creator.data.id === process.env.CREATOR_ID
             );
          });
+
+         let isProducer = false;
+
+         if (pledge) {
+            isProducer =
+               pledge.relationships.reward.data.id ===
+               process.env.PRODUCER_TIER_ID;
+
+            user.reward = pledge.relationships.reward.data.id;
+            user.isProducer = isProducer;
+         }
 
          let isUserPledged = false;
          if (pledge) {
