@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib/session";
 import VotingApp from "../components/VotingApp";
+import BirthdayMessage from "../components/BirthdayMessage";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -30,10 +31,11 @@ export default async function Home() {
       <div className="flex flex-col justify-between p-[16px]">
          <div className="max-w-[1200px] w-full mx-auto">
             <div className="text-[16px] sm:text-[18px]">
+               <BirthdayMessage />
                {user ? (
                   <>
                      <h2>Hi {user.firstName ? user.firstName : user.name}! </h2>
-                     {user && user.isCreator ? (
+                     {user && isCreator ? (
                         <div>Begin requesting movies and shows.</div>
                      ) : (
                         <div>
