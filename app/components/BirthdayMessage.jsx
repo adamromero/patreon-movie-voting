@@ -17,11 +17,6 @@ const BirthdayMessage = () => {
    const isBirthday =
       currentDate.getMonth() === 3 && currentDate.getDate() === 7;
 
-   console.log(
-      "is bday test: ",
-      currentDate.getMonth() === 3 && currentDate.getDate() === 6
-   );
-
    if (isBirthday) {
       return (
          <>
