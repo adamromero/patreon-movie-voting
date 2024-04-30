@@ -37,14 +37,9 @@ export const nextAuthOptions = {
 
          let isProducer = false;
          if (pledge) {
-            console.log(profile?.data?.attributes?.full_name);
-            console.log(pledge.relationships);
-            console.log(pledge);
-
             isProducer =
-               pledge.attributes.amount_cents >= 1600 ||
                pledge.relationships.reward.data.id ===
-                  process.env.PRODUCER_TIER_ID;
+               process.env.PRODUCER_TIER_ID;
          }
 
          if (profile) {
@@ -85,7 +80,6 @@ export const nextAuthOptions = {
          });
 
          let isProducer = false;
-
          if (pledge) {
             isProducer =
                pledge.relationships.reward.data.id ===
