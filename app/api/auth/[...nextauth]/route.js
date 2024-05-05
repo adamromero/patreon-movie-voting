@@ -89,6 +89,9 @@ export const nextAuthOptions = {
             user.isProducer = isProducer;
          }
 
+         console.log("user: ", user);
+         console.log("pledge: ", pledge);
+
          let isUserPledged = false;
          if (pledge) {
             const {
