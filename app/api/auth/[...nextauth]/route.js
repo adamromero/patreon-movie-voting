@@ -13,7 +13,7 @@ export const nextAuthOptions = {
       strategy: "jwt",
    },
    pages: {
-      signIn: "/unauthorized",
+      //signIn: "/unauthorized",
    },
    providers: [
       PatreonProvider({
