@@ -100,6 +100,8 @@ export const nextAuthOptions = {
             isUserPledged = status === "valid";
          }
 
+         console.log("isUserPledged: ", isUserPledged);
+
          if (isUserPledged) {
             return true;
          } else {
