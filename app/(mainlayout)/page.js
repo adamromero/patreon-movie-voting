@@ -4,6 +4,8 @@ import BirthdayMessage from "../components/BirthdayMessage";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
+   redirect("/maintenance");
+
    const user = await getCurrentUser();
 
    const userId = user && user.id;
