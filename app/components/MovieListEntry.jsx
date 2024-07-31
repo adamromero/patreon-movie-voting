@@ -6,6 +6,7 @@ import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
 import { FaRegImage } from "react-icons/fa6";
+import { convertDateFormat } from "../utils/convertDateFormat";
 
 const MovieListEntry = ({
    data,
@@ -94,37 +95,6 @@ const MovieListEntry = ({
       };
 
       setWatchedMovieLinks(watchedMovieData.id, links);
-   };
-
-   const convertDateFormat = (date, releaseDate) => {
-      const months = [
-         "January",
-         "February",
-         "March",
-         "April",
-         "May",
-         "June",
-         "July",
-         "August",
-         "September",
-         "October",
-         "November",
-         "December",
-      ];
-      let originalDate, month, day, year;
-      if (releaseDate) {
-         month = date?.split("-")[1];
-         day = date?.split("-")[2];
-         year = date?.split("-")[0];
-         originalDate = new Date(`${month}-${day}-${year}`);
-      }
-
-      originalDate = new Date(date);
-      month = originalDate.getMonth();
-      day = originalDate.getDate();
-      year = originalDate.getFullYear();
-
-      return `${months[month]} ${day}, ${year}`;
    };
 
    return (
@@ -220,14 +190,14 @@ const MovieListEntry = ({
                            handleRemoveVote(data?._id, data?.voters)
                         }
                      >
-                        Retract
+                        Unvote
                      </button>
                   ) : (
                      <button
                         className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                         onClick={() => handleCastVote(data?._id, data?.voters)}
                      >
-                        Request
+                        Upvote
                      </button>
                   )}
                </div>

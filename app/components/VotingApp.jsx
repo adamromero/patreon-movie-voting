@@ -1,100 +1,36 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
-import RequestMovies from "./RequestMovies";
+import React from "react";
 import MovieList from "./MovieList";
 import FilterMovieList from "./FilterMovieList";
 import SearchMoviesList from "./SearchMoviesList";
-import CopyableList from "./CopyableList";
-import { MovieContext } from "@/context/MovieContext";
+import RequestsThisMonth from "./RequestsThisMonth";
+import WelcomeSection from "./WelcomeSection";
 
-const VotingApp = ({ user, isUnderRequestLimit }) => {
-   const {
-      moviesList,
-      checkIfUserUnderRequestLimit,
-      isUserUnderRequestLimit,
-      requestsRemaining,
-   } = useContext(MovieContext);
-
-   const [open, setOpen] = useState(false);
-   const onOpenModal = () => setOpen(true);
-   const onCloseModal = () => setOpen(false);
-
-   const [disableRequestButton, setDisableRequestButton] =
-      useState(isUnderRequestLimit);
-
-   let id, isProducer, isCreator;
+const VotingApp = ({
+   user,
+   isUnderRequestLimit,
+   seenRequests,
+   channelRequests,
+}) => {
+   let id, isCreator;
    if (user) {
-      ({ id, isProducer, isCreator } = user);
+      ({ id, isCreator } = user);
    }
-
-   useEffect(() => {
-      if (!isCreator) {
-         checkIfUserUnderRequestLimit(id, isProducer);
-      }
-   }, [moviesList]);
-
-   useEffect(() => {
-      if (!isUserUnderRequestLimit && !open) {
-         setDisableRequestButton(true);
-      } else {
-         setDisableRequestButton(false);
-      }
-   }, [open, isUserUnderRequestLimit]);
 
    return (
       <>
-         <div
-            className={`flex flex-col ${
-               user
-                  ? isUnderRequestLimit && !isCreator
-                     ? "mb-[15px]"
-                     : "my-[15px]"
-                  : "my-[15px]"
-            }`}
-         >
-            {user && isUnderRequestLimit && !isCreator && (
-               <div className="text-[16px] sm:text-[18px] mb-[15px]">
-                  You have {requestsRemaining} <strong> new</strong>{" "}
-                  {requestsRemaining === 1 ? "request" : "requests"} remaining
-                  this month.
-               </div>
-            )}
-
-            {user && (
-               <div className="flex max-w-[430px]">
-                  <div className="flex-1 mb-[15px]">
-                     {moviesList.length ? (
-                        !disableRequestButton ? (
-                           <RequestMovies
-                              user={user}
-                              open={open}
-                              onOpenModal={onOpenModal}
-                              onCloseModal={onCloseModal}
-                           />
-                        ) : (
-                           <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                              Limit Reached
-                           </div>
-                        )
-                     ) : (
-                        <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                           <div className="loader button-loader"></div>
-                        </div>
-                     )}
-                  </div>
-
-                  {isCreator && false && (
-                     <div className="flex-1 mb-[15px]">
-                        <CopyableList />
-                     </div>
-                  )}
-               </div>
-            )}
-
-            <SearchMoviesList />
+         <div className="flex flex-col justify-between lg:flex-row mb-[15px] gap-[15px]">
+            <WelcomeSection
+               user={user}
+               isUnderRequestLimit={isUnderRequestLimit}
+               seenRequests={seenRequests}
+               channelRequests={channelRequests}
+            />
+            {user && <RequestsThisMonth userId={id} />}
          </div>
+         <SearchMoviesList />
          <FilterMovieList />
-         <MovieList currentUser={id} isCreator={user && isCreator} />
+         <MovieList currentUser={id} isCreator={isCreator} />
       </>
    );
 };

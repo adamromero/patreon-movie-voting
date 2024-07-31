@@ -4,6 +4,7 @@ import { MovieContext } from "@/context/MovieContext";
 import {
    genre,
    status,
+   requests,
    type,
    chronological,
    added,
@@ -220,9 +221,23 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter(
             (movie) => !movie.hasSeen && !movie.hasReacted && !movie.isRewatch
          );
-      } else if (filterOptions.status === status.AllRequests) {
+      } else if (filterOptions.status === status.Votable) {
          filteredList = filteredList.filter(
             (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
+         );
+      }
+
+      if (filterOptions.requests === requests.MyRequests) {
+         filteredList = filteredList.filter(
+            (movie) => movie.requester === currentUser
+         );
+      } else if (filterOptions.requests === requests.Voted) {
+         filteredList = filteredList.filter((movie) =>
+            movie.voters.includes(currentUser)
+         );
+      } else if (filterOptions.requests === requests.NotVoted) {
+         filteredList = filteredList.filter(
+            (movie) => !movie.voters.includes(currentUser)
          );
       }
 

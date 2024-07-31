@@ -8,6 +8,7 @@ import {
    added,
    alphabetical,
    votes,
+   requests,
    rating,
    watched,
 } from "@/app/utils/filtersOptions";
@@ -29,6 +30,7 @@ export const MovieProvider = ({ children }) => {
       added: added.Default,
       type: type.Default,
       genre: genre.Default,
+      requests: requests.Default,
       status: status.Default,
       watched: watched.Default,
    });
@@ -37,6 +39,20 @@ export const MovieProvider = ({ children }) => {
    const [disableButton, setDisableButton] = useState(false);
    const [isRankingOn, setIsRankingOn] = useState(false);
    const [rankedMovies, setRankedMovies] = useState([]);
+   const [requestsThisMonth, setRequestsThisMonth] = useState([]);
+
+   const retrieveMoviesThisMonth = async (id) => {
+      const response = await fetch("/api/moviesbydate");
+      const requestedMoviesThisMonth = await response.json();
+
+      const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
+         (movie) =>
+            movie.requester === id && !movie.hasReacted && !movie.hasSeen
+      );
+      console.log("id: ", id);
+      console.log("in context: ", requestedMoviesThisMonth);
+      setRequestsThisMonth(currentUsersMonthlyRequests);
+   };
 
    const checkIfUserUnderRequestLimit = async (id, isProducer) => {
       const response = await fetch("/api/moviesbydate");
@@ -509,6 +525,8 @@ export const MovieProvider = ({ children }) => {
             setIsUserUnderRequestLimit,
             requestsRemaining,
             disableButton,
+            retrieveMoviesThisMonth,
+            requestsThisMonth,
          }}
       >
          {children}

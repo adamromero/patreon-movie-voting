@@ -193,3 +193,24 @@ input:focus-visible + .checkmark {
       transform: rotate(45deg);
    }
 }
+
+.request-grid {
+   display: grid;
+   grid-template-columns: repeat(4, 120px);
+}
+
+.request-grid--month {
+   grid-template-columns: repeat(3, 120px);
+}
+
+@media screen and (min-width: 640px) {
+   .request-grid {
+      grid-template-columns: repeat(6, 120px);
+   }
+}
+
+@media screen and (min-width: 960px) {
+   .request-grid {
+      grid-template-columns: repeat(10, 120px);
+   }
+}

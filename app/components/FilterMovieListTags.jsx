@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { MovieContext } from "@/context/MovieContext";
-import { genre, type, status } from "../utils/filtersOptions";
+import { genre, type, status, requests } from "../utils/filtersOptions";
 
 const FilterMovieListTags = () => {
    const { filterOptions, setFilterOptions } = useContext(MovieContext);
@@ -26,12 +26,19 @@ const FilterMovieListTags = () => {
       }));
    };
 
+   const handleStatusRequestsRemove = () => {
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         requests: requests.Default,
+      }));
+   };
+
    return (
       <div className="capitalize flex gap-[5px]">
          {filterOptions.genre !== "All" && (
             <button
                onClick={handleGenreFilterRemove}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               className="1 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterOptions.genre}
             </button>
@@ -39,7 +46,7 @@ const FilterMovieListTags = () => {
          {filterOptions.type !== "All" && (
             <button
                onClick={handleTypeFilterRemove}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               className="2 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterOptions.type === "TV" ? "Series" : filterOptions.type}
             </button>
@@ -47,9 +54,17 @@ const FilterMovieListTags = () => {
          {filterOptions.status !== "All" && (
             <button
                onClick={handleStatusFilterRemove}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               className="3 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterOptions.status}
+            </button>
+         )}
+         {filterOptions.requests !== "All" && (
+            <button
+               onClick={handleStatusRequestsRemove}
+               className="4 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+            >
+               {filterOptions.requests}
             </button>
          )}
       </div>

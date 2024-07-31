@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useContext } from "react";
+import React from "react";
 import SearchTitlesModal from "./SearchTitlesModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import { MovieContext } from "@/context/MovieContext";
 
 const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
    return (

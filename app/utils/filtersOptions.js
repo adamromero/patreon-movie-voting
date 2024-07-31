@@ -28,7 +28,7 @@ export const status = {
    OnChannel: "On Channel",
    Unseen: "Unseen",
    Rewatch: "Rewatch",
-   AllRequests: "All Requests",
+   Votable: "Votable",
 };
 
 export const type = {
@@ -36,6 +36,14 @@ export const type = {
    Default: "All",
    Movie: "Movie",
    Series: "TV",
+};
+
+export const requests = {
+   Name: "Requests",
+   Default: "All",
+   MyRequests: "My Requests",
+   Voted: "Voted",
+   NotVoted: "Not Voted",
 };
 
 export const chronological = {
