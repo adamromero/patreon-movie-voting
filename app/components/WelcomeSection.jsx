@@ -44,56 +44,64 @@ const WelcomeSection = ({
       }
    }, [open, isUserUnderRequestLimit]);
 
-   return (
-      <div>
-         <WelcomeSectionIntro
-            user={user}
-            isUnderRequestLimit={isUserUnderRequestLimit}
-            seenRequests={seenRequests}
-            channelRequests={channelRequests}
-         />
-         <div className="flex flex-col">
-            {user && isUnderRequestLimit && !isCreator && (
-               <p className="text-[16px] sm:text-[18px]">
-                  You have {requestsRemaining} <strong> new</strong>{" "}
-                  {requestsRemaining === 1 ? "request" : "requests"} remaining
-                  this month.
-               </p>
-            )}
+   if (moviesList.length) {
+      return (
+         <div>
+            <WelcomeSectionIntro
+               user={user}
+               isUnderRequestLimit={isUserUnderRequestLimit}
+               seenRequests={seenRequests}
+               channelRequests={channelRequests}
+            />
+            <div className="flex flex-col">
+               {user && isUnderRequestLimit && !isCreator && (
+                  <p className="text-[16px] sm:text-[18px]">
+                     You have {requestsRemaining} <strong> new</strong>{" "}
+                     {requestsRemaining === 1 ? "request" : "requests"}{" "}
+                     remaining this month.
+                  </p>
+               )}
 
-            {user && (
-               <div className="flex max-w-[430px]">
-                  <div className="flex-1 mt-[15px]">
-                     {moviesList.length ? (
-                        !disableRequestButton ? (
-                           <RequestMovies
-                              user={user}
-                              open={open}
-                              onOpenModal={onOpenModal}
-                              onCloseModal={onCloseModal}
-                           />
+               {user && (
+                  <div className="flex max-w-[430px]">
+                     <div className="flex-1 mt-[15px]">
+                        {moviesList.length ? (
+                           !disableRequestButton ? (
+                              <RequestMovies
+                                 user={user}
+                                 open={open}
+                                 onOpenModal={onOpenModal}
+                                 onCloseModal={onCloseModal}
+                              />
+                           ) : (
+                              <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
+                                 Limit Reached
+                              </div>
+                           )
                         ) : (
                            <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                              Limit Reached
+                              <div className="loader button-loader"></div>
                            </div>
-                        )
-                     ) : (
-                        <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                           <div className="loader button-loader"></div>
-                        </div>
-                     )}
-                  </div>
+                        )}
+                     </div>
 
-                  {/* {isCreator && (
+                     {/* {isCreator && (
                      <div className="flex-1">
                         <CopyableList />
                      </div>
                   )} */}
-               </div>
-            )}
+                  </div>
+               )}
+            </div>
          </div>
-      </div>
-   );
+      );
+   } else {
+      return (
+         <div className="flex justify-center flex-1 my-[10px]">
+            <div className="loader loader--intro"></div>
+         </div>
+      );
+   }
 };
 
 export default WelcomeSection;

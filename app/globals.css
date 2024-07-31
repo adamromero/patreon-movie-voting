@@ -151,9 +151,9 @@ input:focus-visible + .checkmark {
 
 .loader {
    margin: auto;
-   border: 15px solid #eaf0f6;
+   border: 10px solid #eaf0f6;
    border-radius: 50%;
-   border-top: 15px solid #830483;
+   border-top: 10px solid #830483;
    width: 180px;
    height: 180px;
    animation: spinner 1s linear infinite;
@@ -161,6 +161,12 @@ input:focus-visible + .checkmark {
    left: 0;
    right: 0;
    top: 35%;
+}
+
+.loader--intro {
+   width: 100px;
+   height: 100px;
+   border-width: 5px;
 }
 
 .button-loader {
