@@ -182,7 +182,7 @@ const MovieListEntry = ({
             </div>
             {!data?.hasReacted && !data?.hasSeen && currentUser ? (
                <div className="mt-[10px] md:mt-0 lg:w-[70px]">
-                  {data?.voters?.filter((voter) => voter === currentUser)
+                  {/* {data?.voters?.filter((voter) => voter === currentUser)
                      .length ? (
                      <button
                         className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
@@ -199,7 +199,7 @@ const MovieListEntry = ({
                      >
                         Upvote
                      </button>
-                  )}
+                  )} */}
                </div>
             ) : (
                <>

@@ -16,13 +16,14 @@ import {
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
-import useRetrieveMovies from "../hooks/useRetrieveMovies";
+// useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
 
-const MovieList = ({ currentUser, isCreator }) => {
+const MovieList = ({ currentUser, isCreator, readOnlyRequests }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
-   const moviesList = useRetrieveMovies();
+   //const moviesList = useRetrieveMovies();
+   const moviesList = readOnlyRequests;
 
    const {
       filteredMoviesList,

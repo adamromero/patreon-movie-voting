@@ -49,8 +49,7 @@ export const MovieProvider = ({ children }) => {
          (movie) =>
             movie.requester === id && !movie.hasReacted && !movie.hasSeen
       );
-      console.log("id: ", id);
-      console.log("in context: ", requestedMoviesThisMonth);
+
       setRequestsThisMonth(currentUsersMonthlyRequests);
    };
 
