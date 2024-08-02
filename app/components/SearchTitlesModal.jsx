@@ -169,11 +169,11 @@ const SearchTitlesModal = ({ user }) => {
    };
 
    const isMovieInList = (selectedMovie) => {
-      return moviesList.filter(
+      return moviesList.some(
          (movie) =>
             movie?.data?.id === selectedMovie?.id &&
             movie.data.Type === selectedMovie?.media_type
-      ).length;
+      );
    };
 
    const isMovieReacted = (selectedMovie) => {
@@ -255,14 +255,12 @@ const SearchTitlesModal = ({ user }) => {
    };
 
    const isMovieVotedByUser = (selectedMovie) => {
-      return moviesList.find((movie) => {
-         if (
+      return moviesList.some(
+         (movie) =>
             movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-         ) {
-            return movie.voters.filter((voter) => voter === currentUser).length;
-         }
-      });
+            movie.data.Type === selectedMovie?.media_type &&
+            movie.voters.some((voter) => voter === currentUser)
+      );
    };
 
    const handleRemoveVote = (selectedMovie) => {

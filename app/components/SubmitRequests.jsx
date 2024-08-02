@@ -1,18 +1,12 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import RequestMovies from "./RequestMovies";
+import SubmitRequestButton from "./SubmitRequestButton";
 import CopyableList from "./CopyableList";
 import { MovieContext } from "@/context/MovieContext";
-import WelcomeSectionIntro from "./WelcomeSectionIntro";
 
-const WelcomeSection = ({
-   user,
-   moviesList,
-   isUnderRequestLimit,
-   seenRequests,
-   channelRequests,
-}) => {
+const SubmitRequests = ({ user, isUnderRequestLimit }) => {
    const {
+      moviesList,
       checkIfUserUnderRequestLimit,
       isUserUnderRequestLimit,
       requestsRemaining,
@@ -45,27 +39,29 @@ const WelcomeSection = ({
    }, [open, isUserUnderRequestLimit]);
 
    return (
-      <div>
-         <WelcomeSectionIntro
-            user={user}
-            isUnderRequestLimit={isUserUnderRequestLimit}
-            seenRequests={seenRequests}
-            channelRequests={channelRequests}
-         />
-         <div className="flex flex-col">
-            {user && isUnderRequestLimit && !isCreator && (
-               <p className="text-[16px] sm:text-[18px]">
-                  You have {requestsRemaining} <strong> new</strong>{" "}
-                  {requestsRemaining === 1 ? "request" : "requests"} remaining
-                  this month.
-               </p>
-            )}
+      <div
+         className={`flex flex-col ${
+            user
+               ? isUnderRequestLimit && !isCreator
+                  ? "mb-[15px]"
+                  : "my-[15px]"
+               : "my-[15px]"
+         }`}
+      >
+         {user && isUnderRequestLimit && !isCreator && (
+            <div className="text-[16px] sm:text-[18px] mb-[15px]">
+               You have {requestsRemaining} <strong> new</strong>{" "}
+               {requestsRemaining === 1 ? "request" : "requests"} remaining this
+               month.
+            </div>
+         )}
 
-            {user && (
-               <div className="flex max-w-[430px]">
-                  <div className="flex-1 mt-[15px]">
-                     {!disableRequestButton ? (
-                        <RequestMovies
+         {user && (
+            <div className="flex max-w-[430px] text-[16px]">
+               <div className="flex-1">
+                  {moviesList.length ? (
+                     !disableRequestButton ? (
+                        <SubmitRequestButton
                            user={user}
                            open={open}
                            onOpenModal={onOpenModal}
@@ -75,19 +71,23 @@ const WelcomeSection = ({
                         <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
                            Limit Reached
                         </div>
-                     )}
-                  </div>
-
-                  {/* {isCreator && (
-                     <div className="flex-1">
-                        <CopyableList />
+                     )
+                  ) : (
+                     <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
+                        <div className="loader button-loader"></div>
                      </div>
-                  )} */}
+                  )}
                </div>
-            )}
-         </div>
+
+               {isCreator && false && (
+                  <div className="flex-1 mb-[15px]">
+                     <CopyableList />
+                  </div>
+               )}
+            </div>
+         )}
       </div>
    );
 };
 
-export default WelcomeSection;
+export default SubmitRequests;

@@ -6,23 +6,26 @@ connectDB();
 
 export const revalidate = 0;
 
-function isDateInCurrentMonth(dateToCheck) {
-   const currentDate = new Date();
-   const date = new Date(dateToCheck);
+function getCurrentMonthRange() {
+   const start = new Date();
+   start.setDate(1);
+   start.setHours(0, 0, 0, 0);
 
-   return (
-      date.getFullYear() === currentDate.getFullYear() &&
-      date.getMonth() === currentDate.getMonth()
-   );
+   const end = new Date(start);
+   end.setMonth(end.getMonth() + 1);
+
+   return { start, end };
 }
 
 export async function GET(req, res) {
    try {
-      const movieVotes = await Movie.find();
-      const moviesThisMonth = movieVotes.filter((movie) => {
-         if (isDateInCurrentMonth(movie.createdAt)) {
-            return movie;
-         }
+      const { start, end } = getCurrentMonthRange();
+
+      const moviesThisMonth = await Movie.find({
+         createdAt: {
+            $gte: start,
+            $lt: end,
+         },
       });
 
       return NextResponse.json(moviesThisMonth);

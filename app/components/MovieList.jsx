@@ -16,14 +16,13 @@ import {
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
-// useRetrieveMovies from "../hooks/useRetrieveMovies";
+import useRetrieveMovies from "../hooks/useRetrieveMovies";
 import Pagination from "./Pagination";
 
-const MovieList = ({ currentUser, isCreator, readOnlyRequests }) => {
+const MovieList = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
-   //const moviesList = useRetrieveMovies();
-   const moviesList = readOnlyRequests;
+   const moviesList = useRetrieveMovies();
 
    const {
       filteredMoviesList,
@@ -40,9 +39,7 @@ const MovieList = ({ currentUser, isCreator, readOnlyRequests }) => {
    const [channelState, setChannelState] = useState({});
    const [seenState, setSeenState] = useState({});
    const [rewatchState, setRewatchState] = useState({});
-
    const [requestStatus, setRequestStatus] = useState({});
-
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(false);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
@@ -428,19 +425,13 @@ const MovieList = ({ currentUser, isCreator, readOnlyRequests }) => {
                   {filterOptions.votes === votes.Default && <FaSort />}
                   {filterOptions.votes === votes.Ascending && <FaSortUp />}
                   {filterOptions.votes === votes.Descending && <FaSortDown />}
-                  Requests
+                  Votes
                </div>
             </button>
          </div>
          <div className="hidden lg:block lg:w-[100px]"></div>
          {isCreator && (
             <>
-               {/* <div className="hidden lg:block w-[80px]">
-                  <div className="w-full text-left p-[10px]">Channel</div>
-               </div>
-               <div className="hidden lg:block w-[80px]">
-                  <div className="w-full text-left p-[10px]">Seen</div>
-               </div> */}
                <div className="hidden lg:block w-[80px]">
                   <div className="w-full text-left p-[10px]">Delete</div>
                </div>

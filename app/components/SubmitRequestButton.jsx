@@ -4,7 +4,13 @@ import SearchTitlesModal from "./SearchTitlesModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
-const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
+const SubmitRequestButton = ({
+   user,
+   open,
+   onOpenModal,
+   onCloseModal,
+   totalRequests,
+}) => {
    return (
       <>
          <button
@@ -22,10 +28,10 @@ const RequestMovies = ({ user, open, onOpenModal, onCloseModal }) => {
             onClose={onCloseModal}
             center
          >
-            <SearchTitlesModal user={user} />
+            <SearchTitlesModal user={user} totalRequests={totalRequests} />
          </Modal>
       </>
    );
 };
 
-export default RequestMovies;
+export default SubmitRequestButton;

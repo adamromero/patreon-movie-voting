@@ -2,40 +2,31 @@
 import React, { useState, useEffect, useContext } from "react";
 import { convertMonthFormat } from "../utils/convertDateFormat";
 import { AiTwotoneCalendar } from "react-icons/ai";
+import { MovieContext } from "@/context/MovieContext";
 
 const RequestsThisMonth = ({ userId }) => {
-   const [requests, setRequests] = useState([]);
    const maxRequestsDisplayed = 3;
+   const { moviesList, requestsThisMonth, retrieveMoviesThisMonth } =
+      useContext(MovieContext);
 
    useEffect(() => {
-      const retrieveMoviesThisMonth = async () => {
-         const response = await fetch("/api/moviesbydate");
-         const requestedMoviesThisMonth = await response.json();
+      retrieveMoviesThisMonth(userId);
+   }, [moviesList]);
 
-         const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-            (movie) =>
-               movie.requester === userId && !movie.hasReacted && !movie.hasSeen
-         );
-         setRequests(currentUsersMonthlyRequests);
-      };
-
-      retrieveMoviesThisMonth();
-   }, [requests]);
-
-   if (requests.length) {
+   if (requestsThisMonth && requestsThisMonth.length) {
       return (
-         <div>
+         <div className="mb-[15px]">
             <h2 className="flex items-center gap-[5px] mb-[5px] font-bold">
                My Requests for {convertMonthFormat(new Date().getMonth())}{" "}
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
-               {requests
+               {requestsThisMonth
                   .slice(
-                     requests.length >= maxRequestsDisplayed
-                        ? requests.length - maxRequestsDisplayed
+                     requestsThisMonth.length >= maxRequestsDisplayed
+                        ? requestsThisMonth.length - maxRequestsDisplayed
                         : 0,
-                     requests.length
+                     requestsThisMonth.length
                   )
                   .map((movie) => (
                      <div key={movie._id}>
@@ -51,6 +42,8 @@ const RequestsThisMonth = ({ userId }) => {
          </div>
       );
    }
+
+   return null;
 };
 
 export default RequestsThisMonth;

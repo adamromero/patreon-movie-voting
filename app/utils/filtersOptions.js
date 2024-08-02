@@ -75,7 +75,7 @@ export const rating = {
 };
 
 export const votes = {
-   Name: "Requests",
+   Name: "Votes",
    Default: "",
    Ascending: "Ascending",
    Descending: "Descending",
