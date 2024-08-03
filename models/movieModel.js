@@ -104,6 +104,17 @@ const movieSchema = new mongoose.Schema({
    },
 });
 
+movieSchema.index({ createdAt: 1 });
+movieSchema.index({ requester: 1 });
+movieSchema.index({ "data.imdbID": 1 }, { unique: true });
+movieSchema.index({ "data.Title": "text" });
+movieSchema.index({
+   requester: 1,
+   hasReacted: 1,
+   hasSeen: 1,
+   createdAt: 1,
+});
+
 const Movie = mongoose.models.Movie || mongoose.model("Movie", movieSchema);
 
 export default Movie;

@@ -1,48 +1,56 @@
 import { getCurrentUser } from "@/lib/session";
 import VotingApp from "../components/VotingApp";
 import BirthdayMessage from "../components/BirthdayMessage";
-import { redirect } from "next/navigation";
 import RequestsThisMonth from "../components/RequestsThisMonth";
 import SubmitRequests from "../components/SubmitRequests";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
    //redirect("/maintenance");
 
    const user = await getCurrentUser();
-
    const userId = user && user.id;
    const isProducer = user && user.isProducer;
    const isCreator = user && user.isCreator;
 
-   const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
-   const requestedMoviesThisMonth = await response.json();
-   const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-      (movie) =>
-         movie.requester === userId && !movie.hasReacted && !movie.hasSeen
-   );
-   const requestLimit = isProducer ? 3 : 2;
-   const isUnderRequestLimit =
-      currentUsersMonthlyRequests.length < requestLimit;
+   let isUnderRequestLimit = true;
+   const seenRequests = [];
+   const channelRequests = [];
+   const currentUsersMonthlyRequests = [];
 
-   const seenRequests = requestedMoviesThisMonth.filter(
-      (movie) => movie.requester === userId && movie.hasSeen
-   );
-   const channelRequests = requestedMoviesThisMonth.filter(
-      (movie) => movie.requester === userId && movie.hasReacted
-   );
+   if (!isCreator) {
+      const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
+      const requestedMoviesThisMonth = await response.json();
+
+      requestedMoviesThisMonth.forEach((movie) => {
+         if (movie.requester === userId) {
+            if (!movie.hasReacted && !movie.hasSeen) {
+               currentUsersMonthlyRequests.push(movie);
+            }
+            if (movie.hasSeen) {
+               seenRequests.push(movie);
+            }
+            if (movie.hasReacted) {
+               channelRequests.push(movie);
+            }
+         }
+      });
+
+      const requestLimit = isProducer ? 3 : 2;
+      isUnderRequestLimit = currentUsersMonthlyRequests.length < requestLimit;
+   }
 
    return (
       <div className="flex flex-col justify-between p-[16px]">
          <div className="max-w-[1200px] w-full mx-auto">
             <div className="text-[16px] sm:text-[18px]">
                <BirthdayMessage />
-
                <div className="flex flex-col justify-between lg:flex-row lg:gap-[15px]">
                   <div>
                      {user ? (
                         <div>
                            <h2 className="text-[20px] font-bold mb-[10px]">
-                              {isProducer && (
+                              {!isCreator && isProducer && (
                                  <span>
                                     Producer Tier (3 New Requests Per Month)
                                  </span>
@@ -123,11 +131,9 @@ export default async function Home() {
                         isUnderRequestLimit={isUnderRequestLimit}
                      />
                   </div>
-
                   {user && <RequestsThisMonth userId={userId} />}
                </div>
             </div>
-
             <VotingApp user={user} />
          </div>
       </div>

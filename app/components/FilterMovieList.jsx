@@ -75,7 +75,7 @@ const FilterMovieList = () => {
    };
 
    return (
-      <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 lg:flex-row gap-[10px] w-full text-white flex">
+      <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 lg:flex-row gap-[10px] w-full text-white flex gap-[20px]">
          <div>
             <div className="flex gap-[4px] mb-[5px] items-center">
                <div>Filter By:</div>
