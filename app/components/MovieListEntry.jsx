@@ -360,7 +360,7 @@ const MovieListEntry = ({
                               </div>
                            )}
                            <div>
-                              <span className="font-bold">Requests:</span>{" "}
+                              <span className="font-bold">Votes:</span>{" "}
                               {data?.voters?.length}
                            </div>
                            <div>
