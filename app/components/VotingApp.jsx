@@ -14,7 +14,7 @@ const VotingApp = ({ user }) => {
          <div>
             <SearchMoviesList />
          </div>
-         <FilterMovieList />
+         <FilterMovieList currentUser={id} />
          <MovieList currentUser={id} isCreator={user && isCreator} />
       </>
    );
