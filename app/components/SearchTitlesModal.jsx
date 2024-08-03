@@ -593,8 +593,8 @@ const SearchTitlesModal = ({ user }) => {
                                                 <div className="text-[16px] mb-[10px] leading-[16px]">
                                                    {getMovieVoteTotal(movie)}{" "}
                                                    {getMovieVoteTotal(movie) > 1
-                                                      ? "requests"
-                                                      : "request"}
+                                                      ? "votes"
+                                                      : "vote"}
                                                 </div>
                                                 {isMovieVotedByUser(movie) ? (
                                                    <button
