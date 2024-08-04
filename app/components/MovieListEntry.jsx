@@ -14,14 +14,7 @@ const MovieListEntry = ({
    isCreator,
    ranking,
    isRankingOn,
-   channelState,
-   setChannelState,
-   seenState,
-   setSeenState,
-   rewatchState,
-   setRewatchState,
-   requestStatus,
-   setRequestStatus,
+   requestStatusState,
 }) => {
    const [moreInfoOpen, setMoreInfoOpen] = useState(false);
    const onOpenMoreInfoModal = () => setMoreInfoOpen(true);
@@ -41,24 +34,24 @@ const MovieListEntry = ({
    const [patreonLinkWarning, setPatreonLinkWarning] = useState("");
 
    const {
-      castMovieVote,
-      removeMovieVote,
-      setMovieStatus,
-      setWatchedMovieLinks,
-      removeMovieVoteOverride,
+      addVoteToRequest,
+      removeVoteFromRequest,
+      setRequestWatchStatus,
+      setOnChannelRequestLinks,
+      removeRequestFromList,
    } = useContext(MovieContext);
 
    const handleCastVote = async (movieId, voters) => {
-      castMovieVote(movieId, voters, currentUser);
+      addVoteToRequest(movieId, voters, currentUser);
    };
 
    const handleRemoveVote = async (movieId, voters) => {
-      removeMovieVote(movieId, voters, currentUser);
+      removeVoteFromRequest(movieId, voters, currentUser);
    };
 
    const handleStatusSetting = (e, data) => {
       const selectedValue = e.target.value;
-      setMovieStatus(data?._id, selectedValue);
+      setRequestWatchStatus(data?._id, selectedValue);
    };
 
    const handleLinkUpdate = (e) => {
@@ -94,7 +87,7 @@ const MovieListEntry = ({
          patreon: updatedPatreonLink,
       };
 
-      setWatchedMovieLinks(watchedMovieData.id, links);
+      setOnChannelRequestLinks(watchedMovieData.id, links);
    };
 
    return (
@@ -419,7 +412,8 @@ const MovieListEntry = ({
                                     value="channel"
                                     id={`checkbox-${data?._id}`}
                                     checked={
-                                       !!requestStatus[data?._id]?.hasReacted
+                                       !!requestStatusState[data?._id]
+                                          ?.hasReacted
                                     }
                                     onChange={(e) => {
                                        handleStatusSetting(e, data);
@@ -441,7 +435,7 @@ const MovieListEntry = ({
                                     value="seen"
                                     id={`checkbox2-${data?._id}`}
                                     checked={
-                                       !!requestStatus[data?._id]?.hasSeen
+                                       !!requestStatusState[data?._id]?.hasSeen
                                     }
                                     onChange={(e) =>
                                        handleStatusSetting(e, data)
@@ -465,7 +459,8 @@ const MovieListEntry = ({
                                     value="rewatch"
                                     id={`checkbox3-${data?._id}`}
                                     checked={
-                                       !!requestStatus[data?._id]?.isRewatch
+                                       !!requestStatusState[data?._id]
+                                          ?.isRewatch
                                     }
                                     onChange={(e) =>
                                        handleStatusSetting(e, data)
@@ -487,7 +482,7 @@ const MovieListEntry = ({
                                     value="unseen"
                                     id={`checkbox4-${data?._id}`}
                                     checked={
-                                       !!requestStatus[data?._id]?.isUnseen
+                                       !!requestStatusState[data?._id]?.isUnseen
                                     }
                                     onChange={(e) =>
                                        handleStatusSetting(e, data)
@@ -568,7 +563,7 @@ const MovieListEntry = ({
             </div>
             <div className="flex justify-between items-center max-w-[200px] w-full mx-auto h-[60px]">
                <button
-                  onClick={() => removeMovieVoteOverride(removeMovieId)}
+                  onClick={() => removeRequestFromList(removeMovieId)}
                   className="bg-[#830483] py-[5px] px-[10px]"
                >
                   Confirm

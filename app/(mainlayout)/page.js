@@ -131,7 +131,7 @@ export default async function Home() {
                         isUnderRequestLimit={isUnderRequestLimit}
                      />
                   </div>
-                  {user && <RequestsThisMonth userId={userId} />}
+                  {user && <RequestsThisMonth />}
                </div>
             </div>
             <VotingApp user={user} />

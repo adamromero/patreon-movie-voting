@@ -6,7 +6,6 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { FaRegImage } from "react-icons/fa6";
-import useRetrieveMovies from "../hooks/useRetrieveMovies";
 
 const SearchTitlesModal = ({ user }) => {
    const [input, setInput] = useState("");
@@ -17,20 +16,18 @@ const SearchTitlesModal = ({ user }) => {
    const [searchTitle, setSearchTitle] = useState("");
    const [searchYear, setSearchYear] = useState("");
    const [searchImdbID, setSearchImdbID] = useState("");
-   const [movies, setMovies] = useState([]);
+   const [titlesFromAPI, setTitlesFromAPI] = useState([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
-   const moviesList = useRetrieveMovies();
    const currentUser = user.id;
-   const { isCreator, isProducer } = user;
 
    const {
-      createMovieVote,
-      castMovieVote,
-      removeMovieVote,
-      checkIfUserUnderRequestLimit,
+      addRequestToList,
+      addVoteToRequest,
+      removeVoteFromRequest,
       isUserUnderRequestLimit,
       disableButton,
+      moviesMap,
    } = useContext(MovieContext);
 
    const inputRef = useRef(null);
@@ -38,12 +35,6 @@ const SearchTitlesModal = ({ user }) => {
    const [disabledButtonStates, setDisabledButtonStates] = useState({});
 
    const API_URL = `https://api.themoviedb.org/3/search/multi?query=${title}&include_adult=false&language=en-US&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
-
-   useEffect(() => {
-      if (!isCreator) {
-         checkIfUserUnderRequestLimit(currentUser, isProducer);
-      }
-   }, [moviesList]);
 
    useEffect(() => {
       const fetchMovieTitles = async () => {
@@ -62,7 +53,7 @@ const SearchTitlesModal = ({ user }) => {
                      ) &&
                      (title.media_type === "movie" || title.media_type === "tv")
                );
-               setMovies(titles);
+               setTitlesFromAPI(titles);
                const ids = data.results.map((entry) => entry.imdbID);
                const result = ids.reduce((obj, num) => {
                   obj[num] = false;
@@ -73,7 +64,7 @@ const SearchTitlesModal = ({ user }) => {
                setDisabledButtonStates(result);
                setInput("");
             } else {
-               setMovies([]);
+               setTitlesFromAPI([]);
                setError("Movie not found!");
             }
 
@@ -106,7 +97,7 @@ const SearchTitlesModal = ({ user }) => {
                if (dataTV.total_results) {
                   clearSearchState({ ...dataTV.results[0], media_type: "tv" });
                } else {
-                  setMovies([]);
+                  setTitlesFromAPI([]);
                   setError("Movie not found!");
                }
             }
@@ -147,7 +138,7 @@ const SearchTitlesModal = ({ user }) => {
                   clearSearchState(results);
                }
             } else {
-               setMovies([]);
+               setTitlesFromAPI([]);
                setError("Movie not found!");
             }
 
@@ -158,8 +149,13 @@ const SearchTitlesModal = ({ user }) => {
       fetchByImdbID();
    }, [searchImdbID]);
 
+   const getMovieData = (selectedMovie) => {
+      const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
+      return moviesMap.get(key);
+   };
+
    const clearSearchState = (data) => {
-      setMovies([data]);
+      setTitlesFromAPI([data]);
       setInputTitle("");
       setInputYear("");
       setInputImdbID("");
@@ -169,59 +165,37 @@ const SearchTitlesModal = ({ user }) => {
    };
 
    const isMovieInList = (selectedMovie) => {
-      return moviesList.some(
-         (movie) =>
-            movie?.data?.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      );
+      return !!getMovieData(selectedMovie);
    };
 
    const isMovieReacted = (selectedMovie) => {
-      return moviesList.find(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      ).hasReacted;
+      const movie = getMovieData(selectedMovie);
+      return movie ? movie.hasReacted : false;
    };
 
    const isMovieSeen = (selectedMovie) => {
-      return moviesList.find(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      ).hasSeen;
+      const movie = getMovieData(selectedMovie);
+      return movie ? movie.hasSeen : false;
    };
 
    const isMovieRewatch = (selectedMovie) => {
-      return moviesList.find(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      ).isRewatch;
+      const movie = getMovieData(selectedMovie);
+      return movie ? movie.isRewatch : false;
    };
 
    const getMovieVoteTotal = (selectedMovie) => {
-      return moviesList.find(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      ).voters.length;
+      const movie = getMovieData(selectedMovie);
+      return movie ? movie.voters.length : 0;
    };
 
    const getPatreonLink = (selectedMovie) => {
-      return moviesList.find(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      ).links.patreon;
+      const movie = getMovieData(selectedMovie);
+      return movie ? movie.links.patreon : "";
    };
 
    const getYouTubeLink = (selectedMovie) => {
-      return moviesList.find(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-      ).links.youtube;
+      const movie = getMovieData(selectedMovie);
+      return movie ? movie.links.youtube : "";
    };
 
    const handleTitleSubmit = (e) => {
@@ -251,39 +225,28 @@ const SearchTitlesModal = ({ user }) => {
    const handleMovieSelection = async (movie) => {
       setMovieIDCollection({ [movie?.id]: true });
       setDisabledButtonStates({ [movie?.id]: true });
-      createMovieVote(movie, currentUser);
+      addRequestToList(movie, currentUser);
    };
 
    const isMovieVotedByUser = (selectedMovie) => {
-      return moviesList.some(
-         (movie) =>
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type &&
-            movie.voters.some((voter) => voter === currentUser)
-      );
+      const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
+      const movie = moviesMap.get(key);
+      return movie ? movie.voters.includes(currentUser) : false;
    };
 
    const handleRemoveVote = (selectedMovie) => {
-      return moviesList.find((movie) => {
-         if (
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-         ) {
-            removeMovieVote(movie._id, movie.voters, currentUser);
-            setDisabledButtonStates({ [selectedMovie?.id]: false });
-         }
-      });
+      const movie = getMovieData(selectedMovie);
+      if (movie) {
+         removeVoteFromRequest(movie._id, movie.voters, currentUser);
+         setDisabledButtonStates({ [selectedMovie?.id]: false });
+      }
    };
 
    const handleCastVote = (selectedMovie) => {
-      return moviesList.find((movie) => {
-         if (
-            movie.data.id === selectedMovie?.id &&
-            movie.data.Type === selectedMovie?.media_type
-         ) {
-            castMovieVote(movie._id, movie.voters, currentUser);
-         }
-      });
+      const movie = getMovieData(selectedMovie);
+      if (movie) {
+         addVoteToRequest(movie._id, movie.voters, currentUser);
+      }
    };
 
    const hasBeenReleased = (date) => {
@@ -379,8 +342,8 @@ const SearchTitlesModal = ({ user }) => {
                <div className="loader absolute"></div>
             ) : (
                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
-                  {movies.length ? (
-                     movies.map((movie) => (
+                  {titlesFromAPI.length ? (
+                     titlesFromAPI.map((movie) => (
                         <div className="mx-auto" key={movie?.id}>
                            {isMovieInList(movie) ? (
                               <div>

@@ -40,53 +40,77 @@ export const MovieProvider = ({ children }) => {
    const [isRankingOn, setIsRankingOn] = useState(false);
    const [rankedMovies, setRankedMovies] = useState([]);
    const [requestsThisMonth, setRequestsThisMonth] = useState([]);
+   const [moviesMap, setMoviesMap] = useState(new Map());
+   const [moviesByDateMap, setMoviesByDateMap] = useState(new Map());
 
-   const retrieveMoviesThisMonth = async (id) => {
-      const response = await fetch("/api/moviesbydate");
-      const requestedMoviesThisMonth = await response.json();
+   const fetchMovies = async () => {
+      try {
+         const response = await fetch(`/api/movies`);
+         const movies = await response.json();
 
-      const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-         (movie) =>
-            movie.requester === id && !movie.hasReacted && !movie.hasSeen
-      );
+         const moviesMap = new Map();
+         const sortedMovies = [];
+         const rankedMoviesObject = {};
 
-      setRequestsThisMonth(currentUsersMonthlyRequests);
+         movies.forEach((movie) => {
+            const key = `${movie.data.id}-${movie.data.Type}`;
+            moviesMap.set(key, movie);
+
+            if (!movie.hasSeen && !movie.hasReacted) {
+               sortedMovies.push(movie);
+            }
+         });
+
+         sortedMovies.sort((a, b) => b.voters.length - a.voters.length);
+
+         sortedMovies.forEach((movie, index) => {
+            rankedMoviesObject[movie.data.imdbID] = index + 1;
+         });
+
+         setMoviesList(movies);
+         setMoviesMap(moviesMap);
+         setRankedMovies(rankedMoviesObject);
+      } catch (error) {
+         console.error("Failed to fetch movies:", error);
+      }
    };
 
-   const checkIfUserUnderRequestLimit = async (id, isProducer) => {
-      const response = await fetch("/api/moviesbydate");
-      const requestedMoviesThisMonth = await response.json();
-
-      const currentUsersMonthlyRequests = requestedMoviesThisMonth.filter(
-         (movie) =>
-            movie.requester === id && !movie.hasReacted && !movie.hasSeen
+   const processUserRequestsByDate = (id, isCreator, isProducer) => {
+      const currentDate = new Date();
+      const startOfMonth = new Date(
+         currentDate.getFullYear(),
+         currentDate.getMonth(),
+         1
       );
+      const startOfNextMonth = new Date(
+         currentDate.getFullYear(),
+         currentDate.getMonth() + 1,
+         1
+      );
+
+      const filteredMap = new Map();
+      for (const [key, value] of moviesMap) {
+         const createdAtDate = new Date(value.createdAt);
+         if (
+            createdAtDate >= startOfMonth &&
+            createdAtDate < startOfNextMonth &&
+            value.requester === id &&
+            !value.hasSeen &&
+            !value.hasReacted
+         ) {
+            filteredMap.set(key, value);
+         }
+      }
 
       const requestLimit = isProducer ? 3 : 2;
-      setIsUserUnderRequestLimit(
-         currentUsersMonthlyRequests.length < requestLimit
-      );
-      setRequestsRemaining(requestLimit - currentUsersMonthlyRequests.length);
+      const isUnderLimit = isCreator ? true : filteredMap.size < requestLimit;
+
+      setMoviesByDateMap(filteredMap);
+      setIsUserUnderRequestLimit(isUnderLimit);
+      setRequestsRemaining(requestLimit - filteredMap.size);
    };
 
-   const getMovieVotes = async () => {
-      const response = await fetch(`/api/movies`);
-      const movies = await response.json();
-      setMoviesList(movies);
-
-      const sortedMovies = movies
-         .filter((movie) => !movie.hasSeen && !movie.hasReacted)
-         .sort((a, b) => b.voters.length - a.voters.length);
-
-      const rankedMoviesObject = sortedMovies.reduce((acc, movie, index) => {
-         acc[movie.data.imdbID] = index + 1;
-         return acc;
-      }, {});
-
-      setRankedMovies(rankedMoviesObject);
-   };
-
-   const createMovieVote = async (movie, currentUser) => {
+   const addRequestToList = async (movie, currentUser) => {
       setDisableButton(true);
 
       let data,
@@ -268,6 +292,14 @@ export const MovieProvider = ({ children }) => {
          );
          if (!postedMovie.error && !findMovie) {
             setMoviesList((movies) => [...movies, postedMovie]);
+            setMoviesMap((prevMap) => {
+               const newMap = new Map(prevMap);
+               newMap.set(
+                  `${postedMovie.data.id}-${postedMovie.data.Type}`,
+                  postedMovie
+               );
+               return newMap;
+            });
          }
 
          return postedMovie;
@@ -278,7 +310,7 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
-   const castMovieVote = async (movieId, voters, currentUser) => {
+   const addVoteToRequest = async (movieId, voters, currentUser) => {
       const newVoters = [...voters, currentUser];
       const votedMovie = moviesList.find((movie) => movie._id === movieId);
       const updatedMovieVote = { ...votedMovie, voters: newVoters };
@@ -301,6 +333,15 @@ export const MovieProvider = ({ children }) => {
          const data = await response.json();
          setMoviesList(updatedMoviesList);
 
+         setMoviesMap((prevMap) => {
+            const newMap = new Map(prevMap);
+            newMap.set(
+               `${updatedMovieVote.data.id}-${updatedMovieVote.data.Type}`,
+               updatedMovieVote
+            );
+            return newMap;
+         });
+
          const sortedMovies = updatedMoviesList
             .filter((movie) => !movie.hasSeen && !movie.hasReacted)
             .sort((a, b) => b.voters.length - a.voters.length);
@@ -318,7 +359,7 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
-   const removeMovieVoteOverride = async (movieId) => {
+   const removeRequestFromList = async (movieId) => {
       try {
          const response = await fetch(`/api/movies/${movieId}`, {
             method: "DELETE",
@@ -333,6 +374,12 @@ export const MovieProvider = ({ children }) => {
             (movie) => movie._id !== deletedMovie._id
          );
          setMoviesList(updatedMoviesList);
+
+         setMoviesMap((prevMap) => {
+            const newMap = new Map(prevMap);
+            newMap.delete(`${deletedMovie.data.id}-${deletedMovie.data.Type}`);
+            return newMap;
+         });
 
          const sortedMovies = updatedMoviesList
             .filter((movie) => !movie.hasSeen && !movie.hasReacted)
@@ -349,10 +396,12 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
-   const removeMovieVote = async (movieId, voters, currentUser) => {
+   const removeVoteFromRequest = async (movieId, voters, currentUser) => {
       const newVoters = voters.filter((voter) => voter !== currentUser);
-      const removeMovieVote = moviesList.find((movie) => movie._id === movieId);
-      const updatedMovieVote = { ...removeMovieVote, voters: newVoters };
+      const removeVoteFromRequest = moviesList.find(
+         (movie) => movie._id === movieId
+      );
+      const updatedMovieVote = { ...removeVoteFromRequest, voters: newVoters };
 
       if (voters.length === 1) {
          try {
@@ -371,6 +420,13 @@ export const MovieProvider = ({ children }) => {
             );
 
             setMoviesList(updatedMoviesList);
+            setMoviesMap((prevMap) => {
+               const newMap = new Map(prevMap);
+               newMap.delete(
+                  `${deletedMovie.data.id}-${deletedMovie.data.Type}`
+               );
+               return newMap;
+            });
          } catch (e) {
             return e;
          }
@@ -393,6 +449,15 @@ export const MovieProvider = ({ children }) => {
             const data = await response.json();
             setMoviesList(updatedMoviesList);
 
+            setMoviesMap((prevMap) => {
+               const newMap = new Map(prevMap);
+               newMap.set(
+                  `${updatedMovieVote.data.id}-${updatedMovieVote.data.Type}`,
+                  updatedMovieVote
+               );
+               return newMap;
+            });
+
             const sortedMovies = updatedMoviesList
                .filter((movie) => !movie.hasSeen && !movie.hasReacted)
                .sort((a, b) => b.voters.length - a.voters.length);
@@ -414,7 +479,7 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
-   const setMovieStatus = async (movieId, status) => {
+   const setRequestWatchStatus = async (movieId, status) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );
@@ -458,13 +523,23 @@ export const MovieProvider = ({ children }) => {
          const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
          setMoviesList(updatedMoviesList);
+
+         setMoviesMap((prevMap) => {
+            const newMap = new Map(prevMap);
+            newMap.set(
+               `${updatedMovieVote.data.id}-${updatedMovieVote.data.Type}`,
+               updatedMovieVote
+            );
+            return newMap;
+         });
+
          return data;
       } catch (e) {
          return e;
       }
    };
 
-   const setWatchedMovieLinks = async (movieId, links) => {
+   const setOnChannelRequestLinks = async (movieId, links) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );
@@ -487,6 +562,16 @@ export const MovieProvider = ({ children }) => {
          const response = await fetch(`/api/movies/${movieId}`, config);
          const data = await response.json();
          setMoviesList(updatedMoviesList);
+
+         setMoviesMap((prevMap) => {
+            const newMap = new Map(prevMap);
+            newMap.set(
+               `${updatedMovieVote.data.id}-${updatedMovieVote.data.Type}`,
+               updatedMovieVote
+            );
+            return newMap;
+         });
+
          return data;
       } catch (e) {
          return e;
@@ -499,17 +584,17 @@ export const MovieProvider = ({ children }) => {
             moviesList,
             filteredMoviesList,
             setFilteredMoviesList,
-            getMovieVotes,
+            fetchMovies,
             isRankingOn,
             setIsRankingOn,
             rankedMovies,
-            createMovieVote,
-            castMovieVote,
-            removeMovieVote,
+            addRequestToList,
+            addVoteToRequest,
+            removeVoteFromRequest,
             filterOptions,
             setFilterOptions,
-            setMovieStatus,
-            setWatchedMovieLinks,
+            setRequestWatchStatus,
+            setOnChannelRequestLinks,
             searchTitle,
             setSearchTitle,
             searchDirector,
@@ -518,14 +603,16 @@ export const MovieProvider = ({ children }) => {
             setSearchActor,
             searchComposer,
             setSearchComposer,
-            removeMovieVoteOverride,
-            checkIfUserUnderRequestLimit,
+            removeRequestFromList,
             isUserUnderRequestLimit,
             setIsUserUnderRequestLimit,
             requestsRemaining,
             disableButton,
-            retrieveMoviesThisMonth,
             requestsThisMonth,
+            moviesMap,
+            moviesByDateMap,
+            processUserRequestsByDate,
+            moviesByDateMap,
          }}
       >
          {children}

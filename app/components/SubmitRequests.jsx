@@ -7,7 +7,7 @@ import { MovieContext } from "@/context/MovieContext";
 const SubmitRequests = ({ user, isUnderRequestLimit }) => {
    const {
       moviesList,
-      checkIfUserUnderRequestLimit,
+      processUserRequestsByDate,
       isUserUnderRequestLimit,
       requestsRemaining,
    } = useContext(MovieContext);
@@ -25,9 +25,7 @@ const SubmitRequests = ({ user, isUnderRequestLimit }) => {
    }
 
    useEffect(() => {
-      if (!isCreator) {
-         checkIfUserUnderRequestLimit(id, isProducer);
-      }
+      processUserRequestsByDate(id, isCreator, isProducer);
    }, [moviesList]);
 
    useEffect(() => {

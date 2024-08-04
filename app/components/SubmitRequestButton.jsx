@@ -4,13 +4,7 @@ import SearchTitlesModal from "./SearchTitlesModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
-const SubmitRequestButton = ({
-   user,
-   open,
-   onOpenModal,
-   onCloseModal,
-   totalRequests,
-}) => {
+const SubmitRequestButton = ({ user, open, onOpenModal, onCloseModal }) => {
    return (
       <>
          <button
@@ -28,7 +22,7 @@ const SubmitRequestButton = ({
             onClose={onCloseModal}
             center
          >
-            <SearchTitlesModal user={user} totalRequests={totalRequests} />
+            <SearchTitlesModal user={user} />
          </Modal>
       </>
    );

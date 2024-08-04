@@ -1,14 +1,14 @@
 import React, { useEffect, useContext } from "react";
 import { MovieContext } from "@/context/MovieContext";
 
-const useRetrieveMovies = () => {
-   const { moviesList, getMovieVotes } = useContext(MovieContext);
+const useFetchMovies = () => {
+   const { moviesList, fetchMovies } = useContext(MovieContext);
 
    useEffect(() => {
-      getMovieVotes();
+      fetchMovies();
    }, []);
 
    return moviesList;
 };
 
-export default useRetrieveMovies;
+export default useFetchMovies;

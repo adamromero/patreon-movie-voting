@@ -16,13 +16,13 @@ import {
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
-import useRetrieveMovies from "../hooks/useRetrieveMovies";
+import useFetchMovies from "../hooks/useFetchMovies";
 import Pagination from "./Pagination";
 
 const MovieList = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
-   const moviesList = useRetrieveMovies();
+   const moviesList = useFetchMovies();
 
    const {
       filteredMoviesList,
@@ -33,13 +33,9 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchDirector,
       searchActor,
       searchComposer,
-      rankedMovies,
    } = useContext(MovieContext);
 
-   const [channelState, setChannelState] = useState({});
-   const [seenState, setSeenState] = useState({});
-   const [rewatchState, setRewatchState] = useState({});
-   const [requestStatus, setRequestStatus] = useState({});
+   const [requestStatusState, setRequestStatusState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
       useState(false);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
@@ -284,17 +280,9 @@ const MovieList = ({ currentUser, isCreator }) => {
    ]);
 
    useEffect(() => {
-      const channelStateObject = {};
-      const seenStateObject = {};
-      const rewatchStateObject = {};
-
       const requestStateObject = {};
 
       filteredMoviesList.forEach((movie) => {
-         channelStateObject[movie._id] = movie.hasReacted;
-         seenStateObject[movie._id] = movie.hasSeen;
-         rewatchStateObject[movie._id] = movie.isRewatch;
-
          requestStateObject[movie._id] = {
             hasReacted: movie.hasReacted,
             hasSeen: movie.hasSeen,
@@ -303,11 +291,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          };
       });
 
-      setChannelState(channelStateObject);
-      setSeenState(seenStateObject);
-      setRewatchState(rewatchStateObject);
-
-      setRequestStatus(requestStateObject);
+      setRequestStatusState(requestStateObject);
    }, [filteredMoviesList]);
 
    const handleTitleSort = () => {
@@ -462,14 +446,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                      isCreator={isCreator}
                      ranking={index + 1 + postsPerPage * (currentPage - 1)}
                      isRankingOn={isRankingOn}
-                     channelState={channelState}
-                     setChannelState={setChannelState}
-                     seenState={seenState}
-                     setSeenState={setSeenState}
-                     rewatchState={rewatchState}
-                     setRewatchState={setRewatchState}
-                     requestStatus={requestStatus}
-                     setRequestStatus={setRequestStatus}
+                     requestStatusState={requestStatusState}
                   />
                </div>
             ))}
