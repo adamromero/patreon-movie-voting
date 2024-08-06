@@ -95,7 +95,10 @@ export const nextAuthOptions = {
             const {
                attributes: { status },
             } = pledge;
-            isUserPledged = status === "valid";
+            isUserPledged =
+               status === "valid" || id === process.env.ALLOW_PATRON_IDS;
+            user.pledge = pledge;
+            user.isUserPledged = isUserPledged;
          }
 
          if (isUserPledged) {
