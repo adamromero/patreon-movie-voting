@@ -170,7 +170,7 @@ const MovieListEntry = ({
                {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : "N/A"}
             </div>
             <div className="lg:w-[40px]">
-               <span className="inline lg:hidden">Requests:</span>{" "}
+               <span className="inline lg:hidden">Votes:</span>{" "}
                {data?.voters?.length}
             </div>
             {!data?.hasReacted && !data?.hasSeen && currentUser ? (
