@@ -62,7 +62,10 @@ export const nextAuthOptions = {
       },
       async signIn({ user, account, profile }) {
          const { id } = profile.data;
-         if (id === process.env.CREATOR_ID) {
+         if (
+            id === process.env.CREATOR_ID ||
+            id === process.env.ALLOW_PATRON_IDS
+         ) {
             return true;
          }
 
@@ -95,8 +98,7 @@ export const nextAuthOptions = {
             const {
                attributes: { status },
             } = pledge;
-            isUserPledged =
-               status === "valid" || id === process.env.ALLOW_PATRON_IDS;
+            isUserPledged = status === "valid";
             user.pledge = pledge;
             user.isUserPledged = isUserPledged;
          }
