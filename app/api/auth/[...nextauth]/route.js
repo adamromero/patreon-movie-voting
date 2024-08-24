@@ -62,10 +62,7 @@ export const nextAuthOptions = {
       },
       async signIn({ user, account, profile }) {
          const { id } = profile.data;
-         if (
-            id === process.env.CREATOR_ID ||
-            id === process.env.ALLOW_PATRON_IDS
-         ) {
+         if (id === process.env.CREATOR_ID) {
             return true;
          }
 
@@ -82,6 +79,11 @@ export const nextAuthOptions = {
                item.relationships.creator.data.id === process.env.CREATOR_ID
             );
          });
+
+         if (id === process.env.ALLOW_PATRON_IDS) {
+            user.pledge = pledge;
+            return true;
+         }
 
          let isProducer = false;
          if (pledge) {
