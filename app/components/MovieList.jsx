@@ -203,6 +203,10 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             movie.data.Genre.includes(genre.Western)
          );
+      } else if (filterOptions.genre === genre.Halloween) {
+         filteredList = filteredList.filter((movie) => movie.isHalloween);
+      } else if (filterOptions.genre === genre.Christmas) {
+         filteredList = filteredList.filter((movie) => movie.isChristmas);
       }
 
       if (filterOptions.status === status.Seen) {
@@ -288,6 +292,8 @@ const MovieList = ({ currentUser, isCreator }) => {
             hasSeen: movie.hasSeen,
             isRewatch: movie.isRewatch,
             isUnseen: !movie.hasReacted && !movie.hasSeen && !movie.isRewatch,
+            isHalloween: movie.isHalloween,
+            isChristmas: movie.isChristmas,
          };
       });
 

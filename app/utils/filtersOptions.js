@@ -19,6 +19,8 @@ export const genre = {
    Thriller: "Thriller",
    Western: "Western",
    War: "War",
+   Halloween: "Halloween",
+   Christmas: "Christmas",
 };
 
 export const status = {

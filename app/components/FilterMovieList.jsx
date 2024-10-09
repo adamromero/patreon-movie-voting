@@ -96,12 +96,14 @@ const FilterMovieList = ({ currentUser }) => {
                         <option value={genre.Action}>Action</option>
                         <option value={genre.Adventure}>Adventure</option>
                         <option value={genre.Animation}>Animation</option>
+                        <option value={genre.Christmas}>Christmas</option>
                         <option value={genre.Comedy}>Comedy</option>
                         <option value={genre.Crime}>Crime</option>
                         <option value={genre.Documentary}>Documentary</option>
                         <option value={genre.Drama}>Drama</option>
                         <option value={genre.Family}>Family</option>
                         <option value={genre.Fantasy}>Fantasy</option>
+                        <option value={genre.Halloween}>Halloween</option>
                         <option value={genre.History}>History</option>
                         <option value={genre.Horror}>Horror</option>
                         <option value={genre.Mystery}>Mystery</option>

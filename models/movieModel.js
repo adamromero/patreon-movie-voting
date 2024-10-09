@@ -84,6 +84,14 @@ const movieSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   isHalloween: {
+      type: Boolean,
+      default: false,
+   },
+   isChristmas: {
+      type: Boolean,
+      default: false,
+   },
    links: {
       patreon: {
          type: String,

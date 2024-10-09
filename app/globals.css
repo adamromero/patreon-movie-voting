@@ -114,6 +114,14 @@ input:focus-visible + .checkmark {
    transition: background-color 0.2s ease-in-out;
 }
 
+.checkbox-container--holiday label .checkmark--halloween:after {
+   border-color: #ff9545;
+}
+
+.checkbox-container--holiday label .checkmark--christmas:after {
+   border-color: #05cb05;
+}
+
 .checkmark:after {
    content: "";
    position: absolute;
@@ -138,6 +146,34 @@ input:focus-visible + .checkmark {
    -webkit-transform: rotate(45deg);
    -ms-transform: rotate(45deg);
    transform: rotate(45deg);
+}
+
+.checkbox-container--holiday {
+   display: flex;
+   align-items: center;
+   height: 20px;
+   width: 90px;
+   font-size: 13px;
+   padding-left: 25px;
+   margin: 0;
+}
+
+.checkbox-container--holiday input:checked ~ .checkmark {
+   background-color: transparent;
+}
+
+.checkbox-container--holiday .checkmark {
+   height: 20px;
+   width: 20px;
+   left: 0;
+   top: 0;
+}
+
+.checkbox-container--holiday .checkmark:after {
+   left: 5px;
+   top: 0px;
+   width: 7px;
+   height: 13px;
 }
 
 .no-scrollbar::-webkit-scrollbar {

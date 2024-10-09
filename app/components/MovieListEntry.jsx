@@ -4,6 +4,7 @@ import { Modal } from "react-responsive-modal";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
+
 import { MovieContext } from "@/context/MovieContext";
 import { FaRegImage } from "react-icons/fa6";
 import { convertDateFormat } from "../utils/convertDateFormat";
@@ -39,6 +40,7 @@ const MovieListEntry = ({
       setRequestWatchStatus,
       setOnChannelRequestLinks,
       removeRequestFromList,
+      setRequestHolidayStatus,
    } = useContext(MovieContext);
 
    const handleCastVote = async (movieId, voters) => {
@@ -52,6 +54,11 @@ const MovieListEntry = ({
    const handleStatusSetting = (e, data) => {
       const selectedValue = e.target.value;
       setRequestWatchStatus(data?._id, selectedValue);
+   };
+
+   const handleHolidaySetting = (e, data) => {
+      const selectedValue = e.target.value;
+      setRequestHolidayStatus(data?._id, selectedValue);
    };
 
    const handleLinkUpdate = (e) => {
@@ -297,7 +304,6 @@ const MovieListEntry = ({
                               </div>
                            )}
                         </div>
-
                         <div className="flex flex-1 flex-col">
                            {data?.data?.Genre && (
                               <div>
@@ -366,26 +372,85 @@ const MovieListEntry = ({
                                  !data.isRewatch &&
                                  "Unseen"}
                            </div>
-                           <div className="flex gap-[5px] max-w-[200px] mt-[10px]">
-                              {data?.links?.youtube && (
-                                 <a
-                                    className="flex flex-1 justify-center items-center max-w-[98px] gap-[2px] bg-[red] text-[25px] p-[3px]"
-                                    href={data?.links?.youtube}
-                                    title="Watch on YouTube"
-                                    target="_blank"
-                                 >
-                                    <AiFillYoutube />
-                                 </a>
-                              )}
-                              {data?.links?.patreon && (
-                                 <a
-                                    className="flex flex-1 justify-center items-center max-w-[98px] gap-[2px] bg-[black] text-[25px] p-[3px] border-[#585858] border-[1px]"
-                                    href={data?.links?.patreon}
-                                    title="Watch Full Length"
-                                    target="_blank"
-                                 >
-                                    <BiLogoPatreon />
-                                 </a>
+                           <div className="flex justify-between flex-col md:flex-row">
+                              <div className="flex gap-[5px] max-w-[200px] mt-[10px] flex-1">
+                                 {data?.links?.youtube && (
+                                    <a
+                                       className="flex flex-1 justify-center items-center max-w-[98px] gap-[2px] bg-[red] text-[25px] p-[3px]"
+                                       href={data?.links?.youtube}
+                                       title="Watch on YouTube"
+                                       target="_blank"
+                                    >
+                                       <AiFillYoutube />
+                                    </a>
+                                 )}
+                                 {data?.links?.patreon && (
+                                    <a
+                                       className="flex flex-1 justify-center items-center max-w-[98px] gap-[2px] bg-[black] text-[25px] p-[3px] border-[#585858] border-[1px]"
+                                       href={data?.links?.patreon}
+                                       title="Watch Full Length"
+                                       target="_blank"
+                                    >
+                                       <BiLogoPatreon />
+                                    </a>
+                                 )}
+                              </div>
+
+                              {isCreator && (
+                                 <div className="flex gap-[5px] mt-[10px]">
+                                    <div className="flex flex-row gap-[5px] items-center">
+                                       <div className="checkbox-container checkbox-container--holiday">
+                                          <label
+                                             htmlFor="checkbox-halloween"
+                                             className="flex text-[12px] cursor-pointer"
+                                          >
+                                             <input
+                                                type="checkbox"
+                                                value="halloween"
+                                                id="checkbox-halloween"
+                                                checked={
+                                                   !!requestStatusState[
+                                                      data?._id
+                                                   ]?.isHalloween
+                                                }
+                                                onChange={(e) => {
+                                                   handleHolidaySetting(
+                                                      e,
+                                                      data
+                                                   );
+                                                }}
+                                             />
+                                             <div className="checkmark checkmark--halloween"></div>
+                                             Halloween
+                                          </label>
+                                       </div>
+                                       <div className="checkbox-container checkbox-container--holiday">
+                                          <label
+                                             htmlFor="checkbox-christmas"
+                                             className="flex text-[12px] cursor-pointer"
+                                          >
+                                             <input
+                                                type="checkbox"
+                                                value="christmas"
+                                                id="checkbox-christmas"
+                                                checked={
+                                                   !!requestStatusState[
+                                                      data?._id
+                                                   ]?.isChristmas
+                                                }
+                                                onChange={(e) => {
+                                                   handleHolidaySetting(
+                                                      e,
+                                                      data
+                                                   );
+                                                }}
+                                             />
+                                             <div className="checkmark checkmark--christmas"></div>
+                                             Christmas
+                                          </label>
+                                       </div>
+                                    </div>
+                                 </div>
                               )}
                            </div>
                         </div>

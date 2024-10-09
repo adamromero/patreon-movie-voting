@@ -269,6 +269,8 @@ export const MovieProvider = ({ children }) => {
       const newMovieVote = {
          data: movieData,
          voters: [currentUser],
+         isHalloween: genres.includes("Horror"),
+         isChristmas: title.includes("Christmas"),
          hasReacted: false,
          hasSeen: false,
          links: { patreon: "", youtube: "" },
@@ -479,6 +481,58 @@ export const MovieProvider = ({ children }) => {
       }
    };
 
+   const setRequestHolidayStatus = async (movieId, status) => {
+      const selectedMovieVote = moviesList.find(
+         (movie) => movie._id === movieId
+      );
+
+      let halloween = selectedMovieVote.isHalloween,
+         christmas = selectedMovieVote.isChristmas;
+      if (status === "halloween") {
+         halloween = !selectedMovieVote.isHalloween;
+      } else if (status === "christmas") {
+         christmas = !selectedMovieVote.isChristmas;
+      }
+
+      const updatedMovieVote = {
+         ...selectedMovieVote,
+         isHalloween: halloween,
+         isChristmas: christmas,
+      };
+
+      const config = {
+         method: "PUT",
+         headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify(updatedMovieVote),
+      };
+
+      const updatedMoviesList = moviesList.map((movie) => {
+         return movie._id === movieId ? updatedMovieVote : movie;
+      });
+
+      try {
+         const response = await fetch(`/api/movies/${movieId}`, config);
+         const data = await response.json();
+         setMoviesList(updatedMoviesList);
+
+         setMoviesMap((prevMap) => {
+            const newMap = new Map(prevMap);
+            newMap.set(
+               `${updatedMovieVote.data.id}-${updatedMovieVote.data.Type}`,
+               updatedMovieVote
+            );
+            return newMap;
+         });
+
+         return data;
+      } catch (e) {
+         return e;
+      }
+   };
+
    const setRequestWatchStatus = async (movieId, status) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
@@ -487,6 +541,7 @@ export const MovieProvider = ({ children }) => {
       let channel = false,
          seen = false,
          rewatch = false;
+
       if (status === "channel") {
          channel = true;
       } else if (status === "seen") {
@@ -594,6 +649,7 @@ export const MovieProvider = ({ children }) => {
             filterOptions,
             setFilterOptions,
             setRequestWatchStatus,
+            setRequestHolidayStatus,
             setOnChannelRequestLinks,
             searchTitle,
             setSearchTitle,
