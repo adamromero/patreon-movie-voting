@@ -269,7 +269,7 @@ export const MovieProvider = ({ children }) => {
       const newMovieVote = {
          data: movieData,
          voters: [currentUser],
-         isHalloween: genres.includes("Horror"),
+         isHalloween: false,
          isChristmas: title.includes("Christmas"),
          hasReacted: false,
          hasSeen: false,
