@@ -21,7 +21,7 @@ export const nextAuthOptions = {
          clientSecret: process.env.PATREON_CLIENT_SECRET,
          authorization: {
             params: {
-               scope: "identity identity[email] identity.memberships",
+               scope: "identity identity[email]",
             },
          },
          allowDangerousEmailAccountLinking: true,
@@ -54,63 +54,53 @@ export const nextAuthOptions = {
          if (token) {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
-            session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer =
-               token.isProducer || token.id === process.env.DEV_ID;
+            session.user.isCreator =
+               token.id === process.env.CREATOR_ID || process.env.DEV_ID;
+            session.user.isProducer = token.isProducer || process.env.DEV_ID;
          }
          return session;
       },
-      async signIn({ user, account, profile }) {
+      async signIn({ account, profile }) {
          const { id } = profile.data;
+
          if (id === process.env.CREATOR_ID) {
             return true;
          }
 
-         const response = await fetch(process.env.PATREON_PROFILE_URL, {
-            headers: {
-               Authorization: `Bearer ${account.access_token}`,
-            },
-         });
-         const userResponse = await response.json();
+         try {
+            const response = await fetch(process.env.PATREON_PROFILE_URL, {
+               headers: {
+                  Authorization: `Bearer ${account.access_token}`,
+               },
+            });
 
-         const pledge = userResponse?.included?.find((item) => {
-            return (
-               item.type === "pledge" &&
-               item.relationships.creator.data.id === process.env.CREATOR_ID
+            if (!response.ok) {
+               console.error(
+                  `Failed to fetch Patreon profile: ${response.statusText}`
+               );
+               return "/unauthorized";
+            }
+
+            const userResponse = await response.json();
+            const pledge = userResponse?.included?.filter(
+               (item) =>
+                  item.type === "member" &&
+                  item.attributes.patron_status === "active_patron" &&
+                  item.relationships.campaign.data.id ===
+                     process.env.CAMPAIGN_ID
             );
-         });
 
-         if (id === process.env.ALLOW_PATRON_IDS) {
-            user.pledge = pledge;
+            if (!pledge || pledge.length === 0) {
+               return "/unauthorized";
+            }
+
             return true;
-         }
-
-         let isProducer = false;
-         if (pledge) {
-            isProducer =
-               pledge.relationships.reward.data.id ===
-               process.env.PRODUCER_TIER_ID;
-
-            user.reward = pledge.relationships.reward.data.id;
-            user.isProducer = isProducer;
-         }
-
-         let isUserPledged = false;
-         if (pledge) {
-            const {
-               attributes: { status },
-            } = pledge;
-            isUserPledged = status === "valid";
-            user.pledge = pledge;
-            user.isUserPledged = isUserPledged;
-         }
-
-         if (isUserPledged) {
-            return true;
-         } else {
+         } catch (error) {
+            console.error(`Error during sign-in: ${error.message}`);
             return "/unauthorized";
          }
       },
+
       async redirect({ baseUrl }) {
          return baseUrl;
       },
