@@ -21,7 +21,7 @@ export const nextAuthOptions = {
          clientSecret: process.env.PATREON_CLIENT_SECRET,
          authorization: {
             params: {
-               scope: "identity identity[email]",
+               scope: "identity identity[email] identity.memberships",
             },
          },
          allowDangerousEmailAccountLinking: true,
@@ -55,51 +55,60 @@ export const nextAuthOptions = {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
             session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer = token.isProducer;
+            session.user.isProducer =
+               token.isProducer || token.id === process.env.DEV_ID;
          }
          return session;
       },
-      async signIn({ account, profile }) {
+      async signIn({ user, account, profile }) {
          const { id } = profile.data;
-
          if (id === process.env.CREATOR_ID) {
             return true;
          }
 
-         try {
-            const response = await fetch(process.env.PATREON_PROFILE_URL, {
-               headers: {
-                  Authorization: `Bearer ${account.access_token}`,
-               },
-            });
-
-            if (!response.ok) {
-               console.error(
-                  `Failed to fetch Patreon profile: ${response.statusText}`
-               );
-               return "/unauthorized";
-            }
-
-            const userResponse = await response.json();
-            const pledge = userResponse?.included?.filter(
-               (item) =>
-                  item.type === "member" &&
-                  item.attributes.patron_status === "active_patron" &&
-                  item.relationships.campaign.data.id ===
-                     process.env.CAMPAIGN_ID
+         const response = await fetch(process.env.PATREON_PROFILE_URL, {
+            headers: {
+               Authorization: `Bearer ${account.access_token}`,
+            },
+         });
+         const userResponse = await response.json();
+         const pledge = userResponse?.included?.find((item) => {
+            return (
+               item.type === "pledge" &&
+               item.relationships.creator.data.id === process.env.CREATOR_ID
             );
-
-            if (!pledge || pledge.length === 0) {
-               return "/unauthorized";
-            }
-
+         });
+         if (id === process.env.ALLOW_PATRON_IDS) {
+            user.pledge = pledge;
             return true;
-         } catch (error) {
-            console.error(`Error during sign-in: ${error.message}`);
+         }
+
+         let isProducer = false;
+         if (pledge) {
+            isProducer =
+               pledge.relationships.reward.data.id ===
+               process.env.PRODUCER_TIER_ID;
+
+            user.reward = pledge.relationships.reward.data.id;
+            user.isProducer = isProducer;
+         }
+
+         let isUserPledged = false;
+         if (pledge) {
+            const {
+               attributes: { status },
+            } = pledge;
+            isUserPledged = status === "valid";
+            user.pledge = pledge;
+            user.isUserPledged = isUserPledged;
+         }
+
+         if (isUserPledged) {
+            return true;
+         } else {
             return "/unauthorized";
          }
       },
-
       async redirect({ baseUrl }) {
          return baseUrl;
       },
