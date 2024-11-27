@@ -55,7 +55,7 @@ export const nextAuthOptions = {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
             session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer = token.isProducer || process.env.DEV_ID;
+            session.user.isProducer = token.isProducer;
          }
          return session;
       },
