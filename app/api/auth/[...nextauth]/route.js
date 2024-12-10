@@ -12,9 +12,6 @@ export const nextAuthOptions = {
    session: {
       strategy: "jwt",
    },
-   pages: {
-      //signIn: "/unauthorized",
-   },
    providers: [
       PatreonProvider({
          clientId: process.env.PATREON_CLIENT_ID,
@@ -24,7 +21,7 @@ export const nextAuthOptions = {
                scope: "identity identity[email] identity.memberships",
             },
          },
-         allowDangerousEmailAccountLinking: true,
+         //allowDangerousEmailAccountLinking: true,
       }),
    ],
    callbacks: {
