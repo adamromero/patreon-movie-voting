@@ -21,7 +21,7 @@ export const nextAuthOptions = {
                scope: "identity identity[email] identity.memberships",
             },
          },
-         //allowDangerousEmailAccountLinking: true,
+         allowDangerousEmailAccountLinking: true,
       }),
    ],
    callbacks: {
