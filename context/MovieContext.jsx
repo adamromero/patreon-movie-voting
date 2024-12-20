@@ -10,7 +10,7 @@ import {
    votes,
    requests,
    rating,
-   watched,
+   statusSort,
 } from "@/app/utils/filtersOptions";
 
 export const MovieContext = createContext();
@@ -32,7 +32,7 @@ export const MovieProvider = ({ children }) => {
       genre: genre.Default,
       requests: requests.Default,
       status: status.Default,
-      watched: watched.Default,
+      statusSort: statusSort.Unwatched,
    });
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
    const [requestsRemaining, setRequestsRemaining] = useState();

@@ -11,7 +11,7 @@ import {
    alphabetical,
    rating,
    votes,
-   watched,
+   statusSort,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
@@ -119,6 +119,24 @@ const MovieList = ({ currentUser, isCreator }) => {
          filteredList = filteredList.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
          );
+      }
+
+      if (filterOptions.statusSort === statusSort.Watched) {
+         const seenList = filteredList.filter(
+            (movie) => movie.hasSeen || movie.hasReacted
+         );
+         const unseenList = filteredList.filter(
+            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
+         );
+         filteredList = [...seenList, ...unseenList];
+      } else if (filterOptions.statusSort === statusSort.Unwatched) {
+         const seenList = filteredList.filter(
+            (movie) => movie.hasSeen || movie.hasReacted
+         );
+         const unseenList = filteredList.filter(
+            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
+         );
+         filteredList = [...unseenList, ...seenList];
       }
 
       if (filterOptions.type === type.Movie) {
@@ -307,7 +325,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
-         watched: watched.Default,
          alphabetical: isTitleFilterAscending
             ? alphabetical.Ascending
             : alphabetical.Descending,
@@ -321,7 +338,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
-         watched: watched.Default,
          votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
       }));
    };
@@ -333,7 +349,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
-         watched: watched.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
    };

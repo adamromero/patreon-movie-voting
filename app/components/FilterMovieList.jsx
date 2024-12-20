@@ -11,6 +11,7 @@ import {
    rating,
    votes,
    alphabetical,
+   statusSort,
 } from "@/app/utils/filtersOptions";
 import FilterMovieListTags from "./FilterMovieListTags";
 import FilterMovieListSortTags from "./FilterMovieListSortTags";
@@ -42,6 +43,14 @@ const FilterMovieList = ({ currentUser }) => {
       }));
    };
 
+   const handleWatchedStatusSort = (e) => {
+      const selection = e.target.value;
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         statusSort: selection,
+      }));
+   };
+
    const handleTypeFilter = (e) => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
@@ -58,7 +67,7 @@ const FilterMovieList = ({ currentUser }) => {
       }));
    };
 
-   const handleWatchedFilter = (e) => {
+   const handleStatusFilter = (e) => {
       const selection = e.target.value;
       setFilterOptions((prevOptions) => ({
          ...prevOptions,
@@ -138,7 +147,7 @@ const FilterMovieList = ({ currentUser }) => {
                         name="statusFilter"
                         id="status"
                         value={filterOptions.status}
-                        onChange={handleWatchedFilter}
+                        onChange={handleStatusFilter}
                      >
                         <option value={status.Default}>All</option>
                         <option value={status.Watched}>On Channel</option>
@@ -176,6 +185,22 @@ const FilterMovieList = ({ currentUser }) => {
                <FilterMovieListSortTags />
             </div>
             <div className="flex gap-[10px]">
+               <div className="flex flex-col flex-1 lg:flex-none">
+                  <label htmlFor="statusSort">{statusSort.Name}</label>
+                  <select
+                     className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                     name="watchedFilter"
+                     id="watched"
+                     value={filterOptions.statusSort}
+                     onChange={handleWatchedStatusSort}
+                  >
+                     <option value={statusSort.Default}>Default</option>
+                     <option value={statusSort.Unwatched}>
+                        Unseen/Rewatch
+                     </option>
+                     <option value={statusSort.Watched}>Seen/On Channel</option>
+                  </select>
+               </div>
                <div className="flex flex-col flex-1 lg:flex-none">
                   <label htmlFor="chronological">{chronological.Name}</label>
                   <select
