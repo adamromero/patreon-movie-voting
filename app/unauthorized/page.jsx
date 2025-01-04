@@ -17,7 +17,7 @@ const lato = Lato({
 const UnauthorizedPage = () => {
    return (
       <div
-         className={`${lato.className} h-[100vh] md:pt-[75px] text-[20px] p-[20px] max-w-[1000px] mx-auto flex flex-col align-center`}
+         className={`${lato.className} md:pt-[75px] text-[20px] p-[20px] max-w-[1000px] mx-auto flex flex-col align-center`}
       >
          <div className="flex flex-col justify-center align-center bg-[black] py-[10px] h-[500px] rounded-[20px]">
             <div className="film-strip"></div>
