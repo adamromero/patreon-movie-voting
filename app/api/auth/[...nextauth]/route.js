@@ -21,7 +21,7 @@ export const nextAuthOptions = {
          clientSecret: process.env.PATREON_CLIENT_SECRET,
          authorization: {
             params: {
-               scope: "identity",
+               scope: "identity identity.memberships",
             },
          },
          allowDangerousEmailAccountLinking: true,
