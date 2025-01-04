@@ -17,9 +17,9 @@ const lato = Lato({
 const UnauthorizedPage = () => {
    return (
       <div
-         className={`${lato.className} md:pt-[75px] text-[20px] p-[20px] max-w-[1000px] mx-auto flex flex-col align-center`}
+         className={`${lato.className} text-[20px] p-[20px] max-w-[1000px] mx-auto flex flex-col align-center`}
       >
-         <div className="flex flex-col justify-center align-center bg-[black] py-[10px] h-[500px] rounded-[20px]">
+         <div className="flex flex-col justify-center align-center bg-[black] py-[10px] h-[475px] overflow-hidden rounded-[20px]">
             <div className="film-strip"></div>
             <div className="flex flex-col justify-center align-center items-center gap-[20px] p-[40px] h-[425px]">
                <h1 className="sr-only">Access is Denied</h1>
