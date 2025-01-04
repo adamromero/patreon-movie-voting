@@ -27,12 +27,12 @@ const UnauthorizedPage = () => {
                   Oh Frig!
                </strong>
                <p>
-                  To request and vote on movies and shows, you must be a patron
-                  of this channel.
+                  To request and vote on movies and shows, you must be a current
+                  patron of this channel.
                </p>
                <div className="flex flex-col mb-[30px] sm:flex-row gap-[15px]">
                   <p>
-                     If you currently are not, please join{" "}
+                     Please join{" "}
                      <a
                         className="underline text-[#ff52ff]"
                         href="https://www.patreon.com/jenmurray"
