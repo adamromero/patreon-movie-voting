@@ -148,25 +148,29 @@ const FilterMovieList = ({ currentUser }) => {
                         <option value={status.Votable}>Votable</option>
                      </select>
                   </div>
-                  {currentUser && (
-                     <div className="flex flex-col flex-1 lg:flex-none">
-                        <label htmlFor="requests">{requests.Name}</label>
-                        <select
-                           className="bg-white text-black w-full lg:w-[125px] p-[5px]"
-                           name="requestsFilter"
-                           id="requests"
-                           value={filterOptions.requests}
-                           onChange={handleRequestsFilter}
-                        >
-                           <option value={requests.Default}>All</option>
-                           <option value={requests.MyRequests}>
-                              My Requests
-                           </option>
-                           <option value={requests.Voted}>Voted</option>
-                           <option value={requests.NotVoted}>Not Voted</option>
-                        </select>
-                     </div>
-                  )}
+                  <div className="flex flex-col flex-1 lg:flex-none">
+                     {currentUser && (
+                        <>
+                           <label htmlFor="requests">{requests.Name}</label>
+                           <select
+                              className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                              name="requestsFilter"
+                              id="requests"
+                              value={filterOptions.requests}
+                              onChange={handleRequestsFilter}
+                           >
+                              <option value={requests.Default}>All</option>
+                              <option value={requests.MyRequests}>
+                                 My Requests
+                              </option>
+                              <option value={requests.Voted}>Voted</option>
+                              <option value={requests.NotVoted}>
+                                 Not Voted
+                              </option>
+                           </select>
+                        </>
+                     )}
+                  </div>
                </div>
             </div>
          </div>
