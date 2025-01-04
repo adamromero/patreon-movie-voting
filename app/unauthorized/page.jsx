@@ -21,7 +21,7 @@ const UnauthorizedPage = () => {
       >
          <div className="flex flex-col justify-center align-center bg-[black] py-[10px] h-[475px] overflow-hidden rounded-[20px]">
             <div className="film-strip"></div>
-            <div className="flex flex-col justify-center align-center items-center gap-[20px] p-[40px] h-[425px]">
+            <div className="flex flex-col justify-center align-center items-center gap-[20px] p-[40px] h-[425px] text-center">
                <h1 className="sr-only">Access is Denied</h1>
                <strong className={`${breathing.className} text-[25px]`}>
                   Oh Frig!
