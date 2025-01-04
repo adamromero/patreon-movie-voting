@@ -12,7 +12,8 @@ const UnauthorizedPage = () => {
          className={`${lato.className} md:pt-[75px] text-[20px] p-[20px] max-w-[1000px] mx-auto gap-[20px] flex flex-col justify-center align-center`}
       >
          <p>
-            To request and vote on movies, you must be a patron of this channel.
+            To request and vote on movies and shows, you must be a patron of
+            this channel.
          </p>
          <div className="flex flex-col mb-[30px] sm:flex-row items-center gap-[15px]">
             <p>
