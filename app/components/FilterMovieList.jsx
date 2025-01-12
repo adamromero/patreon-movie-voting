@@ -95,7 +95,7 @@ const FilterMovieList = ({ currentUser }) => {
                   <div className="flex flex-col flex-1 lg:flex-none">
                      <label htmlFor="genre">{genre.Name}</label>
                      <select
-                        className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="genreFilter"
                         id="genre"
                         value={filterOptions.genre}
@@ -127,7 +127,7 @@ const FilterMovieList = ({ currentUser }) => {
                   <div className="flex flex-col flex-1 lg:flex-none">
                      <label htmlFor="type">{type.Name}</label>
                      <select
-                        className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="typeFilter"
                         id="type"
                         value={filterOptions.type}
@@ -143,7 +143,7 @@ const FilterMovieList = ({ currentUser }) => {
                   <div className="flex flex-col flex-1 lg:flex-none">
                      <label htmlFor="status">{status.Name}</label>
                      <select
-                        className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="statusFilter"
                         id="status"
                         value={filterOptions.status}
@@ -161,7 +161,7 @@ const FilterMovieList = ({ currentUser }) => {
                      <div className="flex flex-col flex-1 lg:flex-none">
                         <label htmlFor="requests">{requests.Name}</label>
                         <select
-                           className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                           className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                            name="requestsFilter"
                            id="requests"
                            value={filterOptions.requests}
@@ -188,7 +188,7 @@ const FilterMovieList = ({ currentUser }) => {
                <div className="flex flex-col flex-1 lg:flex-none">
                   <label htmlFor="statusSort">{statusSort.Name}</label>
                   <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                      name="watchedFilter"
                      id="watched"
                      value={filterOptions.statusSort}
@@ -204,7 +204,7 @@ const FilterMovieList = ({ currentUser }) => {
                <div className="flex flex-col flex-1 lg:flex-none">
                   <label htmlFor="chronological">{chronological.Name}</label>
                   <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                      name="chronologicalFilter"
                      id="chronological"
                      value={filterOptions.chronological}
@@ -218,7 +218,7 @@ const FilterMovieList = ({ currentUser }) => {
                <div className="flex flex-col flex-1 lg:flex-none">
                   <label htmlFor="added">{added.Name}</label>
                   <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px]"
+                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                      name="addedFilter"
                      id="added"
                      value={filterOptions.added}
