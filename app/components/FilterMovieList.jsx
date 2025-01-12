@@ -198,7 +198,7 @@ const FilterMovieList = ({ currentUser }) => {
                      <option value={statusSort.Unwatched}>
                         Unseen/Rewatch
                      </option>
-                     <option value={statusSort.Watched}>Seen/On Channel</option>
+                     <option value={statusSort.Watched}>On Channel/Seen</option>
                   </select>
                </div>
                <div className="flex flex-col flex-1 lg:flex-none">
