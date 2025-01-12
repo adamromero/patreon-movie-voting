@@ -12,39 +12,79 @@ export const nextAuthOptions = {
    session: {
       strategy: "jwt",
    },
+   pages: {
+      signIn: "/",
+   },
    providers: [
       PatreonProvider({
          clientId: process.env.PATREON_CLIENT_ID,
          clientSecret: process.env.PATREON_CLIENT_SECRET,
          authorization: {
             params: {
-               scope: "identity identity[email] identity.memberships",
+               scope: "identity identity[email]",
             },
          },
          allowDangerousEmailAccountLinking: true,
       }),
    ],
    callbacks: {
-      async jwt({ token, profile }) {
-         const pledge = profile?.included?.find((item) => {
-            return (
-               item.type === "pledge" &&
-               item.relationships.creator.data.id === process.env.CREATOR_ID
+      async signIn({ account, profile }) {
+         const { id } = profile.data;
+
+         if (id === process.env.CREATOR_ID) {
+            return true;
+         }
+
+         try {
+            const response = await fetch(process.env.PATREON_PROFILE_URL, {
+               headers: {
+                  Authorization: `Bearer ${account.access_token}`,
+               },
+            });
+
+            if (!response.ok) {
+               console.error(
+                  `Failed to fetch Patreon profile: ${response.statusText}`
+               );
+               return "/unauthorized";
+            }
+
+            const userResponse = await response.json();
+            const pledge = userResponse?.included?.filter(
+               (item) =>
+                  item.type === "member" &&
+                  item.attributes.patron_status === "active_patron" &&
+                  item.relationships.campaign.data.id ===
+                     process.env.CAMPAIGN_ID
             );
-         });
 
-         let isProducer = false;
-         if (pledge) {
-            isProducer =
-               pledge.relationships.reward.data.id ===
+            if (!pledge || pledge.length === 0) {
+               return "/unauthorized";
+            }
+
+            return true;
+         } catch (error) {
+            console.error(`Error during sign-in: ${error.message}`);
+            return "/unauthorized";
+         }
+      },
+      async redirect({ baseUrl }) {
+         return baseUrl;
+      },
+      async jwt({ token, user, profile }) {
+         if (!user || !profile) return token;
+
+         const { isUserPledged, pledge } = user;
+
+         const isProducer =
+            isUserPledged &&
+            pledge?.relationships?.reward?.data?.id ===
                process.env.PRODUCER_TIER_ID;
-         }
 
-         if (profile) {
-            token.id = profile.data.id;
-            token.firstName = profile.data.attributes.first_name;
-            token.isProducer = isProducer;
-         }
+         token.id = profile.data.id;
+         token.firstName = profile.data.attributes.first_name;
+         token.isProducer = isProducer;
+
          return token;
       },
       async session({ token, session }) {
@@ -55,59 +95,8 @@ export const nextAuthOptions = {
             session.user.isProducer =
                token.isProducer || token.id === process.env.DEV_ID;
          }
+
          return session;
-      },
-      async signIn({ user, account, profile }) {
-         const { id } = profile.data;
-         if (id === process.env.CREATOR_ID) {
-            return true;
-         }
-
-         const response = await fetch(process.env.PATREON_PROFILE_URL, {
-            headers: {
-               Authorization: `Bearer ${account.access_token}`,
-            },
-         });
-         const userResponse = await response.json();
-         const pledge = userResponse?.included?.find((item) => {
-            return (
-               item.type === "pledge" &&
-               item.relationships.creator.data.id === process.env.CREATOR_ID
-            );
-         });
-         if (id === process.env.ALLOW_PATRON_IDS) {
-            user.pledge = pledge;
-            return true;
-         }
-
-         let isProducer = false;
-         if (pledge) {
-            isProducer =
-               pledge.relationships.reward.data.id ===
-               process.env.PRODUCER_TIER_ID;
-
-            user.reward = pledge.relationships.reward.data.id;
-            user.isProducer = isProducer;
-         }
-
-         let isUserPledged = false;
-         if (pledge) {
-            const {
-               attributes: { status },
-            } = pledge;
-            isUserPledged = status === "valid";
-            user.pledge = pledge;
-            user.isUserPledged = isUserPledged;
-         }
-
-         if (isUserPledged) {
-            return true;
-         } else {
-            return "/unauthorized";
-         }
-      },
-      async redirect({ baseUrl }) {
-         return baseUrl;
       },
    },
 };
