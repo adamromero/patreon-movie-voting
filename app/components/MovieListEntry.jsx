@@ -174,7 +174,7 @@ const MovieListEntry = ({
             </div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Rating:</span>{" "}
-               {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : "N/A"}
+               {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : ""}
             </div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Votes:</span>{" "}
