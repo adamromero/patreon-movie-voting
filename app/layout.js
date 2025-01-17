@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
    title: "Patron Movie Requests",
    description:
-      "A movie voting app for the Jen Murray movie reaction channel on Patreon",
+      "A requesting web app exclusive to Patreon members on the Jen Murray movie/tv reaction channel.",
    other: {
       "google-site-verification": "ik7hvs9SJ6lg9swECf_QuiptsofDCk5K1a_ucnHEw-Y",
    },
