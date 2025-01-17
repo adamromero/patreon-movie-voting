@@ -17,13 +17,13 @@ const lato = Lato({
 const UnauthorizedPage = () => {
    return (
       <div
-         className={`${lato.className} text-[20px] p-[20px] max-w-[1000px] mx-auto flex flex-col align-center`}
+         className={`${lato.className} text-[20px] py-[20px] px-0 mx-auto flex flex-col align-center`}
       >
-         <div className="flex flex-col justify-center align-center bg-[black] py-[10px] h-[475px] overflow-hidden rounded-[20px]">
+         <div className="flex flex-col justify-center align-center bg-[black] py-[10px] overflow-hidden">
             <div className="film-strip"></div>
-            <div className="flex flex-col justify-center align-center items-center gap-[20px] p-[40px] h-[425px] text-center">
+            <div className="flex flex-col justify-center align-center items-center gap-[20px] py-[60px] md:py-[75px] px-[30px] text-center">
                <h1 className="sr-only">Access is Denied</h1>
-               <strong className={`${breathing.className} text-[25px]`}>
+               <strong className={`${breathing.className} text-[32px]`}>
                   Oh Frig!
                </strong>
                <p>
