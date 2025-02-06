@@ -7,7 +7,10 @@ import { AiFillDelete } from "react-icons/ai";
 
 import { MovieContext } from "@/context/MovieContext";
 import { FaRegImage } from "react-icons/fa6";
-import { convertDateFormat } from "../utils/convertDateFormat";
+import {
+   convertDateFormat,
+   convertReleaseDate,
+} from "../utils/convertDateFormat";
 
 const MovieListEntry = ({
    data,
@@ -349,13 +352,21 @@ const MovieListEntry = ({
                            {data?.data?.Release && (
                               <div>
                                  <span className="font-bold">Released:</span>{" "}
-                                 {convertDateFormat(data?.data?.Release, true)}
+                                 {convertDateFormat(
+                                    convertReleaseDate(data?.data?.Release)
+                                 )}
                               </div>
                            )}
                            {data?.createdAt && (
                               <div>
                                  <span className="font-bold">Requested:</span>{" "}
-                                 {convertDateFormat(data?.createdAt, false)}
+                                 {convertDateFormat(data?.createdAt)}
+                              </div>
+                           )}
+                           {data?.publishedAt && (
+                              <div>
+                                 <span className="font-bold">Published:</span>{" "}
+                                 {convertDateFormat(data?.publishedAt)}
                               </div>
                            )}
                            <div>

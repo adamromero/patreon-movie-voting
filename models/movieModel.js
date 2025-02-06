@@ -110,6 +110,10 @@ const movieSchema = new mongoose.Schema({
       type: Date,
       default: Date.now,
    },
+   publishedAt: {
+      type: Date,
+      default: null,
+   },
 });
 
 movieSchema.index({ createdAt: 1 });
