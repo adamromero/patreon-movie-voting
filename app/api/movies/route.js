@@ -7,7 +7,7 @@ connectDB();
 
 export async function GET(req, res) {
    try {
-      const movieVotes = await Movie.find();
+      const movieVotes = await Movie.find().sort({ createdAt: 1 });
       return NextResponse.json(movieVotes);
    } catch (error) {
       return NextResponse.json({
