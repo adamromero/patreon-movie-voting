@@ -12,6 +12,7 @@ import {
    votes,
    alphabetical,
    statusSort,
+   published,
 } from "@/app/utils/filtersOptions";
 import FilterMovieListTags from "./FilterMovieListTags";
 import FilterMovieListSortTags from "./FilterMovieListSortTags";
@@ -28,6 +29,7 @@ const FilterMovieList = ({ currentUser }) => {
          rating: rating.Default,
          added: added.Default,
          chronological: selection,
+         published: published.Default,
       }));
    };
 
@@ -40,6 +42,20 @@ const FilterMovieList = ({ currentUser }) => {
          rating: rating.Default,
          added: selection,
          chronological: chronological.Default,
+         published: published.Default,
+      }));
+   };
+
+   const handlePublishSort = (e) => {
+      const selection = e.target.value;
+      setFilterOptions((prevOptions) => ({
+         ...prevOptions,
+         alphabetical: alphabetical.Default,
+         votes: votes.Default,
+         rating: rating.Default,
+         added: added.Default,
+         chronological: chronological.Default,
+         published: selection,
       }));
    };
 
@@ -213,6 +229,20 @@ const FilterMovieList = ({ currentUser }) => {
                      <option value={chronological.Default}>Default</option>
                      <option value={chronological.Older}>Older</option>
                      <option value={chronological.Newer}>Newer</option>
+                  </select>
+               </div>
+               <div className="flex flex-col flex-1 lg:flex-none">
+                  <label htmlFor="published">{published.Name}</label>
+                  <select
+                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
+                     name="publishedFilter"
+                     id="published"
+                     value={filterOptions.published}
+                     onChange={handlePublishSort}
+                  >
+                     <option value={published.Default}>Default</option>
+                     <option value={published.Older}>Older</option>
+                     <option value={published.Newer}>Newer</option>
                   </select>
                </div>
                <div className="flex flex-col flex-1 lg:flex-none">
