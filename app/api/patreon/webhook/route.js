@@ -34,7 +34,9 @@ export async function POST(req) {
             const filter = year
                ? {
                     "data.Title": extractedTitle,
-                    "data.Year": { $in: [year, year + 1] },
+                    "data.Year": {
+                       $in: [year, String(parseInt(year, 10) + 1)],
+                    },
                     "data.Type": "movie",
                     "links.patreon": "",
                  }
