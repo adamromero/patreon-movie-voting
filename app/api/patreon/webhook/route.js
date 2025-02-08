@@ -33,7 +33,7 @@ export async function POST(req) {
          if (extractedTitle) {
             const filter = year
                ? {
-                    "data.Title": extractedTitle,
+                    "data.Title": { $regex: extractedTitle, $options: "i" },
                     "data.Year": {
                        $in: [year, String(parseInt(year, 10) + 1)],
                     },
@@ -41,7 +41,7 @@ export async function POST(req) {
                     "links.patreon": "",
                  }
                : {
-                    "data.Title": extractedTitle,
+                    "data.Title": { $regex: extractedTitle, $options: "i" },
                     "data.Type": "tv",
                     "links.patreon": "",
                  };
