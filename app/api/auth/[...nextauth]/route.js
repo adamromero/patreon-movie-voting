@@ -28,10 +28,11 @@ export const nextAuthOptions = {
       }),
    ],
    callbacks: {
-      async signIn({ account, profile }) {
+      async signIn({ user, account, profile }) {
          const { id } = profile.data;
 
          if (id === process.env.CREATOR_ID) {
+            user.accessToken = account.access_token;
             return true;
          }
 

@@ -363,12 +363,12 @@ const MovieListEntry = ({
                                  {convertDateFormat(data?.createdAt)}
                               </div>
                            )}
-                           {data?.publishedAt && (
+                           {/* {data?.publishedAt && (
                               <div>
                                  <span className="font-bold">Published:</span>{" "}
                                  {convertDateFormat(data?.publishedAt)}
                               </div>
-                           )}
+                           )} */}
                            <div>
                               <span className="font-bold">Votes:</span>{" "}
                               {data?.voters?.length}
