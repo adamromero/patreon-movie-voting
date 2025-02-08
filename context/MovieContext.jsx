@@ -666,7 +666,6 @@ export const MovieProvider = ({ children }) => {
             disableButton,
             requestsThisMonth,
             moviesMap,
-            moviesByDateMap,
             processUserRequestsByDate,
             moviesByDateMap,
          }}

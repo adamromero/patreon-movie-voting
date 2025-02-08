@@ -16,7 +16,8 @@ const RequestsThisMonth = () => {
       return (
          <div className="mb-[15px]">
             <h2 className="flex items-center gap-[5px] mb-[5px] font-bold">
-               My Requests for {convertMonthFormat(new Date().getMonth())}{" "}
+               My Requests for{" "}
+               {new Date().toLocaleString(undefined, { month: "long" })}{" "}
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
