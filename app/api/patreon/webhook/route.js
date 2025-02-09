@@ -19,6 +19,8 @@ export async function POST(req) {
       const request = await req.json();
       const { title, url, published_at } = request.data.attributes;
 
+      console.log(title, url, published_at);
+
       if (!title || !url || !published_at) {
          return NextResponse.json(
             { message: "Invalid input, no action performed" },
@@ -55,6 +57,8 @@ export async function POST(req) {
                   publishedAt: published_at,
                },
             };
+
+            console.log(filter, update);
 
             const result = await Movie.updateOne(filter, update);
             if (result.modifiedCount > 0) {
