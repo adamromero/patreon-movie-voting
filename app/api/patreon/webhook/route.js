@@ -41,11 +41,13 @@ export async function POST(req) {
                     },
                     "data.Type": "movie",
                     "links.patreon": "",
+                    publishedAt: null,
                  }
                : {
                     "data.Title": { $regex: extractedTitle, $options: "i" },
                     "data.Type": "tv",
                     "links.patreon": "",
+                    publishedAt: null,
                  };
 
             const update = {
