@@ -28,15 +28,17 @@ export const nextAuthOptions = {
       }),
    ],
    callbacks: {
-      async signIn({ user, account, profile }) {
-         const { id } = profile.data;
-
-         if (id === process.env.CREATOR_ID) {
-            user.accessToken = account.access_token;
-            return true;
-         }
-
+      async signIn({ account, profile }) {
          try {
+            const id = profile?.data?.id;
+            if (!id) {
+               return "/unauthorized";
+            }
+
+            if (id === process.env.CREATOR_ID) {
+               return true;
+            }
+
             const response = await fetch(process.env.PATREON_PROFILE_URL, {
                headers: {
                   Authorization: `Bearer ${account.access_token}`,
@@ -51,29 +53,37 @@ export const nextAuthOptions = {
             }
 
             const userResponse = await response.json();
-            const pledge = userResponse?.included?.filter(
+            const pledge = userResponse?.included?.find(
                (item) =>
                   item.type === "member" &&
                   item.attributes.patron_status === "active_patron" &&
-                  item.relationships.campaign.data.id ===
+                  item.relationships.campaign?.data?.id ===
                      process.env.CAMPAIGN_ID
             );
 
-            if (!pledge || pledge.length === 0) {
+            if (!pledge) {
                return "/unauthorized";
             }
 
+            const isProducer =
+               pledge.relationships?.currently_entitled_tiers?.data?.some(
+                  (tier) => tier.id === process.env.PRODUCER_TIER_ID
+               );
+
+            account.isProducer = isProducer;
+
             return true;
          } catch (error) {
-            console.error(`Error during sign-in: ${error.message}`);
+            console.error("Error during sign-in:", error);
             return "/unauthorized";
          }
       },
+
       async redirect({ baseUrl }) {
          return baseUrl;
       },
-      async jwt({ token, user, profile }) {
-         if (!user || !profile) return token;
+      async jwt({ token, user, profile, account }) {
+         if (!profile) return token;
 
          const { isUserPledged, pledge } = user;
 
@@ -84,7 +94,7 @@ export const nextAuthOptions = {
 
          token.id = profile.data.id;
          token.firstName = profile.data.attributes.first_name;
-         token.isProducer = isProducer;
+         token.isProducer = account.isProducer || isProducer;
 
          return token;
       },
