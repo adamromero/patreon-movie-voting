@@ -336,6 +336,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
+         published: published.Default,
          alphabetical: isTitleFilterAscending
             ? alphabetical.Ascending
             : alphabetical.Descending,
@@ -349,6 +350,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
+         published: published.Default,
          votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
       }));
    };
@@ -360,6 +362,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
+         published: published.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
    };
