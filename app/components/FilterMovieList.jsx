@@ -101,9 +101,9 @@ const FilterMovieList = ({ currentUser }) => {
    };
 
    return (
-      <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 lg:flex-row gap-[10px] w-full text-white flex gap-[20px]">
+      <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 xlg:flex-row gap-[10px] w-full text-white flex gap-[20px]">
          <div>
-            <div className="flex gap-[4px] mb-[5px] items-center">
+            <div className="flex gap-[4px] mb-[10px] items-center h-[30px]">
                <div>Filter By:</div>
                <FilterMovieListTags />
             </div>
@@ -197,68 +197,74 @@ const FilterMovieList = ({ currentUser }) => {
             </div>
          </div>
          <div>
-            <div className="flex gap-[4px] mb-[5px] items-center">
+            <div className="flex gap-[4px] mb-[10px] items-center h-[30px]">
                <div>Sort By: </div>
                <FilterMovieListSortTags />
             </div>
-            <div className="flex gap-[10px]">
-               <div className="flex flex-col flex-1 lg:flex-none">
-                  <label htmlFor="statusSort">{statusSort.Name}</label>
-                  <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
-                     name="watchedFilter"
-                     id="watched"
-                     value={filterOptions.statusSort}
-                     onChange={handleWatchedStatusSort}
-                  >
-                     <option value={statusSort.Default}>Default</option>
-                     <option value={statusSort.Unwatched}>
-                        Unseen/Rewatch
-                     </option>
-                     <option value={statusSort.Watched}>On Channel/Seen</option>
-                  </select>
+            <div className="flex flex-col lg:flex-row gap-[10px]">
+               <div className="flex gap-[10px]">
+                  <div className="flex flex-col flex-1 lg:flex-none">
+                     <label htmlFor="statusSort">{statusSort.Name}</label>
+                     <select
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
+                        name="watchedFilter"
+                        id="watched"
+                        value={filterOptions.statusSort}
+                        onChange={handleWatchedStatusSort}
+                     >
+                        <option value={statusSort.Default}>Default</option>
+                        <option value={statusSort.Unwatched}>
+                           Unseen/Rewatch
+                        </option>
+                        <option value={statusSort.Watched}>
+                           On Channel/Seen
+                        </option>
+                     </select>
+                  </div>
+                  <div className="flex flex-col flex-1 lg:flex-none">
+                     <label htmlFor="chronological">{chronological.Name}</label>
+                     <select
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
+                        name="chronologicalFilter"
+                        id="chronological"
+                        value={filterOptions.chronological}
+                        onChange={handleChronologicalSort}
+                     >
+                        <option value={chronological.Default}>Default</option>
+                        <option value={chronological.Older}>Older</option>
+                        <option value={chronological.Newer}>Newer</option>
+                     </select>
+                  </div>
                </div>
-               <div className="flex flex-col flex-1 lg:flex-none">
-                  <label htmlFor="chronological">{chronological.Name}</label>
-                  <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
-                     name="chronologicalFilter"
-                     id="chronological"
-                     value={filterOptions.chronological}
-                     onChange={handleChronologicalSort}
-                  >
-                     <option value={chronological.Default}>Default</option>
-                     <option value={chronological.Older}>Older</option>
-                     <option value={chronological.Newer}>Newer</option>
-                  </select>
-               </div>
-               <div className="flex flex-col flex-1 lg:flex-none">
-                  <label htmlFor="published">{published.Name}</label>
-                  <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
-                     name="publishedFilter"
-                     id="published"
-                     value={filterOptions.published}
-                     onChange={handlePublishSort}
-                  >
-                     <option value={published.Default}>Default</option>
-                     <option value={published.Older}>Older</option>
-                     <option value={published.Newer}>Newer</option>
-                  </select>
-               </div>
-               <div className="flex flex-col flex-1 lg:flex-none">
-                  <label htmlFor="added">{added.Name}</label>
-                  <select
-                     className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
-                     name="addedFilter"
-                     id="added"
-                     value={filterOptions.added}
-                     onChange={handleAddedSort}
-                  >
-                     <option value={added.Default}>Default</option>
-                     <option value={added.Older}>Older</option>
-                     <option value={added.Newer}>Newer</option>
-                  </select>
+               <div className="flex gap-[10px]">
+                  <div className="flex flex-col flex-1 lg:flex-none">
+                     <label htmlFor="published">{published.Name}</label>
+                     <select
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
+                        name="publishedFilter"
+                        id="published"
+                        value={filterOptions.published}
+                        onChange={handlePublishSort}
+                     >
+                        <option value={published.Default}>Default</option>
+                        <option value={published.Older}>Older</option>
+                        <option value={published.Newer}>Newer</option>
+                     </select>
+                  </div>
+                  <div className="flex flex-col flex-1 lg:flex-none">
+                     <label htmlFor="added">{added.Name}</label>
+                     <select
+                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
+                        name="addedFilter"
+                        id="added"
+                        value={filterOptions.added}
+                        onChange={handleAddedSort}
+                     >
+                        <option value={added.Default}>Default</option>
+                        <option value={added.Older}>Older</option>
+                        <option value={added.Newer}>Newer</option>
+                     </select>
+                  </div>
                </div>
             </div>
          </div>
