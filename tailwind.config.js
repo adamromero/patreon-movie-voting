@@ -18,6 +18,7 @@ module.exports = {
          sm: "640px",
          md: "768px",
          lg: "960px",
+         xlg: "1130px",
       },
    },
    plugins: [],

@@ -7,6 +7,7 @@ import {
    rating,
    statusSort,
    votes,
+   published,
 } from "@/app/utils/filtersOptions";
 
 const FilterMovieListSortTags = () => {
@@ -20,6 +21,7 @@ const FilterMovieListSortTags = () => {
          rating: rating.Default,
          added: added.Default,
          chronological: chronological.Default,
+         published: published.Default,
       }));
    };
 
@@ -46,6 +48,9 @@ const FilterMovieListSortTags = () => {
       if (filterOptions.votes !== votes.Default) {
          return votes.Name;
       }
+      if (filterOptions.published !== published.Default) {
+         return published.Name;
+      }
       if (filterOptions.statusSort !== statusSort.Default) {
          return statusSort.Name;
       }
@@ -66,7 +71,8 @@ const FilterMovieListSortTags = () => {
             filterOptions.added !== added.Default ||
             filterOptions.alphabetical !== alphabetical.Default ||
             filterOptions.rating !== rating.Default ||
-            filterOptions.votes !== votes.Default) && (
+            filterOptions.votes !== votes.Default ||
+            filterOptions.published !== published.Default) && (
             <button
                onClick={handleSortFilterRemove}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"

@@ -12,6 +12,7 @@ import {
    rating,
    votes,
    statusSort,
+   published,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
@@ -108,6 +109,16 @@ const MovieList = ({ currentUser, isCreator }) => {
             (a, b) =>
                new Date(b.data.Release ? b.data.Release : "1900-01-01") -
                new Date(a.data.Release ? a.data.Release : "1900-01-01")
+         );
+      }
+
+      if (filterOptions.published === published.Older) {
+         filteredList = filteredList.sort(
+            (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+         );
+      } else if (filterOptions.published === published.Newer) {
+         filteredList = filteredList.sort(
+            (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
          );
       }
 
@@ -325,6 +336,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
+         published: published.Default,
          alphabetical: isTitleFilterAscending
             ? alphabetical.Ascending
             : alphabetical.Descending,
@@ -338,6 +350,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
+         published: published.Default,
          votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
       }));
    };
@@ -349,6 +362,7 @@ const MovieList = ({ currentUser, isCreator }) => {
          votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
+         published: published.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
    };

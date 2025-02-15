@@ -89,3 +89,10 @@ export const statusSort = {
    Watched: "Watched",
    Unwatched: "Unwatched",
 };
+
+export const published = {
+   Name: "Published",
+   Default: "",
+   Older: "Older",
+   Newer: "Newer",
+};
