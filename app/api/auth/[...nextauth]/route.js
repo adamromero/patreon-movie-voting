@@ -78,6 +78,41 @@ export const nextAuthOptions = {
             return "/unauthorized";
          }
       },
+      async signIn({ account, user, profile }) {
+         const id = profile?.data?.id;
+         if (id === process.env.CREATOR_ID) {
+            return true;
+         }
+
+         const response = await fetch(process.env.PATREON_PROFILE_URL, {
+            headers: {
+               Authorization: `Bearer ${account.access_token}`,
+            },
+         });
+
+         const userResponse = await response.json();
+         const pledge = userResponse?.included?.find(
+            (item) =>
+               item.type === "member" &&
+               item.attributes.patron_status === "active_patron" &&
+               item.relationships.campaign?.data?.id === process.env.CAMPAIGN_ID
+         );
+
+         if (!pledge) {
+            return "/unauthorized";
+         }
+
+         const tier =
+            pledge.relationships?.currently_entitled_tiers?.data?.find(
+               (item) => item.type === "tier"
+            )?.id;
+
+         user.patreonId = id;
+         user.tier = tier;
+         account.isProducer = tier === process.env.PRODUCER_TIER_ID;
+
+         return true;
+      },
 
       async redirect({ baseUrl }) {
          return baseUrl;
