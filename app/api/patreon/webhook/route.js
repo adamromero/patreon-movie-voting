@@ -38,13 +38,11 @@ export async function POST(req) {
                        $in: [year, String(parseInt(year, 10) + 1)],
                     },
                     "data.Type": "movie",
-                    "links.patreon": "",
                     publishedAt: null,
                  }
                : {
                     "data.Title": { $regex: extractedTitle, $options: "i" },
                     "data.Type": "tv",
-                    "links.patreon": "",
                     publishedAt: null,
                  };
 
