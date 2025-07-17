@@ -18,7 +18,7 @@ import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
 import useFetchMovies from "../hooks/useFetchMovies";
-import Pagination from "./Pagination";
+import PageControls from "./PageControls";
 
 const MovieList = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
@@ -42,9 +42,9 @@ const MovieList = ({ currentUser, isCreator }) => {
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
    const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
    const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
-   const [postsPerPage, setPostsPerPage] = useState(defaultRowsPerPage);
-   const indexOfLastPost = currentPage * postsPerPage;
-   const indexOfFirstPost = indexOfLastPost - postsPerPage;
+   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
+   const indexOfLastPost = currentPage * rowsPerPage;
+   const indexOfFirstPost = indexOfLastPost - rowsPerPage;
    const [isRankingOn, setIsRankingOn] = useState(false);
 
    useEffect(() => {
@@ -297,9 +297,9 @@ const MovieList = ({ currentUser, isCreator }) => {
       }
 
       const initialPage =
-         currentPage <= Math.ceil(filteredList.length / postsPerPage)
+         currentPage <= Math.ceil(filteredList.length / rowsPerPage)
             ? currentPage
-            : Math.ceil(filteredList.length / postsPerPage);
+            : Math.ceil(filteredList.length / rowsPerPage);
       setCurrentPage(initialPage > 0 ? initialPage : 1);
       setFilteredMoviesList(filteredList);
    }, [
@@ -309,7 +309,7 @@ const MovieList = ({ currentUser, isCreator }) => {
       searchDirector,
       searchActor,
       searchComposer,
-      postsPerPage,
+      rowsPerPage,
    ]);
 
    useEffect(() => {
@@ -365,21 +365,6 @@ const MovieList = ({ currentUser, isCreator }) => {
          published: published.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       }));
-   };
-
-   const firstPage = () => setCurrentPage(1);
-   const lastPage = () =>
-      setCurrentPage(Math.ceil(filteredMoviesList.length / postsPerPage));
-   const decrementPage = () =>
-      setCurrentPage((pageNumber) =>
-         pageNumber > 1 ? pageNumber - 1 : pageNumber
-      );
-   const incrementPage = () => {
-      setCurrentPage((pageNumber) =>
-         pageNumber < Math.ceil(filteredMoviesList.length / postsPerPage)
-            ? pageNumber + 1
-            : pageNumber
-      );
    };
 
    const tableHead = (
@@ -479,7 +464,7 @@ const MovieList = ({ currentUser, isCreator }) => {
                      data={data}
                      currentUser={currentUser}
                      isCreator={isCreator}
-                     ranking={index + 1 + postsPerPage * (currentPage - 1)}
+                     ranking={index + 1 + rowsPerPage * (currentPage - 1)}
                      isRankingOn={isRankingOn}
                      requestStatusState={requestStatusState}
                   />
@@ -494,33 +479,13 @@ const MovieList = ({ currentUser, isCreator }) => {
             filteredMoviesList.length ? (
                <>
                   <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
-                     <Pagination
-                        postsPerPage={postsPerPage}
-                        totalPosts={filteredMoviesList.length}
+                     <PageControls
                         currentPage={currentPage}
-                        firstPage={firstPage}
-                        lastPage={lastPage}
-                        decrementPage={decrementPage}
-                        incrementPage={incrementPage}
+                        setCurrentPage={setCurrentPage}
+                        rowsPerPage={rowsPerPage}
+                        setRowsPerPage={setRowsPerPage}
+                        filteredListLength={filteredMoviesList.length}
                      />
-                     <div>Results: {filteredMoviesList.length}</div>
-                     <div className="flex gap-[5px]">
-                        <label htmlFor="postsPerPage">Rows per page</label>
-                        <select
-                           className="text-black"
-                           name="postsPerPage"
-                           id="postsPerPage"
-                           value={postsPerPage}
-                           onChange={(e) =>
-                              setPostsPerPage(parseInt(e.target.value))
-                           }
-                        >
-                           <option value="10">10</option>
-                           <option value="20">20</option>
-                           <option value="50">50</option>
-                           <option value="100">100</option>
-                        </select>
-                     </div>
                   </div>
                   <div>
                      {tableHead}

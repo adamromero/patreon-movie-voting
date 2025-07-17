@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { MovieContext } from "@/context/MovieContext";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { BiLogoPatreon } from "react-icons/bi";
-import { AiFillYoutube } from "react-icons/ai";
-import { FaRegImage } from "react-icons/fa6";
+import ReactedState from "./SearchTitles/SearchStates/ReactedState";
+import SeenState from "./SearchTitles/SearchStates/SeenState";
+import UnReactedState from "./SearchTitles/SearchStates/UnReactedState";
+import LimitReachedState from "./SearchTitles/SearchStates/LimitReachedState";
+import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
+import SearchFields from "./SearchTitles/SearchFields";
 
 const SearchTitlesModal = ({ user }) => {
    const [input, setInput] = useState("");
@@ -239,92 +241,68 @@ const SearchTitlesModal = ({ user }) => {
       }
    };
 
-   const hasBeenReleased = (date) => {
-      if (date) {
-         const month = date.split("-")[1];
-         const day = date.split("-")[2];
-         const year = date.split("-")[0];
-         const releaseDate = new Date(`${month}-${day}-${year}`);
-         return releaseDate <= new Date();
-      }
+   const renderMovieStatus = (movie) => {
+      //props for search state components
+      const sharedMovieProps = { movie, movieIDCollection };
 
-      return false;
+      const reactedProps = {
+         ...sharedMovieProps,
+         getPatreonLink,
+         getYouTubeLink,
+      };
+
+      const unseenProps = {
+         ...sharedMovieProps,
+         isMovieRewatch,
+         getMovieVoteTotal,
+         isMovieVotedByUser,
+         handleRemoveVote,
+         handleCastVote,
+      };
+
+      const underLimitProps = {
+         ...sharedMovieProps,
+         handleMovieSelection,
+         disabledButtonStates,
+         disableButton,
+      };
+
+      if (isMovieInList(movie)) {
+         if (isMovieSeen(movie)) return <SeenState {...sharedMovieProps} />;
+         return isMovieReacted(movie) ? (
+            <ReactedState {...reactedProps} />
+         ) : (
+            <UnReactedState {...unseenProps} />
+         );
+      } else {
+         return isUserUnderRequestLimit ? (
+            <UnderLimitState {...underLimitProps} />
+         ) : (
+            <LimitReachedState {...sharedMovieProps} />
+         );
+      }
+   };
+
+   const searchFieldsProps = {
+      handleTitleSubmit,
+      setInput,
+      handleTitleYearSubmit,
+      setInputTitle,
+      setInputYear,
+      handleImdbIDSubmit,
+      setInputImdbID,
+      input,
+      inputTitle,
+      inputYear,
+      inputImdbID,
+      inputRef,
    };
 
    return (
       <div>
          <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px] mt-[35px] md:mt-0 mr-0 md:mr-[35px]">
             <div className="flex flex-col md:flex-row gap-[10px]">
-               <div className="flex flex-col sm:flex-row flex gap-[10px]">
-                  <form
-                     className="flex flex-1 gap-2 w-full"
-                     onSubmit={(e) => handleTitleSubmit(e)}
-                  >
-                     <input
-                        className="text-black w-full py-[5px] px-[10px]"
-                        type="text"
-                        name=""
-                        id=""
-                        placeholder="Search titles"
-                        value={input}
-                        ref={inputRef}
-                        onChange={(e) => setInput(e.target.value)}
-                     />
-                     <input
-                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
-                        type="submit"
-                        value="Search"
-                     />
-                  </form>
-                  <form
-                     onSubmit={(e) => handleTitleYearSubmit(e)}
-                     className="flex flex-1 gap-2 w-full "
-                  >
-                     <div className="flex w-full gap-[5px]">
-                        <input
-                           className="flex-[2_2_0%] w-full text-black py-[5px] px-[10px]"
-                           type="text"
-                           placeholder="Title"
-                           value={inputTitle}
-                           onChange={(e) => setInputTitle(e.target.value)}
-                        />
-                        <input
-                           className="text-black flex-1 w-full sm:max-w-[80px] py-[5px] px-[10px]"
-                           type="text"
-                           placeholder="Year"
-                           value={inputYear}
-                           maxLength="4"
-                           onChange={(e) => setInputYear(e.target.value)}
-                        />
-                     </div>
-                     <input
-                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
-                        type="submit"
-                        value="Search"
-                     />
-                  </form>
-               </div>
-               <div>
-                  <form
-                     onSubmit={(e) => handleImdbIDSubmit(e)}
-                     className="flex flex-1 gap-2 w-full"
-                  >
-                     <div className="flex w-full gap-[5px]">
-                        <input
-                           className="text-black w-[80px] py-[5px] px-[10px] w-full"
-                           type="text"
-                           placeholder="IMDB ID"
-                           value={inputImdbID}
-                           onChange={(e) => setInputImdbID(e.target.value)}
-                        />
-                     </div>
-                     <input
-                        className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-1 px-3"
-                        type="submit"
-                        value="Search"
-                     />
-                  </form>
-               </div>
+               <SearchFields {...searchFieldsProps} />
             </div>
          </div>
          <div className="overflow-auto h-[75vh] relative no-scrollbar">
@@ -335,399 +313,7 @@ const SearchTitlesModal = ({ user }) => {
                   {titlesFromAPI.length ? (
                      titlesFromAPI.map((movie) => (
                         <div className="mx-auto" key={movie?.id}>
-                           {isMovieInList(movie) ? (
-                              <div>
-                                 {isMovieReacted(movie) ? (
-                                    <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
-                                       <div>
-                                          {!movie?.poster_path ? (
-                                             <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                <FaRegImage className="text-[40px]" />
-                                             </div>
-                                          ) : (
-                                             <img
-                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
-                                                alt={
-                                                   movie?.media_type === "movie"
-                                                      ? movie?.title
-                                                      : movie?.name
-                                                }
-                                                width="175"
-                                                height="285"
-                                                className="w-full h-full object-cover mx-auto"
-                                             />
-                                          )}
-                                          <div
-                                             className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
-                                             style={{
-                                                textShadow: "1px 1px 3px black",
-                                             }}
-                                          >
-                                             <div
-                                                className={`flex flex-col ${
-                                                   getPatreonLink(movie) ||
-                                                   getYouTubeLink(movie)
-                                                      ? "mt-[67px]"
-                                                      : ""
-                                                } items-center z-10`}
-                                             >
-                                                <IoMdAddCircleOutline
-                                                   className={`text-[50px] rotate-45 ${
-                                                      movieIDCollection[
-                                                         movie?.id
-                                                      ]
-                                                         ? "animate-rotation"
-                                                         : ""
-                                                   }`}
-                                                />
-                                                <div>On Channel</div>
-                                                <div className="flex flex-col gap-[4px] max-w-[80px] w-full">
-                                                   {getYouTubeLink(movie) && (
-                                                      <a
-                                                         className="bg-[red] text-[white] flex justify-center p-[2px]"
-                                                         href={getYouTubeLink(
-                                                            movie
-                                                         )}
-                                                         title="Watch on YouTube"
-                                                         target="_blank"
-                                                      >
-                                                         <AiFillYoutube />
-                                                      </a>
-                                                   )}
-                                                   {getPatreonLink(movie) && (
-                                                      <a
-                                                         className="bg-[black] text-[white] flex justify-center p-[2px] border-[#585858] border-[1px]"
-                                                         href={getPatreonLink(
-                                                            movie
-                                                         )}
-                                                         title="Watch Full Length"
-                                                         target="_blank"
-                                                      >
-                                                         <BiLogoPatreon />
-                                                      </a>
-                                                   )}
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <div
-                                             className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
-                                             style={{
-                                                textShadow: "1px 1px 3px black",
-                                             }}
-                                          >
-                                             {movie?.media_type === "movie"
-                                                ? movie?.title
-                                                : movie?.name}{" "}
-                                             {(movie?.release_date ||
-                                                movie?.first_air_date) && (
-                                                <>
-                                                   (
-                                                   {movie?.media_type ===
-                                                   "movie"
-                                                      ? movie?.release_date.split(
-                                                           "-"
-                                                        )[0]
-                                                      : movie?.first_air_date.split(
-                                                           "-"
-                                                        )[0]}
-                                                   )
-                                                </>
-                                             )}
-                                          </div>
-                                       </div>
-                                    </div>
-                                 ) : isMovieSeen(movie) ? (
-                                    <div className="text-[#8d8d8d] cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
-                                       <div>
-                                          {!movie?.poster_path ? (
-                                             <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                <FaRegImage className="text-[40px]" />
-                                             </div>
-                                          ) : (
-                                             <img
-                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
-                                                alt={
-                                                   movie?.media_type === "movie"
-                                                      ? movie?.title
-                                                      : movie?.name
-                                                }
-                                                width="175"
-                                                height="285"
-                                                className="w-full h-full object-cover mx-auto"
-                                             />
-                                          )}
-                                          <div
-                                             className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
-                                             style={{
-                                                textShadow: "1px 1px 3px black",
-                                             }}
-                                          >
-                                             <div className="flex flex-col mt-[6px] items-center z-10">
-                                                <IoMdAddCircleOutline
-                                                   className={`text-[50px] rotate-45 ${
-                                                      movieIDCollection[
-                                                         movie?.id
-                                                      ]
-                                                         ? "animate-rotation"
-                                                         : ""
-                                                   }`}
-                                                />
-                                                <div>Seen</div>
-                                             </div>
-                                          </div>
-                                          <div
-                                             className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
-                                             style={{
-                                                textShadow: "1px 1px 3px black",
-                                             }}
-                                          >
-                                             {movie?.media_type === "movie"
-                                                ? movie?.title
-                                                : movie?.name}{" "}
-                                             {(movie?.release_date ||
-                                                movie?.first_air_date) && (
-                                                <>
-                                                   (
-                                                   {movie?.media_type ===
-                                                   "movie"
-                                                      ? movie?.release_date.split(
-                                                           "-"
-                                                        )[0]
-                                                      : movie?.first_air_date.split(
-                                                           "-"
-                                                        )[0]}
-                                                   )
-                                                </>
-                                             )}
-                                          </div>
-                                       </div>
-                                    </div>
-                                 ) : (
-                                    <div className="text-white relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
-                                       <div>
-                                          {!movie?.poster_path ? (
-                                             <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                                <FaRegImage className="text-[40px]" />
-                                             </div>
-                                          ) : (
-                                             <img
-                                                src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
-                                                alt={
-                                                   movie?.media_type === "movie"
-                                                      ? movie?.title
-                                                      : movie?.name
-                                                }
-                                                width="175"
-                                                height="285"
-                                                className="w-full h-full object-cover mx-auto"
-                                             />
-                                          )}
-                                          <div
-                                             className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
-                                             style={{
-                                                textShadow: "1px 1px 3px black",
-                                             }}
-                                          >
-                                             <div className="mt-[59px] flex flex-col items-center z-10">
-                                                <IoMdAddCircleOutline
-                                                   className={`text-[50px] rotate-45 ${
-                                                      movieIDCollection[
-                                                         movie?.id
-                                                      ]
-                                                         ? "animate-rotation"
-                                                         : ""
-                                                   }`}
-                                                />
-                                                <div>
-                                                   {isMovieRewatch(movie)
-                                                      ? "Rewatch"
-                                                      : "Requested"}
-                                                </div>
-                                                <div className="text-[16px] mb-[10px] leading-[16px]">
-                                                   {getMovieVoteTotal(movie)}{" "}
-                                                   {getMovieVoteTotal(movie) > 1
-                                                      ? "votes"
-                                                      : "vote"}
-                                                </div>
-                                                {isMovieVotedByUser(movie) ? (
-                                                   <button
-                                                      onClick={() =>
-                                                         handleRemoveVote(movie)
-                                                      }
-                                                      className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                                                   >
-                                                      Unvote
-                                                   </button>
-                                                ) : (
-                                                   <button
-                                                      onClick={() =>
-                                                         handleCastVote(movie)
-                                                      }
-                                                      className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                                                   >
-                                                      Upvote
-                                                   </button>
-                                                )}
-                                             </div>
-                                          </div>
-                                          <div
-                                             className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
-                                             style={{
-                                                textShadow: "1px 1px 3px black",
-                                             }}
-                                          >
-                                             {movie?.media_type === "movie"
-                                                ? movie?.title
-                                                : movie?.name}{" "}
-                                             {(movie?.release_date ||
-                                                movie?.first_air_date) && (
-                                                <>
-                                                   (
-                                                   {movie?.media_type ===
-                                                   "movie"
-                                                      ? movie?.release_date.split(
-                                                           "-"
-                                                        )[0]
-                                                      : movie?.first_air_date.split(
-                                                           "-"
-                                                        )[0]}
-                                                   )
-                                                </>
-                                             )}
-                                          </div>
-                                       </div>
-                                    </div>
-                                 )}
-                              </div>
-                           ) : isUserUnderRequestLimit ? (
-                              <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
-                                 <button
-                                    className="block"
-                                    onClick={() => handleMovieSelection(movie)}
-                                    disabled={disableButton}
-                                 >
-                                    {!movie?.poster_path ? (
-                                       <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                          <FaRegImage className="text-[40px]" />
-                                       </div>
-                                    ) : (
-                                       <img
-                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
-                                          alt={
-                                             movie?.media_type === "movie"
-                                                ? movie?.title
-                                                : movie?.name
-                                          }
-                                          width="175"
-                                          height="285"
-                                          className="w-full h-full object-cover mx-auto"
-                                       />
-                                    )}
-                                    <div
-                                       className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-white text-[25px] flex items-center justify-center"
-                                       style={{
-                                          textShadow: "1px 1px 3px black",
-                                       }}
-                                    >
-                                       <div className="flex flex-col">
-                                          <IoMdAddCircleOutline className="text-[50px] mx-auto" />
-                                          <div>
-                                             {disabledButtonStates[movie?.id]
-                                                ? "Pending"
-                                                : "Add"}
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div
-                                       className="absolute top-0 left-0 right-0 text-white text-center text-[18px] font-black pt-[5px] leading-5"
-                                       style={{
-                                          textShadow: "1px 1px 3px black",
-                                       }}
-                                    >
-                                       {movie?.media_type === "movie"
-                                          ? movie?.title
-                                          : movie?.name}{" "}
-                                       {(movie?.release_date ||
-                                          movie?.first_air_date) && (
-                                          <>
-                                             (
-                                             {movie?.media_type === "movie"
-                                                ? movie?.release_date.split(
-                                                     "-"
-                                                  )[0]
-                                                : movie?.first_air_date.split(
-                                                     "-"
-                                                  )[0]}
-                                             )
-                                          </>
-                                       )}
-                                    </div>
-                                 </button>
-                              </div>
-                           ) : (
-                              <div className="cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
-                                 <div>
-                                    {!movie?.poster_path ? (
-                                       <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
-                                          <FaRegImage className="text-[40px]" />
-                                       </div>
-                                    ) : (
-                                       <img
-                                          src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
-                                          alt={
-                                             movie?.media_type === "movie"
-                                                ? movie?.title
-                                                : movie?.name
-                                          }
-                                          width="175"
-                                          height="285"
-                                          className="w-full h-full object-cover mx-auto"
-                                       />
-                                    )}
-                                    <div
-                                       className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-[25px] flex items-center justify-center"
-                                       style={{
-                                          textShadow: "1px 1px 3px black",
-                                       }}
-                                    >
-                                       <div className="flex flex-col mt-[6px] items-center z-10">
-                                          <IoMdAddCircleOutline
-                                             className={`text-[50px] rotate-45 ${
-                                                movieIDCollection[movie?.id]
-                                                   ? "animate-rotation"
-                                                   : ""
-                                             }`}
-                                          />
-                                          <div>Limit Reached</div>
-                                       </div>
-                                    </div>
-                                    <div
-                                       className="absolute top-0 left-0 right-0 text-center text-[18px] font-black pt-[5px] leading-5"
-                                       style={{
-                                          textShadow: "1px 1px 3px black",
-                                       }}
-                                    >
-                                       {movie?.media_type === "movie"
-                                          ? movie?.title
-                                          : movie?.name}{" "}
-                                       {(movie?.release_date ||
-                                          movie?.first_air_date) && (
-                                          <>
-                                             (
-                                             {movie?.media_type === "movie"
-                                                ? movie?.release_date.split(
-                                                     "-"
-                                                  )[0]
-                                                : movie?.first_air_date.split(
-                                                     "-"
-                                                  )[0]}
-                                             )
-                                          </>
-                                       )}
-                                    </div>
-                                 </div>
-                              </div>
-                           )}
+                           {renderMovieStatus(movie)}
                         </div>
                      ))
                   ) : (

@@ -7,7 +7,7 @@ import {
 } from "react-icons/md";
 
 const Pagination = ({
-   postsPerPage,
+   rowsPerPage,
    totalPosts,
    currentPage,
    firstPage,
@@ -30,7 +30,7 @@ const Pagination = ({
             <MdKeyboardArrowLeft />
          </button>
          <div className="text-[16px] mx-[5px]">
-            {currentPage} of {Math.ceil(totalPosts / postsPerPage)}
+            {currentPage} of {Math.ceil(totalPosts / rowsPerPage)}
          </div>
          <button
             className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"

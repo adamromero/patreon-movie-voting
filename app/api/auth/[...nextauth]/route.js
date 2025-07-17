@@ -28,56 +28,6 @@ export const nextAuthOptions = {
       }),
    ],
    callbacks: {
-      async signIn({ account, profile }) {
-         try {
-            const id = profile?.data?.id;
-            if (!id) {
-               return "/unauthorized";
-            }
-
-            if (id === process.env.CREATOR_ID) {
-               return true;
-            }
-
-            const response = await fetch(process.env.PATREON_PROFILE_URL, {
-               headers: {
-                  Authorization: `Bearer ${account.access_token}`,
-               },
-            });
-
-            if (!response.ok) {
-               console.error(
-                  `Failed to fetch Patreon profile: ${response.statusText}`
-               );
-               return "/unauthorized";
-            }
-
-            const userResponse = await response.json();
-            const pledge = userResponse?.included?.find(
-               (item) =>
-                  item.type === "member" &&
-                  item.attributes.patron_status === "active_patron" &&
-                  item.relationships.campaign?.data?.id ===
-                     process.env.CAMPAIGN_ID
-            );
-
-            if (!pledge) {
-               return "/unauthorized";
-            }
-
-            const isProducer =
-               pledge.relationships?.currently_entitled_tiers?.data?.some(
-                  (tier) => tier.id === process.env.PRODUCER_TIER_ID
-               );
-
-            account.isProducer = isProducer;
-
-            return true;
-         } catch (error) {
-            console.error("Error during sign-in:", error);
-            return "/unauthorized";
-         }
-      },
       async signIn({ account, user, profile }) {
          const id = profile?.data?.id;
          if (id === process.env.CREATOR_ID) {
@@ -117,19 +67,12 @@ export const nextAuthOptions = {
       async redirect({ baseUrl }) {
          return baseUrl;
       },
-      async jwt({ token, user, profile, account }) {
+      async jwt({ token, profile, account }) {
          if (!profile) return token;
-
-         const { isUserPledged, pledge } = user;
-
-         const isProducer =
-            isUserPledged &&
-            pledge?.relationships?.reward?.data?.id ===
-               process.env.PRODUCER_TIER_ID;
 
          token.id = profile.data.id;
          token.firstName = profile.data.attributes.first_name;
-         token.isProducer = account.isProducer || isProducer;
+         token.isProducer = account.isProducer;
 
          return token;
       },
@@ -137,7 +80,7 @@ export const nextAuthOptions = {
          if (token) {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
-            session.user.isCreator = token.id === process.env.CREATOR_ID;
+            session.user.isCreator = token.id === process.env.CREATOR_ID; //|| token.id === process.env.DEV_ID;
             session.user.isProducer =
                token.isProducer || token.id === process.env.DEV_ID;
          }
