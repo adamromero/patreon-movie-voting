@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, ReactNode } from "react";
 import {
    genre,
    type,
@@ -11,11 +11,57 @@ import {
    requests,
    rating,
    statusSort,
+   published,
 } from "@/app/utils/filtersOptions";
 
-export const MovieContext = createContext();
+interface Movie {
+   _id: string;
+   data: {
+      id: number;
+      Type: string;
+      Title: string;
+      Year: string;
+      Rated: string;
+      Genre: string;
+      Director: string;
+      Actors: string;
+      Poster: string;
+      Backdrop: string;
+      imdbID: string;
+      Rating: number;
+      Release: string;
+      Runtime: number;
+      Composer: string;
+      Studio: string;
+   };
+   links: {
+      patreon: string;
+      youtube: string;
+   };
+   createdAt: string;
+   hasReacted: boolean;
+   hasSeen: boolean;
+   isChristmas: boolean;
+   isHalloween: boolean;
+   isRewatch: boolean;
+   publishedAt: string | null;
+   requester: string;
+   voters: [number];
+}
 
-export const MovieProvider = ({ children }) => {
+interface MovieContextType {
+   moviesList: Movie[];
+}
+
+interface MovieProviderType {
+   children: ReactNode;
+}
+
+export const MovieContext = createContext<MovieContextType | undefined>(
+   undefined
+);
+
+export const MovieProvider = ({ children }: MovieProviderType) => {
    const [moviesList, setMoviesList] = useState([]);
    const [filteredMoviesList, setFilteredMoviesList] = useState([]);
    const [searchTitle, setSearchTitle] = useState("");
@@ -33,13 +79,13 @@ export const MovieProvider = ({ children }) => {
       requests: requests.Default,
       status: status.Default,
       statusSort: statusSort.Unwatched,
+      published: published.Default,
    });
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
    const [requestsRemaining, setRequestsRemaining] = useState();
    const [disableButton, setDisableButton] = useState(false);
    const [isRankingOn, setIsRankingOn] = useState(false);
    const [rankedMovies, setRankedMovies] = useState([]);
-   const [requestsThisMonth, setRequestsThisMonth] = useState([]);
    const [moviesMap, setMoviesMap] = useState(new Map());
    const [moviesByDateMap, setMoviesByDateMap] = useState(new Map());
 
@@ -49,10 +95,10 @@ export const MovieProvider = ({ children }) => {
          const movies = await response.json();
 
          const moviesMap = new Map();
-         const sortedMovies = [];
+         const sortedMovies: Movie[] = [];
          const rankedMoviesObject = {};
 
-         movies.forEach((movie) => {
+         movies.forEach((movie: Movie) => {
             const key = `${movie.data.id}-${movie.data.Type}`;
             moviesMap.set(key, movie);
 
@@ -598,7 +644,14 @@ export const MovieProvider = ({ children }) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );
-      const updatedMovieVote = { ...selectedMovieVote, links };
+
+      const updatedMovieVote = {
+         ...selectedMovieVote,
+         links,
+         publishedAt: selectedMovieVote.publishedAt
+            ? selectedMovieVote.publishedAt
+            : new Date().toISOString(),
+      };
 
       const config = {
          method: "PUT",
@@ -664,7 +717,6 @@ export const MovieProvider = ({ children }) => {
             setIsUserUnderRequestLimit,
             requestsRemaining,
             disableButton,
-            requestsThisMonth,
             moviesMap,
             processUserRequestsByDate,
             moviesByDateMap,

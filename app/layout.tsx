@@ -1,5 +1,7 @@
 import "./globals.css";
 import { Inter, Lato } from "next/font/google";
+import { Metadata } from "next";
+import type { ReactNode } from "react";
 
 const lato = Lato({
    subsets: ["latin"],
@@ -8,7 +10,7 @@ const lato = Lato({
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
    title: "Patron Movie Requests",
    description:
       "A requesting web app exclusive to Patreon members on the Jen Murray movie/tv reaction channel.",
@@ -17,7 +19,11 @@ export const metadata = {
    },
 };
 
-export default function RootLayout({ children }) {
+interface RootLayoutProps {
+   children: ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
    return (
       <html lang="en">
          <body className={lato.className}>{children}</body>

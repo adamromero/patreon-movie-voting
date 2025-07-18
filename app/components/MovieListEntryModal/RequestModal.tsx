@@ -8,6 +8,12 @@ import HolidaySettings from "./HolidaySettings";
 import StatusSelector from "./StatusSelector";
 import LinksSection from "./LinksSection";
 
+interface RequestModalProps {
+   data: any;
+   moreInfoOpen: boolean;
+   onCloseInfoModal: any;
+}
+
 const RequestModal = ({
    data,
    moreInfoOpen,

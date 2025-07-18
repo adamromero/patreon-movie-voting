@@ -4,7 +4,21 @@ import SubmitRequestButton from "./SubmitRequestButton";
 import CopyableList from "./CopyableList";
 import { MovieContext } from "@/context/MovieContext";
 
-const SubmitRequests = ({ user, isUnderRequestLimit }) => {
+interface SubmitRequestsProps {
+   user?: {
+      id: string;
+      name: string;
+      firstName: string;
+      isCreator: boolean;
+      isProducer: boolean;
+   };
+   isUnderRequestLimit: boolean;
+}
+
+const SubmitRequests: React.FC<SubmitRequestsProps> = ({
+   user,
+   isUnderRequestLimit,
+}) => {
    const {
       moviesList,
       processUserRequestsByDate,

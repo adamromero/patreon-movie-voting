@@ -4,7 +4,25 @@ import SearchTitlesModal from "./SearchTitlesModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
-const SubmitRequestButton = ({ user, open, onOpenModal, onCloseModal }) => {
+interface SubmitRequestButtonProps {
+   user: {
+      id: string;
+      name: string;
+      firstName: string;
+      isCreator: boolean;
+      isProducer: boolean;
+   };
+   open: boolean;
+   onOpenModal: () => void;
+   onCloseModal: () => void;
+}
+
+const SubmitRequestButton: React.FC<SubmitRequestButtonProps> = ({
+   user,
+   open,
+   onOpenModal,
+   onCloseModal,
+}) => {
    return (
       <>
          <button

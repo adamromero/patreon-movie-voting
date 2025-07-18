@@ -28,5 +28,10 @@
       "react-responsive-modal": "^6.4.2",
       "tailwindcss": "3.3.3",
       "tween-functions": "^1.2.0"
+   },
+   "devDependencies": {
+      "@types/node": "^24.0.14",
+      "@types/react": "^19.1.8",
+      "typescript": "^5.8.3"
    }
 }

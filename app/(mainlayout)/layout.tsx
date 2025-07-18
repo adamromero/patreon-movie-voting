@@ -3,6 +3,7 @@ import { NextAuthProvider } from "../provider";
 import { MovieProvider } from "@/context/MovieContext";
 import Header from "../components/Header";
 import { Inter, Lato } from "next/font/google";
+import type { ReactNode } from "react";
 
 const lato = Lato({
    subsets: ["latin"],
@@ -11,7 +12,11 @@ const lato = Lato({
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function MainLayout({ children }) {
+interface MainLayoutProps {
+   children: ReactNode;
+}
+
+export default function MainLayout({ children }: MainLayoutProps) {
    return (
       <NextAuthProvider>
          <MovieProvider>

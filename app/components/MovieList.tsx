@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, FC } from "react";
 import { MovieContext } from "@/context/MovieContext";
 import {
    genre,
@@ -20,7 +20,12 @@ import { AiOutlineNumber } from "react-icons/ai";
 import useFetchMovies from "../hooks/useFetchMovies";
 import PageControls from "./PageControls";
 
-const MovieList = ({ currentUser, isCreator }) => {
+interface MovieListProps {
+   currentUser?: string;
+   isCreator?: boolean;
+}
+
+const MovieList: FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
    const moviesList = useFetchMovies();

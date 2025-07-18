@@ -6,7 +6,20 @@ import { FiLogOut } from "react-icons/fi";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 import { signIn, signOut } from "next-auth/react";
 
-const UserSignIn = ({ user }) => {
+interface UserProps {
+   id: string;
+   name: string;
+   image: string;
+   firstName: string;
+   isCreator: boolean;
+   isProducer: boolean;
+}
+
+interface UserSignInProps {
+   user: UserProps;
+}
+
+const UserSignIn: React.FC<UserSignInProps> = ({ user }) => {
    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
    const handleOutsideClick = () => {
       setIsDropdownOpen(false);

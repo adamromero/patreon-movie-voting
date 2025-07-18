@@ -9,6 +9,25 @@ import LimitReachedState from "./SearchTitles/SearchStates/LimitReachedState";
 import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
 
+interface APIMovieProps {
+   id: number;
+   Type: string;
+   Title: string;
+   Year: string;
+   Rated: string;
+   Genre: string;
+   Director: string;
+   Actors: string;
+   Poster: string;
+   Backdrop: string;
+   imdbID: string;
+   Rating: number;
+   Release: string;
+   Runtime: number;
+   Composer: string;
+   Studio: string;
+}
+
 const SearchTitlesModal = ({ user }) => {
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
@@ -214,7 +233,7 @@ const SearchTitlesModal = ({ user }) => {
       if (inputYear) setSearchYear(inputYear);
    };
 
-   const handleMovieSelection = async (movie) => {
+   const handleMovieSelection = async (movie: APIMovieProps) => {
       setMovieIDCollection({ [movie?.id]: true });
       setDisabledButtonStates({ [movie?.id]: true });
       addRequestToList(movie, currentUser);
@@ -241,7 +260,7 @@ const SearchTitlesModal = ({ user }) => {
       }
    };
 
-   const renderMovieStatus = (movie) => {
+   const renderMovieStatus = (movie: APIMovieProps) => {
       //props for search state components
       const sharedMovieProps = { movie, movieIDCollection };
 
@@ -311,7 +330,7 @@ const SearchTitlesModal = ({ user }) => {
             ) : (
                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
                   {titlesFromAPI.length ? (
-                     titlesFromAPI.map((movie) => (
+                     titlesFromAPI.map((movie: APIMovieProps) => (
                         <div className="mx-auto" key={movie?.id}>
                            {renderMovieStatus(movie)}
                         </div>

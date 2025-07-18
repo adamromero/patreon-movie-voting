@@ -1,9 +1,34 @@
-import NextAuth from "next-auth/next";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
-import clientPromise from "@/lib/mongodb";
+import clientPromise from "../../../../lib/mongodb";
 
-export const nextAuthOptions = {
+declare module "next-auth" {
+   interface Session {
+      user: {
+         id: string;
+         name: string;
+         firstName: string;
+         isCreator: boolean;
+         isProducer: boolean;
+      };
+   }
+
+   interface User {
+      patreonId?: string;
+      tier?: string;
+   }
+}
+
+declare module "next-auth/jwt" {
+   interface JWT {
+      id: string;
+      firstName: string;
+      isProducer: boolean;
+   }
+}
+
+export const nextAuthOptions: NextAuthOptions = {
    adapter: MongoDBAdapter(clientPromise),
    secret: process.env.NEXTAUTH_SECRET,
    jwt: {
@@ -17,8 +42,8 @@ export const nextAuthOptions = {
    },
    providers: [
       PatreonProvider({
-         clientId: process.env.PATREON_CLIENT_ID,
-         clientSecret: process.env.PATREON_CLIENT_SECRET,
+         clientId: process.env.PATREON_CLIENT_ID!,
+         clientSecret: process.env.PATREON_CLIENT_SECRET!,
          authorization: {
             params: {
                scope: "identity identity[email]",
@@ -29,20 +54,20 @@ export const nextAuthOptions = {
    ],
    callbacks: {
       async signIn({ account, user, profile }) {
-         const id = profile?.data?.id;
+         const id = (profile as any)?.data?.id;
          if (id === process.env.CREATOR_ID) {
             return true;
          }
 
-         const response = await fetch(process.env.PATREON_PROFILE_URL, {
+         const response = await fetch(process.env.PATREON_PROFILE_URL!, {
             headers: {
-               Authorization: `Bearer ${account.access_token}`,
+               Authorization: `Bearer ${account?.access_token}`,
             },
          });
 
          const userResponse = await response.json();
          const pledge = userResponse?.included?.find(
-            (item) =>
+            (item: any) =>
                item.type === "member" &&
                item.attributes.patron_status === "active_patron" &&
                item.relationships.campaign?.data?.id === process.env.CAMPAIGN_ID
@@ -54,12 +79,12 @@ export const nextAuthOptions = {
 
          const tier =
             pledge.relationships?.currently_entitled_tiers?.data?.find(
-               (item) => item.type === "tier"
+               (item: any) => item.type === "tier"
             )?.id;
 
          user.patreonId = id;
          user.tier = tier;
-         account.isProducer = tier === process.env.PRODUCER_TIER_ID;
+         (account as any).isProducer = tier === process.env.PRODUCER_TIER_ID;
 
          return true;
       },
@@ -70,9 +95,9 @@ export const nextAuthOptions = {
       async jwt({ token, profile, account }) {
          if (!profile) return token;
 
-         token.id = profile.data.id;
-         token.firstName = profile.data.attributes.first_name;
-         token.isProducer = account.isProducer;
+         token.id = (profile as any).data.id;
+         token.firstName = (profile as any).data.attributes.first_name;
+         token.isProducer = (account as any)?.isProducer;
 
          return token;
       },
@@ -80,7 +105,7 @@ export const nextAuthOptions = {
          if (token) {
             session.user.id = token.id;
             session.user.firstName = token.firstName;
-            session.user.isCreator = token.id === process.env.CREATOR_ID; //|| token.id === process.env.DEV_ID;
+            session.user.isCreator = token.id === process.env.CREATOR_ID;
             session.user.isProducer =
                token.isProducer || token.id === process.env.DEV_ID;
          }

@@ -5,6 +5,49 @@ import RequestsThisMonth from "../components/RequestsThisMonth";
 import SubmitRequests from "../components/SubmitRequests";
 import { redirect } from "next/navigation";
 
+interface MovieProps {
+   _id: string;
+   data: {
+      id: number;
+      Type: string;
+      Title: string;
+      Year: string;
+      Rated: string;
+      Genre: string;
+      Director: string;
+      Actors: string;
+      Poster: string;
+      Backdrop: string;
+      imdbID: string;
+      Rating: number;
+      Release: string;
+      Runtime: number;
+      Composer: string;
+      Studio: string;
+   };
+   links: {
+      patreon: string;
+      youtube: string;
+   };
+   createdAt: string;
+   hasReacted: boolean;
+   hasSeen: boolean;
+   isChristmas: boolean;
+   isHalloween: boolean;
+   isRewatch: boolean;
+   publishedAt: string | null;
+   requester: string;
+   voters: [number];
+}
+
+interface UserProps {
+   id: string;
+   firstName: string;
+   name: string;
+   isProducer: boolean;
+   isCreator: boolean;
+}
+
 export default async function Home() {
    //redirect("/maintenance");
 
@@ -22,7 +65,7 @@ export default async function Home() {
       const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
       const requestedMoviesThisMonth = await response.json();
 
-      requestedMoviesThisMonth.forEach((movie) => {
+      requestedMoviesThisMonth.forEach((movie: MovieProps) => {
          if (movie.requester === userId) {
             if (!movie.hasReacted && !movie.hasSeen) {
                currentUsersMonthlyRequests.push(movie);
