@@ -15,16 +15,24 @@ interface SubmitRequestsProps {
    isUnderRequestLimit: boolean;
 }
 
+interface UserRoleInfo {
+   id: string;
+   isProducer: boolean;
+   isCreator: boolean;
+}
+
 const SubmitRequests: React.FC<SubmitRequestsProps> = ({
    user,
    isUnderRequestLimit,
 }) => {
-   const {
-      moviesList,
-      processUserRequestsByDate,
-      isUserUnderRequestLimit,
-      requestsRemaining,
-   } = useContext(MovieContext);
+   const movieContext = useContext(MovieContext);
+
+   const moviesList = movieContext?.moviesList ?? [];
+   const processUserRequestsByDate =
+      movieContext?.processUserRequestsByDate ?? (() => {});
+   const isUserUnderRequestLimit =
+      movieContext?.isUserUnderRequestLimit ?? false;
+   const requestsRemaining = movieContext?.requestsRemaining ?? 0;
 
    const [open, setOpen] = useState(false);
    const onOpenModal = () => setOpen(true);
@@ -33,10 +41,9 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
    const [disableRequestButton, setDisableRequestButton] =
       useState(isUnderRequestLimit);
 
-   let id, isProducer, isCreator;
-   if (user) {
-      ({ id, isProducer, isCreator } = user);
-   }
+   const id: UserRoleInfo["id"] = user?.id ?? "";
+   const isProducer: UserRoleInfo["isProducer"] = user?.isProducer ?? false;
+   const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
 
    useEffect(() => {
       processUserRequestsByDate(id, isCreator, isProducer);

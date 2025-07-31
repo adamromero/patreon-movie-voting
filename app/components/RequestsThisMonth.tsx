@@ -1,11 +1,12 @@
 "use client";
 import React, { useContext } from "react";
-import { convertMonthFormat } from "../utils/convertDateFormat";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { MovieContext } from "@/context/MovieContext";
 
 const RequestsThisMonth = () => {
-   const { moviesByDateMap } = useContext(MovieContext);
+   const movieContext = useContext(MovieContext);
+   const moviesByDateMap = movieContext?.moviesByDateMap ?? new Map();
+
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
       moviesByDateMap.size >= maxRequestsDisplayed

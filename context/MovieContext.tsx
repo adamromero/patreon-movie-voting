@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useState, ReactNode } from "react";
+import React, {
+   createContext,
+   useState,
+   Dispatch,
+   SetStateAction,
+   ReactNode,
+} from "react";
 import {
    genre,
    type,
@@ -13,44 +19,85 @@ import {
    statusSort,
    published,
 } from "@/app/utils/filtersOptions";
-
-interface Movie {
-   _id: string;
-   data: {
-      id: number;
-      Type: string;
-      Title: string;
-      Year: string;
-      Rated: string;
-      Genre: string;
-      Director: string;
-      Actors: string;
-      Poster: string;
-      Backdrop: string;
-      imdbID: string;
-      Rating: number;
-      Release: string;
-      Runtime: number;
-      Composer: string;
-      Studio: string;
-   };
-   links: {
-      patreon: string;
-      youtube: string;
-   };
-   createdAt: string;
-   hasReacted: boolean;
-   hasSeen: boolean;
-   isChristmas: boolean;
-   isHalloween: boolean;
-   isRewatch: boolean;
-   publishedAt: string | null;
-   requester: string;
-   voters: [number];
-}
+import { APIMovieData, Movie } from "@/app/types/interfaces";
 
 interface MovieContextType {
-   moviesList: Movie[];
+   moviesList?: Movie[];
+   setMoviesList?: Dispatch<SetStateAction<Movie[]>>;
+   filteredMoviesList: Movie[];
+   setFilteredMoviesList: Dispatch<SetStateAction<never[]>>;
+   processUserRequestsByDate: (
+      id: string,
+      isCreator: boolean,
+      isProducer: boolean
+   ) => void;
+   addVoteToRequest?: (
+      movieId: string,
+      voters: [string],
+      currentUser: string
+   ) => void;
+   removeVoteFromRequest?: (
+      movieId: string,
+      voters: [string],
+      currentUser: string
+   ) => void;
+   removeRequestFromList?: (
+      movieId: string,
+      voters: [string],
+      currentUser: string
+   ) => void;
+   addRequestToList?: (
+      movie: APIMovieData,
+      currentUser: string
+   ) => Promise<Movie | null>;
+   isUserUnderRequestLimit: boolean;
+   setIsUserUnderRequestLimit: Dispatch<SetStateAction<boolean>>;
+   requestsRemaining: number;
+   disableButton: boolean;
+   setDisableButton: Dispatch<SetStateAction<boolean>>;
+   isRankingOn: boolean;
+   setIsRankingOn: Dispatch<SetStateAction<boolean>>;
+   rankedMovies: Record<string, number>;
+   moviesMap: Map<string, Movie>;
+   moviesByDateMap: Map<string, Movie>;
+   fetchMovies: () => Promise<void>;
+   setRequestWatchStatus: (
+      movieId: string,
+      status: "channel" | "seen" | "rewatch" | "unseen"
+   ) => Promise<Movie | null>;
+   setRequestHolidayStatus: (
+      movieId: string,
+      status: "halloween" | "christmas"
+   ) => Promise<Movie | null>;
+   setOnChannelRequestLinks: (
+      movieId: string,
+      links: { patreon: string; youtube: string }
+   ) => Promise<Movie | null>;
+   filterOptions: {
+      alphabetical: string;
+      votes: string;
+      rating: string;
+      chronological: string;
+      added: string;
+      type: string;
+      genre: string;
+      requests: string;
+      status: string;
+      statusSort: string;
+      published: string;
+   };
+   setFilterOptions: Dispatch<
+      SetStateAction<MovieContextType["filterOptions"]>
+   >;
+   searchTitle: string;
+   setSearchTitle: Dispatch<SetStateAction<string>>;
+   searchDirector: string;
+   setSearchDirector: Dispatch<SetStateAction<string>>;
+   searchActor: string;
+   setSearchActor: Dispatch<SetStateAction<string>>;
+   searchComposer: string;
+   setSearchComposer: Dispatch<SetStateAction<string>>;
+   children: ReactNode;
 }
 
 interface MovieProviderType {
@@ -62,8 +109,8 @@ export const MovieContext = createContext<MovieContextType | undefined>(
 );
 
 export const MovieProvider = ({ children }: MovieProviderType) => {
-   const [moviesList, setMoviesList] = useState([]);
-   const [filteredMoviesList, setFilteredMoviesList] = useState([]);
+   const [moviesList, setMoviesList] = useState<Movie[]>([]);
+   const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
    const [searchTitle, setSearchTitle] = useState("");
    const [searchDirector, setSearchDirector] = useState("");
    const [searchActor, setSearchActor] = useState("");
@@ -82,7 +129,7 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       published: published.Default,
    });
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
-   const [requestsRemaining, setRequestsRemaining] = useState();
+   const [requestsRemaining, setRequestsRemaining] = useState(0);
    const [disableButton, setDisableButton] = useState(false);
    const [isRankingOn, setIsRankingOn] = useState(false);
    const [rankedMovies, setRankedMovies] = useState([]);
@@ -121,7 +168,11 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       }
    };
 
-   const processUserRequestsByDate = (id, isCreator, isProducer) => {
+   const processUserRequestsByDate = (
+      id: string,
+      isCreator: boolean,
+      isProducer: boolean
+   ) => {
       const currentDate = new Date();
       const startOfMonth = new Date(
          currentDate.getFullYear(),
@@ -156,7 +207,10 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       setRequestsRemaining(requestLimit - filteredMap.size);
    };
 
-   const addRequestToList = async (movie, currentUser) => {
+   const addRequestToList = async (
+      movie: APIMovieData,
+      currentUser: string
+   ) => {
       setDisableButton(true);
 
       let data,
@@ -358,7 +412,11 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       }
    };
 
-   const addVoteToRequest = async (movieId, voters, currentUser) => {
+   const addVoteToRequest = async (
+      movieId: string,
+      voters: [string],
+      currentUser: string
+   ) => {
       const newVoters = [...voters, currentUser];
       const votedMovie = moviesList.find((movie) => movie._id === movieId);
       const updatedMovieVote = { ...votedMovie, voters: newVoters };
@@ -407,7 +465,7 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       }
    };
 
-   const removeRequestFromList = async (movieId) => {
+   const removeRequestFromList = async (movieId: string) => {
       try {
          const response = await fetch(`/api/movies/${movieId}`, {
             method: "DELETE",
@@ -444,7 +502,11 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       }
    };
 
-   const removeVoteFromRequest = async (movieId, voters, currentUser) => {
+   const removeVoteFromRequest = async (
+      movieId: string,
+      voters: [string],
+      currentUser: string
+   ) => {
       const newVoters = voters.filter((voter) => voter !== currentUser);
       const removeVoteFromRequest = moviesList.find(
          (movie) => movie._id === movieId
@@ -527,10 +589,14 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       }
    };
 
-   const setRequestHolidayStatus = async (movieId, status) => {
+   const setRequestHolidayStatus = async (movieId: string, status: string) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
-      );
+      ) as Movie | undefined;
+
+      if (!selectedMovieVote) {
+         return null;
+      }
 
       let halloween = selectedMovieVote.isHalloween,
          christmas = selectedMovieVote.isChristmas;
@@ -640,7 +706,7 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
       }
    };
 
-   const setOnChannelRequestLinks = async (movieId, links) => {
+   const setOnChannelRequestLinks = async (movieId: string, links) => {
       const selectedMovieVote = moviesList.find(
          (movie) => movie._id === movieId
       );

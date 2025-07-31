@@ -2,15 +2,10 @@
 import MovieList from "./MovieList";
 import FilterMovieList from "./FilterMovieList";
 import SearchMoviesList from "./SearchMoviesList";
+import { User } from "../types/interfaces";
 
 interface VotingAppProps {
-   user?: {
-      id: string;
-      name: string;
-      firstName: string;
-      isCreator: boolean;
-      isProducer: boolean;
-   };
+   user?: User;
 }
 
 const VotingApp: React.FC<VotingAppProps> = ({ user }) => {
