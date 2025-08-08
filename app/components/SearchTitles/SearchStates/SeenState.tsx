@@ -1,8 +1,14 @@
+import { APIMovieData } from "@/app/types/movie";
 import React from "react";
 import { FaRegImage } from "react-icons/fa6";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
-const SeenState = ({ movieIDCollection, movie }) => {
+interface SeenStateProps {
+   movieIDCollection: Record<string | number, boolean>;
+   movie: APIMovieData;
+}
+
+const SeenState: React.FC<SeenStateProps> = ({ movieIDCollection, movie }) => {
    return (
       <div className="text-[#8d8d8d] cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
          <div>
@@ -30,7 +36,9 @@ const SeenState = ({ movieIDCollection, movie }) => {
                <div className="flex flex-col mt-[6px] items-center z-10">
                   <IoMdAddCircleOutline
                      className={`text-[50px] rotate-45 ${
-                        movieIDCollection[movie?.id] ? "animate-rotation" : ""
+                        movieIDCollection[movie?.id as any]
+                           ? "animate-rotation"
+                           : ""
                      }`}
                   />
                   <div>Seen</div>
@@ -46,9 +54,13 @@ const SeenState = ({ movieIDCollection, movie }) => {
                {(movie?.release_date || movie?.first_air_date) && (
                   <>
                      (
-                     {movie?.media_type === "movie"
-                        ? movie?.release_date.split("-")[0]
-                        : movie?.first_air_date.split("-")[0]}
+                     {
+                        (
+                           (movie?.media_type === "movie"
+                              ? movie?.release_date
+                              : movie?.first_air_date) ?? ""
+                        ).split("-")[0]
+                     }
                      )
                   </>
                )}

@@ -1,8 +1,17 @@
+import { APIMovieData } from "@/app/types/movie";
 import React from "react";
 import { FaRegImage } from "react-icons/fa6";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
-const LimitReachedState = ({ movie, movieIDCollection }) => {
+interface LimitReachedStateProps {
+   movie: APIMovieData;
+   movieIDCollection: Record<string | number, boolean>;
+}
+
+const LimitReachedState: React.FC<LimitReachedStateProps> = ({
+   movie,
+   movieIDCollection,
+}) => {
    return (
       <div className="cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
          <div>
@@ -30,7 +39,9 @@ const LimitReachedState = ({ movie, movieIDCollection }) => {
                <div className="flex flex-col mt-[6px] items-center z-10">
                   <IoMdAddCircleOutline
                      className={`text-[50px] rotate-45 ${
-                        movieIDCollection[movie?.id] ? "animate-rotation" : ""
+                        movieIDCollection[movie?.id as any]
+                           ? "animate-rotation"
+                           : ""
                      }`}
                   />
                   <div>Limit Reached</div>
@@ -46,9 +57,13 @@ const LimitReachedState = ({ movie, movieIDCollection }) => {
                {(movie?.release_date || movie?.first_air_date) && (
                   <>
                      (
-                     {movie?.media_type === "movie"
-                        ? movie?.release_date.split("-")[0]
-                        : movie?.first_air_date.split("-")[0]}
+                     {
+                        (
+                           (movie?.media_type === "movie"
+                              ? movie?.release_date
+                              : movie?.first_air_date) ?? ""
+                        ).split("-")[0]
+                     }
                      )
                   </>
                )}

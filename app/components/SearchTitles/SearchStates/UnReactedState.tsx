@@ -1,8 +1,19 @@
+import { APIMovieData } from "@/app/types/movie";
 import React from "react";
 import { FaRegImage } from "react-icons/fa6";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
-const UnReactedState = ({
+interface UnReactedStateProps {
+   isMovieRewatch: (selectedMovie: APIMovieData) => boolean;
+   getMovieVoteTotal: (selectedMovie: APIMovieData) => number;
+   isMovieVotedByUser: (selectedMovie: APIMovieData) => boolean;
+   handleRemoveVote: (selectedMovie: APIMovieData) => void;
+   handleCastVote: (selectedMovie: APIMovieData) => void;
+   movieIDCollection: Record<string | number, boolean>;
+   movie: APIMovieData;
+}
+
+const UnReactedState: React.FC<UnReactedStateProps> = ({
    isMovieRewatch,
    getMovieVoteTotal,
    isMovieVotedByUser,
@@ -73,9 +84,13 @@ const UnReactedState = ({
                {(movie?.release_date || movie?.first_air_date) && (
                   <>
                      (
-                     {movie?.media_type === "movie"
-                        ? movie?.release_date.split("-")[0]
-                        : movie?.first_air_date.split("-")[0]}
+                     {
+                        (
+                           (movie?.media_type === "movie"
+                              ? movie?.release_date
+                              : movie?.first_air_date) ?? ""
+                        ).split("-")[0]
+                     }
                      )
                   </>
                )}

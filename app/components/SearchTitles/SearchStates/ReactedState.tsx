@@ -3,8 +3,16 @@ import { FaRegImage } from "react-icons/fa6";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
+import { APIMovieData } from "@/app/types/movie";
 
-const ReactedState = ({
+interface ReactedStateProps {
+   getPatreonLink: (selectedMovie: any) => string;
+   getYouTubeLink: (selectedMovie: any) => string;
+   movieIDCollection: Record<string | number, boolean>;
+   movie: APIMovieData;
+}
+
+const ReactedState: React.FC<ReactedStateProps> = ({
    getPatreonLink,
    getYouTubeLink,
    movieIDCollection,
@@ -81,9 +89,13 @@ const ReactedState = ({
                {(movie?.release_date || movie?.first_air_date) && (
                   <>
                      (
-                     {movie?.media_type === "movie"
-                        ? movie?.release_date.split("-")[0]
-                        : movie?.first_air_date.split("-")[0]}
+                     {
+                        (
+                           (movie?.media_type === "movie"
+                              ? movie?.release_date
+                              : movie?.first_air_date) ?? ""
+                        ).split("-")[0]
+                     }
                      )
                   </>
                )}

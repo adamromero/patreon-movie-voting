@@ -1,6 +1,6 @@
 // stores/slices/movieDataSlice.ts
 import { StateCreator } from "zustand";
-import { Movie, APIMovieData } from "../../app/types/movie";
+import { Movie, MovieData } from "../../app/types/movie";
 import { StoreState } from "../../app/types/store";
 import {
    genre,
@@ -47,7 +47,7 @@ export interface MovieDataSlice {
 
    fetchMovies: () => Promise<void>;
    addRequestToList: (
-      movie: APIMovieData,
+      movie: MovieData,
       currentUser: string
    ) => Promise<Movie | null>;
    removeRequestFromList: (_id: string) => Promise<void>;
@@ -130,7 +130,7 @@ export const createMovieDataSlice: StateCreator<
       }
    },
 
-   addRequestToList: async (movie: APIMovieData, currentUser: string) => {
+   addRequestToList: async (movie: MovieData, currentUser: string) => {
       const { moviesList, moviesMap } = get();
 
       let data: any,

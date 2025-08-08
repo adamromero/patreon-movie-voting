@@ -1,6 +1,21 @@
-import React from "react";
+import React, { RefObject } from "react";
 
-const SearchFields = ({
+interface SearchFieldsProps {
+   handleTitleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+   setInput: (value: string) => void;
+   handleTitleYearSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+   setInputTitle: (value: string) => void;
+   setInputYear: (value: string) => void;
+   handleImdbIDSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+   setInputImdbID: (value: string) => void;
+   input: string;
+   inputTitle: string;
+   inputYear: string;
+   inputImdbID: string;
+   inputRef: RefObject<HTMLInputElement>;
+}
+
+const SearchFields: React.FC<SearchFieldsProps> = ({
    handleTitleSubmit,
    setInput,
    handleTitleYearSubmit,
@@ -54,7 +69,7 @@ const SearchFields = ({
                      type="text"
                      placeholder="Year"
                      value={inputYear}
-                     maxLength="4"
+                     maxLength={4}
                      onChange={(e) => setInputYear(e.target.value)}
                   />
                </div>

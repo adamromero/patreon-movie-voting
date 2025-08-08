@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactedState from "./SearchTitles/SearchStates/ReactedState";
 import SeenState from "./SearchTitles/SearchStates/SeenState";
 import UnReactedState from "./SearchTitles/SearchStates/UnReactedState";
@@ -9,9 +9,15 @@ import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
 import { useBoundStore } from "@/stores/useBoundStore";
 
-import { APIMovieData } from "../types/user";
+import { APIMovieData } from "../types/movie";
 
-const SearchTitlesModal = ({ user }) => {
+interface SearchTitlesModalProps {
+   user: { id: string };
+}
+
+type MovieData = APIMovieData;
+
+const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    const [input, setInput] = useState("");
    const [title, setTitle] = useState("");
    const [inputTitle, setInputTitle] = useState("");
@@ -20,7 +26,7 @@ const SearchTitlesModal = ({ user }) => {
    const [searchTitle, setSearchTitle] = useState("");
    const [searchYear, setSearchYear] = useState("");
    const [searchImdbID, setSearchImdbID] = useState("");
-   const [titlesFromAPI, setTitlesFromAPI] = useState([]);
+   const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
    const currentUser = user.id;
@@ -34,9 +40,13 @@ const SearchTitlesModal = ({ user }) => {
       moviesMap,
    } = useBoundStore();
 
-   const inputRef = useRef(null);
-   const [movieIDCollection, setMovieIDCollection] = useState({});
-   const [disabledButtonStates, setDisabledButtonStates] = useState({});
+   const inputRef = useRef<HTMLInputElement>(null);
+   const [movieIDCollection, setMovieIDCollection] = useState<
+      Record<string | number, boolean>
+   >({});
+   const [disabledButtonStates, setDisabledButtonStates] = useState<
+      Record<string | number, boolean>
+   >({});
 
    const API_URL = `https://api.themoviedb.org/3/search/multi?query=${title}&include_adult=false&language=en-US&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
 
@@ -44,22 +54,28 @@ const SearchTitlesModal = ({ user }) => {
       const fetchMovieTitles = async () => {
          if (title) {
             setLoading(true);
-            inputRef.current.blur();
+            inputRef.current?.blur();
 
             const response = await fetch(API_URL);
             const data = await response.json();
 
             if (data.results.length) {
                const titles = data.results.filter(
-                  (title) =>
+                  (title: any) =>
                      title.media_type === "movie" || title.media_type === "tv"
                );
                setTitlesFromAPI(titles);
-               const ids = data.results.map((entry) => entry.imdbID);
-               const result = ids.reduce((obj, num) => {
-                  obj[num] = false;
-                  return obj;
-               }, {});
+               const ids = data.results.map((entry: any) => entry.id);
+               const result = ids.reduce(
+                  (
+                     obj: Record<string | number, boolean>,
+                     num: string | number
+                  ) => {
+                     obj[num] = false;
+                     return obj;
+                  },
+                  {} as Record<string | number, boolean>
+               );
 
                setMovieIDCollection(result);
                setDisabledButtonStates(result);
@@ -123,14 +139,10 @@ const SearchTitlesModal = ({ user }) => {
 
             if (movie_results.length) {
                const results = movie_results[0];
-               if (results.media_type === "movie") {
-                  clearSearchState(results);
-               }
+               clearSearchState({ ...results, media_type: "movie" });
             } else if (tv_results.length) {
                const results = tv_results[0];
-               if (results.media_type === "tv") {
-                  clearSearchState(results);
-               }
+               clearSearchState({ ...results, media_type: "tv" });
             } else {
                setTitlesFromAPI([]);
                setError("Title not found!");
@@ -143,12 +155,12 @@ const SearchTitlesModal = ({ user }) => {
       fetchByImdbID();
    }, [searchImdbID]);
 
-   const getMovieData = (selectedMovie) => {
+   const getMovieData = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
       return moviesMap[key];
    };
 
-   const clearSearchState = (data) => {
+   const clearSearchState = (data: MovieData) => {
       setTitlesFromAPI([data]);
       setInputTitle("");
       setInputYear("");
@@ -158,48 +170,48 @@ const SearchTitlesModal = ({ user }) => {
       setSearchImdbID("");
    };
 
-   const isMovieInList = (selectedMovie) => {
+   const isMovieInList = (selectedMovie: APIMovieData) => {
       return !!getMovieData(selectedMovie);
    };
 
-   const isMovieReacted = (selectedMovie) => {
+   const isMovieReacted = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       return movie ? movie.hasReacted : false;
    };
 
-   const isMovieSeen = (selectedMovie) => {
+   const isMovieSeen = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       return movie ? movie.hasSeen : false;
    };
 
-   const isMovieRewatch = (selectedMovie) => {
+   const isMovieRewatch = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       return movie ? movie.isRewatch : false;
    };
 
-   const getMovieVoteTotal = (selectedMovie) => {
+   const getMovieVoteTotal = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       return movie ? movie.voters.length : 0;
    };
 
-   const getPatreonLink = (selectedMovie) => {
+   const getPatreonLink = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       return movie ? movie.links.patreon : "";
    };
 
-   const getYouTubeLink = (selectedMovie) => {
+   const getYouTubeLink = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       return movie ? movie.links.youtube : "";
    };
 
-   const handleTitleSubmit = (e) => {
+   const handleTitleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (input) {
          setTitle(encodeURIComponent(input.trim()));
       }
    };
 
-   const handleImdbIDSubmit = (e) => {
+   const handleImdbIDSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const regex = /^[t0-9]+$/;
       if (inputImdbID) {
@@ -210,25 +222,25 @@ const SearchTitlesModal = ({ user }) => {
       }
    };
 
-   const handleTitleYearSubmit = (e) => {
+   const handleTitleYearSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (inputTitle) setSearchTitle(encodeURIComponent(inputTitle.trim()));
       if (inputYear) setSearchYear(inputYear);
    };
 
-   const handleMovieSelection = async (movie: APIMovieData) => {
+   const handleMovieSelection = async (movie: MovieData) => {
       setMovieIDCollection({ [movie?.id]: true });
       setDisabledButtonStates({ [movie?.id]: true });
       addRequestToList(movie, currentUser);
    };
 
-   const isMovieVotedByUser = (selectedMovie) => {
+   const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
       const movie = moviesMap[key];
       return movie ? movie.voters.includes(currentUser) : false;
    };
 
-   const handleRemoveVote = (selectedMovie) => {
+   const handleRemoveVote = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
          removeVoteFromRequest(movie._id, movie.voters, currentUser);
@@ -236,14 +248,14 @@ const SearchTitlesModal = ({ user }) => {
       }
    };
 
-   const handleCastVote = (selectedMovie) => {
+   const handleCastVote = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
          addVoteToRequest(movie._id, movie.voters, currentUser);
       }
    };
 
-   const renderMovieStatus = (movie: APIMovieData) => {
+   const renderMovieStatus = (movie: MovieData) => {
       //props for search state components
       const sharedMovieProps = { movie, movieIDCollection };
 
@@ -313,7 +325,7 @@ const SearchTitlesModal = ({ user }) => {
             ) : (
                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
                   {titlesFromAPI.length ? (
-                     titlesFromAPI.map((movie: APIMovieData) => (
+                     titlesFromAPI.map((movie: MovieData) => (
                         <div className="mx-auto" key={movie?.id}>
                            {renderMovieStatus(movie)}
                         </div>

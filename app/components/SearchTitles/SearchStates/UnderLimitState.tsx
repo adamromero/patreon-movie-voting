@@ -1,8 +1,16 @@
+import { APIMovieData } from "@/app/types/movie";
 import React from "react";
 import { FaRegImage } from "react-icons/fa6";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
-const UnderLimitState = ({
+interface UnderLimitStateProps {
+   handleMovieSelection: (movie: APIMovieData) => Promise<void> | void;
+   disabledButtonStates: Record<string | number, boolean>;
+   disableButton: boolean;
+   movie: APIMovieData;
+}
+
+const UnderLimitState: React.FC<UnderLimitStateProps> = ({
    handleMovieSelection,
    disabledButtonStates,
    disableButton,
@@ -39,7 +47,9 @@ const UnderLimitState = ({
                <div className="flex flex-col">
                   <IoMdAddCircleOutline className="text-[50px] mx-auto" />
                   <div>
-                     {disabledButtonStates[movie?.id] ? "Pending" : "Add"}
+                     {disabledButtonStates[movie?.id as any]
+                        ? "Pending"
+                        : "Add"}
                   </div>
                </div>
             </div>
@@ -53,9 +63,13 @@ const UnderLimitState = ({
                {(movie?.release_date || movie?.first_air_date) && (
                   <>
                      (
-                     {movie?.media_type === "movie"
-                        ? movie?.release_date.split("-")[0]
-                        : movie?.first_air_date.split("-")[0]}
+                     {
+                        (
+                           (movie?.media_type === "movie"
+                              ? movie?.release_date
+                              : movie?.first_air_date) ?? ""
+                        ).split("-")[0]
+                     }
                      )
                   </>
                )}

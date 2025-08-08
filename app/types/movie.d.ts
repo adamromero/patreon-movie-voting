@@ -1,4 +1,4 @@
-export interface APIMovieData {
+export interface MovieData {
    id: number;
    media_type?: "movie" | "tv";
    Type?: string;
@@ -18,9 +18,17 @@ export interface APIMovieData {
    Studio?: string;
 }
 
+export interface APIMovieData extends MovieData {
+   poster_path?: string;
+   title?: string;
+   name?: string;
+   release_date?: string;
+   first_air_date?: string;
+}
+
 export interface Movie {
    _id: string;
-   data: APIMovieData;
+   data: MovieData;
    links: {
       patreon: string;
       youtube: string;
