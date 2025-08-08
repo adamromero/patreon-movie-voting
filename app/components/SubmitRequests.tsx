@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SubmitRequestButton from "./SubmitRequestButton";
-import CopyableList from "./CopyableList";
 import { useBoundStore } from "@/stores/useBoundStore";
 
 interface SubmitRequestsProps {
@@ -95,12 +94,6 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
                      </div>
                   )}
                </div>
-
-               {isCreator && false && (
-                  <div className="flex-1 mb-[15px]">
-                     <CopyableList />
-                  </div>
-               )}
             </div>
          )}
       </div>

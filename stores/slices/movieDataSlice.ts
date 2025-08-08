@@ -83,7 +83,7 @@ export const createMovieDataSlice: StateCreator<
    searchComposer: "",
    filterOptions: {
       alphabetical: alphabetical.Default,
-      votes: votes.Default,
+      votes: votes.Ascending,
       rating: rating.Default,
       chronological: chronological.Default,
       added: added.Default,
@@ -91,7 +91,7 @@ export const createMovieDataSlice: StateCreator<
       genre: genre.Default,
       requests: requests.Default,
       status: status.Default,
-      statusSort: statusSort.Default,
+      statusSort: statusSort.Unwatched,
       published: published.Default,
    },
 

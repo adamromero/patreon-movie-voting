@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import React from "react";
 import { useBoundStore } from "@/stores/useBoundStore";
 
 const SearchMoviesList = () => {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useContext, FC } from "react";
+import React, { useState, useEffect } from "react";
 import { useBoundStore } from "@/stores/useBoundStore";
 
 import {
@@ -26,7 +26,7 @@ interface MovieListProps {
    isCreator?: boolean;
 }
 
-const MovieList: FC<MovieListProps> = ({ currentUser, isCreator }) => {
+const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
    const moviesList = useFetchMovies();
