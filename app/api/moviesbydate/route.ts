@@ -1,6 +1,6 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 connectDB();
 
@@ -17,7 +17,7 @@ function getCurrentMonthRange() {
    return { start, end };
 }
 
-export async function GET(req, res) {
+export async function GET(req: NextRequest, res: NextResponse) {
    try {
       const { start, end } = getCurrentMonthRange();
 
@@ -30,9 +30,14 @@ export async function GET(req, res) {
 
       return NextResponse.json(moviesThisMonth);
    } catch (error) {
+      let message = "Unknown error";
+
+      if (error instanceof Error) {
+         message = error.message;
+      }
       return NextResponse.json({
          error: "Unable to fetch movie votes from the database.",
-         details: error.message,
+         details: message,
       });
    }
 }

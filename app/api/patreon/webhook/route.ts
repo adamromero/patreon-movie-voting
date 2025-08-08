@@ -1,20 +1,20 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 connectDB();
 
-const extractTitle = (input) => {
+const extractTitle = (input: string) => {
    const match = input.match(/^(.*?)(?: \((\d{4})\)| S\d{2}E\d{2})/);
    return match ? match[1].trim() : "";
 };
 
-const extractYear = (input) => {
+const extractYear = (input: string) => {
    const match = input.match(/^(.*?) \((\d{4})\)/);
    return match ? match[2].trim() : "";
 };
 
-export async function POST(req) {
+export async function POST(req: NextRequest) {
    try {
       const request = await req.json();
       const { title, url, published_at } = request.data.attributes;

@@ -1,11 +1,11 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 
 connectDB();
 
-export async function PUT(req, res) {
+export async function PUT(req: NextRequest, res: NextResponse) {
    const user = await getCurrentUser();
    if (user) {
       try {
@@ -32,7 +32,7 @@ export async function PUT(req, res) {
    }
 }
 
-export async function DELETE(req, res) {
+export async function DELETE(req: NextRequest, res: NextResponse) {
    const user = await getCurrentUser();
    if (user) {
       try {

@@ -1,23 +1,28 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 
 connectDB();
 
-export async function GET(req, res) {
+export async function GET(req: NextRequest, res: NextResponse) {
    try {
       const movieVotes = await Movie.find().sort({ createdAt: 1 });
       return NextResponse.json(movieVotes);
    } catch (error) {
+      let message = "Unknown error";
+
+      if (error instanceof Error) {
+         message = error.message;
+      }
       return NextResponse.json({
          error: "Unable to fetch movie votes from the database.",
-         details: error.message,
+         details: message,
       });
    }
 }
 
-export async function POST(req, res) {
+export async function POST(req: NextRequest, res: NextResponse) {
    const user = await getCurrentUser();
    if (user) {
       try {
@@ -56,9 +61,14 @@ export async function POST(req, res) {
             error: "Unable to post movie selection to the database.",
          });
       } catch (error) {
+         let message = "Unknown error";
+
+         if (error instanceof Error) {
+            message = error.message;
+         }
          return NextResponse.json({
             error: "Unable to post movie selection to the database.",
-            details: error.message,
+            details: message,
          });
       }
    }
