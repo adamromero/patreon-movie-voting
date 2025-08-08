@@ -11,11 +11,11 @@ const StatusSelector = ({
    setYouTubeReactionLink,
    watchedMovieData,
 }) => {
-   const { setRequestWatchStatus } = useBoundStore();
+   const { setWatchStatus } = useBoundStore();
 
    const handleStatusSetting = (e, data) => {
       const selectedValue = e.target.value;
-      setRequestWatchStatus(data?._id, selectedValue);
+      setWatchStatus(data?._id, selectedValue);
    };
 
    return (
