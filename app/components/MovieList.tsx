@@ -20,6 +20,7 @@ import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
 import useFetchMovies from "../hooks/useFetchMovies";
 import PageControls from "./PageControls";
+import { Movie } from "../types/movie";
 
 interface MovieListProps {
    currentUser?: string;
@@ -54,7 +55,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const [isRankingOn, setIsRankingOn] = useState(false);
 
    useEffect(() => {
-      let filteredList = [...moviesList];
+      let filteredList: Movie[] = [...moviesList];
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
@@ -70,18 +71,16 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
 
       if (filterOptions.alphabetical === alphabetical.Ascending) {
          filteredList = filteredList.sort((a, b) => {
-            if (a.data.Title < b.data.Title) {
-               return -1;
-            }
-            return 0;
+            const titleA = a.data.Title ?? "";
+            const titleB = b.data.Title ?? "";
+            return titleA.localeCompare(titleB);
          });
       } else if (filterOptions.alphabetical === alphabetical.Descending) {
          filteredList = filteredList
             .sort((a, b) => {
-               if (a.data.Title < b.data.Title) {
-                  return -1;
-               }
-               return 0;
+               const titleA = a.data.Title ?? "";
+               const titleB = b.data.Title ?? "";
+               return titleB.localeCompare(titleA);
             })
             .reverse();
       } else {
@@ -91,14 +90,14 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       if (filterOptions.rating === rating.Ascending) {
          filteredList = filteredList.sort(
             (a, b) =>
-               parseFloat(b.data.Rating ? b.data.Rating : 0) -
-               parseFloat(a.data.Rating ? a.data.Rating : 0)
+               parseFloat(b.data.Rating ? String(b.data.Rating) : "0") -
+               parseFloat(a.data.Rating ? String(a.data.Rating) : "0")
          );
       } else if (filterOptions.rating === rating.Descending) {
          filteredList = filteredList.sort(
             (a, b) =>
-               parseFloat(a.data.Rating ? a.data.Rating : 0) -
-               parseFloat(b.data.Rating ? b.data.Rating : 0)
+               parseFloat(a.data.Rating ? String(a.data.Rating) : "0") -
+               parseFloat(b.data.Rating ? String(b.data.Rating) : "0")
          );
       } else {
          setIsRatingFilterAscending(true);
@@ -107,34 +106,48 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       if (filterOptions.chronological === chronological.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(a.data.Release ? a.data.Release : "1900-01-01") -
-               new Date(b.data.Release ? b.data.Release : "1900-01-01")
+               new Date(
+                  a.data.Release ? a.data.Release : "1900-01-01"
+               ).getTime() -
+               new Date(
+                  b.data.Release ? b.data.Release : "1900-01-01"
+               ).getTime()
          );
       } else if (filterOptions.chronological === chronological.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(b.data.Release ? b.data.Release : "1900-01-01") -
-               new Date(a.data.Release ? a.data.Release : "1900-01-01")
+               new Date(
+                  b.data.Release ? b.data.Release : "1900-01-01"
+               ).getTime() -
+               new Date(
+                  a.data.Release ? a.data.Release : "1900-01-01"
+               ).getTime()
          );
       }
 
       if (filterOptions.published === published.Older) {
          filteredList = filteredList.sort(
-            (a, b) => new Date(a.publishedAt) - new Date(b.publishedAt)
+            (a, b) =>
+               new Date(a.publishedAt ?? "").getTime() -
+               new Date(b.publishedAt ?? "").getTime()
          );
       } else if (filterOptions.published === published.Newer) {
          filteredList = filteredList.sort(
-            (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+            (a, b) =>
+               new Date(b.publishedAt ?? "").getTime() -
+               new Date(a.publishedAt ?? "").getTime()
          );
       }
 
       if (filterOptions.added === added.Older) {
          filteredList = filteredList.sort(
-            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            (a, b) =>
+               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
          );
       } else if (filterOptions.added === added.Newer) {
          filteredList = filteredList.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            (a, b) =>
+               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
          );
       }
 
@@ -158,85 +171,85 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
 
       if (filterOptions.type === type.Movie) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Type.includes(type.Movie.toLowerCase())
+            (movie.data.Type ?? "").includes(type.Movie.toLowerCase())
          );
       } else if (filterOptions.type === type.Series) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Type.includes(type.Series.toLowerCase())
+            (movie.data.Type ?? "").includes(type.Series.toLowerCase())
          );
       }
 
       if (filterOptions.genre === genre.Action) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Action)
+            (movie.data.Genre ?? "").includes(genre.Action)
          );
       } else if (filterOptions.genre === genre.Adventure) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Adventure)
+            (movie.data.Genre ?? "").includes(genre.Adventure)
          );
       } else if (filterOptions.genre === genre.Animation) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Animation)
+            (movie.data.Genre ?? "").includes(genre.Animation)
          );
       } else if (filterOptions.genre === genre.Comedy) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Comedy)
+            (movie.data.Genre ?? "").includes(genre.Comedy)
          );
       } else if (filterOptions.genre === genre.Crime) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Crime)
+            (movie.data.Genre ?? "").includes(genre.Crime)
          );
       } else if (filterOptions.genre === genre.Documentary) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Documentary)
+            (movie.data.Genre ?? "").includes(genre.Documentary)
          );
       } else if (filterOptions.genre === genre.Drama) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Drama)
+            (movie.data.Genre ?? "").includes(genre.Drama)
          );
       } else if (filterOptions.genre === genre.SciFi) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.SciFi)
+            (movie.data.Genre ?? "").includes(genre.SciFi)
          );
       } else if (filterOptions.genre === genre.Family) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Family)
+            (movie.data.Genre ?? "").includes(genre.Family)
          );
       } else if (filterOptions.genre === genre.Fantasy) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Fantasy)
+            (movie.data.Genre ?? "").includes(genre.Fantasy)
          );
       } else if (filterOptions.genre === genre.History) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.History)
+            (movie.data.Genre ?? "").includes(genre.History)
          );
       } else if (filterOptions.genre === genre.Horror) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Horror)
+            (movie.data.Genre ?? "").includes(genre.Horror)
          );
       } else if (filterOptions.genre === genre.Mystery) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Mystery)
+            (movie.data.Genre ?? "").includes(genre.Mystery)
          );
       } else if (filterOptions.genre === genre.Music) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Music)
+            (movie.data.Genre ?? "").includes(genre.Music)
          );
       } else if (filterOptions.genre === genre.Thriller) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Thriller)
+            (movie.data.Genre ?? "").includes(genre.Thriller)
          );
       } else if (filterOptions.genre === genre.Romance) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Romance)
+            (movie.data.Genre ?? "").includes(genre.Romance)
          );
       } else if (filterOptions.genre === genre.War) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.War)
+            (movie.data.Genre ?? "").includes(genre.War)
          );
       } else if (filterOptions.genre === genre.Western) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Genre.includes(genre.Western)
+            (movie.data.Genre ?? "").includes(genre.Western)
          );
       } else if (filterOptions.genre === genre.Halloween) {
          filteredList = filteredList.filter((movie) => movie.isHalloween);
@@ -266,31 +279,35 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          );
       } else if (filterOptions.requests === requests.Voted) {
          filteredList = filteredList.filter((movie) =>
-            movie.voters.includes(currentUser)
+            movie.voters.includes(currentUser ?? "")
          );
       } else if (filterOptions.requests === requests.NotVoted) {
          filteredList = filteredList.filter(
-            (movie) => !movie.voters.includes(currentUser)
+            (movie) => !movie.voters.includes(currentUser ?? "")
          );
       }
 
       if (searchTitle) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Title.toLowerCase().includes(searchTitle.toLowerCase())
+            (movie.data.Title ?? "")
+               .toLowerCase()
+               .includes(searchTitle.toLowerCase())
          );
       }
 
       if (searchDirector) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Director.toLowerCase().includes(
-               searchDirector.toLowerCase()
-            )
+            (movie.data.Director ?? "")
+               .toLowerCase()
+               .includes(searchDirector.toLowerCase())
          );
       }
 
       if (searchActor) {
          filteredList = filteredList.filter((movie) =>
-            movie.data.Actors.toLowerCase().includes(searchActor.toLowerCase())
+            (movie.data.Actors ?? "")
+               .toLowerCase()
+               .includes(searchActor.toLowerCase())
          );
       }
 
@@ -319,7 +336,16 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    ]);
 
    useEffect(() => {
-      const requestStateObject = {};
+      const requestStateObject: {
+         [key: string]: {
+            hasReacted: boolean;
+            hasSeen: boolean;
+            isRewatch: boolean;
+            isUnseen: boolean;
+            isHalloween: boolean;
+            isChristmas: boolean;
+         };
+      } = {};
 
       filteredMoviesList.forEach((movie) => {
          requestStateObject[movie._id] = {
@@ -465,8 +491,8 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                >
                   <MovieListEntry
                      data={data}
-                     currentUser={currentUser}
-                     isCreator={isCreator}
+                     currentUser={currentUser ?? ""}
+                     isCreator={isCreator ?? false}
                      ranking={index + 1 + rowsPerPage * (currentPage - 1)}
                      isRankingOn={isRankingOn}
                      requestStatusState={requestStatusState}

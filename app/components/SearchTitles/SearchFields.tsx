@@ -12,7 +12,7 @@ interface SearchFieldsProps {
    inputTitle: string;
    inputYear: string;
    inputImdbID: string;
-   inputRef: RefObject<HTMLInputElement>;
+   inputRef: RefObject<HTMLInputElement | null>;
 }
 
 const SearchFields: React.FC<SearchFieldsProps> = ({
