@@ -1,9 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useBoundStore } from "@/stores/useBoundStore";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
+import { Movie } from "@/app/types/movie";
 
-const ReactionLinkForm = ({
+interface ReactionLinkFormProps {
+   patreonReactionLink: string;
+   setPatreonReactionLink: (link: string) => void;
+   youtubeReactionLink: string;
+   setYouTubeReactionLink: (link: string) => void;
+   watchedMovieData: Movie;
+}
+
+const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
    patreonReactionLink,
    setPatreonReactionLink,
    youtubeReactionLink,
@@ -15,10 +24,14 @@ const ReactionLinkForm = ({
 
    const { setReactionLink } = useBoundStore();
 
-   const handleLinkUpdate = (e) => {
+   const handleLinkUpdate = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      const processLink = (regex, link, setLinkWarning) => {
+      const processLink = (
+         regex: RegExp,
+         link: string,
+         setLinkWarning: (warning: string) => void
+      ) => {
          if (regex.test(link)) {
             setLinkWarning("");
             return link;
@@ -48,8 +61,8 @@ const ReactionLinkForm = ({
          patreon: updatedPatreonLink,
       };
 
-      setReactionLink(watchedMovieData.id, links);
-      //set published at timestampi
+      setReactionLink(watchedMovieData._id, links);
+      //set published at timestamp
    };
 
    return (

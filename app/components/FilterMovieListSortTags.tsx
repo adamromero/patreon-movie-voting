@@ -14,7 +14,8 @@ const FilterMovieListSortTags = () => {
    const { filterOptions, setFilterOptions } = useBoundStore();
 
    const handleSortFilterRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const { name, value } = e.target;
+      const target = e.target as HTMLButtonElement;
+      const { name, value } = target;
 
       setFilterOptions({
          alphabetical: alphabetical.Default,

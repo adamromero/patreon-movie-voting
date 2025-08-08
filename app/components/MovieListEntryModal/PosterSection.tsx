@@ -1,7 +1,12 @@
 import React from "react";
 import { FaRegImage } from "react-icons/fa6";
+import { Movie } from "@/app/types/movie";
 
-const PosterSection = ({ data }) => {
+interface PosterSectionProps {
+   data: Movie;
+}
+
+const PosterSection: React.FC<PosterSectionProps> = ({ data }) => {
    return (
       <div className="w-[135px] sm:w-[185px] mx-auto">
          {data?.data?.Poster ? (

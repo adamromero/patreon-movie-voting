@@ -7,14 +7,22 @@ import Details from "./Details";
 import HolidaySettings from "./HolidaySettings";
 import StatusSelector from "./StatusSelector";
 import LinksSection from "./LinksSection";
+import { Movie } from "@/app/types/movie";
 
 interface RequestModalProps {
-   data: any;
+   data: Movie;
    moreInfoOpen: boolean;
-   onCloseInfoModal: any;
+   onCloseMoreInfoModal: () => void;
+   requestStatusState: Record<string, any>;
+   isCreator: boolean;
+   patreonReactionLink: string;
+   setPatreonReactionLink: (link: string) => void;
+   youtubeReactionLink: string;
+   setYouTubeReactionLink: (link: string) => void;
+   watchedMovieData: Movie;
 }
 
-const RequestModal = ({
+const RequestModal: React.FC<RequestModalProps> = ({
    data,
    moreInfoOpen,
    onCloseMoreInfoModal,

@@ -1,8 +1,13 @@
 import React from "react";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
+import { Movie } from "@/app/types/movie";
 
-const LinksSection = ({ data }) => {
+interface LinksSectionProps {
+   data: Movie;
+}
+
+const LinksSection: React.FC<LinksSectionProps> = ({ data }) => {
    return (
       <div className="flex gap-[5px] max-w-[200px] mt-[10px] flex-1">
          {data?.links?.youtube && (

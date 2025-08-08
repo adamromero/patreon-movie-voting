@@ -1,12 +1,30 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useBoundStore } from "@/stores/useBoundStore";
+import { Movie } from "@/app/types/movie";
 
-const HolidaySettings = ({ data, requestStatusState }) => {
+interface HolidaySettingsProps {
+   data: Movie;
+   requestStatusState: Record<
+      string,
+      {
+         isHalloween?: boolean;
+         isChristmas?: boolean;
+      }
+   >;
+}
+
+const HolidaySettings: React.FC<HolidaySettingsProps> = ({
+   data,
+   requestStatusState,
+}) => {
    const { setHolidayStatus } = useBoundStore();
 
-   const handleHolidaySetting = (e, data) => {
+   const handleHolidaySetting = (
+      e: React.ChangeEvent<HTMLInputElement>,
+      data: Movie
+   ) => {
       const selectedValue = e.target.value;
-      setHolidayStatus(data?._id, selectedValue);
+      setHolidayStatus(data?._id, selectedValue as "halloween" | "christmas");
    };
 
    return (

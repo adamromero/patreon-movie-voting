@@ -3,8 +3,13 @@ import {
    convertDateFormat,
    convertReleaseDate,
 } from "../../utils/convertDateFormat";
+import { Movie } from "@/app/types/movie";
 
-const Details = ({ data }) => {
+interface DetailsProps {
+   data: Movie;
+}
+
+const Details: React.FC<DetailsProps> = ({ data }) => {
    return (
       <>
          {data?.data?.Genre && (
@@ -35,7 +40,7 @@ const Details = ({ data }) => {
                {data?.data?.Composer}
             </div>
          )}
-         {data?.data?.Rating > 0 && (
+         {data?.data?.Rating && data?.data?.Rating > 0 && (
             <div>
                <span className="font-bold">TMDB Rating:</span>{" "}
                {data?.data?.Rating.toFixed(1)}

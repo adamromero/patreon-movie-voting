@@ -1,8 +1,27 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useBoundStore } from "@/stores/useBoundStore";
 import ReactionLinkForm from "./ReactionLinkForm";
+import { Movie } from "@/app/types/movie";
 
-const StatusSelector = ({
+interface StatusSelectorProps {
+   data: Movie;
+   requestStatusState: Record<
+      string,
+      {
+         hasReacted?: boolean;
+         hasSeen?: boolean;
+         isRewatch?: boolean;
+         isUnseen?: boolean;
+      }
+   >;
+   patreonReactionLink: string;
+   setPatreonReactionLink: (link: string) => void;
+   youtubeReactionLink: string;
+   setYouTubeReactionLink: (link: string) => void;
+   watchedMovieData: Movie;
+}
+
+const StatusSelector: React.FC<StatusSelectorProps> = ({
    data,
    requestStatusState,
    patreonReactionLink,
@@ -13,9 +32,15 @@ const StatusSelector = ({
 }) => {
    const { setWatchStatus } = useBoundStore();
 
-   const handleStatusSetting = (e, data) => {
+   const handleStatusSetting = (
+      e: React.ChangeEvent<HTMLInputElement>,
+      data: Movie
+   ) => {
       const selectedValue = e.target.value;
-      setWatchStatus(data?._id, selectedValue);
+      setWatchStatus(
+         data?._id,
+         selectedValue as "channel" | "seen" | "rewatch" | "unseen"
+      );
    };
 
    return (

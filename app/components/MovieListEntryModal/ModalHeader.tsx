@@ -1,6 +1,11 @@
 import React from "react";
+import { Movie } from "@/app/types/movie";
 
-const ModalHeader = ({ data }) => {
+interface ModalHeaderProps {
+   data: Movie;
+}
+
+const ModalHeader: React.FC<ModalHeaderProps> = ({ data }) => {
    return (
       <>
          <a
