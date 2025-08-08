@@ -6,7 +6,17 @@ import {
    MdKeyboardArrowRight,
 } from "react-icons/md";
 
-const Pagination = ({
+interface PaginationProps {
+   rowsPerPage: number;
+   totalPosts: number;
+   currentPage: number;
+   firstPage: () => void;
+   lastPage: () => void;
+   decrementPage: () => void;
+   incrementPage: () => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
    rowsPerPage,
    totalPosts,
    currentPage,

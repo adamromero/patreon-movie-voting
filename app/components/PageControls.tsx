@@ -1,7 +1,15 @@
 import React from "react";
 import Pagination from "./Pagination";
 
-const PageControls = ({
+interface PageControlsProps {
+   currentPage: number;
+   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+   rowsPerPage: number;
+   setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
+   filteredListLength: number;
+}
+
+const PageControls: React.FC<PageControlsProps> = ({
    currentPage,
    setCurrentPage,
    rowsPerPage,

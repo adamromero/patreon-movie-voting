@@ -167,7 +167,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
                         onChange={handleStatusFilter}
                      >
                         <option value={status.Default}>All</option>
-                        <option value={status.Watched}>On Channel</option>
+                        <option value={status.OnChannel}>On Channel</option>
                         <option value={status.Seen}>Seen</option>
                         <option value={status.Rewatch}>Rewatch</option>
                         <option value={status.Unseen}>Unseen</option>

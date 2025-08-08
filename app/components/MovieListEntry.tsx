@@ -9,8 +9,20 @@ import { useBoundStore } from "@/stores/useBoundStore";
 import { FaRegImage } from "react-icons/fa6";
 
 import RequestModal from "./MovieListEntryModal/RequestModal";
+import { Movie, MovieData } from "../types/movie";
 
-const MovieListEntry = ({
+interface MovieListEntryProps {
+   data: Movie;
+   currentUser: string;
+   isCreator: boolean;
+   ranking: number;
+   isRankingOn: boolean;
+   requestStatusState: Record<string | number, boolean>;
+}
+
+type WatchedMovieRef = { _id: string };
+
+const MovieListEntry: React.FC<MovieListEntryProps> = ({
    data,
    currentUser,
    isCreator,
@@ -26,20 +38,21 @@ const MovieListEntry = ({
    const onOpenDeleteModal = () => setOpenDelete(true);
    const onCloseDeleteModal = () => setOpenDelete(false);
 
-   const [removeMovieId, setRemoveMovieId] = useState();
+   const [removeMovieId, setRemoveMovieId] = useState("");
 
-   const [watchedMovieData, setWatchedMovieData] = useState({});
+   const [watchedMovieData, setWatchedMovieData] =
+      useState<WatchedMovieRef | null>(null);
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
    const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
 
    const { addVoteToRequest, removeVoteFromRequest, removeRequestFromList } =
       useBoundStore();
 
-   const handleCastVote = async (movieId, voters) => {
+   const handleCastVote = async (movieId: string, voters: string[]) => {
       addVoteToRequest(movieId, voters, currentUser);
    };
 
-   const handleRemoveVote = async (movieId, voters) => {
+   const handleRemoveVote = async (movieId: string, voters: string[]) => {
       removeVoteFromRequest(movieId, voters, currentUser);
    };
 
@@ -58,7 +71,7 @@ const MovieListEntry = ({
                   setPatreonReactionLink(data?.links?.patreon);
                   setYouTubeReactionLink(data?.links?.youtube);
                   setWatchedMovieData({
-                     id: data?._id,
+                     _id: data?._id,
                   });
                }}
             >

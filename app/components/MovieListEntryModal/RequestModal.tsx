@@ -9,6 +9,8 @@ import StatusSelector from "./StatusSelector";
 import LinksSection from "./LinksSection";
 import { Movie } from "@/app/types/movie";
 
+type WatchedMovieRef = { _id: string };
+
 interface RequestModalProps {
    data: Movie;
    moreInfoOpen: boolean;
@@ -19,7 +21,7 @@ interface RequestModalProps {
    setPatreonReactionLink: (link: string) => void;
    youtubeReactionLink: string;
    setYouTubeReactionLink: (link: string) => void;
-   watchedMovieData: Movie;
+   watchedMovieData: WatchedMovieRef | null;
 }
 
 const RequestModal: React.FC<RequestModalProps> = ({

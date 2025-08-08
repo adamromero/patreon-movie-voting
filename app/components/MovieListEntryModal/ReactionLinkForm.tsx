@@ -4,12 +4,14 @@ import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { Movie } from "@/app/types/movie";
 
+type WatchedMovieRef = { _id: string };
+
 interface ReactionLinkFormProps {
    patreonReactionLink: string;
    setPatreonReactionLink: (link: string) => void;
    youtubeReactionLink: string;
    setYouTubeReactionLink: (link: string) => void;
-   watchedMovieData: Movie;
+   watchedMovieData: WatchedMovieRef;
 }
 
 const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
