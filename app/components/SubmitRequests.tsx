@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import SubmitRequestButton from "./SubmitRequestButton";
 import CopyableList from "./CopyableList";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 interface SubmitRequestsProps {
    user?: {
@@ -25,14 +25,12 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
    user,
    isUnderRequestLimit,
 }) => {
-   const movieContext = useContext(MovieContext);
-
-   const moviesList = movieContext?.moviesList ?? [];
-   const processUserRequestsByDate =
-      movieContext?.processUserRequestsByDate ?? (() => {});
-   const isUserUnderRequestLimit =
-      movieContext?.isUserUnderRequestLimit ?? false;
-   const requestsRemaining = movieContext?.requestsRemaining ?? 0;
+   const {
+      moviesList,
+      processUserRequestsByDate,
+      isUserUnderRequestLimit,
+      requestsRemaining,
+   } = useBoundStore();
 
    const [open, setOpen] = useState(false);
    const onOpenModal = () => setOpen(true);
@@ -47,7 +45,7 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
 
    useEffect(() => {
       processUserRequestsByDate(id, isCreator, isProducer);
-   }, [moviesList]);
+   }, [moviesList, processUserRequestsByDate, id, isCreator, isProducer]);
 
    useEffect(() => {
       if (!isUserUnderRequestLimit && !open) {

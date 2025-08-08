@@ -1,19 +1,18 @@
 "use client";
-import React, { useContext } from "react";
+import React from "react";
 import { AiTwotoneCalendar } from "react-icons/ai";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 const RequestsThisMonth = () => {
-   const movieContext = useContext(MovieContext);
-   const moviesByDateMap = movieContext?.moviesByDateMap ?? new Map();
+   const { moviesByDateMap } = useBoundStore();
 
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
-      moviesByDateMap.size >= maxRequestsDisplayed
-         ? moviesByDateMap.size - maxRequestsDisplayed
+      Object.keys(moviesByDateMap).length >= maxRequestsDisplayed
+         ? Object.keys(moviesByDateMap).length - maxRequestsDisplayed
          : 0;
 
-   if (moviesByDateMap.size) {
+   if (Object.keys(moviesByDateMap).length) {
       return (
          <div className="mb-[15px]">
             <h2 className="flex items-center gap-[5px] mb-[5px] font-bold">
@@ -22,8 +21,11 @@ const RequestsThisMonth = () => {
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
-               {Array.from(moviesByDateMap.entries())
-                  .slice(firstRequestDisplayed, moviesByDateMap.size)
+               {Object.entries(moviesByDateMap)
+                  .slice(
+                     firstRequestDisplayed,
+                     Object.keys(moviesByDateMap).length
+                  )
                   .map(([key, value]) => (
                      <div key={key}>
                         <img

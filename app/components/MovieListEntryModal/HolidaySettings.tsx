@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 const HolidaySettings = ({ data, requestStatusState }) => {
-   const { setRequestHolidayStatus } = useContext(MovieContext);
+   const { setHolidayStatus } = useBoundStore();
 
    const handleHolidaySetting = (e, data) => {
       const selectedValue = e.target.value;
-      setRequestHolidayStatus(data?._id, selectedValue);
+      setHolidayStatus(data?._id, selectedValue);
    };
 
    return (

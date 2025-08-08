@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 import {
    added,
    alphabetical,
@@ -11,25 +11,26 @@ import {
 } from "@/app/utils/filtersOptions";
 
 const FilterMovieListSortTags = () => {
-   const { filterOptions, setFilterOptions } = useContext(MovieContext);
+   const { filterOptions, setFilterOptions } = useBoundStore();
 
-   const handleSortFilterRemove = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+   const handleSortFilterRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { name, value } = e.target;
+
+      setFilterOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
          added: added.Default,
          chronological: chronological.Default,
          published: published.Default,
-      }));
+         [name]: value,
+      });
    };
 
    const handleStatusSortFilterRemove = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          statusSort: statusSort.Default,
-      }));
+      });
    };
 
    const filterSortOptions = () => {
@@ -74,7 +75,7 @@ const FilterMovieListSortTags = () => {
             filterOptions.votes !== votes.Default ||
             filterOptions.published !== published.Default) && (
             <button
-               onClick={handleSortFilterRemove}
+               onClick={(e) => handleSortFilterRemove(e)}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                {filterSortOptions()}

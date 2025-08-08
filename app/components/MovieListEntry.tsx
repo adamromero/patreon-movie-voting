@@ -5,7 +5,7 @@ import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { FaRegImage } from "react-icons/fa6";
 
 import RequestModal from "./MovieListEntryModal/RequestModal";
@@ -33,7 +33,7 @@ const MovieListEntry = ({
    const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
 
    const { addVoteToRequest, removeVoteFromRequest, removeRequestFromList } =
-      useContext(MovieContext);
+      useBoundStore();
 
    const handleCastVote = async (movieId, voters) => {
       addVoteToRequest(movieId, voters, currentUser);

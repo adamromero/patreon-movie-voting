@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 
@@ -13,7 +13,7 @@ const ReactionLinkForm = ({
    const [youtubeLinkWarning, setYouTubeLinkWarning] = useState("");
    const [patreonLinkWarning, setPatreonLinkWarning] = useState("");
 
-   const { setOnChannelRequestLinks } = useContext(MovieContext);
+   const { setReactionLink } = useBoundStore();
 
    const handleLinkUpdate = (e) => {
       e.preventDefault();
@@ -48,8 +48,8 @@ const ReactionLinkForm = ({
          patreon: updatedPatreonLink,
       };
 
-      setOnChannelRequestLinks(watchedMovieData.id, links);
-      //set published at timestamp
+      setReactionLink(watchedMovieData.id, links);
+      //set published at timestampi
    };
 
    return (

@@ -19,7 +19,7 @@ import {
    statusSort,
    published,
 } from "@/app/utils/filtersOptions";
-import { APIMovieData, Movie } from "@/app/types/interfaces";
+import { APIMovieData, Movie } from "@/app/types/user";
 
 interface MovieContextType {
    moviesList?: Movie[];
@@ -770,14 +770,14 @@ export const MovieProvider = ({ children }: MovieProviderType) => {
             setRequestWatchStatus,
             setRequestHolidayStatus,
             setOnChannelRequestLinks,
-            searchTitle,
-            setSearchTitle,
-            searchDirector,
-            setSearchDirector,
-            searchActor,
-            setSearchActor,
-            searchComposer,
-            setSearchComposer,
+            // searchTitle,
+            // setSearchTitle,
+            // searchDirector,
+            // setSearchDirector,
+            // searchActor,
+            // setSearchActor,
+            // searchComposer,
+            // setSearchComposer,
             removeRequestFromList,
             isUserUnderRequestLimit,
             setIsUserUnderRequestLimit,

@@ -1,6 +1,7 @@
 "use client";
-import React, { useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import React from "react";
+import { useBoundStore } from "@/stores/useBoundStore";
+
 import {
    genre,
    status,
@@ -22,86 +23,81 @@ interface FilterMovieListProps {
 }
 
 const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
-   const { filterOptions, setFilterOptions } = useContext(MovieContext);
+   const { filterOptions, setFilterOptions } = useBoundStore();
 
-   const handleChronologicalSort = (e) => {
+   const handleChronologicalSort = (
+      e: React.ChangeEvent<HTMLSelectElement>
+   ) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
          added: added.Default,
+         published: published.Default,
          chronological: selection,
-         published: published.Default,
-      }));
+      });
    };
 
-   const handleAddedSort = (e) => {
+   const handleAddedSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
-         added: selection,
          chronological: chronological.Default,
          published: published.Default,
-      }));
+         added: selection,
+      });
    };
 
-   const handlePublishSort = (e) => {
+   const handlePublishSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
          added: added.Default,
          chronological: chronological.Default,
-         status: status.OnChannel,
          published: selection,
-      }));
+      });
    };
 
-   const handleWatchedStatusSort = (e) => {
+   const handleWatchedStatusSort = (
+      e: React.ChangeEvent<HTMLSelectElement>
+   ) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          statusSort: selection,
-      }));
+      });
    };
 
-   const handleTypeFilter = (e) => {
+   const handleTypeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          type: selection,
-      }));
+      });
    };
 
-   const handleGenreFilter = (e) => {
+   const handleGenreFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          genre: selection,
-      }));
+      });
    };
 
-   const handleStatusFilter = (e) => {
+   const handleStatusFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          status: selection,
-      }));
+      });
    };
 
-   const handleRequestsFilter = (e) => {
+   const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          requests: selection,
-      }));
+      });
    };
 
    return (

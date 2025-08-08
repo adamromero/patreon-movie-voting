@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext, FC } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
+
 import {
    genre,
    status,
@@ -39,7 +40,7 @@ const MovieList: FC<MovieListProps> = ({ currentUser, isCreator }) => {
       searchDirector,
       searchActor,
       searchComposer,
-   } = useContext(MovieContext);
+   } = useBoundStore();
 
    const [requestStatusState, setRequestStatusState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
@@ -335,8 +336,7 @@ const MovieList: FC<MovieListProps> = ({ currentUser, isCreator }) => {
    }, [filteredMoviesList]);
 
    const handleTitleSort = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          votes: votes.Default,
          rating: rating.Default,
          chronological: chronological.Default,
@@ -345,31 +345,29 @@ const MovieList: FC<MovieListProps> = ({ currentUser, isCreator }) => {
          alphabetical: isTitleFilterAscending
             ? alphabetical.Ascending
             : alphabetical.Descending,
-      }));
+      });
    };
 
    const handleRequestsSort = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          alphabetical: alphabetical.Default,
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
          votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
-      }));
+      });
    };
 
    const handleRatingsSort = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
-      }));
+      });
    };
 
    const tableHead = (

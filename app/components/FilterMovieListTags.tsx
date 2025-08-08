@@ -1,36 +1,32 @@
-import React, { useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import React from "react";
+import { useBoundStore } from "@/stores/useBoundStore";
 import { genre, type, status, requests } from "../utils/filtersOptions";
 
 const FilterMovieListTags = () => {
-   const { filterOptions, setFilterOptions } = useContext(MovieContext);
+   const { filterOptions, setFilterOptions } = useBoundStore();
 
    const handleGenreFilterRemove = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          genre: genre.Default,
-      }));
+      });
    };
 
    const handleTypeFilterRemove = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          type: type.Default,
-      }));
+      });
    };
 
    const handleStatusFilterRemove = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          status: status.Default,
-      }));
+      });
    };
 
    const handleStatusRequestsRemove = () => {
-      setFilterOptions((prevOptions) => ({
-         ...prevOptions,
+      setFilterOptions({
          requests: requests.Default,
-      }));
+      });
    };
 
    return (

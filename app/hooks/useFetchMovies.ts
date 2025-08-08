@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import { MovieContext } from "@/context/MovieContext";
+import { useBoundStore } from "@/stores/useBoundStore";
 
 const useFetchMovies = () => {
-   const { moviesList, fetchMovies } = useContext(MovieContext);
+   const { moviesList, fetchMovies } = useBoundStore();
 
    useEffect(() => {
       fetchMovies();

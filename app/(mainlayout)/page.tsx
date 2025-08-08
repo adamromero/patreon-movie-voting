@@ -3,7 +3,7 @@ import VotingApp from "../components/VotingApp";
 import BirthdayMessage from "../components/BirthdayMessage";
 import RequestsThisMonth from "../components/RequestsThisMonth";
 import SubmitRequests from "../components/SubmitRequests";
-import { Movie } from "../types/interfaces";
+import { Movie } from "../types/user";
 import { redirect } from "next/navigation";
 
 export default async function Home() {

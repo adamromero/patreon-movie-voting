@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { MovieContext } from "@/context/MovieContext";
 import ReactedState from "./SearchTitles/SearchStates/ReactedState";
 import SeenState from "./SearchTitles/SearchStates/SeenState";
 import UnReactedState from "./SearchTitles/SearchStates/UnReactedState";
 import LimitReachedState from "./SearchTitles/SearchStates/LimitReachedState";
 import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
+import { useBoundStore } from "@/stores/useBoundStore";
 
-import { APIMovieData } from "../types/interfaces";
+import { APIMovieData } from "../types/user";
 
 const SearchTitlesModal = ({ user }) => {
    const [input, setInput] = useState("");
@@ -32,7 +32,7 @@ const SearchTitlesModal = ({ user }) => {
       isUserUnderRequestLimit,
       disableButton,
       moviesMap,
-   } = useContext(MovieContext);
+   } = useBoundStore();
 
    const inputRef = useRef(null);
    const [movieIDCollection, setMovieIDCollection] = useState({});
@@ -145,7 +145,7 @@ const SearchTitlesModal = ({ user }) => {
 
    const getMovieData = (selectedMovie) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
-      return moviesMap.get(key);
+      return moviesMap[key];
    };
 
    const clearSearchState = (data) => {
@@ -224,7 +224,7 @@ const SearchTitlesModal = ({ user }) => {
 
    const isMovieVotedByUser = (selectedMovie) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
-      const movie = moviesMap.get(key);
+      const movie = moviesMap[key];
       return movie ? movie.voters.includes(currentUser) : false;
    };
 

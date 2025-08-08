@@ -2,7 +2,7 @@
 import MovieList from "./MovieList";
 import FilterMovieList from "./FilterMovieList";
 import SearchMoviesList from "./SearchMoviesList";
-import { User } from "../types/interfaces";
+import { User } from "../types/user";
 
 interface VotingAppProps {
    user?: User;
