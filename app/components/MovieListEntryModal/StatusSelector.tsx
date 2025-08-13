@@ -3,6 +3,8 @@ import { useBoundStore } from "@/stores/useBoundStore";
 import ReactionLinkForm from "./ReactionLinkForm";
 import { Movie } from "@/app/types/movie";
 
+type WatchedMovieRef = { _id: string };
+
 interface StatusSelectorProps {
    data: Movie;
    requestStatusState: Record<
@@ -18,7 +20,7 @@ interface StatusSelectorProps {
    setPatreonReactionLink: (link: string) => void;
    youtubeReactionLink: string;
    setYouTubeReactionLink: (link: string) => void;
-   watchedMovieData: Movie;
+   watchedMovieData: WatchedMovieRef;
 }
 
 const StatusSelector: React.FC<StatusSelectorProps> = ({

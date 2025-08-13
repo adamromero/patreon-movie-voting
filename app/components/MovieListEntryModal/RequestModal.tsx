@@ -21,7 +21,7 @@ interface RequestModalProps {
    setPatreonReactionLink: (link: string) => void;
    youtubeReactionLink: string;
    setYouTubeReactionLink: (link: string) => void;
-   watchedMovieData: WatchedMovieRef | null;
+   watchedMovieData: WatchedMovieRef;
 }
 
 const RequestModal: React.FC<RequestModalProps> = ({
