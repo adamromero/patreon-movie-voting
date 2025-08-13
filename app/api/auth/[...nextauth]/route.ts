@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "../../../../lib/mongodb";
@@ -28,7 +28,7 @@ declare module "next-auth/jwt" {
    }
 }
 
-export const nextAuthOptions: NextAuthOptions = {
+export const nextAuthOptions = {
    adapter: MongoDBAdapter(clientPromise),
    secret: process.env.NEXTAUTH_SECRET,
    jwt: {
@@ -113,7 +113,7 @@ export const nextAuthOptions: NextAuthOptions = {
          return session;
       },
    },
-};
+} satisfies AuthOptions;
 
 const handler = NextAuth(nextAuthOptions);
 
