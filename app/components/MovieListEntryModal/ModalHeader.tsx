@@ -22,7 +22,7 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({ data }) => {
                </span>
             )}
             <span className="text-[13px]">
-               {data?.data?.Runtime > 0 && `${data?.data?.Runtime} mins.`}
+               {data?.data?.Runtime ? `${data.data.Runtime} mins.` : null}
             </span>
          </h2>
          {data?.data?.Studio && (
