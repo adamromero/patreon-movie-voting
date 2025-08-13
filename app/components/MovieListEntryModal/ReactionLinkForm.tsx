@@ -11,7 +11,7 @@ interface ReactionLinkFormProps {
    setPatreonReactionLink: (link: string) => void;
    youtubeReactionLink: string;
    setYouTubeReactionLink: (link: string) => void;
-   watchedMovieData: WatchedMovieRef;
+   watchedMovieData: WatchedMovieRef | null;
 }
 
 const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
@@ -63,7 +63,7 @@ const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
          patreon: updatedPatreonLink,
       };
 
-      setReactionLink(watchedMovieData._id, links);
+      if (watchedMovieData) setReactionLink(watchedMovieData._id, links);
       //set published at timestamp
    };
 

@@ -20,7 +20,7 @@ interface StatusSelectorProps {
    setPatreonReactionLink: (link: string) => void;
    youtubeReactionLink: string;
    setYouTubeReactionLink: (link: string) => void;
-   watchedMovieData: WatchedMovieRef;
+   watchedMovieData: WatchedMovieRef | null;
 }
 
 const StatusSelector: React.FC<StatusSelectorProps> = ({
