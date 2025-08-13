@@ -9,14 +9,14 @@ import { signIn, signOut } from "next-auth/react";
 interface UserProps {
    id: string;
    name: string;
-   image: string;
    firstName: string;
    isCreator: boolean;
    isProducer: boolean;
+   image?: string;
 }
 
 interface UserSignInProps {
-   user: UserProps;
+   user?: UserProps;
 }
 
 const UserSignIn: React.FC<UserSignInProps> = ({ user }) => {
@@ -38,7 +38,7 @@ const UserSignIn: React.FC<UserSignInProps> = ({ user }) => {
                   >
                      <div className="flex items-center w-[35px] h-[35px]">
                         <Image
-                           src={user.image}
+                           src={user.image || ""}
                            alt={user.name}
                            width={35}
                            height={35}
