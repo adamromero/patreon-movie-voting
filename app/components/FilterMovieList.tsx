@@ -59,6 +59,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
          rating: rating.Default,
          added: added.Default,
          chronological: chronological.Default,
+         status: status.OnChannel,
          published: selection,
       });
    };

@@ -106,36 +106,28 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       if (filterOptions.chronological === chronological.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(
-                  a.data.Release ? a.data.Release : "1900-01-01"
-               ).getTime() -
-               new Date(
-                  b.data.Release ? b.data.Release : "1900-01-01"
-               ).getTime()
+               new Date(a.data.Release || "1900-01-01").getTime() -
+               new Date(b.data.Release || "1900-01-01").getTime()
          );
       } else if (filterOptions.chronological === chronological.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(
-                  b.data.Release ? b.data.Release : "1900-01-01"
-               ).getTime() -
-               new Date(
-                  a.data.Release ? a.data.Release : "1900-01-01"
-               ).getTime()
+               new Date(b.data.Release || "1900-01-01").getTime() -
+               new Date(a.data.Release || "1900-01-01").getTime()
          );
       }
 
       if (filterOptions.published === published.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(a.publishedAt ?? "").getTime() -
-               new Date(b.publishedAt ?? "").getTime()
+               new Date(a.publishedAt || "1900-01-01").getTime() -
+               new Date(b.publishedAt || "1900-01-01").getTime()
          );
       } else if (filterOptions.published === published.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(b.publishedAt ?? "").getTime() -
-               new Date(a.publishedAt ?? "").getTime()
+               new Date(b.publishedAt || "1900-01-01").getTime() -
+               new Date(a.publishedAt || "1900-01-01").getTime()
          );
       }
 

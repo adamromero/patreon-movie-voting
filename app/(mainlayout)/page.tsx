@@ -3,7 +3,7 @@ import VotingApp from "../components/VotingApp";
 import BirthdayMessage from "../components/BirthdayMessage";
 import RequestsThisMonth from "../components/RequestsThisMonth";
 import SubmitRequests from "../components/SubmitRequests";
-import { Movie } from "../types/user";
+import { Movie } from "../types/movie";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -15,9 +15,9 @@ export default async function Home() {
    const isCreator = user && user.isCreator;
 
    let isUnderRequestLimit = true;
-   const seenRequests = [];
-   const channelRequests = [];
-   const currentUsersMonthlyRequests = [];
+   const seenRequests: Movie[] = [];
+   const channelRequests: Movie[] = [];
+   const currentUsersMonthlyRequests: Movie[] = [];
 
    if (!isCreator) {
       const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
