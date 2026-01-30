@@ -529,25 +529,10 @@ export const MovieProvider = ({ children }) => {
   const setRequestWatchStatus = async (movieId, status) => {
     const selectedMovieVote = moviesList.find((movie) => movie._id === movieId);
 
-    let channel = false,
-      seen = false,
-      rewatch = false,
-      rewatchFriend = false;
-
-    if (status === "channel") {
-      channel = true;
-    } else if (status === "seen") {
-      seen = true;
-    } else if (status === "rewatch") {
-      rewatch = true;
-    } else if (status === "rewatchFriend") {
-      rewatchFriend = true;
-    } else if (status === "unseen") {
-      channel = false;
-      seen = false;
-      rewatch = false;
-      rewatchFriend = false;
-    }
+    const channel = status === "channel";
+    const seen = status === "seen";
+    const rewatch = status === "rewatch";
+    const rewatchFriend = status === "rewatchFriend";
 
     const updatedMovieVote = {
       ...selectedMovieVote,
