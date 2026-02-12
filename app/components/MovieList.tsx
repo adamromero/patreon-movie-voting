@@ -59,11 +59,11 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
 
       if (filterOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
-            (a, b) => b?.voters?.length - a?.voters?.length
+            (a, b) => b?.voters?.length - a?.voters?.length,
          );
       } else if (filterOptions.votes === votes.Descending) {
          filteredList = filteredList.sort(
-            (a, b) => a?.voters?.length - b?.voters?.length
+            (a, b) => a?.voters?.length - b?.voters?.length,
          );
       } else {
          setIsRequestFilterAscending(true);
@@ -91,13 +91,13 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          filteredList = filteredList.sort(
             (a, b) =>
                parseFloat(b.data.Rating ? String(b.data.Rating) : "0") -
-               parseFloat(a.data.Rating ? String(a.data.Rating) : "0")
+               parseFloat(a.data.Rating ? String(a.data.Rating) : "0"),
          );
       } else if (filterOptions.rating === rating.Descending) {
          filteredList = filteredList.sort(
             (a, b) =>
                parseFloat(a.data.Rating ? String(a.data.Rating) : "0") -
-               parseFloat(b.data.Rating ? String(b.data.Rating) : "0")
+               parseFloat(b.data.Rating ? String(b.data.Rating) : "0"),
          );
       } else {
          setIsRatingFilterAscending(true);
@@ -107,13 +107,13 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(a.data.Release || "1900-01-01").getTime() -
-               new Date(b.data.Release || "1900-01-01").getTime()
+               new Date(b.data.Release || "1900-01-01").getTime(),
          );
       } else if (filterOptions.chronological === chronological.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(b.data.Release || "1900-01-01").getTime() -
-               new Date(a.data.Release || "1900-01-01").getTime()
+               new Date(a.data.Release || "1900-01-01").getTime(),
          );
       }
 
@@ -121,127 +121,135 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(a.publishedAt || "1900-01-01").getTime() -
-               new Date(b.publishedAt || "1900-01-01").getTime()
+               new Date(b.publishedAt || "1900-01-01").getTime(),
          );
       } else if (filterOptions.published === published.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(b.publishedAt || "1900-01-01").getTime() -
-               new Date(a.publishedAt || "1900-01-01").getTime()
+               new Date(a.publishedAt || "1900-01-01").getTime(),
          );
       }
 
       if (filterOptions.added === added.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+               new Date(a.createdAt).getTime() -
+               new Date(b.createdAt).getTime(),
          );
       } else if (filterOptions.added === added.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
-               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+               new Date(b.createdAt).getTime() -
+               new Date(a.createdAt).getTime(),
          );
       }
 
       if (filterOptions.statusSort === statusSort.Watched) {
          const seenList = filteredList.filter(
-            (movie) => movie.hasSeen || movie.hasReacted
+            (movie) => movie.hasSeen || movie.hasReacted,
          );
          const unseenList = filteredList.filter(
-            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
+            (movie) =>
+               (!movie.hasSeen && !movie.hasReacted) ||
+               movie.isRewatch ||
+               movie.isRewatchFriend,
          );
          filteredList = [...seenList, ...unseenList];
       } else if (filterOptions.statusSort === statusSort.Unwatched) {
          const seenList = filteredList.filter(
-            (movie) => movie.hasSeen || movie.hasReacted
+            (movie) => movie.hasSeen || movie.hasReacted,
          );
          const unseenList = filteredList.filter(
-            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
+            (movie) =>
+               (!movie.hasSeen && !movie.hasReacted) ||
+               movie.isRewatch ||
+               movie.isRewatchFriend,
          );
          filteredList = [...unseenList, ...seenList];
       }
 
       if (filterOptions.type === type.Movie) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Type ?? "").includes(type.Movie.toLowerCase())
+            (movie.data.Type ?? "").includes(type.Movie.toLowerCase()),
          );
       } else if (filterOptions.type === type.Series) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Type ?? "").includes(type.Series.toLowerCase())
+            (movie.data.Type ?? "").includes(type.Series.toLowerCase()),
          );
       }
 
       if (filterOptions.genre === genre.Action) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Action)
+            (movie.data.Genre ?? "").includes(genre.Action),
          );
       } else if (filterOptions.genre === genre.Adventure) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Adventure)
+            (movie.data.Genre ?? "").includes(genre.Adventure),
          );
       } else if (filterOptions.genre === genre.Animation) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Animation)
+            (movie.data.Genre ?? "").includes(genre.Animation),
          );
       } else if (filterOptions.genre === genre.Comedy) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Comedy)
+            (movie.data.Genre ?? "").includes(genre.Comedy),
          );
       } else if (filterOptions.genre === genre.Crime) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Crime)
+            (movie.data.Genre ?? "").includes(genre.Crime),
          );
       } else if (filterOptions.genre === genre.Documentary) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Documentary)
+            (movie.data.Genre ?? "").includes(genre.Documentary),
          );
       } else if (filterOptions.genre === genre.Drama) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Drama)
+            (movie.data.Genre ?? "").includes(genre.Drama),
          );
       } else if (filterOptions.genre === genre.SciFi) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.SciFi)
+            (movie.data.Genre ?? "").includes(genre.SciFi),
          );
       } else if (filterOptions.genre === genre.Family) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Family)
+            (movie.data.Genre ?? "").includes(genre.Family),
          );
       } else if (filterOptions.genre === genre.Fantasy) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Fantasy)
+            (movie.data.Genre ?? "").includes(genre.Fantasy),
          );
       } else if (filterOptions.genre === genre.History) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.History)
+            (movie.data.Genre ?? "").includes(genre.History),
          );
       } else if (filterOptions.genre === genre.Horror) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Horror)
+            (movie.data.Genre ?? "").includes(genre.Horror),
          );
       } else if (filterOptions.genre === genre.Mystery) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Mystery)
+            (movie.data.Genre ?? "").includes(genre.Mystery),
          );
       } else if (filterOptions.genre === genre.Music) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Music)
+            (movie.data.Genre ?? "").includes(genre.Music),
          );
       } else if (filterOptions.genre === genre.Thriller) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Thriller)
+            (movie.data.Genre ?? "").includes(genre.Thriller),
          );
       } else if (filterOptions.genre === genre.Romance) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Romance)
+            (movie.data.Genre ?? "").includes(genre.Romance),
          );
       } else if (filterOptions.genre === genre.War) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.War)
+            (movie.data.Genre ?? "").includes(genre.War),
          );
       } else if (filterOptions.genre === genre.Western) {
          filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Western)
+            (movie.data.Genre ?? "").includes(genre.Western),
          );
       } else if (filterOptions.genre === genre.Halloween) {
          filteredList = filteredList.filter((movie) => movie.isHalloween);
@@ -254,28 +262,30 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       } else if (filterOptions.status === status.OnChannel) {
          filteredList = filteredList.filter((movie) => movie.hasReacted);
       } else if (filterOptions.status === status.Rewatch) {
-         filteredList = filteredList.filter((movie) => movie.isRewatch);
+         filteredList = filteredList.filter(
+            (movie) => movie.isRewatch || movie.isRewatchFriend,
+         );
       } else if (filterOptions.status === status.Unseen) {
          filteredList = filteredList.filter(
-            (movie) => !movie.hasSeen && !movie.hasReacted && !movie.isRewatch
+            (movie) => !movie.hasSeen && !movie.hasReacted && !movie.isRewatch,
          );
       } else if (filterOptions.status === status.Votable) {
          filteredList = filteredList.filter(
-            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch
+            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch,
          );
       }
 
       if (filterOptions.requests === requests.MyRequests) {
          filteredList = filteredList.filter(
-            (movie) => movie.requester === currentUser
+            (movie) => movie.requester === currentUser,
          );
       } else if (filterOptions.requests === requests.Voted) {
          filteredList = filteredList.filter((movie) =>
-            movie.voters.includes(currentUser ?? "")
+            movie.voters.includes(currentUser ?? ""),
          );
       } else if (filterOptions.requests === requests.NotVoted) {
          filteredList = filteredList.filter(
-            (movie) => !movie.voters.includes(currentUser ?? "")
+            (movie) => !movie.voters.includes(currentUser ?? ""),
          );
       }
 
@@ -283,7 +293,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             (movie.data.Title ?? "")
                .toLowerCase()
-               .includes(searchTitle.toLowerCase())
+               .includes(searchTitle.toLowerCase()),
          );
       }
 
@@ -291,7 +301,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             (movie.data.Director ?? "")
                .toLowerCase()
-               .includes(searchDirector.toLowerCase())
+               .includes(searchDirector.toLowerCase()),
          );
       }
 
@@ -299,15 +309,15 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          filteredList = filteredList.filter((movie) =>
             (movie.data.Actors ?? "")
                .toLowerCase()
-               .includes(searchActor.toLowerCase())
+               .includes(searchActor.toLowerCase()),
          );
       }
 
       if (searchComposer) {
          filteredList = filteredList.filter((movie) =>
             movie?.data?.Composer?.toLowerCase().includes(
-               searchComposer.toLowerCase()
-            )
+               searchComposer.toLowerCase(),
+            ),
          );
       }
 
@@ -333,6 +343,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
             hasReacted: boolean;
             hasSeen: boolean;
             isRewatch: boolean;
+            isRewatchFriend: boolean;
             isUnseen: boolean;
             isHalloween: boolean;
             isChristmas: boolean;
@@ -344,7 +355,12 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
             hasReacted: movie.hasReacted,
             hasSeen: movie.hasSeen,
             isRewatch: movie.isRewatch,
-            isUnseen: !movie.hasReacted && !movie.hasSeen && !movie.isRewatch,
+            isRewatchFriend: movie.isRewatchFriend,
+            isUnseen:
+               !movie.hasReacted &&
+               !movie.hasSeen &&
+               !movie.isRewatch &&
+               !movie.isRewatchFriend,
             isHalloween: movie.isHalloween,
             isChristmas: movie.isChristmas,
          };

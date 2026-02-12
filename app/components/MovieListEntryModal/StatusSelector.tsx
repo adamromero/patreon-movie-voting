@@ -13,6 +13,7 @@ interface StatusSelectorProps {
          hasReacted?: boolean;
          hasSeen?: boolean;
          isRewatch?: boolean;
+         isRewatchFriend?: boolean;
          isUnseen?: boolean;
       }
    >;
@@ -36,12 +37,17 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
 
    const handleStatusSetting = (
       e: React.ChangeEvent<HTMLInputElement>,
-      data: Movie
+      data: Movie,
    ) => {
       const selectedValue = e.target.value;
       setWatchStatus(
          data?._id,
-         selectedValue as "channel" | "seen" | "rewatch" | "unseen"
+         selectedValue as
+            | "channel"
+            | "seen"
+            | "rewatch"
+            | "unseen"
+            | "rewatchFriend",
       );
    };
 
@@ -49,9 +55,9 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
       <div className="flex flex-col flex-1">
          <div className="film-strip mt-[10px]"></div>
          <div className="p-[15px]">
-            <div className="flex justify-between max-w-[400px] mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mx-auto text-center">
                <div className="flex flex-col items-center">
-                  <div className="leading-[16px] mb-[8px]">Channel</div>
+                  <div className="leading-[16px] mb-2">Channel</div>
                   <div className="checkbox-container">
                      <label
                         className="checkbox"
@@ -71,7 +77,7 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
                   </div>
                </div>
                <div className="flex flex-col items-center">
-                  <div className="leading-[16px] mb-[8px]">Seen</div>
+                  <div className="leading-[16px] mb-2">Seen</div>
                   <div className="checkbox-container">
                      <label
                         className="checkbox"
@@ -89,7 +95,7 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
                   </div>
                </div>
                <div className="flex flex-col items-center">
-                  <div className="leading-[16px] mb-[8px]">Rewatch</div>
+                  <div className="leading-[16px] mb-2">Rewatch</div>
                   <div className="checkbox-container">
                      <label
                         className="checkbox"
@@ -107,7 +113,7 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
                   </div>
                </div>
                <div className="flex flex-col items-center">
-                  <div className="leading-[16px] mb-[8px]">Unseen</div>
+                  <div className="leading-[16px] mb-2">Rewatch with Friend</div>
                   <div className="checkbox-container">
                      <label
                         className="checkbox"
@@ -115,8 +121,28 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
                      >
                         <input
                            type="radio"
-                           value="unseen"
+                           value="rewatchFriend"
                            id={`checkbox4-${data?._id}`}
+                           checked={
+                              !!requestStatusState[data?._id]?.isRewatchFriend
+                           }
+                           onChange={(e) => handleStatusSetting(e, data)}
+                        />
+                        <div className="checkmark"></div>
+                     </label>
+                  </div>
+               </div>
+               <div className="flex flex-col items-center">
+                  <div className="leading-[16px] mb-2">Unseen</div>
+                  <div className="checkbox-container">
+                     <label
+                        className="checkbox"
+                        htmlFor={`checkbox5-${data?._id}`}
+                     >
+                        <input
+                           type="radio"
+                           value="unseen"
+                           id={`checkbox5-${data?._id}`}
                            checked={!!requestStatusState[data?._id]?.isUnseen}
                            onChange={(e) => handleStatusSetting(e, data)}
                         />

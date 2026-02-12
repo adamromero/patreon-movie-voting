@@ -84,6 +84,10 @@ const movieSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   isRewatchFriend: {
+      type: Boolean,
+      default: false,
+   },
    isHalloween: {
       type: Boolean,
       default: false,

@@ -39,6 +39,7 @@ export interface Movie {
    isChristmas: boolean;
    isHalloween: boolean;
    isRewatch: boolean;
+   isRewatchFriend: boolean;
    publishedAt: string | null;
    requester: string;
    voters: string[];

@@ -8,7 +8,7 @@ export interface RequestMetaSlice {
    requestsThisMonth: Movie[];
    requestWatchStatus: Record<
       string,
-      "seen" | "unseen" | "reacted" | "rewatch"
+      "seen" | "unseen" | "reacted" | "rewatch" | "rewatchFriend"
    >;
    requestHolidayStatus: Record<string, "none" | "halloween" | "christmas">;
    onChannelRequestLinks: Record<string, { patreon: string; youtube: string }>;
@@ -18,19 +18,19 @@ export interface RequestMetaSlice {
    updateRequestLimits: (
       userId: string,
       movies: Movie[],
-      limit: number
+      limit: number,
    ) => void;
    setWatchStatus: (
       movieId: string,
-      status: "channel" | "seen" | "rewatch" | "unseen"
+      status: "channel" | "seen" | "rewatch" | "rewatchFriend" | "unseen",
    ) => Promise<Movie | null>;
    setHolidayStatus: (
       movieId: string,
-      status: "halloween" | "christmas"
+      status: "halloween" | "christmas",
    ) => Promise<Movie | null>;
    setReactionLink: (
       movieId: string,
-      links: { patreon: string; youtube: string }
+      links: { patreon: string; youtube: string },
    ) => Promise<Movie | null>;
    toggleRanking: () => void;
    setDisableButton: (disabled: boolean) => void;
@@ -56,12 +56,12 @@ export const createRequestMetaSlice: StateCreator<
       const currentMonthStart = new Date(
          currentDate.getFullYear(),
          currentDate.getMonth(),
-         1
+         1,
       );
       const requestsThisMonth = movies.filter(
          (movie) =>
             movie.requester === userId &&
-            new Date(movie.createdAt) >= currentMonthStart
+            new Date(movie.createdAt) >= currentMonthStart,
       );
 
       const remaining = limit - requestsThisMonth.length;
@@ -78,31 +78,21 @@ export const createRequestMetaSlice: StateCreator<
    setWatchStatus: async (movieId, status) => {
       const { moviesList, moviesMap } = get();
       const selectedMovieVote = moviesList.find(
-         (movie) => movie._id === movieId
+         (movie) => movie._id === movieId,
       );
       if (!selectedMovieVote) return null;
 
-      let channel = false,
-         seen = false,
-         rewatch = false;
-
-      if (status === "channel") {
-         channel = true;
-      } else if (status === "seen") {
-         seen = true;
-      } else if (status === "rewatch") {
-         rewatch = true;
-      } else if (status === "unseen") {
-         channel = false;
-         seen = false;
-         rewatch = false;
-      }
+      const channel = status === "channel";
+      const seen = status === "seen";
+      const rewatch = status === "rewatch";
+      const rewatchFriend = status === "rewatchFriend";
 
       const updatedMovieVote = {
          ...selectedMovieVote,
          hasReacted: channel,
          hasSeen: seen,
          isRewatch: rewatch,
+         isRewatchFriend: rewatchFriend,
       };
 
       const config = {
@@ -143,7 +133,7 @@ export const createRequestMetaSlice: StateCreator<
    setHolidayStatus: async (movieId, status) => {
       const { moviesList, moviesMap } = get();
       const selectedMovieVote = moviesList.find(
-         (movie) => movie._id === movieId
+         (movie) => movie._id === movieId,
       );
       if (!selectedMovieVote) return null;
 
@@ -200,7 +190,7 @@ export const createRequestMetaSlice: StateCreator<
    setReactionLink: async (movieId, links) => {
       const { moviesList, moviesMap } = get();
       const selectedMovieVote = moviesList.find(
-         (movie) => movie._id === movieId
+         (movie) => movie._id === movieId,
       );
       if (!selectedMovieVote) return null;
 

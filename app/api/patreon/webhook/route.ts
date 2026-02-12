@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       if (!title || !url || !published_at) {
          return NextResponse.json(
             { message: "Invalid input, no action performed" },
-            { status: 200 }
+            { status: 200 },
          );
       }
 
@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
                $set: {
                   hasReacted: true,
                   isRewatch: false,
+                  isRewatchFriend: false,
                   hasSeen: false,
                   "links.patreon": `https://www.patreon.com${url}`,
                   publishedAt: published_at,
@@ -71,13 +72,13 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json(
          { message: "No action performed" },
-         { status: 200 }
+         { status: 200 },
       );
    } catch (error) {
       console.error(error);
       return NextResponse.json(
          { error: "Internal server error" },
-         { status: 500 }
+         { status: 500 },
       );
    }
 }

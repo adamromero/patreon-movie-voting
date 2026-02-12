@@ -30,6 +30,7 @@ export const status = {
    OnChannel: "On Channel",
    Unseen: "Unseen",
    Rewatch: "Rewatch",
+   RewatchFriend: "Rewatch with Friend",
    Votable: "Votable",
 };
 

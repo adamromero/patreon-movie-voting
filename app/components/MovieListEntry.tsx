@@ -75,18 +75,22 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                   });
                }}
             >
-               {(data?.hasReacted || data?.hasSeen || data?.isRewatch) && (
+               {(data?.hasReacted ||
+                  data?.hasSeen ||
+                  data?.isRewatch ||
+                  data?.isRewatchFriend) && (
                   <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-center items-center bg-black/[.5] z-10">
                      <p
                         className={`text-[20px] text-shadow font-bold text-center ${
-                           data?.isRewatch
+                           data?.isRewatch || data?.isRewatchFriend
                               ? "leading-[22px] px-[2px] lg:leading-[13px] lg:text-[12px]"
                               : "leading-[16px] lg:text-[14px]"
                         }`}
                      >
                         {data?.hasReacted && <>On Channel</>}
                         {data?.hasSeen && <>Seen</>}
-                        {data?.isRewatch && <>Rewatch with Friend</>}
+                        {data?.isRewatch && <>Rewatch</>}
+                        {data?.isRewatchFriend && <>Rewatch with Friend</>}
                      </p>
                   </div>
                )}

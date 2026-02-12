@@ -71,8 +71,13 @@ const Details: React.FC<DetailsProps> = ({ data }) => {
          <div>
             <span className="font-bold">Status:</span> {data?.hasSeen && "Seen"}
             {data?.hasReacted && "On Channel"}
-            {data?.isRewatch && "Rewatch with Friend"}
-            {!data?.hasSeen && !data.hasReacted && !data.isRewatch && "Unseen"}
+            {data?.isRewatch && "Rewatch"}
+            {data?.isRewatchFriend && "Rewatch with Friend"}
+            {!data?.hasSeen &&
+               !data.hasReacted &&
+               !data.isRewatch &&
+               !data.isRewatchFriend &&
+               "Unseen"}
          </div>
       </>
    );

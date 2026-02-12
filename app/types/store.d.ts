@@ -36,19 +36,19 @@ export interface StoreState {
    processUserRequestsByDate: (
       id: string,
       isCreator: boolean,
-      isProducer: boolean
+      isProducer: boolean,
    ) => void;
 
    // votingSlice
    addVoteToRequest: (
       movieId: string,
       voters: string[],
-      currentUser: string
+      currentUser: string,
    ) => Promise<void>;
    removeVoteFromRequest: (
       movieId: string,
       voters: string[],
-      currentUser: string
+      currentUser: string,
    ) => Promise<void>;
 
    // requestMetaSlice
@@ -57,7 +57,7 @@ export interface StoreState {
    requestsThisMonth: Movie[];
    requestWatchStatus: Record<
       string,
-      "seen" | "unseen" | "reacted" | "rewatch"
+      "seen" | "unseen" | "reacted" | "rewatch" | "rewatchFriend"
    >;
    requestHolidayStatus: Record<string, "none" | "halloween" | "christmas">;
    onChannelRequestLinks: Record<string, { patreon: string; youtube: string }>;
@@ -66,19 +66,19 @@ export interface StoreState {
    updateRequestLimits: (
       userId: string,
       movies: Movie[],
-      limit: number
+      limit: number,
    ) => void;
    setWatchStatus: (
       movieId: string,
-      status: "channel" | "seen" | "rewatch" | "unseen"
+      status: "channel" | "seen" | "rewatch" | "unseen" | "rewatchFriend",
    ) => Promise<Movie | null>;
    setHolidayStatus: (
       movieId: string,
-      status: "halloween" | "christmas"
+      status: "halloween" | "christmas",
    ) => Promise<Movie | null>;
    setReactionLink: (
       movieId: string,
-      links: { patreon: string; youtube: string }
+      links: { patreon: string; youtube: string },
    ) => Promise<Movie | null>;
    toggleRanking: () => void;
    setDisableButton: (disabled: boolean) => void;
