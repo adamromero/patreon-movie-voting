@@ -7,23 +7,25 @@ const InfoPage = () => {
          <div className="max-w-[1200px] w-full mx-auto md:text-[18px]">
             <p>
                The purpose of this app is to compile a list of requests and give
-               Jen an idea of where most of the interest is. The film and series
-               submissions are all contributed by patrons. As with the weekly
-               polls, please vote for every film or series you want to see a
-               reaction to. If you&apos;ve already requested something currently
-               in the list, you have the option of retracting it.
+               Jen an idea of where most of the interest is. Please remember
+               that this list is not a poll and is not a final indicator of what
+               will end up on the channel as that will come at Jen's own
+               discretion. The film and series submissions are all contributed
+               by patrons. As with the weekly polls, please vote for every film
+               or series you want to see a reaction to. If you&apos;ve already
+               voted on something currently in the list, you have the option of
+               removing your vote.
             </p>
             <br />
             <p>
                There is a monthly limit on submitting{" "}
-               <strong className="underline">new</strong> requests to the list,
-               there is no limit on adding a request (upvoting) on a movie or
-               series already in the list. New requests are limited at 3 per
-               month for producers, the limit is 2 for all other tiers. You will
-               get an extra 1 for every new request that was marked as &quot;On
-               Channel&quot; or &quot;Seen&quot; during the same month it was
-               added. The request limit will reset at the first of the month at
-               12:00am UTC time.
+               <strong className="underline">new</strong> requests, there is no
+               limit on upvoting a movie or series already in the list. New
+               requests are limited at 3 per month for producers, the limit is 2
+               for all other tiers. You will get an extra 1 for every new
+               request that was marked as &quot;On Channel&quot; or
+               &quot;Seen&quot; during the same month it was added. The request
+               limit will reset at the first of the month at 12:00am UTC time.
             </p>
             <br />
             <p>Thank you for taking the time to submit requests!</p>
@@ -65,9 +67,9 @@ const InfoPage = () => {
 
             <h2 className="font-bold">Vote on requests</h2>
             <p>
-               To vote on a currently requested title, click request. The
-               retract button will appear after you&apos;ve cast a vote if you
-               change your mind.
+               To vote on a currently requested title, click upvote. The unvote
+               button will appear after you&apos;ve cast a vote if you change
+               your mind.
             </p>
             <p>
                <strong>Important note: </strong> If you add a new request and
@@ -75,15 +77,10 @@ const InfoPage = () => {
                will still count as part of your monthly limit.
             </p>
             <p>
-               If a vote is retracted while the count is at 1, the entry will be
+               If a vote is removed while the count is at 1, the entry will be
                removed from the list entirely. In that case, you will get a new
                request if you originally added it.
             </p>
-
-            <div className="flex">
-               <Image src="/requestvote.png" width={82} height={50} alt="" />
-               <Image src="/retract.png" width={82} height={50} alt="" />
-            </div>
 
             <br />
 
