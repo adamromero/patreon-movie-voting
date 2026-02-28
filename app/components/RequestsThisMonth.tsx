@@ -1,18 +1,23 @@
 "use client";
 import React from "react";
 import { AiTwotoneCalendar } from "react-icons/ai";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 
 const RequestsThisMonth = () => {
-   const { moviesByDateMap } = useBoundStore();
+   const { moviesByDateMap } = useMovieContext();
+
+   const moviesByDateArray = Array.from(moviesByDateMap, ([key, value]) => ({
+      key,
+      value,
+   }));
 
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
-      Object.keys(moviesByDateMap).length >= maxRequestsDisplayed
-         ? Object.keys(moviesByDateMap).length - maxRequestsDisplayed
+      moviesByDateArray.length >= maxRequestsDisplayed
+         ? moviesByDateArray.length - maxRequestsDisplayed
          : 0;
 
-   if (Object.keys(moviesByDateMap).length) {
+   if (moviesByDateArray.length) {
       return (
          <div className="mb-[15px]">
             <h2 className="flex items-center gap-[5px] mb-[5px] font-bold">
@@ -21,16 +26,13 @@ const RequestsThisMonth = () => {
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
-               {Object.entries(moviesByDateMap)
-                  .slice(
-                     firstRequestDisplayed,
-                     Object.keys(moviesByDateMap).length
-                  )
-                  .map(([key, value]) => (
+               {moviesByDateArray
+                  .slice(firstRequestDisplayed, moviesByDateArray.length)
+                  .map(({ key, value: { data } }) => (
                      <div key={key}>
                         <img
-                           src={`https://image.tmdb.org/t/p/w200/${value.data.Poster}`}
-                           alt={value.data.Title}
+                           src={`https://image.tmdb.org/t/p/w200/${data.Poster}`}
+                           alt={data.Title}
                            width="75"
                            height="100"
                         />

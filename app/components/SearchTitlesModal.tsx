@@ -7,7 +7,7 @@ import UnReactedState from "./SearchTitles/SearchStates/UnReactedState";
 import LimitReachedState from "./SearchTitles/SearchStates/LimitReachedState";
 import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 
 import { APIMovieData } from "../types/movie";
 
@@ -38,7 +38,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       isUserUnderRequestLimit,
       disableButton,
       moviesMap,
-   } = useBoundStore();
+   } = useMovieContext();
 
    const inputRef = useRef<HTMLInputElement>(null);
    const [movieIDCollection, setMovieIDCollection] = useState<
@@ -62,19 +62,19 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
             if (data.results.length) {
                const titles = data.results.filter(
                   (title: any) =>
-                     title.media_type === "movie" || title.media_type === "tv"
+                     title.media_type === "movie" || title.media_type === "tv",
                );
                setTitlesFromAPI(titles);
                const ids = data.results.map((entry: any) => entry.id);
                const result = ids.reduce(
                   (
                      obj: Record<string | number, boolean>,
-                     num: string | number
+                     num: string | number,
                   ) => {
                      obj[num] = false;
                      return obj;
                   },
-                  {} as Record<string | number, boolean>
+                  {} as Record<string | number, boolean>,
                );
 
                setMovieIDCollection(result);
@@ -157,7 +157,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
 
    const getMovieData = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
-      return moviesMap[key];
+      return moviesMap.get(key);
    };
 
    const clearSearchState = (data: MovieData) => {
@@ -217,7 +217,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       if (inputImdbID) {
          const inputImdbIDTrimmed = inputImdbID.trim();
          setSearchImdbID(
-            regex.test(inputImdbIDTrimmed) ? inputImdbIDTrimmed : ""
+            regex.test(inputImdbIDTrimmed) ? inputImdbIDTrimmed : "",
          );
       }
    };
@@ -236,7 +236,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
 
    const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
-      const movie = moviesMap[key];
+      const movie = moviesMap.get(key);
       return movie ? movie.voters.includes(currentUser) : false;
    };
 

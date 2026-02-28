@@ -1,5 +1,5 @@
 import React from "react";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 
 const SearchMoviesList = () => {
    const {
@@ -11,7 +11,7 @@ const SearchMoviesList = () => {
       setSearchActor,
       searchComposer,
       setSearchComposer,
-   } = useBoundStore();
+   } = useMovieContext();
 
    return (
       <div className="mb-[15px]">

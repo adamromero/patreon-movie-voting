@@ -1,5 +1,5 @@
 import React from "react";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 import { Movie } from "@/app/types/movie";
 
 interface HolidaySettingsProps {
@@ -17,11 +17,11 @@ const HolidaySettings: React.FC<HolidaySettingsProps> = ({
    data,
    requestStatusState,
 }) => {
-   const { setHolidayStatus } = useBoundStore();
+   const { setHolidayStatus } = useMovieContext();
 
    const handleHolidaySetting = (
       e: React.ChangeEvent<HTMLInputElement>,
-      data: Movie
+      data: Movie,
    ) => {
       const selectedValue = e.target.value;
       setHolidayStatus(data?._id, selectedValue as "halloween" | "christmas");

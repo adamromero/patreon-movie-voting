@@ -1,5 +1,5 @@
 import React from "react";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 import ReactionLinkForm from "./ReactionLinkForm";
 import { Movie } from "@/app/types/movie";
 
@@ -33,7 +33,7 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
    setYouTubeReactionLink,
    watchedMovieData,
 }) => {
-   const { setWatchStatus } = useBoundStore();
+   const { setWatchStatus } = useMovieContext();
 
    const handleStatusSetting = (
       e: React.ChangeEvent<HTMLInputElement>,

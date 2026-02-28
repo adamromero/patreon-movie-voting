@@ -67,7 +67,8 @@ export const authOptions: AuthOptions = {
             (item: any) =>
                item.type === "member" &&
                item.attributes.patron_status === "active_patron" &&
-               item.relationships.campaign?.data?.id === process.env.CAMPAIGN_ID
+               item.relationships.campaign?.data?.id ===
+                  process.env.CAMPAIGN_ID,
          );
 
          if (!pledge) {
@@ -76,7 +77,7 @@ export const authOptions: AuthOptions = {
 
          const tier =
             pledge.relationships?.currently_entitled_tiers?.data?.find(
-               (item: any) => item.type === "tier"
+               (item: any) => item.type === "tier",
             )?.id;
 
          user.patreonId = id;

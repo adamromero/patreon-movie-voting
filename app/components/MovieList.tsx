@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 
 import {
    genre,
@@ -37,11 +37,15 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       setFilteredMoviesList,
       filterOptions,
       setFilterOptions,
+      sortOptions,
+      setSortOptions,
+      statusSortOption,
+      setStatusSortOption,
       searchTitle,
       searchDirector,
       searchActor,
       searchComposer,
-   } = useBoundStore();
+   } = useMovieContext();
 
    const [requestStatusState, setRequestStatusState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
@@ -57,11 +61,11 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    useEffect(() => {
       let filteredList: Movie[] = [...moviesList];
 
-      if (filterOptions.votes === votes.Ascending) {
+      if (sortOptions.votes === votes.Ascending) {
          filteredList = filteredList.sort(
             (a, b) => b?.voters?.length - a?.voters?.length,
          );
-      } else if (filterOptions.votes === votes.Descending) {
+      } else if (sortOptions.votes === votes.Descending) {
          filteredList = filteredList.sort(
             (a, b) => a?.voters?.length - b?.voters?.length,
          );
@@ -69,31 +73,31 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          setIsRequestFilterAscending(true);
       }
 
-      if (filterOptions.alphabetical === alphabetical.Ascending) {
+      if (sortOptions.alphabetical === alphabetical.Ascending) {
          filteredList = filteredList.sort((a, b) => {
             const titleA = a.data.Title ?? "";
             const titleB = b.data.Title ?? "";
             return titleA.localeCompare(titleB);
          });
-      } else if (filterOptions.alphabetical === alphabetical.Descending) {
+      } else if (sortOptions.alphabetical === alphabetical.Descending) {
          filteredList = filteredList
             .sort((a, b) => {
                const titleA = a.data.Title ?? "";
                const titleB = b.data.Title ?? "";
-               return titleB.localeCompare(titleA);
+               return titleA.localeCompare(titleB);
             })
             .reverse();
       } else {
          setIsTitleFilterAscending(true);
       }
 
-      if (filterOptions.rating === rating.Ascending) {
+      if (sortOptions.rating === rating.Ascending) {
          filteredList = filteredList.sort(
             (a, b) =>
                parseFloat(b.data.Rating ? String(b.data.Rating) : "0") -
                parseFloat(a.data.Rating ? String(a.data.Rating) : "0"),
          );
-      } else if (filterOptions.rating === rating.Descending) {
+      } else if (sortOptions.rating === rating.Descending) {
          filteredList = filteredList.sort(
             (a, b) =>
                parseFloat(a.data.Rating ? String(a.data.Rating) : "0") -
@@ -103,13 +107,13 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          setIsRatingFilterAscending(true);
       }
 
-      if (filterOptions.chronological === chronological.Older) {
+      if (sortOptions.chronological === chronological.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(a.data.Release || "1900-01-01").getTime() -
                new Date(b.data.Release || "1900-01-01").getTime(),
          );
-      } else if (filterOptions.chronological === chronological.Newer) {
+      } else if (sortOptions.chronological === chronological.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(b.data.Release || "1900-01-01").getTime() -
@@ -117,13 +121,13 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          );
       }
 
-      if (filterOptions.published === published.Older) {
+      if (sortOptions.published === published.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(a.publishedAt || "1900-01-01").getTime() -
                new Date(b.publishedAt || "1900-01-01").getTime(),
          );
-      } else if (filterOptions.published === published.Newer) {
+      } else if (sortOptions.published === published.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(b.publishedAt || "1900-01-01").getTime() -
@@ -131,13 +135,13 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          );
       }
 
-      if (filterOptions.added === added.Older) {
+      if (sortOptions.added === added.Older) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(a.createdAt).getTime() -
                new Date(b.createdAt).getTime(),
          );
-      } else if (filterOptions.added === added.Newer) {
+      } else if (sortOptions.added === added.Newer) {
          filteredList = filteredList.sort(
             (a, b) =>
                new Date(b.createdAt).getTime() -
@@ -145,7 +149,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          );
       }
 
-      if (filterOptions.statusSort === statusSort.Watched) {
+      if (statusSortOption.statusSort === statusSort.Watched) {
          const seenList = filteredList.filter(
             (movie) => movie.hasSeen || movie.hasReacted,
          );
@@ -156,7 +160,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                movie.isRewatchFriend,
          );
          filteredList = [...seenList, ...unseenList];
-      } else if (filterOptions.statusSort === statusSort.Unwatched) {
+      } else if (statusSortOption.statusSort === statusSort.Unwatched) {
          const seenList = filteredList.filter(
             (movie) => movie.hasSeen || movie.hasReacted,
          );
@@ -330,6 +334,8 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    }, [
       moviesList,
       filterOptions,
+      sortOptions,
+      statusSortOption,
       searchTitle,
       searchDirector,
       searchActor,
@@ -370,7 +376,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    }, [filteredMoviesList]);
 
    const handleTitleSort = () => {
-      setFilterOptions({
+      setSortOptions({
          votes: votes.Default,
          rating: rating.Default,
          chronological: chronological.Default,
@@ -382,8 +388,8 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       });
    };
 
-   const handleRequestsSort = () => {
-      setFilterOptions({
+   const handleVotesSort = () => {
+      setSortOptions({
          alphabetical: alphabetical.Default,
          rating: rating.Default,
          chronological: chronological.Default,
@@ -394,12 +400,12 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    };
 
    const handleRatingsSort = () => {
-      setFilterOptions({
+      setSortOptions({
          alphabetical: alphabetical.Default,
-         votes: votes.Default,
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
+         votes: votes.Default,
          rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
       });
    };
@@ -422,13 +428,13 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
-                  {filterOptions.alphabetical === alphabetical.Default && (
+                  {sortOptions.alphabetical === alphabetical.Default && (
                      <FaSort />
                   )}
-                  {filterOptions.alphabetical === alphabetical.Ascending && (
+                  {sortOptions.alphabetical === alphabetical.Ascending && (
                      <FaSortUp />
                   )}
-                  {filterOptions.alphabetical === alphabetical.Descending && (
+                  {sortOptions.alphabetical === alphabetical.Descending && (
                      <FaSortDown />
                   )}
                   Title
@@ -447,9 +453,9 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
-                  {filterOptions.rating === rating.Default && <FaSort />}
-                  {filterOptions.rating === rating.Ascending && <FaSortUp />}
-                  {filterOptions.rating === rating.Descending && <FaSortDown />}
+                  {sortOptions.rating === rating.Default && <FaSort />}
+                  {sortOptions.rating === rating.Ascending && <FaSortUp />}
+                  {sortOptions.rating === rating.Descending && <FaSortDown />}
                   Rating
                </div>
             </button>
@@ -458,14 +464,14 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
             <button
                onClick={() => {
                   setIsRequestFilterAscending(!isRequestFilterAscending);
-                  handleRequestsSort();
+                  handleVotesSort();
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
-                  {filterOptions.votes === votes.Default && <FaSort />}
-                  {filterOptions.votes === votes.Ascending && <FaSortUp />}
-                  {filterOptions.votes === votes.Descending && <FaSortDown />}
+                  {sortOptions.votes === votes.Default && <FaSort />}
+                  {sortOptions.votes === votes.Ascending && <FaSortUp />}
+                  {sortOptions.votes === votes.Descending && <FaSortDown />}
                   Votes
                </div>
             </button>

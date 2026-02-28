@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import { Inter, Lato } from "next/font/google";
 import type { ReactNode } from "react";
 
+import { MovieProvider } from "@/context/MovieContext";
+
 const lato = Lato({
    subsets: ["latin"],
    weight: ["400"],
@@ -18,10 +20,12 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
    return (
       <NextAuthProvider>
-         <div className={lato.className}>
-            <Header />
-            <main>{children}</main>
-         </div>
+         <MovieProvider>
+            <div className={lato.className}>
+               <Header />
+               <main>{children}</main>
+            </div>
+         </MovieProvider>
       </NextAuthProvider>
    );
 }

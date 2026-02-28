@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SubmitRequestButton from "./SubmitRequestButton";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 
 interface SubmitRequestsProps {
    user?: {
@@ -29,7 +29,8 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
       processUserRequestsByDate,
       isUserUnderRequestLimit,
       requestsRemaining,
-   } = useBoundStore();
+      moviesByDateMap,
+   } = useMovieContext();
 
    const [open, setOpen] = useState(false);
    const onOpenModal = () => setOpen(true);
@@ -44,7 +45,7 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
 
    useEffect(() => {
       processUserRequestsByDate(id, isCreator, isProducer);
-   }, [moviesList, processUserRequestsByDate, id, isCreator, isProducer]);
+   }, [moviesList]);
 
    useEffect(() => {
       if (!isUserUnderRequestLimit && !open) {

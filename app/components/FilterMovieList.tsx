@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 
 import {
    genre,
@@ -15,21 +15,28 @@ import {
    statusSort,
    published,
 } from "@/app/utils/filtersOptions";
-import FilterMovieListTags from "./FilterMovieListTags";
-import FilterMovieListSortTags from "./FilterMovieListSortTags";
+import MovieListFilterTags from "./MovieListFilterTags";
+import MovieListSortTags from "./MovieListSortTags";
 
 interface FilterMovieListProps {
    currentUser?: string;
 }
 
 const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
-   const { filterOptions, setFilterOptions } = useBoundStore();
+   const {
+      filterOptions,
+      setFilterOptions,
+      sortOptions,
+      setSortOptions,
+      statusSortOption,
+      setStatusSortOption,
+   } = useMovieContext();
 
    const handleChronologicalSort = (
-      e: React.ChangeEvent<HTMLSelectElement>
+      e: React.ChangeEvent<HTMLSelectElement>,
    ) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setSortOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
@@ -41,7 +48,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
 
    const handleAddedSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setSortOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
@@ -53,52 +60,55 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
 
    const handlePublishSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setSortOptions({
          alphabetical: alphabetical.Default,
          votes: votes.Default,
          rating: rating.Default,
          added: added.Default,
          chronological: chronological.Default,
-         status: status.OnChannel,
          published: selection,
       });
    };
 
    const handleWatchedStatusSort = (
-      e: React.ChangeEvent<HTMLSelectElement>
+      e: React.ChangeEvent<HTMLSelectElement>,
    ) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setStatusSortOption({
          statusSort: selection,
       });
    };
 
    const handleTypeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setFilterOptions((currentFilters) => ({
+         ...currentFilters,
          type: selection,
-      });
+      }));
    };
 
    const handleGenreFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setFilterOptions((currentFilters) => ({
+         ...currentFilters,
          genre: selection,
-      });
+      }));
    };
 
    const handleStatusFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setFilterOptions((currentFilters) => ({
+         ...currentFilters,
          status: selection,
-      });
+      }));
    };
 
    const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions({
+      setFilterOptions((currentFilters) => ({
+         ...currentFilters,
          requests: selection,
-      });
+      }));
    };
 
    return (
@@ -106,7 +116,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
          <div>
             <div className="flex gap-[4px] mb-[10px] items-center h-[30px]">
                <div>Filter By:</div>
-               <FilterMovieListTags />
+               <MovieListFilterTags />
             </div>
             <div className="flex flex-col lg:flex-row gap-[10px]">
                <div className="flex gap-[10px]">
@@ -200,7 +210,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
          <div>
             <div className="flex gap-[4px] mb-[10px] items-center h-[30px]">
                <div>Sort By: </div>
-               <FilterMovieListSortTags />
+               <MovieListSortTags />
             </div>
             <div className="flex flex-col lg:flex-row gap-[10px]">
                <div className="flex gap-[10px]">
@@ -210,7 +220,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="watchedFilter"
                         id="watched"
-                        value={filterOptions.statusSort}
+                        value={statusSortOption.statusSort}
                         onChange={handleWatchedStatusSort}
                      >
                         <option value={statusSort.Default}>Default</option>
@@ -228,7 +238,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="chronologicalFilter"
                         id="chronological"
-                        value={filterOptions.chronological}
+                        value={sortOptions.chronological}
                         onChange={handleChronologicalSort}
                      >
                         <option value={chronological.Default}>Default</option>
@@ -244,7 +254,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="publishedFilter"
                         id="published"
-                        value={filterOptions.published}
+                        value={sortOptions.published}
                         onChange={handlePublishSort}
                      >
                         <option value={published.Default}>Default</option>
@@ -258,7 +268,7 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="addedFilter"
                         id="added"
-                        value={filterOptions.added}
+                        value={sortOptions.added}
                         onChange={handleAddedSort}
                      >
                         <option value={added.Default}>Default</option>

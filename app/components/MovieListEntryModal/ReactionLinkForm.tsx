@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useBoundStore } from "@/stores/useBoundStore";
+import { useMovieContext } from "@/context/MovieContext";
 import { BiLogoPatreon } from "react-icons/bi";
 import { AiFillYoutube } from "react-icons/ai";
 import { Movie } from "@/app/types/movie";
@@ -24,7 +24,7 @@ const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
    const [youtubeLinkWarning, setYouTubeLinkWarning] = useState("");
    const [patreonLinkWarning, setPatreonLinkWarning] = useState("");
 
-   const { setReactionLink } = useBoundStore();
+   const { setReactionLink } = useMovieContext();
 
    const handleLinkUpdate = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -32,7 +32,7 @@ const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
       const processLink = (
          regex: RegExp,
          link: string,
-         setLinkWarning: (warning: string) => void
+         setLinkWarning: (warning: string) => void,
       ) => {
          if (regex.test(link)) {
             setLinkWarning("");
@@ -50,12 +50,12 @@ const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
       const updatedYouTubeLink = processLink(
          validYouTubeLinkPattern,
          youtubeReactionLink,
-         setYouTubeLinkWarning
+         setYouTubeLinkWarning,
       );
       const updatedPatreonLink = processLink(
          validPatreonLinkPattern,
          patreonReactionLink,
-         setPatreonLinkWarning
+         setPatreonLinkWarning,
       );
 
       const links = {
