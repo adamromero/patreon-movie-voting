@@ -167,7 +167,7 @@ const MovieListEntry = ({
                            className="block flex justify-between whitespace-nowrap bg-white gap-[3px] text-[black] py-[8px] px-[10px] rounded-sm font-bold text-[12px] mt-[10px] md:m-0"
                         >
                            <BiLogoPatreon className="text-[20px]" />
-                           <span className="">Connect to Vote</span>
+                           <span className="leading-5">Connect to Vote</span>
                         </button>
                      </div>
                   ) : (
