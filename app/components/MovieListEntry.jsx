@@ -48,7 +48,11 @@ const MovieListEntry = ({
          top: 0,
          behavior: "smooth",
       });
+      //need to set focus on patreon button
    };
+
+   const hasVoted = data?.voters?.includes(currentUser);
+   const canVote = !data?.hasReacted && !data?.hasSeen && currentUser;
 
    return (
       <>
@@ -137,10 +141,10 @@ const MovieListEntry = ({
                <span className="inline lg:hidden">Votes:</span>{" "}
                {data?.voters?.length}
             </div>
-            {!data?.hasReacted && !data?.hasSeen && currentUser ? (
+
+            {canVote ? (
                <div className="mt-[10px] md:mt-0 lg:w-[70px]">
-                  {data?.voters?.filter((voter) => voter === currentUser)
-                     .length ? (
+                  {hasVoted ? (
                      <button
                         className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                         onClick={() =>
@@ -158,46 +162,44 @@ const MovieListEntry = ({
                      </button>
                   )}
                </div>
-            ) : (
-               <>
-                  {!data?.hasReacted ? (
-                     <div className="w-[135px]">
-                        <button
-                           onClick={handleScrollToTop}
-                           className="block flex justify-between whitespace-nowrap bg-white gap-[3px] text-[black] py-[8px] px-[10px] rounded-sm font-bold text-[12px] mt-[10px] md:m-0"
+            ) : data?.hasSeen && !data?.hasReacted ? (
+               <div className="w-[70px]"></div>
+            ) : !currentUser && !data?.hasReacted ? (
+               <div className="w-[135px]">
+                  <button
+                     onClick={handleScrollToTop}
+                     className="block flex justify-between whitespace-nowrap bg-white gap-[3px] text-[black] py-[8px] px-[10px] rounded-sm font-bold text-[12px] mt-[10px] md:m-0"
+                  >
+                     <BiLogoPatreon className="text-[20px]" />
+                     <span className="leading-5">Connect to Vote</span>
+                  </button>
+               </div>
+            ) : data?.hasReacted ? (
+               <div className="w-[70px]">
+                  <div className="flex flex-col gap-[8px]">
+                     {data?.links?.youtube && (
+                        <a
+                           className="flex justify-center items-center gap-[2px] bg-[red] text-[18px] p-[3px]"
+                           href={data?.links?.youtube}
+                           title="Watch on YouTube"
+                           target="_blank"
                         >
-                           <BiLogoPatreon className="text-[20px]" />
-                           <span className="leading-5">Connect to Vote</span>
-                        </button>
-                     </div>
-                  ) : (
-                     <div className="w-[70px]">
-                        <div className="flex flex-col gap-[8px]">
-                           {data?.links?.youtube && (
-                              <a
-                                 className="flex justify-center items-center gap-[2px] bg-[red] text-[18px] p-[3px]"
-                                 href={data?.links?.youtube}
-                                 title="Watch on YouTube"
-                                 target="_blank"
-                              >
-                                 <AiFillYoutube />
-                              </a>
-                           )}
-                           {data?.links?.patreon && (
-                              <a
-                                 className="flex justify-center items-center gap-[2px] bg-[black] text-[18px] p-[3px]"
-                                 href={data?.links?.patreon}
-                                 title="Watch Full Length"
-                                 target="_blank"
-                              >
-                                 <BiLogoPatreon />
-                              </a>
-                           )}
-                        </div>
-                     </div>
-                  )}
-               </>
-            )}
+                           <AiFillYoutube />
+                        </a>
+                     )}
+                     {data?.links?.patreon && (
+                        <a
+                           className="flex justify-center items-center gap-[2px] bg-[black] text-[18px] p-[3px]"
+                           href={data?.links?.patreon}
+                           title="Watch Full Length"
+                           target="_blank"
+                        >
+                           <BiLogoPatreon />
+                        </a>
+                     )}
+                  </div>
+               </div>
+            ) : null}
             {isCreator && (
                <>
                   <div className="hidden lg:block lg:w-[75px] text-center">
