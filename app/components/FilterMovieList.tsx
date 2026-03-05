@@ -68,6 +68,10 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
          chronological: chronological.Default,
          published: selection,
       });
+      setFilterOptions((currentFilters) => ({
+         ...currentFilters,
+         status: status.OnChannel,
+      }));
    };
 
    const handleWatchedStatusSort = (
