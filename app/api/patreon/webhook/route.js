@@ -22,11 +22,11 @@ export async function POST(req) {
       if (!title || !url || !published_at) {
          return NextResponse.json(
             { message: "Invalid input, no action performed" },
-            { status: 200 }
+            { status: 200 },
          );
       }
 
-      if (title.toLowerCase().includes("full length reaction")) {
+      if (title.toLowerCase().includes("full length")) {
          const extractedTitle = extractTitle(title);
          const year = extractYear(title);
 
@@ -71,13 +71,13 @@ export async function POST(req) {
 
       return NextResponse.json(
          { message: "No action performed" },
-         { status: 200 }
+         { status: 200 },
       );
    } catch (error) {
       console.error(error);
       return NextResponse.json(
          { error: "Internal server error" },
-         { status: 500 }
+         { status: 500 },
       );
    }
 }
