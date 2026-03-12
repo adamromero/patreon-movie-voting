@@ -26,7 +26,16 @@ export async function POST(req: NextRequest) {
          );
       }
 
-      if (title.toLowerCase().includes("full length")) {
+      const postTitleMatch = [
+         "full length",
+         "full length reaction",
+         "full reaction",
+         "watch along",
+         "watch-along",
+      ];
+      const lowerTitle = title.toLowerCase();
+
+      if (postTitleMatch.some((p) => lowerTitle.includes(p))) {
          const extractedTitle = extractTitle(title);
          const year = extractYear(title);
 
