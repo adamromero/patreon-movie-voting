@@ -21,13 +21,13 @@ const PageControls: React.FC<PageControlsProps> = ({
       setCurrentPage(Math.ceil(filteredListLength / rowsPerPage));
    const decrementPage = () =>
       setCurrentPage((pageNumber) =>
-         pageNumber > 1 ? pageNumber - 1 : pageNumber
+         pageNumber > 1 ? pageNumber - 1 : pageNumber,
       );
    const incrementPage = () => {
       setCurrentPage((pageNumber) =>
          pageNumber < Math.ceil(filteredListLength / rowsPerPage)
             ? pageNumber + 1
-            : pageNumber
+            : pageNumber,
       );
    };
 
@@ -44,7 +44,6 @@ const PageControls: React.FC<PageControlsProps> = ({
          />
          <div>Results: {filteredListLength}</div>
          <div className="flex gap-[5px]">
-            <label htmlFor="rowsPerPage">Rows per page</label>
             <select
                className="text-black"
                name="rowsPerPage"
@@ -57,6 +56,7 @@ const PageControls: React.FC<PageControlsProps> = ({
                <option value="50">50</option>
                <option value="100">100</option>
             </select>
+            <label htmlFor="rowsPerPage">per page</label>
          </div>
       </>
    );

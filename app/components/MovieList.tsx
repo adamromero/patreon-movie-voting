@@ -22,6 +22,10 @@ import useFetchMovies from "../hooks/useFetchMovies";
 import PageControls from "./PageControls";
 import { Movie } from "../types/movie";
 
+import { FaPatreon } from "react-icons/fa6";
+
+import { FaYoutube } from "react-icons/fa";
+
 interface MovieListProps {
    currentUser?: string;
    isCreator?: boolean;
@@ -57,6 +61,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const indexOfLastPost = currentPage * rowsPerPage;
    const indexOfFirstPost = indexOfLastPost - rowsPerPage;
    const [isRankingOn, setIsRankingOn] = useState(false);
+   const [listFormat, setListFormat] = useState("detailed");
 
    useEffect(() => {
       let filteredList: Movie[] = [...moviesList];
@@ -516,6 +521,128 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       </div>
    );
 
+   const detailedList = (
+      <div>
+         {filteredMoviesList
+            .slice(indexOfFirstPost, indexOfLastPost)
+            .map((data, index) => (
+               <div key={data._id} className="mb-[10px]">
+                  <div className="flex justify-between gap-5 bg-[#5f005f] px-[20px] py-[10px] items-center">
+                     {/* <div className="text-[20px] font-bold">{index + 1}</div> */}
+                     <div className="text-[18px] font-bold">
+                        {data.data.Title} ({data.data.Year})
+                     </div>
+                     <button className="bg-[#a300a3] px-[15px] py-[5px]">
+                        &#9650; Upvote
+                     </button>
+                  </div>
+                  <div className="flex gap-5 bg-[black] p-[20px]">
+                     <img
+                        className="max-w-[100px] h-[150px]"
+                        src={`https://image.tmdb.org/t/p/w200${data?.data?.Poster}`}
+                        alt={data.data.Title}
+                     />
+                     <div>
+                        <div>
+                           <a
+                              href={`https://tubitv.com/search/${encodeURIComponent(data.data.Title ?? "")}`}
+                              target="_blank"
+                           >
+                              Tubi
+                           </a>
+                           <a
+                              href={`https://therokuchannel.roku.com/search/${encodeURIComponent(data.data.Title ?? "")}`}
+                              target="_blank"
+                           >
+                              The Roku Channel
+                           </a>
+                        </div>
+
+                        <div className="text-[18px] font-bold">
+                           Rank: {index + 1}
+                        </div>
+                        <div className="text-[18px] font-bold mb-[10px]">
+                           {data.voters.length} votes
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                           <div className="font-bold">{data.data.Genre}</div>
+                           <div className="flex gap-5">
+                              <div>
+                                 Directed by{" "}
+                                 <span className="font-bold">
+                                    {data.data.Director}
+                                 </span>
+                              </div>
+                              <div>
+                                 Starring{" "}
+                                 <span className="font-bold">
+                                    {data.data.Actors?.split(",")
+                                       .slice(0, 3)
+                                       .join(",")}
+                                 </span>
+                              </div>
+                           </div>
+
+                           <div className="flex gap-5 text-[14px]">
+                              <span className="border-[1px] px-[4px]">
+                                 {data.data.Rated}
+                              </span>
+                              <span>Runtime {data.data.Runtime} mins.</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div>
+                        <div className="flex items-center gap-5">
+                           {data.links.youtube && (
+                              <a
+                                 className="px-[20px] py-[5px] bg-[red] block"
+                                 href={data.links.youtube}
+                              >
+                                 <FaYoutube className="text-[30px]" />
+                              </a>
+                           )}
+                           {data.links.patreon && (
+                              <a
+                                 className="px-[20px] py-[5px] bg-black block"
+                                 href={data.links.patreon}
+                              >
+                                 <FaPatreon className="text-[30px]" />
+                              </a>
+                           )}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            ))}
+      </div>
+   );
+
+   const galleryList = (
+      <div className="grid gap-[15px] grid-cols-5">
+         {filteredMoviesList
+            .slice(indexOfFirstPost, indexOfLastPost)
+            .map((data, index) => (
+               <div key={data._id}>
+                  <img
+                     // className="max-w-[150px] w-full"
+                     src={`https://image.tmdb.org/t/p/w200${data?.data?.Poster}`}
+                     alt={data.data.Title}
+                  />
+               </div>
+            ))}
+      </div>
+   );
+
+   let renderedList;
+   if (listFormat === "detailed") {
+      renderedList = detailedList;
+   } else if (listFormat === "gallery") {
+      renderedList = galleryList;
+   } else {
+      renderedList = tableBody;
+   }
+
    return (
       <>
          {moviesList.length ? (
@@ -531,8 +658,20 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                      />
                   </div>
                   <div>
+                     <div className="flex gap-5 justify-end">
+                        <button onClick={() => setListFormat("detailed")}>
+                           Detailed
+                        </button>
+                        <button onClick={() => setListFormat("table")}>
+                           Table
+                        </button>
+                        <button onClick={() => setListFormat("gallery")}>
+                           Gallery
+                        </button>
+                     </div>
+
                      {tableHead}
-                     {tableBody}
+                     {renderedList}
                   </div>
                </>
             ) : (
