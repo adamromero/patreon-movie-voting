@@ -14,6 +14,8 @@ export default async function Home() {
    const isProducer = user && user.isProducer;
    const isCreator = user && user.isCreator;
 
+   console.log(user);
+
    let isUnderRequestLimit = true;
    const seenRequests: Movie[] = [];
    const channelRequests: Movie[] = [];
@@ -41,6 +43,29 @@ export default async function Home() {
       isUnderRequestLimit = currentUsersMonthlyRequests.length < requestLimit;
    }
 
+   if (
+      !user?.isCreator &&
+      user?.accessEndsAt &&
+      new Date(user?.accessEndsAt) < new Date()
+   ) {
+      return (
+         <div className="flex flex-col justify-center my-[50px] text-[24px] text-[white] text-center">
+            <p>
+               Your access has expired. Please renew your subscription to regain
+               access.
+            </p>
+            <p>It may take up to 24 hours to regain access after renewal.</p>
+            <a
+               className="bg-[black] px-[30px] py-[10px] mt-[20px] m-auto text-[16px]"
+               href="https://www.patreon.com/c/jenmurray/membership"
+               target="_blank"
+            >
+               Join Here
+            </a>
+         </div>
+      );
+   }
+
    return (
       <div className="flex flex-col justify-between p-[16px]">
          <div className="max-w-[1200px] w-full mx-auto">
@@ -64,7 +89,7 @@ export default async function Home() {
                               )}
                            </h2>
                            <h2>
-                              Hi {user.firstName ? user.firstName : user.name}!{" "}
+                              Hi {user.name.trim().split(" ")[0]}!{" "}
                               {user && isCreator && (
                                  <span className="relative inline-block top-[-2px]">
                                     👑

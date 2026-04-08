@@ -5,11 +5,12 @@ import { useMovieContext } from "@/context/MovieContext";
 
 interface SubmitRequestsProps {
    user?: {
-      id: string;
+      id?: string;
       name: string;
-      firstName: string;
       isCreator: boolean;
       isProducer: boolean;
+      accessEndsAt?: Date;
+      pledgeCanceledAt?: Date;
    };
    isUnderRequestLimit: boolean;
 }
