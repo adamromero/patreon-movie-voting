@@ -6,17 +6,20 @@ import clientPromise from "@/lib/mongodb";
 declare module "next-auth" {
    interface Session {
       user: {
-         id: string;
+         id?: string;
          name: string;
-         firstName: string;
          isCreator: boolean;
          isProducer: boolean;
+         accessEndsAt?: Date;
+         pledgeCanceledAt?: Date;
       };
    }
 
    interface User {
       patreonId?: string;
       tier?: string;
+      isGifted?: boolean;
+      accessEndsAt?: Date;
    }
 }
 
@@ -32,7 +35,9 @@ export const authOptions: AuthOptions = {
    adapter: MongoDBAdapter(clientPromise),
    secret: process.env.NEXTAUTH_SECRET,
    session: {
-      strategy: "jwt",
+      strategy: "database",
+      maxAge: 30 * 24 * 60 * 60,
+      updateAge: 12 * 60 * 60,
    },
    pages: {
       signIn: "/",
@@ -90,23 +95,14 @@ export const authOptions: AuthOptions = {
       async redirect({ baseUrl }) {
          return baseUrl;
       },
-      async jwt({ token, profile, account }) {
-         if (!profile) return token;
 
-         token.id = (profile as any).data.id;
-         token.firstName = (profile as any).data.attributes.first_name;
-         token.isProducer = (account as any)?.isProducer;
-
-         return token;
-      },
-      async session({ token, session }) {
-         if (token) {
-            session.user.id = token.id;
-            session.user.firstName = token.firstName;
-            session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer =
-               token.isProducer || token.id === process.env.DEV_ID;
-         }
+      async session({ session, user }) {
+         session.user.id = user.patreonId;
+         session.user.accessEndsAt = user.accessEndsAt;
+         session.user.isCreator = user.patreonId === process.env.CREATOR_ID;
+         session.user.isProducer =
+            user.patreonId === process.env.PRODUCER_TIER_ID ||
+            user.patreonId === process.env.DEV_ID;
 
          return session;
       },

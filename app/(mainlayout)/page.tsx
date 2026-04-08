@@ -72,6 +72,29 @@ export default async function Home() {
       );
    }
 
+   if (
+      !user?.isCreator &&
+      user?.accessEndsAt &&
+      new Date(user?.accessEndsAt) < new Date()
+   ) {
+      return (
+         <div className="flex flex-col justify-center my-[50px] text-[24px] text-[white] text-center">
+            <p>
+               Your access has expired. Please renew your subscription to regain
+               access.
+            </p>
+            <p>It may take up to 24 hours to regain access after renewal.</p>
+            <a
+               className="bg-[black] px-[30px] py-[10px] mt-[20px] m-auto text-[16px]"
+               href="https://www.patreon.com/c/jenmurray/membership"
+               target="_blank"
+            >
+               Join Here
+            </a>
+         </div>
+      );
+   }
+
    return (
       <div className="flex flex-col justify-between p-[16px]">
          <div className="max-w-[1200px] w-full mx-auto">
