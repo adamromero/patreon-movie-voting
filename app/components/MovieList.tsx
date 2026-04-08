@@ -647,7 +647,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       <>
          {moviesList.length ? (
             filteredMoviesList.length ? (
-               <>
+               <div>
                   <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
                      <PageControls
                         currentPage={currentPage}
@@ -673,7 +673,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                      {tableHead}
                      {renderedList}
                   </div>
-               </>
+               </div>
             ) : (
                <div className="text-[18px]">No results found</div>
             )
