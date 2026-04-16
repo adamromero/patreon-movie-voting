@@ -2,6 +2,9 @@ import { AuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
+import connectDB from "@/lib/connectDB";
+
+connectDB();
 
 declare module "next-auth" {
    interface Session {
@@ -56,10 +59,12 @@ export const authOptions: AuthOptions = {
    ],
    callbacks: {
       async signIn({ account, user, profile }) {
-         const id = (profile as any)?.data?.id;
-         if (id === process.env.CREATOR_ID) {
+         const patreonId = (profile as any)?.data?.id;
+         if (patreonId === process.env.CREATOR_ID) {
             return true;
          }
+
+         const email = (profile as any)?.data?.attributes?.email;
 
          const response = await fetch(process.env.PATREON_PROFILE_URL!, {
             headers: {
@@ -73,7 +78,7 @@ export const authOptions: AuthOptions = {
                item.type === "member" &&
                item.attributes.patron_status === "active_patron" &&
                item.relationships.campaign?.data?.id ===
-                  process.env.CAMPAIGN_ID,
+               process.env.CAMPAIGN_ID,
          );
 
          if (!pledge) {
@@ -85,9 +90,23 @@ export const authOptions: AuthOptions = {
                (item: any) => item.type === "tier",
             )?.id;
 
-         user.patreonId = id;
+         user.patreonId = patreonId;
          user.tier = tier;
-         (account as any).isProducer = tier === process.env.PRODUCER_TIER_ID;
+
+         const conn = await connectDB()
+         const db = conn.connection.db;
+
+         if (db) {
+            const userDB = await db.collection("users").findOne({ email });
+            if (userDB) {
+               if (!userDB.patreonId) {
+                  userDB.updateOne({ $set: { patreonId } })
+               }
+               if (!userDB.tier || userDB.tier !== tier) {
+                  userDB.updateOne({ $set: { tier } })
+               }
+            }
+         }
 
          return true;
       },
