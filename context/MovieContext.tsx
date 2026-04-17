@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, {
+   createContext,
+   useContext,
+   useEffect,
+   useState,
+   useCallback,
+} from "react";
 import {
    genre,
    type,
@@ -161,7 +167,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
       new Map<string, Movie>(),
    );
 
-   const fetchMovies = async () => {
+   const fetchMovies = useCallback(async () => {
       try {
          const response = await fetch(`/api/movies`);
          const movies: Movie[] = await response.json();
@@ -191,7 +197,11 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
       } catch (error) {
          console.error("Failed to fetch movies:", error);
       }
-   };
+   }, []);
+
+   useEffect(() => {
+      fetchMovies();
+   }, [fetchMovies]);
 
    const processUserRequestsByDate = (
       id: string,

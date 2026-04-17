@@ -20,10 +20,7 @@ interface UserRoleInfo {
    isCreator: boolean;
 }
 
-const SubmitRequests: React.FC<SubmitRequestsProps> = ({
-   user,
-   isUnderRequestLimit,
-}) => {
+const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
    const {
       moviesList,
       processUserRequestsByDate,
@@ -36,9 +33,6 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
    const onOpenModal = () => setOpen(true);
    const onCloseModal = () => setOpen(false);
 
-   const [disableRequestButton, setDisableRequestButton] =
-      useState(isUnderRequestLimit);
-
    const id: UserRoleInfo["id"] = user?.id ?? "";
    const isProducer: UserRoleInfo["isProducer"] = user?.isProducer ?? false;
    const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
@@ -47,25 +41,17 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
       processUserRequestsByDate(id, isCreator, isProducer);
    }, [moviesList]);
 
-   useEffect(() => {
-      if (!isUserUnderRequestLimit && !open) {
-         setDisableRequestButton(true);
-      } else {
-         setDisableRequestButton(false);
-      }
-   }, [open, isUserUnderRequestLimit]);
-
    return (
       <div
          className={`flex flex-col ${
             user
-               ? isUnderRequestLimit && !isCreator
+               ? isUserUnderRequestLimit && !isCreator
                   ? "mb-[15px]"
                   : "my-[15px]"
                : "my-[15px]"
          }`}
       >
-         {user && isUnderRequestLimit && !isCreator && (
+         {user && isUserUnderRequestLimit && !isCreator && (
             <div className="text-[16px] sm:text-[18px] mb-[15px]">
                You have {requestsRemaining} <strong> new</strong>{" "}
                {requestsRemaining === 1 ? "request" : "requests"} remaining this
@@ -77,7 +63,7 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
             <div className="flex max-w-[430px] text-[16px]">
                <div className="flex-1">
                   {moviesList.length ? (
-                     !disableRequestButton ? (
+                     !isUserUnderRequestLimit ? (
                         <SubmitRequestButton
                            user={user}
                            open={open}
