@@ -18,7 +18,6 @@ import {
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
-import useFetchMovies from "../hooks/useFetchMovies";
 import PageControls from "./PageControls";
 import { Movie } from "../types/movie";
 
@@ -30,9 +29,9 @@ interface MovieListProps {
 const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
-   const moviesList = useFetchMovies();
 
    const {
+      moviesList,
       filteredMoviesList,
       setFilteredMoviesList,
       filterOptions,
@@ -507,7 +506,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                      data={data}
                      currentUser={currentUser ?? ""}
                      isCreator={isCreator ?? false}
-                     ranking={index + 1 + rowsPerPage * (currentPage - 1)}
+                     //ranking={index + 1 + rowsPerPage * (currentPage - 1)}
                      isRankingOn={isRankingOn}
                      requestStatusState={requestStatusState}
                   />

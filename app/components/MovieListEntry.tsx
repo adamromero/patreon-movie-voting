@@ -15,7 +15,7 @@ interface MovieListEntryProps {
    data: Movie;
    currentUser: string;
    isCreator: boolean;
-   ranking: number;
+   //ranking: number;
    isRankingOn: boolean;
    requestStatusState: Record<string | number, boolean>;
 }
@@ -26,7 +26,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    data,
    currentUser,
    isCreator,
-   ranking,
+   //ranking,
    isRankingOn,
    requestStatusState,
 }) => {
@@ -45,8 +45,12 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
    const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
 
-   const { addVoteToRequest, removeVoteFromRequest, removeRequestFromList } =
-      useMovieContext();
+   const {
+      addVoteToRequest,
+      removeVoteFromRequest,
+      removeRequestFromList,
+      rankedMovies,
+   } = useMovieContext();
 
    const handleCastVote = async (movieId: string, voters: string[]) => {
       addVoteToRequest(movieId, voters, currentUser);
@@ -107,12 +111,12 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                )}
                {data?.data?.Poster ? (
                   <div className="relative">
-                     {isRankingOn && (
+                     {isRankingOn && rankedMovies[data.data.imdbID ?? ""] && (
                         <span
                            className="absolute w-full h-full items-center justify-center hidden lg:flex z-20"
                            style={{ background: "rgba(0,0,0,.75)" }}
                         >
-                           {ranking}
+                           {rankedMovies[data.data.imdbID ?? ""]}
                         </span>
                      )}
 
@@ -144,7 +148,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
             <div className="lg:hidden">
-               <span>Rank:</span> {ranking}
+               <span>Rank:</span> {rankedMovies[data.data.imdbID ?? ""]}
             </div>
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Rating:</span>{" "}

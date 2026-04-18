@@ -23,10 +23,9 @@ interface UserRoleInfo {
 const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
    const {
       moviesList,
-      processUserRequestsByDate,
+      //processUserRequestsByDate,
       isUserUnderRequestLimit,
       requestsRemaining,
-      moviesByDateMap,
    } = useMovieContext();
 
    const [open, setOpen] = useState(false);
@@ -38,7 +37,7 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
    const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
 
    useEffect(() => {
-      processUserRequestsByDate(id, isCreator, isProducer);
+      //processUserRequestsByDate(id, isCreator, isProducer);
    }, [moviesList]);
 
    return (
@@ -63,7 +62,7 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
             <div className="flex max-w-[430px] text-[16px]">
                <div className="flex-1">
                   {moviesList.length ? (
-                     !isUserUnderRequestLimit ? (
+                     isUserUnderRequestLimit ? (
                         <SubmitRequestButton
                            user={user}
                            open={open}
