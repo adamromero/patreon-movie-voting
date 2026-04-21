@@ -5,8 +5,6 @@ import { Movie } from "../types/movie";
 export const useMoviesMap = () => {
    const { moviesList } = useMovieContext();
 
-   console.log("useMoviesMap render");
-
    return useMemo(() => {
       const map = new Map<string, Movie>();
 
