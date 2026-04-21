@@ -61,7 +61,7 @@ export interface StoreState {
    >;
    requestHolidayStatus: Record<string, "none" | "halloween" | "christmas">;
    onChannelRequestLinks: Record<string, { patreon: string; youtube: string }>;
-   disableButton: boolean;
+   disableAddButton: boolean;
    isRankingOn: boolean;
    updateRequestLimits: (
       userId: string,
@@ -81,5 +81,5 @@ export interface StoreState {
       links: { patreon: string; youtube: string },
    ) => Promise<Movie | null>;
    toggleRanking: () => void;
-   setDisableButton: (disabled: boolean) => void;
+   setDisableAddButton: (disabled: boolean) => void;
 }

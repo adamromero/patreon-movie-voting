@@ -47,9 +47,11 @@ export type MovieActions = {
 export function useMovieActions({
    moviesList,
    setMoviesList,
+   setDisableAddButton,
 }: {
    moviesList: Movie[];
    setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
+   setDisableAddButton: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
    const fetchMovies = useCallback(async () => {
       const res = await fetch("/api/movies");
@@ -285,6 +287,8 @@ export function useMovieActions({
       movie: AddRequestMovieInput,
       currentUser: string,
    ): Promise<Movie | null> => {
+      setDisableAddButton(true);
+
       let data: {
          id: number;
          poster_path?: string;
@@ -442,6 +446,7 @@ export function useMovieActions({
             ? findUSRating.rating
             : releaseData?.results[0]?.rating;
       } else {
+         setDisableAddButton(false);
          return null;
       }
 
@@ -505,6 +510,8 @@ export function useMovieActions({
          return postedMovie;
       } catch (e) {
          return null;
+      } finally {
+         setDisableAddButton(false);
       }
    };
 

@@ -28,6 +28,7 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
    const actions = useMovieActions({
       moviesList: state.moviesList,
       setMoviesList: state.setMoviesList,
+      setDisableAddButton: state.setDisableAddButton,
    });
 
    useEffect(() => {

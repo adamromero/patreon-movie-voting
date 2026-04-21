@@ -59,6 +59,8 @@ export type MovieState = {
 
    isRankingOn: boolean;
 
+   disableAddButton: boolean;
+
    isUserUnderRequestLimit: boolean;
    requestsRemaining: number | undefined;
    requestsThisMonth: Movie[];
@@ -93,6 +95,8 @@ export function useMovieState() {
    const [searchComposer, setSearchComposer] = useState("");
 
    const [isRankingOn, setIsRankingOn] = useState(false);
+
+   const [disableAddButton, setDisableAddButton] = useState(false);
 
    const [isUserUnderRequestLimit, setIsUserUnderRequestLimit] = useState(true);
    const [requestsRemaining, setRequestsRemaining] = useState<
@@ -136,5 +140,8 @@ export function useMovieState() {
 
       requestsThisMonth,
       setRequestsThisMonth,
+
+      disableAddButton,
+      setDisableAddButton,
    };
 }

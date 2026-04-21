@@ -1,9 +1,11 @@
-import { useMovieState } from "@/context/movie.state";
+import { useMovieContext } from "@/context/MovieContext";
 import { useMemo } from "react";
 import { Movie } from "../types/movie";
 
 export const useMoviesMap = () => {
-   const { moviesList } = useMovieState();
+   const { moviesList } = useMovieContext();
+
+   console.log("useMoviesMap render");
 
    return useMemo(() => {
       const map = new Map<string, Movie>();

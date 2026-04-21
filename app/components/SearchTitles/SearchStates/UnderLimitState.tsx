@@ -6,14 +6,14 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 interface UnderLimitStateProps {
    handleMovieSelection: (movie: APIMovieData) => Promise<void> | void;
    disabledButtonStates: Record<string | number, boolean>;
-   disableButton: boolean;
+   disableAddButton: boolean;
    movie: APIMovieData;
 }
 
 const UnderLimitState: React.FC<UnderLimitStateProps> = ({
    handleMovieSelection,
    disabledButtonStates,
-   disableButton,
+   disableAddButton,
    movie,
 }) => {
    return (
@@ -21,7 +21,7 @@ const UnderLimitState: React.FC<UnderLimitStateProps> = ({
          <button
             className="block"
             onClick={() => handleMovieSelection(movie)}
-            disabled={disableButton}
+            disabled={disableAddButton}
          >
             {!movie?.poster_path ? (
                <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">

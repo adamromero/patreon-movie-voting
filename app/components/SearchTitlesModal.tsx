@@ -37,7 +37,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       addVoteToRequest,
       removeVoteFromRequest,
       isUserUnderRequestLimit,
-      disableButton,
+      disableAddButton,
    } = useMovieContext();
 
    const moviesMap = useMoviesMap();
@@ -280,7 +280,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
          ...sharedMovieProps,
          handleMovieSelection,
          disabledButtonStates,
-         disableButton,
+         disableAddButton,
       };
 
       if (isMovieInList(movie)) {

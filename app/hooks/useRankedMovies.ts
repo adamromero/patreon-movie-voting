@@ -1,8 +1,8 @@
-import { useMovieState } from "@/context/movie.state";
+import { useMovieContext } from "@/context/MovieContext";
 import { useMemo } from "react";
 
 export const useRankedMovies = () => {
-   const { moviesList } = useMovieState();
+   const { moviesList } = useMovieContext();
 
    return useMemo(() => {
       const filtered = moviesList
