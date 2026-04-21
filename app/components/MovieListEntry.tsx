@@ -9,13 +9,13 @@ import { useMovieContext } from "@/context/MovieContext";
 import { FaRegImage } from "react-icons/fa6";
 
 import RequestModal from "./MovieListEntryModal/RequestModal";
-import { Movie, MovieData } from "../types/movie";
+import { Movie } from "../types/movie";
+import { useRankedMovies } from "../hooks/useRankedMovies";
 
 interface MovieListEntryProps {
    data: Movie;
    currentUser: string;
    isCreator: boolean;
-   //ranking: number;
    isRankingOn: boolean;
    requestStatusState: Record<string | number, boolean>;
 }
@@ -26,7 +26,6 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    data,
    currentUser,
    isCreator,
-   //ranking,
    isRankingOn,
    requestStatusState,
 }) => {
@@ -45,12 +44,10 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
    const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
 
-   const {
-      addVoteToRequest,
-      removeVoteFromRequest,
-      removeRequestFromList,
-      rankedMovies,
-   } = useMovieContext();
+   const { addVoteToRequest, removeVoteFromRequest, removeRequestFromList } =
+      useMovieContext();
+
+   const rankedMovies = useRankedMovies();
 
    const handleCastVote = async (movieId: string, voters: string[]) => {
       addVoteToRequest(movieId, voters, currentUser);

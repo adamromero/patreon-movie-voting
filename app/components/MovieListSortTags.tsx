@@ -12,8 +12,6 @@ import {
 
 const MovieListSortTags = () => {
    const {
-      filterOptions,
-      setFilterOptions,
       sortOptions,
       setSortOptions,
       statusSortOption,

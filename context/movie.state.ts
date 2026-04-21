@@ -39,14 +39,23 @@ export type MovieState = {
    filteredMoviesList: Movie[];
 
    filterOptions: MovieFilterOptions;
+   setFilterOptions: React.Dispatch<React.SetStateAction<MovieFilterOptions>>;
+
    sortOptions: MovieSortOptions;
    setSortOptions: React.Dispatch<React.SetStateAction<MovieSortOptions>>;
    statusSortOption: MovieStatusSortOption;
+   setStatusSortOption: React.Dispatch<
+      React.SetStateAction<MovieStatusSortOption>
+   >;
 
    searchTitle: string;
+   setSearchTitle: React.Dispatch<React.SetStateAction<string>>;
    searchDirector: string;
+   setSearchDirector: React.Dispatch<React.SetStateAction<string>>;
    searchActor: string;
+   setSearchActor: React.Dispatch<React.SetStateAction<string>>;
    searchComposer: string;
+   setSearchComposer: React.Dispatch<React.SetStateAction<string>>;
 
    isRankingOn: boolean;
 
@@ -57,6 +66,7 @@ export type MovieState = {
 
 export function useMovieState() {
    const [moviesList, setMoviesList] = useState<Movie[]>([]);
+   const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
 
    const [filterOptions, setFilterOptions] = useState<MovieFilterOptions>({
       type: type.Default,
@@ -94,6 +104,8 @@ export function useMovieState() {
    return {
       moviesList,
       setMoviesList,
+
+      filteredMoviesList,
 
       filterOptions,
       setFilterOptions,

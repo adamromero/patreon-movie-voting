@@ -10,6 +10,7 @@ import SearchFields from "./SearchTitles/SearchFields";
 import { useMovieContext } from "@/context/MovieContext";
 
 import { APIMovieData } from "../types/movie";
+import { useMoviesMap } from "../hooks/useMoviesMap";
 
 interface SearchTitlesModalProps {
    user: { id: string };
@@ -37,8 +38,9 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       removeVoteFromRequest,
       isUserUnderRequestLimit,
       disableButton,
-      moviesMap,
    } = useMovieContext();
+
+   const moviesMap = useMoviesMap();
 
    const inputRef = useRef<HTMLInputElement>(null);
    const [movieIDCollection, setMovieIDCollection] = useState<

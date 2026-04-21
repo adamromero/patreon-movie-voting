@@ -42,12 +42,6 @@ export type MovieActions = {
       movieId: string,
       links: { patreon: string; youtube: string },
    ) => Promise<Movie | unknown>;
-
-   //    processUserRequestsByDate: (
-   //       id: string,
-   //       isCreator: boolean,
-   //       isProducer: boolean,
-   //    ) => void;
 };
 
 export function useMovieActions({

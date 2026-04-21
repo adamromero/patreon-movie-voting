@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import SubmitRequestButton from "./SubmitRequestButton";
 import { useMovieContext } from "@/context/MovieContext";
+import { useRequestStatus } from "../hooks/useRequestStatus";
 
 interface SubmitRequestsProps {
    user?: {
@@ -21,24 +22,21 @@ interface UserRoleInfo {
 }
 
 const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
-   const {
-      moviesList,
-      //processUserRequestsByDate,
-      isUserUnderRequestLimit,
-      requestsRemaining,
-   } = useMovieContext();
-
-   const [open, setOpen] = useState(false);
-   const onOpenModal = () => setOpen(true);
-   const onCloseModal = () => setOpen(false);
-
    const id: UserRoleInfo["id"] = user?.id ?? "";
    const isProducer: UserRoleInfo["isProducer"] = user?.isProducer ?? false;
    const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
 
-   useEffect(() => {
-      //processUserRequestsByDate(id, isCreator, isProducer);
-   }, [moviesList]);
+   const { moviesList } = useMovieContext();
+
+   const { isUserUnderRequestLimit, requestsRemaining } = useRequestStatus(
+      id,
+      isCreator,
+      isProducer,
+   );
+
+   const [open, setOpen] = useState(false);
+   const onOpenModal = () => setOpen(true);
+   const onCloseModal = () => setOpen(false);
 
    return (
       <div

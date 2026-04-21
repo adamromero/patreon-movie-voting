@@ -1,23 +1,39 @@
 "use client";
 import React from "react";
 import { AiTwotoneCalendar } from "react-icons/ai";
-import { useMovieContext } from "@/context/MovieContext";
+import { useRequestStatus } from "../hooks/useRequestStatus";
 
-const RequestsThisMonth = () => {
-   const { moviesByDateMap } = useMovieContext();
+interface RequestThisMonthProps {
+   user?: {
+      id: string;
+      name: string;
+      firstName: string;
+      isCreator: boolean;
+      isProducer: boolean;
+   };
+   //isUnderRequestLimit: boolean;
+}
 
-   const moviesByDateArray = Array.from(moviesByDateMap, ([key, value]) => ({
-      key,
-      value,
-   }));
+interface UserRoleInfo {
+   id: string;
+   isProducer: boolean;
+   isCreator: boolean;
+}
+
+const RequestsThisMonth: React.FC<RequestThisMonthProps> = ({ user }) => {
+   const id: UserRoleInfo["id"] = user?.id ?? "";
+   const isProducer: UserRoleInfo["isProducer"] = user?.isProducer ?? false;
+   const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
+
+   const { moviesThisMonth } = useRequestStatus(id, isCreator, isProducer);
 
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
-      moviesByDateArray.length >= maxRequestsDisplayed
-         ? moviesByDateArray.length - maxRequestsDisplayed
+      moviesThisMonth.length >= maxRequestsDisplayed
+         ? moviesThisMonth.length - maxRequestsDisplayed
          : 0;
 
-   if (moviesByDateArray.length) {
+   if (moviesThisMonth.length) {
       return (
          <div className="mb-[15px]">
             <h2 className="flex items-center gap-[5px] mb-[5px] font-bold">
@@ -26,13 +42,13 @@ const RequestsThisMonth = () => {
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
-               {moviesByDateArray
-                  .slice(firstRequestDisplayed, moviesByDateArray.length)
-                  .map(({ key, value: { data } }) => (
-                     <div key={key}>
+               {moviesThisMonth
+                  .slice(firstRequestDisplayed, moviesThisMonth.length)
+                  .map((movie) => (
+                     <div key={movie._id}>
                         <img
-                           src={`https://image.tmdb.org/t/p/w200/${data.Poster}`}
-                           alt={data.Title}
+                           src={`https://image.tmdb.org/t/p/w200/${movie.data.Poster}`}
+                           alt={movie.data.Title}
                            width="75"
                            height="100"
                         />

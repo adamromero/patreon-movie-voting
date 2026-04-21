@@ -20,6 +20,7 @@ import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
 import PageControls from "./PageControls";
 import { Movie } from "../types/movie";
+import { useFilteredMovies } from "../hooks/useFilteredMovies";
 
 interface MovieListProps {
    currentUser?: string;
@@ -30,21 +31,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
 
-   const {
-      moviesList,
-      filteredMoviesList,
-      setFilteredMoviesList,
-      filterOptions,
-      setFilterOptions,
-      sortOptions,
-      setSortOptions,
-      statusSortOption,
-      setStatusSortOption,
-      searchTitle,
-      searchDirector,
-      searchActor,
-      searchComposer,
-   } = useMovieContext();
+   const { moviesList, sortOptions, setSortOptions } = useMovieContext();
 
    const [requestStatusState, setRequestStatusState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
@@ -56,291 +43,14 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    const indexOfLastPost = currentPage * rowsPerPage;
    const indexOfFirstPost = indexOfLastPost - rowsPerPage;
    const [isRankingOn, setIsRankingOn] = useState(false);
+   const filteredMovies = useFilteredMovies(currentUser);
 
    useEffect(() => {
-      let filteredList: Movie[] = [...moviesList];
-
-      if (sortOptions.votes === votes.Ascending) {
-         filteredList = filteredList.sort(
-            (a, b) => b?.voters?.length - a?.voters?.length,
-         );
-      } else if (sortOptions.votes === votes.Descending) {
-         filteredList = filteredList.sort(
-            (a, b) => a?.voters?.length - b?.voters?.length,
-         );
-      } else {
-         setIsRequestFilterAscending(true);
+      const maxPage = Math.ceil(filteredMovies.length / rowsPerPage);
+      if (currentPage > maxPage) {
+         setCurrentPage(maxPage || 1);
       }
-
-      if (sortOptions.alphabetical === alphabetical.Ascending) {
-         filteredList = filteredList.sort((a, b) => {
-            const titleA = a.data.Title ?? "";
-            const titleB = b.data.Title ?? "";
-            return titleA.localeCompare(titleB);
-         });
-      } else if (sortOptions.alphabetical === alphabetical.Descending) {
-         filteredList = filteredList
-            .sort((a, b) => {
-               const titleA = a.data.Title ?? "";
-               const titleB = b.data.Title ?? "";
-               return titleA.localeCompare(titleB);
-            })
-            .reverse();
-      } else {
-         setIsTitleFilterAscending(true);
-      }
-
-      if (sortOptions.rating === rating.Ascending) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               parseFloat(b.data.Rating ? String(b.data.Rating) : "0") -
-               parseFloat(a.data.Rating ? String(a.data.Rating) : "0"),
-         );
-      } else if (sortOptions.rating === rating.Descending) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               parseFloat(a.data.Rating ? String(a.data.Rating) : "0") -
-               parseFloat(b.data.Rating ? String(b.data.Rating) : "0"),
-         );
-      } else {
-         setIsRatingFilterAscending(true);
-      }
-
-      if (sortOptions.chronological === chronological.Older) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               new Date(a.data.Release || "1900-01-01").getTime() -
-               new Date(b.data.Release || "1900-01-01").getTime(),
-         );
-      } else if (sortOptions.chronological === chronological.Newer) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               new Date(b.data.Release || "1900-01-01").getTime() -
-               new Date(a.data.Release || "1900-01-01").getTime(),
-         );
-      }
-
-      if (sortOptions.published === published.Older) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               new Date(a.publishedAt || "1900-01-01").getTime() -
-               new Date(b.publishedAt || "1900-01-01").getTime(),
-         );
-      } else if (sortOptions.published === published.Newer) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               new Date(b.publishedAt || "1900-01-01").getTime() -
-               new Date(a.publishedAt || "1900-01-01").getTime(),
-         );
-      }
-
-      if (sortOptions.added === added.Older) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               new Date(a.createdAt).getTime() -
-               new Date(b.createdAt).getTime(),
-         );
-      } else if (sortOptions.added === added.Newer) {
-         filteredList = filteredList.sort(
-            (a, b) =>
-               new Date(b.createdAt).getTime() -
-               new Date(a.createdAt).getTime(),
-         );
-      }
-
-      if (statusSortOption.statusSort === statusSort.Watched) {
-         const seenList = filteredList.filter(
-            (movie) => movie.hasSeen || movie.hasReacted,
-         );
-         const unseenList = filteredList.filter(
-            (movie) =>
-               (!movie.hasSeen && !movie.hasReacted) ||
-               movie.isRewatch ||
-               movie.isRewatchFriend,
-         );
-         filteredList = [...seenList, ...unseenList];
-      } else if (statusSortOption.statusSort === statusSort.Unwatched) {
-         const seenList = filteredList.filter(
-            (movie) => movie.hasSeen || movie.hasReacted,
-         );
-         const unseenList = filteredList.filter(
-            (movie) =>
-               (!movie.hasSeen && !movie.hasReacted) ||
-               movie.isRewatch ||
-               movie.isRewatchFriend,
-         );
-         filteredList = [...unseenList, ...seenList];
-      }
-
-      if (filterOptions.type === type.Movie) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Type ?? "").includes(type.Movie.toLowerCase()),
-         );
-      } else if (filterOptions.type === type.Series) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Type ?? "").includes(type.Series.toLowerCase()),
-         );
-      }
-
-      if (filterOptions.genre === genre.Action) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Action),
-         );
-      } else if (filterOptions.genre === genre.Adventure) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Adventure),
-         );
-      } else if (filterOptions.genre === genre.Animation) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Animation),
-         );
-      } else if (filterOptions.genre === genre.Comedy) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Comedy),
-         );
-      } else if (filterOptions.genre === genre.Crime) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Crime),
-         );
-      } else if (filterOptions.genre === genre.Documentary) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Documentary),
-         );
-      } else if (filterOptions.genre === genre.Drama) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Drama),
-         );
-      } else if (filterOptions.genre === genre.SciFi) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.SciFi),
-         );
-      } else if (filterOptions.genre === genre.Family) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Family),
-         );
-      } else if (filterOptions.genre === genre.Fantasy) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Fantasy),
-         );
-      } else if (filterOptions.genre === genre.History) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.History),
-         );
-      } else if (filterOptions.genre === genre.Horror) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Horror),
-         );
-      } else if (filterOptions.genre === genre.Mystery) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Mystery),
-         );
-      } else if (filterOptions.genre === genre.Music) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Music),
-         );
-      } else if (filterOptions.genre === genre.Thriller) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Thriller),
-         );
-      } else if (filterOptions.genre === genre.Romance) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Romance),
-         );
-      } else if (filterOptions.genre === genre.War) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.War),
-         );
-      } else if (filterOptions.genre === genre.Western) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Genre ?? "").includes(genre.Western),
-         );
-      } else if (filterOptions.genre === genre.Halloween) {
-         filteredList = filteredList.filter((movie) => movie.isHalloween);
-      } else if (filterOptions.genre === genre.Christmas) {
-         filteredList = filteredList.filter((movie) => movie.isChristmas);
-      }
-
-      if (filterOptions.status === status.Seen) {
-         filteredList = filteredList.filter((movie) => movie.hasSeen);
-      } else if (filterOptions.status === status.OnChannel) {
-         filteredList = filteredList.filter((movie) => movie.hasReacted);
-      } else if (filterOptions.status === status.Rewatch) {
-         filteredList = filteredList.filter(
-            (movie) => movie.isRewatch || movie.isRewatchFriend,
-         );
-      } else if (filterOptions.status === status.Unseen) {
-         filteredList = filteredList.filter(
-            (movie) => !movie.hasSeen && !movie.hasReacted && !movie.isRewatch,
-         );
-      } else if (filterOptions.status === status.Votable) {
-         filteredList = filteredList.filter(
-            (movie) => (!movie.hasSeen && !movie.hasReacted) || movie.isRewatch,
-         );
-      }
-
-      if (filterOptions.requests === requests.MyRequests) {
-         filteredList = filteredList.filter(
-            (movie) => movie.requester === currentUser,
-         );
-      } else if (filterOptions.requests === requests.Voted) {
-         filteredList = filteredList.filter((movie) =>
-            movie.voters.includes(currentUser ?? ""),
-         );
-      } else if (filterOptions.requests === requests.NotVoted) {
-         filteredList = filteredList.filter(
-            (movie) => !movie.voters.includes(currentUser ?? ""),
-         );
-      }
-
-      if (searchTitle) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Title ?? "")
-               .toLowerCase()
-               .includes(searchTitle.toLowerCase()),
-         );
-      }
-
-      if (searchDirector) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Director ?? "")
-               .toLowerCase()
-               .includes(searchDirector.toLowerCase()),
-         );
-      }
-
-      if (searchActor) {
-         filteredList = filteredList.filter((movie) =>
-            (movie.data.Actors ?? "")
-               .toLowerCase()
-               .includes(searchActor.toLowerCase()),
-         );
-      }
-
-      if (searchComposer) {
-         filteredList = filteredList.filter((movie) =>
-            movie?.data?.Composer?.toLowerCase().includes(
-               searchComposer.toLowerCase(),
-            ),
-         );
-      }
-
-      const initialPage =
-         currentPage <= Math.ceil(filteredList.length / rowsPerPage)
-            ? currentPage
-            : Math.ceil(filteredList.length / rowsPerPage);
-      setCurrentPage(initialPage > 0 ? initialPage : 1);
-      setFilteredMoviesList(filteredList);
-   }, [
-      moviesList,
-      filterOptions,
-      sortOptions,
-      statusSortOption,
-      searchTitle,
-      searchDirector,
-      searchActor,
-      searchComposer,
-      rowsPerPage,
-   ]);
+   }, [filteredMovies, currentPage, rowsPerPage]);
 
    useEffect(() => {
       const requestStateObject: {
@@ -355,7 +65,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
          };
       } = {};
 
-      filteredMoviesList.forEach((movie) => {
+      filteredMovies.forEach((movie) => {
          requestStateObject[movie._id] = {
             hasReacted: movie.hasReacted,
             hasSeen: movie.hasSeen,
@@ -372,7 +82,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
       });
 
       setRequestStatusState(requestStateObject);
-   }, [filteredMoviesList]);
+   }, [filteredMovies]);
 
    const handleTitleSort = () => {
       setSortOptions({
@@ -488,7 +198,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
 
    const tableBody = (
       <div>
-         {filteredMoviesList
+         {filteredMovies
             .slice(indexOfFirstPost, indexOfLastPost)
             .map((data, index) => (
                <div
@@ -518,7 +228,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
    return (
       <>
          {moviesList.length ? (
-            filteredMoviesList.length ? (
+            filteredMovies.length ? (
                <>
                   <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
                      <PageControls
@@ -526,7 +236,7 @@ const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
                         setCurrentPage={setCurrentPage}
                         rowsPerPage={rowsPerPage}
                         setRowsPerPage={setRowsPerPage}
-                        filteredListLength={filteredMoviesList.length}
+                        filteredListLength={filteredMovies.length}
                      />
                   </div>
                   <div>

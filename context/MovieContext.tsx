@@ -2,10 +2,9 @@
 
 import React, { createContext, useContext, useEffect } from "react";
 import { useMovieState, MovieState } from "./movie.state";
-import { useMovieSelectors, MovieSelectors } from "./movie.selectors";
 import { useMovieActions, MovieActions } from "./movie.actions";
 
-type MovieContextValue = MovieState & MovieSelectors & MovieActions;
+type MovieContextValue = MovieState & MovieActions;
 
 export const MovieContext = createContext<MovieContextValue | undefined>(
    undefined,
@@ -26,12 +25,6 @@ interface MovieProviderProps {
 export const MovieProvider = ({ children }: MovieProviderProps) => {
    const state = useMovieState();
 
-   const selectors = useMovieSelectors({
-      moviesList: state.moviesList,
-      filterOptions: state.filterOptions,
-      sortOptions: state.sortOptions,
-   });
-
    const actions = useMovieActions({
       moviesList: state.moviesList,
       setMoviesList: state.setMoviesList,
@@ -43,7 +36,6 @@ export const MovieProvider = ({ children }: MovieProviderProps) => {
 
    const value: MovieContextValue = {
       ...state,
-      ...selectors,
       ...actions,
    };
 
