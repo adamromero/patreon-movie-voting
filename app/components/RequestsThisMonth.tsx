@@ -1,7 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { useRequestStatus } from "../hooks/useRequestStatus";
+import { useRequestsThisMonth } from "../hooks/useRequestsThisMonth";
+import { useFetch } from "../hooks/useFetch";
+import { Movie } from "../types/movie";
 
 interface RequestThisMonthProps {
    user?: {
@@ -21,19 +24,19 @@ interface UserRoleInfo {
 }
 
 const RequestsThisMonth: React.FC<RequestThisMonthProps> = ({ user }) => {
-   const id: UserRoleInfo["id"] = user?.id ?? "";
-   const isProducer: UserRoleInfo["isProducer"] = user?.isProducer ?? false;
-   const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
-
-   const { moviesThisMonth } = useRequestStatus(id, isCreator, isProducer);
+   const requestsThisMonth =
+      useFetch<Movie[] | null>(
+         `${process.env.NEXT_PUBLIC_API_URL}/api/requests/user/monthly`,
+      ) ?? [];
+   const requestCount = requestsThisMonth?.length || 0;
 
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
-      moviesThisMonth.length >= maxRequestsDisplayed
-         ? moviesThisMonth.length - maxRequestsDisplayed
+      requestCount >= maxRequestsDisplayed
+         ? requestCount - maxRequestsDisplayed
          : 0;
 
-   if (moviesThisMonth.length) {
+   if (requestCount) {
       return (
          <div className="mb-[15px]">
             <h2 className="flex items-center gap-[5px] mb-[5px] font-bold">
@@ -42,8 +45,8 @@ const RequestsThisMonth: React.FC<RequestThisMonthProps> = ({ user }) => {
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
-               {moviesThisMonth
-                  .slice(firstRequestDisplayed, moviesThisMonth.length)
+               {requestsThisMonth
+                  .slice(firstRequestDisplayed, requestCount)
                   .map((movie) => (
                      <div key={movie._id}>
                         <img

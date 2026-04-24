@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import SubmitRequestButton from "./SubmitRequestButton";
-import { useMovieContext } from "@/context/MovieContext";
-import { useRequestStatus } from "../hooks/useRequestStatus";
+import { useRequestsSummary } from "../hooks/useRequestsSummary";
 
 interface SubmitRequestsProps {
    user?: {
@@ -12,7 +11,7 @@ interface SubmitRequestsProps {
       isCreator: boolean;
       isProducer: boolean;
    };
-   isUnderRequestLimit: boolean;
+   initialSummary: SummaryResponse;
 }
 
 interface UserRoleInfo {
@@ -21,61 +20,61 @@ interface UserRoleInfo {
    isCreator: boolean;
 }
 
-const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
-   const id: UserRoleInfo["id"] = user?.id ?? "";
-   const isProducer: UserRoleInfo["isProducer"] = user?.isProducer ?? false;
-   const isCreator: UserRoleInfo["isCreator"] = user?.isCreator ?? false;
+interface SummaryResponse {
+   count: number;
+   limit: number;
+   remaining: number;
+   isLimitReached: boolean;
+}
 
-   const { moviesList } = useMovieContext();
-
-   const { isUserUnderRequestLimit, requestsRemaining } = useRequestStatus(
-      id,
-      isCreator,
-      isProducer,
-   );
-
+const SubmitRequests: React.FC<SubmitRequestsProps> = ({
+   user,
+   initialSummary,
+}) => {
    const [open, setOpen] = useState(false);
    const onOpenModal = () => setOpen(true);
    const onCloseModal = () => setOpen(false);
+
+   const { summary, refresh } = useRequestsSummary(initialSummary);
+
+   const { count, limit, remaining, isLimitReached } =
+      summary as SummaryResponse;
+
+   const isCreator = user?.isCreator ?? "";
+
+   console.log(count, limit, remaining, isLimitReached);
 
    return (
       <div
          className={`flex flex-col ${
             user
-               ? isUserUnderRequestLimit && !isCreator
+               ? isLimitReached && !isCreator
                   ? "mb-[15px]"
                   : "my-[15px]"
                : "my-[15px]"
          }`}
       >
-         {user && isUserUnderRequestLimit && !isCreator && (
+         {user && !isLimitReached && !isCreator && (
             <div className="text-[16px] sm:text-[18px] mb-[15px]">
-               You have {requestsRemaining} <strong> new</strong>{" "}
-               {requestsRemaining === 1 ? "request" : "requests"} remaining this
-               month.
+               You have {remaining} <strong> new</strong>{" "}
+               {remaining === 1 ? "request" : "requests"} remaining this month.
             </div>
          )}
 
          {user && (
             <div className="flex max-w-[430px] text-[16px]">
                <div className="flex-1">
-                  {moviesList.length ? (
-                     isUserUnderRequestLimit ? (
-                        <SubmitRequestButton
-                           user={user}
-                           open={open}
-                           onOpenModal={onOpenModal}
-                           onCloseModal={onCloseModal}
-                        />
-                     ) : (
-                        <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                           Limit Reached
-                        </div>
-                     )
-                  ) : (
+                  {isLimitReached ? (
                      <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
-                        <div className="loader button-loader"></div>
+                        Limit Reached
                      </div>
+                  ) : (
+                     <SubmitRequestButton
+                        user={user}
+                        open={open}
+                        onOpenModal={onOpenModal}
+                        onCloseModal={onCloseModal}
+                     />
                   )}
                </div>
             </div>

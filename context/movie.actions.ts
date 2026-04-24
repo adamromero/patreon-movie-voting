@@ -54,7 +54,7 @@ export function useMovieActions({
    setDisableAddButton: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
    const fetchMovies = useCallback(async () => {
-      const res = await fetch("/api/movies");
+      const res = await fetch("/api/requests");
       const movies: Movie[] = await res.json();
       setMoviesList(movies);
    }, [setMoviesList]);

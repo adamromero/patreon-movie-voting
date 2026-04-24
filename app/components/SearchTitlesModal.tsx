@@ -9,6 +9,8 @@ import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
 import { useMovieContext } from "@/context/MovieContext";
 
+import { searchTitles } from "@/lib/api/tmdb/search";
+
 import { APIMovieData } from "../types/movie";
 import { useMoviesMap } from "../hooks/useMoviesMap";
 
@@ -50,51 +52,49 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       Record<string | number, boolean>
    >({});
 
-   const API_URL = `https://api.themoviedb.org/3/search/multi?query=${title}&include_adult=false&language=en-US&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+   // useEffect(() => {
+   //    const fetchMovieTitles = async () => {
+   //       if (title) {
+   //          setLoading(true);
+   //          inputRef.current?.blur();
 
-   useEffect(() => {
-      const fetchMovieTitles = async () => {
-         if (title) {
-            setLoading(true);
-            inputRef.current?.blur();
+   //          const response = await fetch(API_URL);
+   //          const data = await response.json();
 
-            const response = await fetch(API_URL);
-            const data = await response.json();
+   //          if (data.results.length) {
+   //             const titles = data.results.filter(
+   //                (title: any) =>
+   //                   title.media_type === "movie" || title.media_type === "tv",
+   //             );
+   //             setTitlesFromAPI(titles);
+   //             const ids = data.results.map((entry: any) => entry.id);
+   //             const result = ids.reduce(
+   //                (
+   //                   obj: Record<string | number, boolean>,
+   //                   num: string | number,
+   //                ) => {
+   //                   obj[num] = false;
+   //                   return obj;
+   //                },
+   //                {} as Record<string | number, boolean>,
+   //             );
 
-            if (data.results.length) {
-               const titles = data.results.filter(
-                  (title: any) =>
-                     title.media_type === "movie" || title.media_type === "tv",
-               );
-               setTitlesFromAPI(titles);
-               const ids = data.results.map((entry: any) => entry.id);
-               const result = ids.reduce(
-                  (
-                     obj: Record<string | number, boolean>,
-                     num: string | number,
-                  ) => {
-                     obj[num] = false;
-                     return obj;
-                  },
-                  {} as Record<string | number, boolean>,
-               );
+   //             setMovieIDCollection(result);
+   //             setDisabledButtonStates(result);
+   //             setInput("");
+   //          } else {
+   //             setTitlesFromAPI([]);
+   //             setError("Title not found!");
+   //          }
 
-               setMovieIDCollection(result);
-               setDisabledButtonStates(result);
-               setInput("");
-            } else {
-               setTitlesFromAPI([]);
-               setError("Title not found!");
-            }
-
-            setLoading(false);
-         }
-      };
-      if (inputRef.current) {
-         inputRef.current.focus();
-      }
-      fetchMovieTitles();
-   }, [title]);
+   //          setLoading(false);
+   //       }
+   //    };
+   //    if (inputRef.current) {
+   //       inputRef.current.focus();
+   //    }
+   //    fetchMovieTitles();
+   // }, [title]);
 
    useEffect(() => {
       const fetchTitleByYear = async () => {
@@ -206,10 +206,11 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       return movie ? movie.links.youtube : "";
    };
 
-   const handleTitleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleTitleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (input) {
-         setTitle(encodeURIComponent(input.trim()));
+         const results = await searchTitles(encodeURIComponent(input.trim()));
+         setTitlesFromAPI(results);
       }
    };
 

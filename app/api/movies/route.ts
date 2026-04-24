@@ -32,12 +32,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
          const currentMonthStart = new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
-            1
+            1,
          );
          const currentMonthEnd = new Date(
             currentDate.getFullYear(),
             currentDate.getMonth() + 1,
-            0
+            0,
          );
 
          const existingDocument = await Movie.find({
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             const movie = await Movie.findOneAndUpdate(
                { "data.imdbID": selectedMovie.data.imdbID },
                { $setOnInsert: selectedMovie },
-               { upsert: true, new: true }
+               { upsert: true, new: true },
             );
             return NextResponse.json(movie);
          }

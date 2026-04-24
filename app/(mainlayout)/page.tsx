@@ -3,43 +3,43 @@ import VotingApp from "../components/VotingApp";
 import BirthdayMessage from "../components/BirthdayMessage";
 import RequestsThisMonth from "../components/RequestsThisMonth";
 import SubmitRequests from "../components/SubmitRequests";
+import { getMonthlyRequests, getMonthlySummary } from "@/lib/db/requests";
 import { Movie } from "../types/movie";
 import { redirect } from "next/navigation";
+
+interface SummaryProps {
+   count: number;
+   limit: number;
+   remaining: number;
+   isLimitReached: boolean;
+}
 
 export default async function Home() {
    //redirect("/maintenance");
 
    const user = await getCurrentUser();
-   const userId = user && user.id;
-   const isProducer = user && user.isProducer;
-   const isCreator = user && user.isCreator;
+   const userId = (user && user.id) || "";
+   const isProducer = (user && user.isProducer) || false;
+   const isCreator = (user && user.isCreator) || false;
 
-   let isUnderRequestLimit = true;
    const seenRequests: Movie[] = [];
    const channelRequests: Movie[] = [];
-   const currentUsersMonthlyRequests: Movie[] = [];
 
-   if (!isCreator) {
-      const response = await fetch(`${process.env.API_URL}/api/moviesbydate`);
-      const requestedMoviesThisMonth = await response.json();
+   const requestsThisMonth = await getMonthlyRequests(userId);
+   const summary = !isCreator
+      ? await getMonthlySummary(userId, isProducer)
+      : null;
 
-      requestedMoviesThisMonth.forEach((movie: Movie) => {
-         if (movie.requester === userId) {
-            if (!movie.hasReacted && !movie.hasSeen) {
-               currentUsersMonthlyRequests.push(movie);
-            }
-            if (movie.hasSeen) {
-               seenRequests.push(movie);
-            }
-            if (movie.hasReacted) {
-               channelRequests.push(movie);
-            }
-         }
-      });
+   const { count, limit, remaining, isLimitReached } = summary as SummaryProps;
 
-      const requestLimit = isProducer ? 3 : 2;
-      isUnderRequestLimit = currentUsersMonthlyRequests.length < requestLimit;
-   }
+   requestsThisMonth.forEach((movie: Movie) => {
+      if (movie.hasSeen) {
+         seenRequests.push(movie);
+      }
+      if (movie.hasReacted) {
+         channelRequests.push(movie);
+      }
+   });
 
    return (
       <div className="flex flex-col justify-between p-[16px]">
@@ -51,18 +51,12 @@ export default async function Home() {
                      {user ? (
                         <div>
                            <h2 className="text-[20px] font-bold mb-[10px]">
-                              {!isCreator && isProducer && (
-                                 <span>
-                                    Producer Tier (3 New Requests Per Month)
-                                 </span>
-                              )}
-                              {!isCreator && !isProducer && (
-                                 <span>
-                                    Standard Patron Tier (2 New Requests Per
-                                    Month)
-                                 </span>
-                              )}
+                              <span>
+                                 {isProducer ? "Producer" : "Standard"} Tier (
+                                 {limit} New Requests Per Month)
+                              </span>
                            </h2>
+
                            <h2>
                               Hi {user.firstName ? user.firstName : user.name}!{" "}
                               {user && isCreator && (
@@ -78,7 +72,19 @@ export default async function Home() {
                               </div>
                            ) : (
                               <div>
-                                 {isUnderRequestLimit ? (
+                                 {isLimitReached ? (
+                                    <>
+                                       <div>
+                                          You have reached your monthly request
+                                          limit and cannot make new requests
+                                          until next month.
+                                       </div>
+                                       <div>
+                                          You may continue to vote on movies
+                                          currently in the list.
+                                       </div>
+                                    </>
+                                 ) : (
                                     <>
                                        <div>
                                           Begin requesting movies and shows. You
@@ -102,18 +108,6 @@ export default async function Home() {
                                           </div>
                                        )}
                                     </>
-                                 ) : (
-                                    <>
-                                       <div>
-                                          You have reached your monthly request
-                                          limit and cannot make new requests
-                                          until next month.
-                                       </div>
-                                       <div>
-                                          You may continue to vote on movies
-                                          currently in the list.
-                                       </div>
-                                    </>
                                  )}
                               </div>
                            )}
@@ -127,10 +121,7 @@ export default async function Home() {
                            <p>You must be a current patron of this channel.</p>
                         </div>
                      )}
-                     <SubmitRequests
-                        user={user}
-                        isUnderRequestLimit={isUnderRequestLimit}
-                     />
+                     <SubmitRequests user={user} initialSummary={summary} />
                   </div>
                   {user && <RequestsThisMonth user={user} />}
                </div>
