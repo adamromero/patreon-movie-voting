@@ -3,6 +3,7 @@ import Movie from "@/models/movieModel";
 import { getRequests, addRequest } from "@/lib/db/requests";
 import { NextResponse, NextRequest } from "next/server";
 import { getCurrentUser } from "@/lib/session";
+import { buildRequestPayload } from "@/lib/services/requests/buildRequest";
 
 connectDB();
 
@@ -32,8 +33,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
    const body = await req.json();
 
+   const payload = await buildRequestPayload({
+      request: body,
+      userId: user.id,
+   });
+
    try {
-      const request = await addRequest(user, body);
+      //console.log(user, payload);
+      //return NextResponse.json({});
+      const request = await addRequest(user, payload);
       return NextResponse.json(request);
    } catch (err: any) {
       return NextResponse.json(

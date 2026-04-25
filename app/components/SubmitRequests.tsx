@@ -42,8 +42,6 @@ const SubmitRequests: React.FC<SubmitRequestsProps> = ({
 
    const isCreator = user?.isCreator ?? "";
 
-   console.log(count, limit, remaining, isLimitReached);
-
    return (
       <div
          className={`flex flex-col ${

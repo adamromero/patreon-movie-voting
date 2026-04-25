@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import ReactedState from "./SearchTitles/SearchStates/ReactedState";
 import SeenState from "./SearchTitles/SearchStates/SeenState";
 import UnReactedState from "./SearchTitles/SearchStates/UnReactedState";
@@ -9,7 +9,8 @@ import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
 import { useMovieContext } from "@/context/MovieContext";
 
-import { searchTitles } from "@/lib/api/tmdb/search";
+import { searchTitlesApi } from "@/lib/api/tmdb/search";
+import { parseInput } from "@/lib/external/tmdb/parse";
 
 import { APIMovieData } from "../types/movie";
 import { useMoviesMap } from "../hooks/useMoviesMap";
@@ -22,13 +23,6 @@ type MovieData = APIMovieData;
 
 const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    const [input, setInput] = useState("");
-   const [title, setTitle] = useState("");
-   const [inputTitle, setInputTitle] = useState("");
-   const [inputYear, setInputYear] = useState("");
-   const [inputImdbID, setInputImdbID] = useState("");
-   const [searchTitle, setSearchTitle] = useState("");
-   const [searchYear, setSearchYear] = useState("");
-   const [searchImdbID, setSearchImdbID] = useState("");
    const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
@@ -52,124 +46,13 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       Record<string | number, boolean>
    >({});
 
-   // useEffect(() => {
-   //    const fetchMovieTitles = async () => {
-   //       if (title) {
-   //          setLoading(true);
-   //          inputRef.current?.blur();
-
-   //          const response = await fetch(API_URL);
-   //          const data = await response.json();
-
-   //          if (data.results.length) {
-   //             const titles = data.results.filter(
-   //                (title: any) =>
-   //                   title.media_type === "movie" || title.media_type === "tv",
-   //             );
-   //             setTitlesFromAPI(titles);
-   //             const ids = data.results.map((entry: any) => entry.id);
-   //             const result = ids.reduce(
-   //                (
-   //                   obj: Record<string | number, boolean>,
-   //                   num: string | number,
-   //                ) => {
-   //                   obj[num] = false;
-   //                   return obj;
-   //                },
-   //                {} as Record<string | number, boolean>,
-   //             );
-
-   //             setMovieIDCollection(result);
-   //             setDisabledButtonStates(result);
-   //             setInput("");
-   //          } else {
-   //             setTitlesFromAPI([]);
-   //             setError("Title not found!");
-   //          }
-
-   //          setLoading(false);
-   //       }
-   //    };
-   //    if (inputRef.current) {
-   //       inputRef.current.focus();
-   //    }
-   //    fetchMovieTitles();
-   // }, [title]);
-
-   useEffect(() => {
-      const fetchTitleByYear = async () => {
-         if (searchTitle && searchYear) {
-            const API_URL_FILM = `https://api.themoviedb.org/3/search/movie?query=${searchTitle}&include_adult=false&language=en-US&primary_release_year=${searchYear}&page=1&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
-            const responseFilm = await fetch(API_URL_FILM);
-            const dataFilm = await responseFilm.json();
-
-            if (dataFilm.total_results) {
-               clearSearchState({
-                  ...dataFilm.results[0],
-                  media_type: "movie",
-               });
-            } else {
-               const API_URL_TV = `https://api.themoviedb.org/3/search/tv?query=${searchTitle}&include_adult=false&language=en-US&page=1&year=${searchYear}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
-               const responseTV = await fetch(API_URL_TV);
-               const dataTV = await responseTV.json();
-
-               if (dataTV.total_results) {
-                  clearSearchState({
-                     ...dataTV.results[0],
-                     media_type: "tv",
-                  });
-               } else {
-                  setTitlesFromAPI([]);
-                  setError("Title not found!");
-               }
-            }
-
-            setLoading(false);
-         }
-      };
-
-      fetchTitleByYear();
-   }, [searchTitle, searchYear]);
-
-   useEffect(() => {
-      const fetchByImdbID = async () => {
-         if (searchImdbID) {
-            const API_URL = `https://api.themoviedb.org/3/find/${searchImdbID}?external_source=imdb_id&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            const { movie_results, tv_results } = data;
-
-            if (movie_results.length) {
-               const results = movie_results[0];
-               clearSearchState({ ...results, media_type: "movie" });
-            } else if (tv_results.length) {
-               const results = tv_results[0];
-               clearSearchState({ ...results, media_type: "tv" });
-            } else {
-               setTitlesFromAPI([]);
-               setError("Title not found!");
-            }
-
-            setLoading(false);
-         }
-      };
-
-      fetchByImdbID();
-   }, [searchImdbID]);
-
    const getMovieData = (selectedMovie: APIMovieData) => {
-      const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
+      const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
       return moviesMap.get(key);
    };
 
    const clearSearchState = (data: MovieData) => {
       setTitlesFromAPI([data]);
-      setInputTitle("");
-      setInputYear("");
-      setInputImdbID("");
-      setSearchTitle("");
-      setSearchYear("");
-      setSearchImdbID("");
    };
 
    const isMovieInList = (selectedMovie: APIMovieData) => {
@@ -209,36 +92,24 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    const handleTitleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (input) {
-         const results = await searchTitles(encodeURIComponent(input.trim()));
+         const parsedInput = parseInput(input.trim());
+         const results = await searchTitlesApi(parsedInput);
          setTitlesFromAPI(results);
       }
-   };
-
-   const handleImdbIDSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const regex = /^[t0-9]+$/;
-      if (inputImdbID) {
-         const inputImdbIDTrimmed = inputImdbID.trim();
-         setSearchImdbID(
-            regex.test(inputImdbIDTrimmed) ? inputImdbIDTrimmed : "",
-         );
-      }
-   };
-
-   const handleTitleYearSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (inputTitle) setSearchTitle(encodeURIComponent(inputTitle.trim()));
-      if (inputYear) setSearchYear(inputYear);
    };
 
    const handleMovieSelection = async (movie: MovieData) => {
       setMovieIDCollection({ [movie?.id]: true });
       setDisabledButtonStates({ [movie?.id]: true });
-      addRequestToList(movie, currentUser);
+
+      addRequestToList({
+         tmdbId: movie?.id,
+         mediaType: movie?.mediaType,
+      });
    };
 
    const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
-      const key = `${selectedMovie?.id}-${selectedMovie?.media_type}`;
+      const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
       const movie = moviesMap.get(key);
       return movie ? movie.voters.includes(currentUser) : false;
    };
@@ -303,15 +174,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    const searchFieldsProps = {
       handleTitleSubmit,
       setInput,
-      handleTitleYearSubmit,
-      setInputTitle,
-      setInputYear,
-      handleImdbIDSubmit,
-      setInputImdbID,
       input,
-      inputTitle,
-      inputYear,
-      inputImdbID,
       inputRef,
    };
 

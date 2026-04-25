@@ -15,16 +15,14 @@ const LimitReachedState: React.FC<LimitReachedStateProps> = ({
    return (
       <div className="cursor-not-allowed relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
          <div>
-            {!movie?.poster_path ? (
+            {!movie?.posterPath ? (
                <div className="w-[175px] h-[285px] bg-[#858585] flex items-center justify-center mx-auto">
                   <FaRegImage className="text-[40px]" />
                </div>
             ) : (
                <img
-                  src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.poster_path}`}
-                  alt={
-                     movie?.media_type === "movie" ? movie?.title : movie?.name
-                  }
+                  src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2/${movie?.posterPath}`}
+                  alt={movie?.title}
                   width="175"
                   height="285"
                   className="w-full h-full object-cover mx-auto"
@@ -53,19 +51,9 @@ const LimitReachedState: React.FC<LimitReachedStateProps> = ({
                   textShadow: "1px 1px 3px black",
                }}
             >
-               {movie?.media_type === "movie" ? movie?.title : movie?.name}{" "}
-               {(movie?.release_date || movie?.first_air_date) && (
-                  <>
-                     (
-                     {
-                        (
-                           (movie?.media_type === "movie"
-                              ? movie?.release_date
-                              : movie?.first_air_date) ?? ""
-                        ).split("-")[0]
-                     }
-                     )
-                  </>
+               {movie?.title}{" "}
+               {movie?.releaseDate && (
+                  <>({(movie?.releaseDate).split("-")[0]})</>
                )}
             </div>
          </div>

@@ -1,6 +1,5 @@
 export interface MovieData {
    id: number;
-   media_type?: "movie" | "tv";
    Type?: string;
    Title?: string;
    Year?: string;
@@ -19,11 +18,12 @@ export interface MovieData {
 }
 
 export interface APIMovieData extends MovieData {
-   poster_path?: string;
+   //id?: number;
+   posterPath?: string;
    title?: string;
    name?: string;
-   release_date?: string;
-   first_air_date?: string;
+   releaseDate?: string;
+   mediaType?: "movie" | "tv";
 }
 
 export interface Movie {

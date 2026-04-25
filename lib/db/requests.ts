@@ -60,7 +60,7 @@ export async function getMonthlySummary(userId: string, isProducer: boolean) {
 }
 
 // post a request to the list
-export async function addRequest(user: User, data: any) {
+export async function addRequest(user: User, payload: any) {
    const { id, isProducer, isCreator } = user;
 
    if (!isCreator) {
@@ -82,10 +82,7 @@ export async function addRequest(user: User, data: any) {
    }
 
    // maybe prevent potential duplicate by checking imdb id
-   const request = await Movie.create({
-      ...data,
-   });
-
+   const request = await Movie.create(payload);
    return request;
 }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fetchTMDBBySearch, fetchTMDBById } from "@/lib/external/tmdb";
+import { searchTitles } from "@/lib/external/tmdb/search";
 import { getCurrentUser } from "@/lib/session";
 
 export async function GET(req: Request) {
@@ -10,26 +10,20 @@ export async function GET(req: Request) {
    }
 
    const { searchParams } = new URL(req.url);
-   const query = searchParams.get("query");
-   const year = searchParams.get("year");
-   const imdbId = searchParams.get("imdbId");
 
-   if (!query) {
-      return Response.json({ error: "Missing query" }, { status: 400 });
+   const query = searchParams.get("query") || undefined;
+   const year = searchParams.get("year") || undefined;
+   const imdbId = searchParams.get("imdbId") || undefined;
+
+   try {
+      const results = await searchTitles({
+         query,
+         year,
+         imdbId,
+      });
+
+      return Response.json(results);
+   } catch (err: any) {
+      return Response.json({ error: err.message }, { status: 400 });
    }
-
-   let results = "";
-   if (query) {
-      results = await fetchTMDBBySearch(query);
-   }
-
-   if (year) {
-      //results = await fetchTMDBSearch(year);
-   }
-
-   if (imdbId) {
-      results = await fetchTMDBById(imdbId);
-   }
-
-   return Response.json(results);
 }
