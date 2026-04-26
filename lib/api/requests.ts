@@ -49,7 +49,19 @@ export async function updateRequestHolidayStatus(id: string) {}
 
 export async function addRequestVote(id: string) {}
 
-export async function removeRequestVote(id: string) {}
+export async function removeRequestVote(id: string) {
+   const res = await fetch(`/api/requests/${id}`, {
+      method: "DELETE",
+   });
+
+   const data = await res.json();
+
+   if (!res.ok) {
+      throw new Error(data.error || "Failed to remove vote");
+   }
+
+   return data;
+}
 
 export async function updateRequestLink(id: string) {}
 

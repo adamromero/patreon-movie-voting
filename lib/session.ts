@@ -8,5 +8,10 @@ export function getSession() {
 
 export async function getCurrentUser() {
    const session = await getSession();
+
+   if (!session?.user) {
+      throw new Error("Unauthorized");
+   }
+
    return session?.user;
 }

@@ -121,9 +121,9 @@ export default async function Home() {
                            <p>You must be a current patron of this channel.</p>
                         </div>
                      )}
-                     <SubmitRequests user={user} initialSummary={summary} />
+                     <SubmitRequests user={user} />
                   </div>
-                  {user && <RequestsThisMonth user={user} />}
+                  {user && <RequestsThisMonth />}
                </div>
             </div>
             <VotingApp user={user} />

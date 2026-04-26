@@ -13,6 +13,7 @@ import {
    published,
 } from "@/app/utils/filtersOptions";
 import { Movie } from "@/app/types/movie";
+import { Summary } from "@/app/types/summary";
 
 export interface MovieFilterOptions {
    type: string;
@@ -64,9 +65,12 @@ export type MovieState = {
    isUserUnderRequestLimit: boolean;
    requestsRemaining: number | undefined;
    requestsThisMonth: Movie[];
+
+   summary: Summary;
+   setSummary: React.Dispatch<React.SetStateAction<Summary>>;
 };
 
-export function useMovieState() {
+export function useMovieState(initialSummary: Summary) {
    const [moviesList, setMoviesList] = useState<Movie[]>([]);
    const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
 
@@ -104,6 +108,8 @@ export function useMovieState() {
    >();
 
    const [requestsThisMonth, setRequestsThisMonth] = useState<Movie[]>([]);
+
+   const [summary, setSummary] = useState(initialSummary);
 
    return {
       moviesList,
@@ -143,5 +149,8 @@ export function useMovieState() {
 
       disableAddButton,
       setDisableAddButton,
+
+      summary,
+      setSummary,
    };
 }

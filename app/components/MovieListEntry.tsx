@@ -53,8 +53,8 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
       addVoteToRequest(movieId, voters, currentUser);
    };
 
-   const handleRemoveVote = async (movieId: string, voters: string[]) => {
-      removeVoteFromRequest(movieId, voters, currentUser);
+   const handleRemoveVote = async (movieId: string) => {
+      removeVoteFromRequest(movieId);
    };
 
    const handleScrollToTop = () => {
@@ -161,9 +161,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                   {hasVoted ? (
                      <button
                         className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                        onClick={() =>
-                           handleRemoveVote(data?._id, data?.voters)
-                        }
+                        onClick={() => handleRemoveVote(data?._id)}
                      >
                         Unvote
                      </button>

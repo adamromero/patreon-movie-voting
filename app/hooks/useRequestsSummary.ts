@@ -1,14 +1,8 @@
 import { useState, useCallback } from "react";
 import { fetchMonthlySummary } from "@/lib/api/requests";
+import { Summary } from "../types/summary";
 
-interface SummaryResponse {
-   count: number;
-   limit: number;
-   remaining: number;
-   isLimitReached: boolean;
-}
-
-export function useRequestsSummary(initialSummary: SummaryResponse) {
+export function useRequestsSummary(initialSummary: Summary) {
    const [summary, setSummary] = useState(initialSummary);
    const [loading, setLoading] = useState(false);
 

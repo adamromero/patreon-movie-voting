@@ -41,19 +41,26 @@ export async function getMonthlyRequests(userId: string) {
 export async function getMonthlySummary(userId: string, isProducer: boolean) {
    const { start, end } = getCurrentMonthRange();
 
-   const count = await Movie.count({
+   const requests = await Movie.find({
       createdAt: {
          $gte: start,
          $lt: end,
       },
       requester: userId,
-   });
+   }).select("data.Title data.Poster");
 
+   const posters = requests.map((item) => ({
+      Title: item?.data?.Title || "",
+      Poster: item?.data?.Poster || "",
+   }));
+
+   const count = requests.length;
    const limit = isProducer ? 3 : 2;
 
    return {
       count,
       limit,
+      requests: posters,
       remaining: Math.max(0, limit - count),
       isLimitReached: count >= limit,
    };

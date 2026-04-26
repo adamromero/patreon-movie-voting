@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useMovieState, MovieState } from "./movie.state";
 import { useMovieActions, MovieActions } from "./movie.actions";
+import { Summary } from "@/app/types/summary";
 
 type MovieContextValue = MovieState & MovieActions;
 
@@ -20,15 +21,20 @@ export function useMovieContext(): MovieContextValue {
 
 interface MovieProviderProps {
    children: React.ReactNode;
+   initialSummary: Summary;
 }
 
-export const MovieProvider = ({ children }: MovieProviderProps) => {
-   const state = useMovieState();
+export const MovieProvider = ({
+   children,
+   initialSummary,
+}: MovieProviderProps) => {
+   const state = useMovieState(initialSummary);
 
    const actions = useMovieActions({
       moviesList: state.moviesList,
       setMoviesList: state.setMoviesList,
       setDisableAddButton: state.setDisableAddButton,
+      setSummary: state.setSummary,
    });
 
    useEffect(() => {

@@ -1,6 +1,6 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
-import { getRequests, addRequest } from "@/lib/db/requests";
+import { getRequests, addRequest, getMonthlySummary } from "@/lib/db/requests";
 import { NextResponse, NextRequest } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 import { buildRequestPayload } from "@/lib/services/requests/buildRequest";
@@ -39,10 +39,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
    });
 
    try {
-      //console.log(user, payload);
-      //return NextResponse.json({});
       const request = await addRequest(user, payload);
-      return NextResponse.json(request);
+      const summary = await getMonthlySummary(user.id, user.isProducer);
+      return NextResponse.json({ request, summary });
    } catch (err: any) {
       return NextResponse.json(
          {

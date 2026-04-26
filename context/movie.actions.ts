@@ -1,5 +1,7 @@
 import { useCallback } from "react";
 import { Movie } from "@/app/types/movie";
+import { removeRequestVote } from "@/lib/api/requests";
+import { Summary } from "@/app/types/summary";
 
 export interface AddRequestMovieInput {
    id: number;
@@ -22,11 +24,7 @@ export type MovieActions = {
 
    removeRequestFromList: (movieId: string) => Promise<unknown>;
 
-   removeVoteFromRequest: (
-      movieId: string,
-      voters: string[],
-      currentUser: string,
-   ) => Promise<unknown>;
+   removeVoteFromRequest: (movieId: string) => Promise<unknown>;
 
    setWatchStatus: (
       movieId: string,
@@ -48,10 +46,12 @@ export function useMovieActions({
    moviesList,
    setMoviesList,
    setDisableAddButton,
+   setSummary,
 }: {
    moviesList: Movie[];
    setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
    setDisableAddButton: React.Dispatch<React.SetStateAction<boolean>>;
+   setSummary: React.Dispatch<React.SetStateAction<Summary>>;
 }) {
    const fetchMovies = useCallback(async () => {
       const res = await fetch("/api/requests");
@@ -113,60 +113,18 @@ export function useMovieActions({
       }
    };
 
-   const removeVoteFromRequest = async (
-      movieId: string,
-      voters: string[],
-      currentUser: string,
-   ) => {
-      const newVoters = voters.filter((voter) => voter !== currentUser);
-      const movieToUpdate = moviesList.find((movie) => movie._id === movieId);
-      if (!movieToUpdate) return;
-      const updatedMovieVote = { ...movieToUpdate, voters: newVoters };
+   const removeVoteFromRequest = async (movieId: string) => {
+      const data = await removeRequestVote(movieId);
 
-      if (voters.length === 1) {
-         try {
-            const response = await fetch(`/api/movies/${movieId}`, {
-               method: "DELETE",
-               headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-               },
-               body: JSON.stringify(movieId),
-            });
-
-            const deletedMovie: Movie = await response.json();
-            const updatedMoviesList = moviesList.filter(
-               (movie) => movie._id !== deletedMovie._id,
-            );
-
-            setMoviesList(updatedMoviesList);
-         } catch (e) {
-            return e;
-         }
+      if (data.deleted) {
+         setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
       } else {
-         const config = {
-            method: "PUT" as const,
-            headers: {
-               Accept: "application/json",
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedMovieVote),
-         };
-
-         const updatedMoviesList = moviesList.map((movie) =>
-            movie._id === movieId ? updatedMovieVote : movie,
+         setMoviesList((prev) =>
+            prev.map((movie) => (movie._id === movieId ? data.request : movie)),
          );
-
-         try {
-            const response = await fetch(`/api/movies/${movieId}`, config);
-            const data = await response.json();
-            setMoviesList(updatedMoviesList);
-
-            return data;
-         } catch (e) {
-            return e;
-         }
       }
+
+      setSummary(data.summary);
    };
 
    const setWatchStatus = async (
@@ -307,8 +265,9 @@ export function useMovieActions({
             throw new Error(data.error || "Failed to add request");
          }
 
-         setMoviesList((prev) => [data, ...prev]);
-         //setSummary(data.summary);
+         setMoviesList((prev) => [data.request, ...prev]);
+         console.log("data: ", data);
+         setSummary(data.summary);
 
          return data;
       } catch (err: any) {

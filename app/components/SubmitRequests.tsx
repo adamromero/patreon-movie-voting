@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import SubmitRequestButton from "./SubmitRequestButton";
-import { useRequestsSummary } from "../hooks/useRequestsSummary";
+import { useMovieContext } from "@/context/MovieContext";
 
 interface SubmitRequestsProps {
    user?: {
@@ -11,7 +11,6 @@ interface SubmitRequestsProps {
       isCreator: boolean;
       isProducer: boolean;
    };
-   initialSummary: SummaryResponse;
 }
 
 interface UserRoleInfo {
@@ -20,26 +19,13 @@ interface UserRoleInfo {
    isCreator: boolean;
 }
 
-interface SummaryResponse {
-   count: number;
-   limit: number;
-   remaining: number;
-   isLimitReached: boolean;
-}
-
-const SubmitRequests: React.FC<SubmitRequestsProps> = ({
-   user,
-   initialSummary,
-}) => {
+const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
    const [open, setOpen] = useState(false);
    const onOpenModal = () => setOpen(true);
    const onCloseModal = () => setOpen(false);
 
-   const { summary, refresh } = useRequestsSummary(initialSummary);
-
-   const { count, limit, remaining, isLimitReached } =
-      summary as SummaryResponse;
-
+   const { summary } = useMovieContext();
+   const { count, limit, remaining, isLimitReached } = summary;
    const isCreator = user?.isCreator ?? "";
 
    return (
