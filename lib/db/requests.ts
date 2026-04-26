@@ -60,9 +60,9 @@ export async function getMonthlySummary(userId: string, isProducer: boolean) {
    return {
       count,
       limit,
-      requests: posters,
       remaining: Math.max(0, limit - count),
       isLimitReached: count >= limit,
+      requests: posters,
    };
 }
 

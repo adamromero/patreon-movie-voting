@@ -50,7 +50,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    const rankedMovies = useRankedMovies();
 
    const handleCastVote = async (movieId: string, voters: string[]) => {
-      addVoteToRequest(movieId, voters, currentUser);
+      addVoteToRequest(movieId);
    };
 
    const handleRemoveVote = async (movieId: string) => {

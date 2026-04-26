@@ -25,7 +25,10 @@ export interface StoreState {
       published: string;
    };
    fetchMovies: () => Promise<void>;
-   addRequestToList: (movie: any, currentUser: string) => Promise<Movie | null>;
+   addRequestToList: (args: {
+      tmdbId: number;
+      mediaType: "movie" | "tv";
+   }) => Promise<Movie | null>;
    removeRequestFromList: (_id: string) => Promise<void>;
    setFilteredMoviesList: (movies: Movie[]) => void;
    setSearchTitle: (title: string) => void;
@@ -40,16 +43,8 @@ export interface StoreState {
    ) => void;
 
    // votingSlice
-   addVoteToRequest: (
-      movieId: string,
-      voters: string[],
-      currentUser: string,
-   ) => Promise<void>;
-   removeVoteFromRequest: (
-      movieId: string,
-      voters: string[],
-      currentUser: string,
-   ) => Promise<void>;
+   addVoteToRequest: (movieId: string) => Promise<void>;
+   removeVoteFromRequest: (movieId: string) => Promise<void>;
 
    // requestMetaSlice
    isUserUnderRequestLimit: boolean;

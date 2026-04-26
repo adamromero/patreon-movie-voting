@@ -2,22 +2,6 @@
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { useMovieContext } from "@/context/MovieContext";
 
-// interface RequestThisMonthProps {
-//    user?: {
-//       id: string;
-//       name: string;
-//       firstName: string;
-//       isCreator: boolean;
-//       isProducer: boolean;
-//    };
-// }
-
-// interface UserRoleInfo {
-//    id: string;
-//    isProducer: boolean;
-//    isCreator: boolean;
-// }
-
 const RequestsThisMonth = () => {
    const { summary } = useMovieContext();
 
@@ -25,7 +9,7 @@ const RequestsThisMonth = () => {
 
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
-      count >= maxRequestsDisplayed ? count - maxRequestsDisplayed : 0;
+      count >= maxRequestsDisplayed ? maxRequestsDisplayed - count : 0;
 
    if (count) {
       return (

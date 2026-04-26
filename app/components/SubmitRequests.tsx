@@ -13,19 +13,13 @@ interface SubmitRequestsProps {
    };
 }
 
-interface UserRoleInfo {
-   id: string;
-   isProducer: boolean;
-   isCreator: boolean;
-}
-
 const SubmitRequests: React.FC<SubmitRequestsProps> = ({ user }) => {
    const [open, setOpen] = useState(false);
    const onOpenModal = () => setOpen(true);
    const onCloseModal = () => setOpen(false);
 
    const { summary } = useMovieContext();
-   const { count, limit, remaining, isLimitReached } = summary;
+   const { remaining, isLimitReached } = summary;
    const isCreator = user?.isCreator ?? "";
 
    return (

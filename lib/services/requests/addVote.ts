@@ -1,0 +1,28 @@
+import { User } from "@/app/types/user";
+import { getMonthlySummary } from "@/lib/db/requests";
+import Movie from "@/models/movieModel";
+
+export async function addVote({
+   requestId,
+   user,
+}: {
+   requestId: string;
+   user: User;
+}) {
+   const request = await Movie.findOne({ _id: requestId });
+
+   if (!request) {
+      throw new Error("Request not found");
+   }
+
+   request.voters = [...request.voters, user.id];
+   await request.save();
+
+   const summary = await getMonthlySummary(user.id, user.isProducer);
+
+   return {
+      request,
+      requestId,
+      summary,
+   };
+}

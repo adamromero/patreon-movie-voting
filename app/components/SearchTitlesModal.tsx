@@ -99,12 +99,14 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    };
 
    const handleMovieSelection = async (movie: MovieData) => {
+      if (!movie.mediaType) return;
+
       setMovieIDCollection({ [movie?.id]: true });
       setDisabledButtonStates({ [movie?.id]: true });
 
       addRequestToList({
-         tmdbId: movie?.id,
-         mediaType: movie?.mediaType,
+         tmdbId: movie.id,
+         mediaType: movie.mediaType,
       });
    };
 
@@ -117,7 +119,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    const handleRemoveVote = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
-         removeVoteFromRequest(movie._id, movie.voters, currentUser);
+         removeVoteFromRequest(movie._id);
          setDisabledButtonStates({ [selectedMovie?.id]: false });
       }
    };
@@ -125,7 +127,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
    const handleCastVote = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
-         addVoteToRequest(movie._id, movie.voters, currentUser);
+         addVoteToRequest(movie._id);
       }
    };
 

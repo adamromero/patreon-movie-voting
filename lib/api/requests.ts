@@ -44,10 +44,19 @@ export async function addRequestApi(data: any) {
    return res.json();
 }
 
-// update request based on id
-export async function updateRequestHolidayStatus(id: string) {}
+export async function addRequestVote(id: string) {
+   const res = await fetch(`/api/requests/${id}`, {
+      method: "PUT",
+   });
 
-export async function addRequestVote(id: string) {}
+   const data = await res.json();
+
+   if (!res.ok) {
+      throw new Error(data.error || "Failed to add vote");
+   }
+
+   return data;
+}
 
 export async function removeRequestVote(id: string) {
    const res = await fetch(`/api/requests/${id}`, {
@@ -63,8 +72,6 @@ export async function removeRequestVote(id: string) {
    return data;
 }
 
-export async function updateRequestLink(id: string) {}
-
 // delete request based on id
 export async function deleteRequestApi(id: string) {
    const res = await fetch(`/api/requests/${id}`, {
@@ -73,3 +80,12 @@ export async function deleteRequestApi(id: string) {
    if (!res.ok) throw new Error("Failed to delete");
    return res.json();
 }
+
+// update reaction link of request based on id
+export async function updateRequestLink(id: string) {}
+
+// update holiday status of request based on id
+export async function updateRequestHolidayStatus(id: string) {}
+
+// update watch status of request based on id
+export async function updateRequestWatchStatus(id: string) {}

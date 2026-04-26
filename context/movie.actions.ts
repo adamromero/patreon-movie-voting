@@ -1,6 +1,11 @@
 import { useCallback } from "react";
 import { Movie } from "@/app/types/movie";
-import { removeRequestVote } from "@/lib/api/requests";
+import {
+   addRequestApi,
+   deleteRequestApi,
+   addRequestVote,
+   removeRequestVote,
+} from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
 
 export interface AddRequestMovieInput {
@@ -11,16 +16,12 @@ export interface AddRequestMovieInput {
 export type MovieActions = {
    fetchMovies: () => Promise<void>;
 
-   addRequestToList: (
-      tmdbId: string,
-      mediaType: "movie" | "tv",
-   ) => Promise<Movie | null>;
+   addRequestToList: (args: {
+      tmdbId: number;
+      mediaType: "movie" | "tv";
+   }) => Promise<Movie | null>;
 
-   addVoteToRequest: (
-      movieId: string,
-      voters: string[],
-      currentUser: string,
-   ) => Promise<Movie | unknown>;
+   addVoteToRequest: (movieId: string) => Promise<Movie | unknown>;
 
    removeRequestFromList: (movieId: string) => Promise<unknown>;
 
@@ -59,58 +60,17 @@ export function useMovieActions({
       setMoviesList(movies);
    }, [setMoviesList]);
 
-   const addVoteToRequest = async (
-      movieId: string,
-      voters: string[],
-      currentUser: string,
-   ) => {
-      const newVoters = [...voters, currentUser];
-      const votedMovie = moviesList.find((movie) => movie._id === movieId);
-      if (!votedMovie) return;
-      const updatedMovieVote = { ...votedMovie, voters: newVoters };
+   const addRequestToList = async ({
+      tmdbId,
+      mediaType,
+   }: {
+      tmdbId: number;
+      mediaType: "movie" | "tv";
+   }) => {
+      const data = await addRequestApi({ id: tmdbId, mediaType });
 
-      const config = {
-         method: "PUT" as const,
-         headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify(updatedMovieVote),
-      };
-
-      const updatedMoviesList = moviesList.map((movie) =>
-         movie._id === movieId ? updatedMovieVote : movie,
-      );
-
-      try {
-         const response = await fetch(`/api/movies/${movieId}`, config);
-         const data = await response.json();
-         setMoviesList(updatedMoviesList);
-
-         return data;
-      } catch (e) {
-         return e;
-      }
-   };
-
-   const removeRequestFromList = async (movieId: string) => {
-      try {
-         const response = await fetch(`/api/movies/${movieId}`, {
-            method: "DELETE",
-            headers: {
-               Accept: "application/json",
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(movieId),
-         });
-         const deletedMovie: Movie = await response.json();
-         const updatedMoviesList = moviesList.filter(
-            (movie) => movie._id !== deletedMovie._id,
-         );
-         setMoviesList(updatedMoviesList);
-      } catch (e) {
-         return e;
-      }
+      setMoviesList((prev) => [data.request, ...prev]);
+      setSummary(data.summary);
    };
 
    const removeVoteFromRequest = async (movieId: string) => {
@@ -118,14 +78,28 @@ export function useMovieActions({
 
       if (data.deleted) {
          setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+         setSummary(data.summary);
       } else {
          setMoviesList((prev) =>
             prev.map((movie) => (movie._id === movieId ? data.request : movie)),
          );
       }
-
-      setSummary(data.summary);
    };
+
+   const addVoteToRequest = async (movieId: string) => {
+      const data = await addRequestVote(movieId);
+
+      setMoviesList((prev) =>
+         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
+      );
+   };
+
+   const removeRequestFromList = async (movieId: string) => {
+      //const data = await deleteRequestApi(movieId);
+      //console.log(data)
+   };
+
+   // previous functions
 
    const setWatchStatus = async (
       movieId: string,
@@ -239,41 +213,6 @@ export function useMovieActions({
          },
          body: JSON.stringify(updatedMovieVote),
       };
-   };
-
-   const addRequestToList = async ({
-      tmdbId,
-      mediaType,
-   }: {
-      tmdbId: string;
-      mediaType: "movie" | "tv";
-   }) => {
-      try {
-         console.log({ id: tmdbId, mediaType });
-
-         const res = await fetch("/api/requests", {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: tmdbId, mediaType }),
-         });
-
-         const data = await res.json();
-
-         if (!res.ok) {
-            throw new Error(data.error || "Failed to add request");
-         }
-
-         setMoviesList((prev) => [data.request, ...prev]);
-         console.log("data: ", data);
-         setSummary(data.summary);
-
-         return data;
-      } catch (err: any) {
-         console.error(err);
-         throw err; // let UI handle it
-      }
    };
 
    // const addRequestToList = async (
