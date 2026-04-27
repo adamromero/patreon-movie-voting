@@ -6,7 +6,7 @@ export interface RequestItem {
 export interface Summary {
    count: number;
    limit: number;
-   requests: RequestItem[];
    remaining: number;
    isLimitReached: boolean;
+   requests: RequestItem[];
 }

@@ -59,7 +59,7 @@ export async function addRequestVote(id: string) {
 }
 
 export async function removeRequestVote(id: string) {
-   const res = await fetch(`/api/requests/${id}`, {
+   const res = await fetch(`/api/requests/${id}/vote`, {
       method: "DELETE",
    });
 
@@ -82,10 +82,58 @@ export async function deleteRequestApi(id: string) {
 }
 
 // update reaction link of request based on id
-export async function updateRequestLink(id: string) {}
+export async function updateRequestLink(id: string, links: any) {
+   const res = await fetch(`/api/requests/${id}/link`, {
+      method: "PUT",
+      body: JSON.stringify(links),
+      headers: {
+         "Content-Type": "application/json",
+      },
+   });
+
+   const data = await res.json();
+
+   if (!res.ok) {
+      throw new Error(data.error || "Failed to update request status");
+   }
+
+   return data;
+}
 
 // update holiday status of request based on id
-export async function updateRequestHolidayStatus(id: string) {}
+export async function updateRequestHolidayStatus(id: string, holiday: any) {
+   const res = await fetch(`/api/requests/${id}/holiday`, {
+      method: "PUT",
+      body: JSON.stringify(holiday),
+      headers: {
+         "Content-Type": "application/json",
+      },
+   });
+
+   const data = await res.json();
+
+   if (!res.ok) {
+      throw new Error(data.error || "Failed to update request status");
+   }
+
+   return data;
+}
 
 // update watch status of request based on id
-export async function updateRequestWatchStatus(id: string) {}
+export async function updateRequestWatchStatus(id: string, status: any) {
+   const res = await fetch(`/api/requests/${id}/status`, {
+      method: "PUT",
+      body: JSON.stringify(status),
+      headers: {
+         "Content-Type": "application/json",
+      },
+   });
+
+   const data = await res.json();
+
+   if (!res.ok) {
+      throw new Error(data.error || "Failed to update request status");
+   }
+
+   return data;
+}

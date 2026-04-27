@@ -21,11 +21,13 @@ interface MainLayoutProps {
 
 export default async function MainLayout({ children }: MainLayoutProps) {
    const user = await getCurrentUser();
-   const summary = await getMonthlySummary(user.id, user.isProducer);
+   const summary = user
+      ? await getMonthlySummary(user.id, user.isProducer)
+      : null;
 
    return (
       <NextAuthProvider>
-         <MovieProvider initialSummary={summary}>
+         <MovieProvider initialSummary={summary} initialUser={user}>
             <div className={lato.className}>
                <Header />
                <main>{children}</main>

@@ -5,20 +5,12 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
 interface SubmitRequestButtonProps {
-   user: {
-      id: string;
-      name: string;
-      firstName: string;
-      isCreator: boolean;
-      isProducer: boolean;
-   };
    open: boolean;
    onOpenModal: () => void;
    onCloseModal: () => void;
 }
 
 const SubmitRequestButton: React.FC<SubmitRequestButtonProps> = ({
-   user,
    open,
    onOpenModal,
    onCloseModal,
@@ -40,7 +32,7 @@ const SubmitRequestButton: React.FC<SubmitRequestButtonProps> = ({
             onClose={onCloseModal}
             center
          >
-            <SearchTitlesModal user={user} />
+            <SearchTitlesModal />
          </Modal>
       </>
    );

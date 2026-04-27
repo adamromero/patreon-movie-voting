@@ -49,7 +49,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
 
    const rankedMovies = useRankedMovies();
 
-   const handleCastVote = async (movieId: string, voters: string[]) => {
+   const handleAddVote = async (movieId: string) => {
       addVoteToRequest(movieId);
    };
 
@@ -168,7 +168,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                   ) : (
                      <button
                         className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                        onClick={() => handleCastVote(data?._id, data?.voters)}
+                        onClick={() => handleAddVote(data?._id)}
                      >
                         Upvote
                      </button>

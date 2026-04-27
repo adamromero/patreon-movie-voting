@@ -3,35 +3,27 @@ import React, { useState, useEffect } from "react";
 import { useMovieContext } from "@/context/MovieContext";
 
 import {
-   genre,
-   status,
-   requests,
-   type,
    chronological,
    added,
    alphabetical,
    rating,
    votes,
-   statusSort,
    published,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
 import PageControls from "./PageControls";
-import { Movie } from "../types/movie";
 import { useFilteredMovies } from "../hooks/useFilteredMovies";
 
-interface MovieListProps {
-   currentUser?: string;
-   isCreator?: boolean;
-}
-
-const MovieList: React.FC<MovieListProps> = ({ currentUser, isCreator }) => {
+const MovieList = () => {
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
 
-   const { moviesList, sortOptions, setSortOptions } = useMovieContext();
+   const { user, moviesList, sortOptions, setSortOptions } = useMovieContext();
+
+   const currentUser = user && user.id;
+   const isCreator = user && user.isCreator;
 
    const [requestStatusState, setRequestStatusState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =

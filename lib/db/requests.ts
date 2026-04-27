@@ -93,9 +93,6 @@ export async function addRequest(user: User, payload: any) {
    return request;
 }
 
-// update request based on id
-export async function updateRequest(id: string) {}
-
 // delete request based on id
 export async function deleteRequest(id: string) {
    return await Movie.findOneAndDelete({ _id: id });

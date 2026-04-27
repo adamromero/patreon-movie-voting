@@ -8,7 +8,7 @@ interface UnReactedStateProps {
    getMovieVoteTotal: (selectedMovie: APIMovieData) => number;
    isMovieVotedByUser: (selectedMovie: APIMovieData) => boolean;
    handleRemoveVote: (selectedMovie: APIMovieData) => void;
-   handleCastVote: (selectedMovie: APIMovieData) => void;
+   handleAddVote: (selectedMovie: APIMovieData) => void;
    movieIDCollection: Record<string | number, boolean>;
    movie: APIMovieData;
 }
@@ -18,7 +18,7 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
    getMovieVoteTotal,
    isMovieVotedByUser,
    handleRemoveVote,
-   handleCastVote,
+   handleAddVote,
    movieIDCollection,
    movie,
 }) => {
@@ -64,7 +64,7 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
                      </button>
                   ) : (
                      <button
-                        onClick={() => handleCastVote(movie)}
+                        onClick={() => handleAddVote(movie)}
                         className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                      >
                         Upvote

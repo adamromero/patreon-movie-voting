@@ -5,7 +5,7 @@ import { useMovieContext } from "@/context/MovieContext";
 const RequestsThisMonth = () => {
    const { summary } = useMovieContext();
 
-   const { count, requests } = summary;
+   const { count, requests } = summary ?? { count: 0, requests: [] };
 
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =

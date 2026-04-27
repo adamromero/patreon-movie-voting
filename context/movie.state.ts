@@ -14,6 +14,7 @@ import {
 } from "@/app/utils/filtersOptions";
 import { Movie } from "@/app/types/movie";
 import { Summary } from "@/app/types/summary";
+import { User } from "@/app/types/user";
 
 export interface MovieFilterOptions {
    type: string;
@@ -36,6 +37,8 @@ export interface MovieStatusSortOption {
 }
 
 export type MovieState = {
+   user: User | undefined;
+
    moviesList: Movie[];
    filteredMoviesList: Movie[];
 
@@ -66,11 +69,13 @@ export type MovieState = {
    requestsRemaining: number | undefined;
    requestsThisMonth: Movie[];
 
-   summary: Summary;
-   setSummary: React.Dispatch<React.SetStateAction<Summary>>;
+   summary: Summary | null;
+   setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
 };
 
-export function useMovieState(initialSummary: Summary) {
+export function useMovieState(initialSummary: Summary, initialUser: User) {
+   const [user] = useState<User | undefined>(initialUser);
+
    const [moviesList, setMoviesList] = useState<Movie[]>([]);
    const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
 
@@ -109,9 +114,11 @@ export function useMovieState(initialSummary: Summary) {
 
    const [requestsThisMonth, setRequestsThisMonth] = useState<Movie[]>([]);
 
-   const [summary, setSummary] = useState(initialSummary);
+   const [summary, setSummary] = useState<Summary | null>(initialSummary);
 
    return {
+      user,
+
       moviesList,
       setMoviesList,
 

@@ -18,12 +18,9 @@ import {
 import MovieListFilterTags from "./MovieListFilterTags";
 import MovieListSortTags from "./MovieListSortTags";
 
-interface FilterMovieListProps {
-   currentUser?: string;
-}
-
-const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
+const FilterMovieList = () => {
    const {
+      user,
       filterOptions,
       setFilterOptions,
       sortOptions,
@@ -31,6 +28,8 @@ const FilterMovieList: React.FC<FilterMovieListProps> = ({ currentUser }) => {
       statusSortOption,
       setStatusSortOption,
    } = useMovieContext();
+
+   const currentUser = user ? user.id : null;
 
    const handleChronologicalSort = (
       e: React.ChangeEvent<HTMLSelectElement>,

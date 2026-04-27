@@ -15,26 +15,24 @@ import { parseInput } from "@/lib/external/tmdb/parse";
 import { APIMovieData } from "../types/movie";
 import { useMoviesMap } from "../hooks/useMoviesMap";
 
-interface SearchTitlesModalProps {
-   user: { id: string };
-}
-
 type MovieData = APIMovieData;
 
-const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
+const SearchTitlesModal = () => {
    const [input, setInput] = useState("");
    const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
    const [error, setError] = useState("");
-   const currentUser = user.id;
 
    const {
+      user,
       addRequestToList,
       addVoteToRequest,
       removeVoteFromRequest,
       isUserUnderRequestLimit,
       disableAddButton,
    } = useMovieContext();
+
+   const currentUser = user && user.id;
 
    const moviesMap = useMoviesMap();
 
@@ -124,7 +122,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
       }
    };
 
-   const handleCastVote = (selectedMovie: APIMovieData) => {
+   const handleAddVote = (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
          addVoteToRequest(movie._id);
@@ -147,7 +145,7 @@ const SearchTitlesModal: React.FC<SearchTitlesModalProps> = ({ user }) => {
          getMovieVoteTotal,
          isMovieVotedByUser,
          handleRemoveVote,
-         handleCastVote,
+         handleAddVote,
       };
 
       const underLimitProps = {

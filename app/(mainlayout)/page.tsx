@@ -1,10 +1,13 @@
 import { getCurrentUser } from "@/lib/session";
-import VotingApp from "../components/VotingApp";
 import BirthdayMessage from "../components/BirthdayMessage";
 import RequestsThisMonth from "../components/RequestsThisMonth";
 import SubmitRequests from "../components/SubmitRequests";
+import MovieList from "../components/MovieList";
+import FilterMovieList from "../components/FilterMovieList";
+import SearchMoviesList from "../components/SearchMoviesList";
 import { getMonthlyRequests, getMonthlySummary } from "@/lib/db/requests";
 import { Movie } from "../types/movie";
+import { User } from "../types/user";
 import { redirect } from "next/navigation";
 
 interface SummaryProps {
@@ -18,28 +21,71 @@ export default async function Home() {
    //redirect("/maintenance");
 
    const user = await getCurrentUser();
-   const userId = (user && user.id) || "";
-   const isProducer = (user && user.isProducer) || false;
-   const isCreator = (user && user.isCreator) || false;
+
+   if (user) {
+   }
+
+   const { id, isProducer, isCreator } = user as User;
 
    const seenRequests: Movie[] = [];
-   const channelRequests: Movie[] = [];
 
-   const requestsThisMonth = await getMonthlyRequests(userId);
-   const summary = !isCreator
-      ? await getMonthlySummary(userId, isProducer)
-      : null;
+   const monthlyRequests = await getMonthlyRequests(id);
+   const summary = await getMonthlySummary(id, isProducer);
 
-   const { count, limit, remaining, isLimitReached } = summary as SummaryProps;
+   const { limit, isLimitReached } = summary as SummaryProps;
 
-   requestsThisMonth.forEach((movie: Movie) => {
+   monthlyRequests.forEach((movie: Movie) => {
       if (movie.hasSeen) {
          seenRequests.push(movie);
       }
-      if (movie.hasReacted) {
-         channelRequests.push(movie);
-      }
    });
+
+   const heading = !isCreator && (
+      <h2 className="text-[20px] font-bold mb-[10px]">
+         <span>
+            {isProducer ? "Producer" : "Standard"} Tier ({limit} New Requests
+            Per Month)
+         </span>
+      </h2>
+   );
+
+   const userNotConnected = (
+      <div className="text-[16px] sm:text-[18px]">
+         <p>
+            Connect with your Patreon account in the top right corner to request
+            movies and vote.
+         </p>
+         <p>You must be a current patron of this channel.</p>
+      </div>
+   );
+
+   const userConnected = user && (
+      <div>
+         {heading}
+         <h2>
+            Hi {user.firstName ? user.firstName : user.name}!{" "}
+            {isCreator && (
+               <span className="relative inline-block top-[-2px]">👑</span>
+            )}
+         </h2>
+         {isCreator ? (
+            <div>
+               Begin requesting movies and shows, edit the status of requests,
+               and add video links.
+            </div>
+         ) : (
+            <div>
+               {!isLimitReached && seenRequests.length > 0 && (
+                  <div>
+                     Since {seenRequests.length} of your requests this month was
+                     marked as &quot;Seen&quot;, you get an extra{" "}
+                     {seenRequests.length}.
+                  </div>
+               )}
+            </div>
+         )}
+      </div>
+   );
 
    return (
       <div className="flex flex-col justify-between p-[16px]">
@@ -48,85 +94,17 @@ export default async function Home() {
                <BirthdayMessage />
                <div className="flex flex-col justify-between lg:flex-row lg:gap-[15px]">
                   <div>
-                     {user ? (
-                        <div>
-                           <h2 className="text-[20px] font-bold mb-[10px]">
-                              <span>
-                                 {isProducer ? "Producer" : "Standard"} Tier (
-                                 {limit} New Requests Per Month)
-                              </span>
-                           </h2>
-
-                           <h2>
-                              Hi {user.firstName ? user.firstName : user.name}!{" "}
-                              {user && isCreator && (
-                                 <span className="relative inline-block top-[-2px]">
-                                    👑
-                                 </span>
-                              )}
-                           </h2>
-                           {user && isCreator ? (
-                              <div>
-                                 Begin requesting movies and shows, edit the
-                                 status of requests, and add video links.
-                              </div>
-                           ) : (
-                              <div>
-                                 {isLimitReached ? (
-                                    <>
-                                       <div>
-                                          You have reached your monthly request
-                                          limit and cannot make new requests
-                                          until next month.
-                                       </div>
-                                       <div>
-                                          You may continue to vote on movies
-                                          currently in the list.
-                                       </div>
-                                    </>
-                                 ) : (
-                                    <>
-                                       <div>
-                                          Begin requesting movies and shows. You
-                                          may vote on as many requests as you
-                                          like.
-                                       </div>
-                                       {seenRequests.length > 0 && (
-                                          <div>
-                                             Since {seenRequests.length} of your
-                                             requests this month was marked as
-                                             &quot;Seen&quot;, you get an extra{" "}
-                                             {seenRequests.length}.
-                                          </div>
-                                       )}
-                                       {channelRequests.length > 0 && (
-                                          <div>
-                                             Since {channelRequests.length} of
-                                             your requests this month was marked
-                                             as &quot;On Channel&quot;, you get
-                                             an extra {channelRequests.length}.
-                                          </div>
-                                       )}
-                                    </>
-                                 )}
-                              </div>
-                           )}
-                        </div>
-                     ) : (
-                        <div className="text-[16px] sm:text-[18px]">
-                           <p>
-                              Connect with your Patreon account in the top right
-                              corner to request movies and vote.
-                           </p>
-                           <p>You must be a current patron of this channel.</p>
-                        </div>
-                     )}
-                     <SubmitRequests user={user} />
+                     {user ? userConnected : userNotConnected}
+                     {user && <SubmitRequests />}
                   </div>
                   {user && <RequestsThisMonth />}
                </div>
             </div>
-            <VotingApp user={user} />
+            <div>
+               <SearchMoviesList />
+            </div>
+            <FilterMovieList />
+            <MovieList />
          </div>
       </div>
    );
