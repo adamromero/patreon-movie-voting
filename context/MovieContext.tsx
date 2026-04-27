@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useMovieState, MovieState } from "./movie.state";
 import { useMovieActions, MovieActions } from "./movie.actions";
 import { Summary } from "@/app/types/summary";
-import { User } from "next-auth/core/types";
+import { User } from "@/app/types/user";
 
 type MovieContextValue = MovieState & MovieActions;
 
@@ -34,15 +34,13 @@ export const MovieProvider = ({
    const state = useMovieState(initialSummary, initialUser);
 
    const actions = useMovieActions({
-      moviesList: state.moviesList,
       setMoviesList: state.setMoviesList,
-      setDisableAddButton: state.setDisableAddButton,
       setSummary: state.setSummary,
    });
 
    useEffect(() => {
       actions.fetchMovies();
-   }, [actions.fetchMovies]);
+   }, []);
 
    const value: MovieContextValue = {
       ...state,

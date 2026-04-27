@@ -73,7 +73,10 @@ export type MovieState = {
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
 };
 
-export function useMovieState(initialSummary: Summary, initialUser: User) {
+export function useMovieState(
+   initialSummary: Summary | null = null,
+   initialUser?: User,
+) {
    const [user] = useState<User | undefined>(initialUser);
 
    const [moviesList, setMoviesList] = useState<Movie[]>([]);

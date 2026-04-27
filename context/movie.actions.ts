@@ -10,6 +10,7 @@ import {
    updateRequestLink,
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
+import { User } from "@/app/types/user";
 
 export interface AddRequestMovieInput {
    id: number;
@@ -47,15 +48,11 @@ export type MovieActions = {
 };
 
 export function useMovieActions({
-   moviesList,
    setMoviesList,
-   setDisableAddButton,
    setSummary,
 }: {
-   moviesList: Movie[];
    setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
-   setDisableAddButton: React.Dispatch<React.SetStateAction<boolean>>;
-   setSummary: React.Dispatch<React.SetStateAction<Summary>>;
+   setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
 }) {
    const fetchMovies = useCallback(async () => {
       const res = await fetch("/api/requests");

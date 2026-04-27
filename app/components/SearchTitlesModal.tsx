@@ -111,7 +111,7 @@ const SearchTitlesModal = () => {
    const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
       const movie = moviesMap.get(key);
-      return movie ? movie.voters.includes(currentUser) : false;
+      return movie ? movie.voters.includes(currentUser ?? "") : false;
    };
 
    const handleRemoveVote = (selectedMovie: APIMovieData) => {

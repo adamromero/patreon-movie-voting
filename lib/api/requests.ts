@@ -45,7 +45,7 @@ export async function addRequestApi(data: any) {
 }
 
 export async function addRequestVote(id: string) {
-   const res = await fetch(`/api/requests/${id}`, {
+   const res = await fetch(`/api/requests/${id}/vote`, {
       method: "PUT",
    });
 

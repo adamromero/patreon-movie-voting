@@ -1,7 +1,7 @@
 import "../globals.css";
 import { NextAuthProvider } from "../provider";
 import Header from "../components/Header";
-import { Inter, Lato } from "next/font/google";
+import { Lato } from "next/font/google";
 import type { ReactNode } from "react";
 import { getCurrentUser } from "@/lib/session";
 import { getMonthlySummary } from "@/lib/db/requests";
@@ -12,8 +12,6 @@ const lato = Lato({
    subsets: ["latin"],
    weight: ["400"],
 });
-
-const inter = Inter({ subsets: ["latin"] });
 
 interface MainLayoutProps {
    children: ReactNode;

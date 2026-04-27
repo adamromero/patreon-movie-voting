@@ -8,14 +8,8 @@ import SearchMoviesList from "../components/SearchMoviesList";
 import { getMonthlyRequests, getMonthlySummary } from "@/lib/db/requests";
 import { Movie } from "../types/movie";
 import { User } from "../types/user";
+import { Summary } from "../types/summary";
 import { redirect } from "next/navigation";
-
-interface SummaryProps {
-   count: number;
-   limit: number;
-   remaining: number;
-   isLimitReached: boolean;
-}
 
 export default async function Home() {
    //redirect("/maintenance");
@@ -32,13 +26,18 @@ export default async function Home() {
    const monthlyRequests = await getMonthlyRequests(id);
    const summary = await getMonthlySummary(id, isProducer);
 
-   const { limit, isLimitReached } = summary as SummaryProps;
+   const { limit, isLimitReached } = summary as Summary;
 
    monthlyRequests.forEach((movie: Movie) => {
       if (movie.hasSeen) {
          seenRequests.push(movie);
       }
    });
+
+   // const isCreator = false,
+   //    isProducer = false,
+   //    limit = 2,
+   //    isLimitReached = false;
 
    const heading = !isCreator && (
       <h2 className="text-[20px] font-bold mb-[10px]">
