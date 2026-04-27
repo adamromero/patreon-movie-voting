@@ -76,13 +76,13 @@ export function useFilteredMovies(currentUser?: string) {
 
       if (currentUser) {
          switch (filterOptions.requests) {
-            case "MyRequests":
+            case requests.MyRequests:
                result = result.filter((m) => m.requester === currentUser);
                break;
-            case "Voted":
+            case requests.Voted:
                result = result.filter((m) => m.voters.includes(currentUser));
                break;
-            case "NotVoted":
+            case requests.NotVoted:
                result = result.filter((m) => !m.voters.includes(currentUser));
                break;
          }
