@@ -1,3 +1,4 @@
+import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 
 const extractTitle = (input: string) => {
@@ -15,6 +16,7 @@ export async function setOnChannel({
 }: {
    patreonResponse: any;
 }) {
+   await connectDB();
    const { title, url, published_at } = patreonResponse.data.attributes;
 
    if (!title || !url || !published_at) {

@@ -1,3 +1,4 @@
+import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 
 export async function setLinks({
@@ -7,6 +8,7 @@ export async function setLinks({
    requestId: string;
    links: { patreon: string; youtube: string };
 }) {
+   await connectDB();
    const request = await Movie.findByIdAndUpdate(
       requestId,
       {

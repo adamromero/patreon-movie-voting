@@ -1,10 +1,7 @@
-import connectDB from "@/lib/connectDB";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 import { addVote } from "@/lib/services/requests/addVote";
 import { removeVote } from "@/lib/services/requests/removeVote";
-
-connectDB();
 
 export async function PUT(
    req: Request,

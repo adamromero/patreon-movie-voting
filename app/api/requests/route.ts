@@ -1,11 +1,7 @@
-import connectDB from "@/lib/connectDB";
-import Movie from "@/models/movieModel";
 import { getRequests, addRequest, getMonthlySummary } from "@/lib/db/requests";
 import { NextResponse, NextRequest } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 import { buildRequestPayload } from "@/lib/services/requests/buildRequest";
-
-connectDB();
 
 export async function GET(req: NextRequest, res: NextResponse) {
    try {

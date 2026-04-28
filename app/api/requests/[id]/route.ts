@@ -1,9 +1,6 @@
-import connectDB from "@/lib/connectDB";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/session";
 import { deleteRequest } from "@/lib/db/requests";
-
-connectDB();
 
 export async function DELETE(
    req: Request,

@@ -1,3 +1,4 @@
+import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 
 export async function updateHoliday({
@@ -7,6 +8,7 @@ export async function updateHoliday({
    requestId: string;
    holiday: "halloween" | "christmas";
 }) {
+   await connectDB();
    const request = await Movie.findByIdAndUpdate(requestId);
 
    if (!request) {

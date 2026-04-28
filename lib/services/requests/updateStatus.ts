@@ -1,3 +1,4 @@
+import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 
 export async function updateStatus({
@@ -7,6 +8,8 @@ export async function updateStatus({
    requestId: string;
    status: "channel" | "seen" | "rewatch" | "rewatchFriend" | "unseen";
 }) {
+   await connectDB();
+
    const channel = status === "channel";
    const seen = status === "seen";
    const rewatch = status === "rewatch";

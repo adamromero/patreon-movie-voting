@@ -1,3 +1,4 @@
+import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 import { User } from "@/app/types/user";
 
@@ -14,16 +15,19 @@ function getCurrentMonthRange() {
 
 // get full list of requests
 export async function getRequests() {
+   await connectDB();
    return await Movie.find().sort({ createdAt: 1 });
 }
 
 // get list of requests made by current user
 export async function getUserRequests(userId: string) {
+   await connectDB();
    return await Movie.find({ requester: userId });
 }
 
 // get list of requests made by current user this month
 export async function getMonthlyRequests(userId: string) {
+   await connectDB();
    const { start, end } = getCurrentMonthRange();
 
    const requestsThisMonth = await Movie.find({
@@ -39,6 +43,7 @@ export async function getMonthlyRequests(userId: string) {
 
 // get a total summary of requests made by current user this month
 export async function getMonthlySummary(userId: string, isProducer: boolean) {
+   await connectDB();
    const { start, end } = getCurrentMonthRange();
 
    const requests = await Movie.find({
@@ -68,6 +73,7 @@ export async function getMonthlySummary(userId: string, isProducer: boolean) {
 
 // post a request to the list
 export async function addRequest(user: User, payload: any) {
+   await connectDB();
    const { id, isProducer, isCreator } = user;
 
    if (!isCreator) {
@@ -95,5 +101,6 @@ export async function addRequest(user: User, payload: any) {
 
 // delete request based on id
 export async function deleteRequest(id: string) {
+   await connectDB();
    return await Movie.findOneAndDelete({ _id: id });
 }

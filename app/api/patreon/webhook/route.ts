@@ -1,8 +1,5 @@
-import connectDB from "@/lib/connectDB";
 import { setOnChannel } from "@/lib/services/requests/setOnChannel";
 import { NextResponse, NextRequest } from "next/server";
-
-connectDB();
 
 export async function POST(req: NextRequest) {
    try {

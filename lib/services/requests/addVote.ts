@@ -1,3 +1,4 @@
+import connectDB from "@/lib/connectDB";
 import { User } from "@/app/types/user";
 import { getMonthlySummary } from "@/lib/db/requests";
 import Movie from "@/models/movieModel";
@@ -9,6 +10,7 @@ export async function addVote({
    requestId: string;
    user: User;
 }) {
+   await connectDB();
    const request = await Movie.findOne({ _id: requestId });
 
    if (!request) {
