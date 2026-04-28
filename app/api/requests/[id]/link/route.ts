@@ -8,7 +8,7 @@ export async function PUT(
 ) {
    const user = await getCurrentUser();
 
-   if (!user) {
+   if (!user || !user.isCreator) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
    }
 

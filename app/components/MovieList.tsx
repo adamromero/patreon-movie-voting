@@ -27,7 +27,7 @@ const MovieList = () => {
 
    const [requestStatusState, setRequestStatusState] = useState({});
    const [isRequestFilterAscending, setIsRequestFilterAscending] =
-      useState(false);
+      useState(true);
    const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
    const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
    const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
