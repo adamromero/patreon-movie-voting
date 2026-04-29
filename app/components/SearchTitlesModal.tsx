@@ -23,7 +23,7 @@ const SearchTitlesModal = () => {
    const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
    const [limitError, setLimitError] = useState("Monthly limit reached");
-   const [error, setError] = useState("");
+   const [error, setError] = useState("No results found");
 
    const {
       user,

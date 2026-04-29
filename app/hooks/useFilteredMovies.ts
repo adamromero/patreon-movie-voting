@@ -123,7 +123,6 @@ export function useFilteredMovies(currentUser?: string) {
       // SORT
 
       const comparator = (a: any, b: any) => {
-         // votes
          if (sortOptions.votes !== votes.Default) {
             return sortOptions.votes === "Ascending"
                ? b.voters.length - a.voters.length
@@ -145,6 +144,12 @@ export function useFilteredMovies(currentUser?: string) {
             const da = new Date(a.data.Release || "1900").getTime();
             const db = new Date(b.data.Release || "1900").getTime();
             return sortOptions.chronological === "Older" ? da - db : db - da;
+         }
+
+         if (sortOptions.published !== published.Default) {
+            const da = new Date(a.publishedAt || "1900").getTime();
+            const db = new Date(b.publishedAt || "1900").getTime();
+            return sortOptions.published === "Older" ? da - db : db - da;
          }
 
          if (sortOptions.added !== added.Default) {

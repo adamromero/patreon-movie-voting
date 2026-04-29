@@ -192,7 +192,7 @@ const MovieList = () => {
       <div>
          {filteredMovies
             .slice(indexOfFirstPost, indexOfLastPost)
-            .map((data, index) => (
+            .map((data) => (
                <div
                   key={data._id}
                   className="relative flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
@@ -208,7 +208,6 @@ const MovieList = () => {
                      data={data}
                      currentUser={currentUser ?? ""}
                      isCreator={isCreator ?? false}
-                     //ranking={index + 1 + rowsPerPage * (currentPage - 1)}
                      isRankingOn={isRankingOn}
                      requestStatusState={requestStatusState}
                   />

@@ -17,7 +17,17 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
 }) => {
    return (
       <>
-         <div className="flex basis-full md:basis-2/3 gap-[10px]">
+         <div className="flex flex-col basis-full md:basis-2/3 gap-[10px]">
+            <div>
+               <div>
+                  Tip: You can use the 'y:' filter to narrow your results by
+                  year. Example: 'star wars y:1977'
+               </div>
+               <div>
+                  You can also search by the film or show's imdb id. Example:
+                  tt0076759
+               </div>
+            </div>
             <form
                className="flex gap-2 w-full"
                onSubmit={(e) => {

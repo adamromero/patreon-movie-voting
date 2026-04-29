@@ -2,12 +2,19 @@ export function parseInput(input: string) {
    const imdbMatch = input.match(/^tt\d+$/);
    if (imdbMatch) return { imdbId: input };
 
-   const yearMatch = input.match(/\b(19|20)\d{2}\b/);
+   const match = input.match(/^(.*?)(?:\s+y:(\d{4}))?$/i);
 
-   if (yearMatch) {
+   if (!match) {
+      return { query: input.trim() };
+   }
+
+   const query = match[1].trim();
+   const year = match[2] || null;
+
+   if (year) {
       return {
-         query: input.replace(yearMatch[0], "").trim(),
-         year: yearMatch[0],
+         query,
+         year,
       };
    }
 
