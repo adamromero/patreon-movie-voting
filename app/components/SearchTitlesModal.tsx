@@ -23,7 +23,7 @@ const SearchTitlesModal = () => {
    const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
    const [limitError, setLimitError] = useState("Monthly limit reached");
-   const [error, setError] = useState("No results found");
+   const [error, setError] = useState("");
 
    const {
       user,
@@ -97,7 +97,11 @@ const SearchTitlesModal = () => {
 
          try {
             const results = await searchTitlesApi(parsedInput);
-            setTitlesFromAPI(results);
+            if (results.length) {
+               setTitlesFromAPI(results);
+            } else {
+               setError("No results found");
+            }
          } catch (err: any) {
             setError(err.message);
          } finally {
@@ -196,7 +200,7 @@ const SearchTitlesModal = () => {
 
    return (
       <div>
-         <div className="flex mt-[35px] md:mt-0 mb-[25px]">
+         <div className="flex mt-[35px] md:mt-0 mb-[25px] justify-center">
             {isLimitReached ? (
                <ErrorMessage message={limitError} />
             ) : (
