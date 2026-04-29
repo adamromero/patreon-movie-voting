@@ -7,6 +7,7 @@ import UnReactedState from "./SearchTitles/SearchStates/UnReactedState";
 import LimitReachedState from "./SearchTitles/SearchStates/LimitReachedState";
 import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
+import ErrorMessage from "./ErrorMessage";
 import { useMovieContext } from "@/context/MovieContext";
 
 import { searchTitlesApi } from "@/lib/api/tmdb/search";
@@ -21,6 +22,7 @@ const SearchTitlesModal = () => {
    const [input, setInput] = useState("");
    const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
+   const [limitError, setLimitError] = useState("Monthly limit reached");
    const [error, setError] = useState("");
 
    const {
@@ -28,7 +30,8 @@ const SearchTitlesModal = () => {
       addRequestToList,
       addVoteToRequest,
       removeVoteFromRequest,
-      isUserUnderRequestLimit,
+      isLimitReached,
+      setIsLimitReached,
       disableAddButton,
    } = useMovieContext();
 
@@ -91,8 +94,15 @@ const SearchTitlesModal = () => {
       e.preventDefault();
       if (input) {
          const parsedInput = parseInput(input.trim());
-         const results = await searchTitlesApi(parsedInput);
-         setTitlesFromAPI(results);
+
+         try {
+            const results = await searchTitlesApi(parsedInput);
+            setTitlesFromAPI(results);
+         } catch (err: any) {
+            setError(err.message);
+         } finally {
+            setLoading(false);
+         }
       }
    };
 
@@ -102,10 +112,15 @@ const SearchTitlesModal = () => {
       setMovieIDCollection({ [movie?.id]: true });
       setDisabledButtonStates({ [movie?.id]: true });
 
-      addRequestToList({
-         tmdbId: movie.id,
-         mediaType: movie.mediaType,
-      });
+      try {
+         await addRequestToList({
+            tmdbId: movie.id,
+            mediaType: movie.mediaType,
+         });
+      } catch (err: any) {
+         setIsLimitReached(true);
+         setLimitError(err.message);
+      }
    };
 
    const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
@@ -163,16 +178,17 @@ const SearchTitlesModal = () => {
             <UnReactedState {...unseenProps} />
          );
       } else {
-         return isUserUnderRequestLimit ? (
-            <UnderLimitState {...underLimitProps} />
-         ) : (
+         return isLimitReached ? (
             <LimitReachedState {...sharedMovieProps} />
+         ) : (
+            <UnderLimitState {...underLimitProps} />
          );
       }
    };
 
    const searchFieldsProps = {
       handleTitleSubmit,
+      setLoading,
       setInput,
       input,
       inputRef,
@@ -180,16 +196,24 @@ const SearchTitlesModal = () => {
 
    return (
       <div>
-         <div className="flex flex-col md:flex-row gap-2 items-center pb-[16px] mt-[35px] md:mt-0 mr-0 md:mr-[35px]">
-            <div className="flex flex-col md:flex-row gap-[10px]">
+         <div className="flex mt-[35px] md:mt-0 mb-[25px]">
+            {isLimitReached ? (
+               <ErrorMessage message={limitError} />
+            ) : (
                <SearchFields {...searchFieldsProps} />
-            </div>
+            )}
          </div>
          <div className="overflow-auto h-[75vh] relative no-scrollbar">
             {loading ? (
                <div className="loader absolute"></div>
             ) : (
-               <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]">
+               <div
+                  className={
+                     titlesFromAPI.length
+                        ? `grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-[20px] gap-y-[32px]`
+                        : ""
+                  }
+               >
                   {titlesFromAPI.length ? (
                      titlesFromAPI.map((movie: MovieData) => (
                         <div className="mx-auto" key={movie?.id}>
@@ -197,7 +221,7 @@ const SearchTitlesModal = () => {
                         </div>
                      ))
                   ) : (
-                     <div className="text-white">{error}</div>
+                     <ErrorMessage message={error} />
                   )}
                </div>
             )}

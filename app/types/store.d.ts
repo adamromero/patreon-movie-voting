@@ -47,7 +47,7 @@ export interface StoreState {
    removeVoteFromRequest: (movieId: string) => Promise<void>;
 
    // requestMetaSlice
-   isUserUnderRequestLimit: boolean;
+   isLimitReached: boolean;
    requestsRemaining: number;
    requestsThisMonth: Movie[];
    requestWatchStatus: Record<

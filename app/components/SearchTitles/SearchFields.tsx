@@ -2,6 +2,7 @@ import React, { RefObject } from "react";
 
 interface SearchFieldsProps {
    handleTitleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+   setLoading: (value: boolean) => void;
    setInput: (value: string) => void;
    input: string;
    inputRef: RefObject<HTMLInputElement | null>;
@@ -9,22 +10,29 @@ interface SearchFieldsProps {
 
 const SearchFields: React.FC<SearchFieldsProps> = ({
    handleTitleSubmit,
+   setLoading,
    setInput,
    input,
    inputRef,
 }) => {
    return (
       <>
-         <div className="flex flex-col sm:flex-row flex gap-[10px]">
+         <div className="flex basis-full md:basis-2/3 gap-[10px]">
             <form
-               className="flex flex-1 gap-2 w-full"
-               onSubmit={(e) => handleTitleSubmit(e)}
+               className="flex gap-2 w-full"
+               onSubmit={(e) => {
+                  setLoading(true);
+                  handleTitleSubmit(e);
+               }}
             >
+               <label className="sr-only" htmlFor="SearchTitles">
+                  Search Titles
+               </label>
                <input
-                  className="text-black w-full py-[5px] px-[10px]"
+                  className="text-black w-full py-[8px] px-[10px]"
                   type="text"
-                  name=""
-                  id=""
+                  name="search"
+                  id="SearchTitles"
                   placeholder="Search titles"
                   value={input}
                   ref={inputRef}

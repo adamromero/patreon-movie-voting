@@ -10,11 +10,11 @@ export async function searchTitlesApi(params: {
    if (params.imdbId) url.searchParams.set("imdbId", params.imdbId);
 
    const res = await fetch(url.toString());
+   const payload = await res.json().catch(() => null);
 
    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error);
+      throw new Error(payload?.error || "Failed to return any search results");
    }
 
-   return res.json();
+   return payload;
 }

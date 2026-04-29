@@ -36,12 +36,12 @@ export async function addRequestApi(data: any) {
       },
    });
 
+   const payload = await res.json().catch(() => null);
    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error);
+      throw new Error(payload?.error || "Failed to add request");
    }
 
-   return res.json();
+   return payload;
 }
 
 export async function addRequestVote(id: string) {

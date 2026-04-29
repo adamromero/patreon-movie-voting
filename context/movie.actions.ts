@@ -67,10 +67,16 @@ export function useMovieActions({
       tmdbId: number;
       mediaType: "movie" | "tv";
    }) => {
-      const data = await addRequestApi({ id: tmdbId, mediaType });
+      try {
+         const data = await addRequestApi({ id: tmdbId, mediaType });
 
-      setMoviesList((prev) => [data.request, ...prev]);
-      setSummary(data.summary);
+         setMoviesList((prev) => [data.request, ...prev]);
+         setSummary(data.summary);
+
+         return data.request;
+      } catch (err) {
+         throw err;
+      }
    };
 
    const removeVoteFromRequest = async (movieId: string) => {
