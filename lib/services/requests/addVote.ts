@@ -20,7 +20,7 @@ export async function addVote({
    request.voters = [...request.voters, user.id];
    await request.save();
 
-   const summary = await getMonthlySummary(user.id, user.isProducer);
+   const summary = await getMonthlySummary(user);
 
    return {
       request,

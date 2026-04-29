@@ -101,10 +101,10 @@ export function useMovieActions({
    };
 
    const removeRequestFromList = async (movieId: string) => {
-      const data = await deleteRequestApi(movieId);
+      const summary = await deleteRequestApi(movieId);
 
       setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
-      setSummary(data.summary);
+      setSummary(summary);
    };
 
    const setWatchStatus = async (

@@ -9,7 +9,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
    const user = await getCurrentUser();
    if (user) {
       try {
-         const requests = await getMonthlySummary(user.id, user.isProducer);
+         const requests = await getMonthlySummary(user);
          return NextResponse.json(requests);
       } catch (error) {
          let message = "Unknown error";

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
    try {
       const request = await addRequest(user, payload);
-      const summary = await getMonthlySummary(user.id, user.isProducer);
+      const summary = await getMonthlySummary(user);
       return NextResponse.json({ request, summary });
    } catch (err: any) {
       return NextResponse.json(

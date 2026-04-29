@@ -42,8 +42,11 @@ export async function getMonthlyRequests(userId: string) {
 }
 
 // get a total summary of requests made by current user this month
-export async function getMonthlySummary(userId: string, isProducer: boolean) {
+export async function getMonthlySummary(user: User) {
    await connectDB();
+
+   const { id, isProducer, isCreator } = user;
+
    const { start, end } = getCurrentMonthRange();
 
    const requests = await Movie.find({
@@ -51,16 +54,25 @@ export async function getMonthlySummary(userId: string, isProducer: boolean) {
          $gte: start,
          $lt: end,
       },
-      requester: userId,
-   }).select("data.Title data.Poster");
+      requester: id,
+   }).select("data.id data.Title data.Poster hasSeen");
 
    const posters = requests.map((item) => ({
+      id: item?.data?.id || "",
       Title: item?.data?.Title || "",
       Poster: item?.data?.Poster || "",
+      hasSeen: item?.hasSeen || false,
    }));
 
    const count = requests.length;
    const limit = isProducer ? 3 : 2;
+
+   if (isCreator) {
+      return {
+         count,
+         requests: posters,
+      };
+   }
 
    return {
       count,
@@ -100,7 +112,10 @@ export async function addRequest(user: User, payload: any) {
 }
 
 // delete request based on id
-export async function deleteRequest(id: string) {
+export async function deleteRequest(id: string, user: User) {
    await connectDB();
-   return await Movie.findOneAndDelete({ _id: id });
+   await Movie.findOneAndDelete({ _id: id });
+   const summary = await getMonthlySummary(user);
+
+   return summary;
 }

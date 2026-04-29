@@ -17,10 +17,10 @@ export default async function Home() {
    const user = await getCurrentUser();
 
    let heroSection = (
-      <div className="mb-[15px] text-[16px] sm:text-[18px]">
+      <div className="mb-[15px]">
          <p>
-            Connect with your Patreon account in the top right corner to request
-            movies and vote.
+            Connect with your Patreon account in the top right corner to add
+            requests and vote.
          </p>
          <p>You must be a current patron of this channel.</p>
       </div>
@@ -32,7 +32,7 @@ export default async function Home() {
       const seenRequests: Movie[] = [];
       const monthlyRequests = await getMonthlyRequests(id);
 
-      const summary = await getMonthlySummary(id, isProducer);
+      const summary = await getMonthlySummary(user);
       const { limit, isLimitReached } = summary as Summary;
 
       monthlyRequests.forEach((movie: Movie) => {
@@ -59,21 +59,22 @@ export default async function Home() {
                   <span className="relative inline-block top-[-2px]">👑</span>
                )}
             </h2>
+
             {isCreator ? (
-               <div>
+               <p className="mb-[15px]">
                   Begin requesting movies and shows, edit the status of
                   requests, and add video links.
-               </div>
+               </p>
             ) : (
-               <div>
+               <>
                   {!isLimitReached && seenRequests.length > 0 && (
-                     <div>
+                     <p className="text-[14px] italic">
                         Since {seenRequests.length} of your requests this month
                         was marked as &quot;Seen&quot;, you get an extra{" "}
                         {seenRequests.length}.
-                     </div>
+                     </p>
                   )}
-               </div>
+               </>
             )}
          </div>
       );

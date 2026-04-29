@@ -1,6 +1,8 @@
 export interface RequestItem {
+   id: string;
    Title: string;
    Poster: string;
+   hasSeen: boolean;
 }
 
 export interface Summary {

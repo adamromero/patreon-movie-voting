@@ -14,7 +14,7 @@ export async function DELETE(
    }
 
    try {
-      const result = await deleteRequest(params.id);
+      const result = await deleteRequest(params.id, user);
       return NextResponse.json(result);
    } catch (error) {
       return NextResponse.json({

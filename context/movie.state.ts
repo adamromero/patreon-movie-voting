@@ -65,9 +65,6 @@ export type MovieState = {
 
    disableAddButton: boolean;
 
-   isLimitReached: boolean;
-   setIsLimitReached: React.Dispatch<React.SetStateAction<boolean>>;
-
    requestsRemaining: number | undefined;
    requestsThisMonth: Movie[];
 
@@ -112,10 +109,6 @@ export function useMovieState(
 
    const [disableAddButton, setDisableAddButton] = useState(false);
 
-   const [isLimitReached, setIsLimitReached] = useState(
-      initialSummary?.isLimitReached,
-   );
-
    const [requestsRemaining, setRequestsRemaining] = useState<
       number | undefined
    >(initialSummary?.remaining);
@@ -152,9 +145,6 @@ export function useMovieState(
 
       isRankingOn,
       setIsRankingOn,
-
-      isLimitReached,
-      setIsLimitReached,
 
       requestsRemaining,
       setRequestsRemaining,

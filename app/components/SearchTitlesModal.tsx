@@ -22,7 +22,7 @@ const SearchTitlesModal = () => {
    const [input, setInput] = useState("");
    const [titlesFromAPI, setTitlesFromAPI] = useState<MovieData[]>([]);
    const [loading, setLoading] = useState(false);
-   const [limitError, setLimitError] = useState("Monthly limit reached");
+   const [limitError, setLimitError] = useState("");
    const [error, setError] = useState("");
 
    const {
@@ -30,15 +30,15 @@ const SearchTitlesModal = () => {
       addRequestToList,
       addVoteToRequest,
       removeVoteFromRequest,
-      isLimitReached,
-      setIsLimitReached,
       disableAddButton,
+      summary,
    } = useMovieContext();
+
+   const { isLimitReached } = summary ?? { count: 0, requests: [] };
 
    const currentUser = user && user.id;
 
    const moviesMap = useMoviesMap();
-
    const inputRef = useRef<HTMLInputElement>(null);
    const [movieIDCollection, setMovieIDCollection] = useState<
       Record<string | number, boolean>
@@ -122,7 +122,6 @@ const SearchTitlesModal = () => {
             mediaType: movie.mediaType,
          });
       } catch (err: any) {
-         setIsLimitReached(true);
          setLimitError(err.message);
       }
    };

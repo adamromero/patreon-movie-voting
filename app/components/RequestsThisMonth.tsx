@@ -7,9 +7,11 @@ const RequestsThisMonth = () => {
 
    const { count, requests } = summary ?? { count: 0, requests: [] };
 
+   const unseenRequests = requests.filter((request) => !request.hasSeen);
+
    const maxRequestsDisplayed = 3;
    const firstRequestDisplayed =
-      count >= maxRequestsDisplayed ? maxRequestsDisplayed - count : 0;
+      count >= maxRequestsDisplayed ? count - maxRequestsDisplayed : 0;
 
    if (count) {
       return (
@@ -20,16 +22,18 @@ const RequestsThisMonth = () => {
                <AiTwotoneCalendar />
             </h2>
             <div className="flex gap-[10px]">
-               {requests.slice(firstRequestDisplayed, count).map((request) => (
-                  <div key={request.Poster}>
-                     <img
-                        src={`https://image.tmdb.org/t/p/w200/${request.Poster}`}
-                        alt={request.Title}
-                        width="75"
-                        height="100"
-                     />
-                  </div>
-               ))}
+               {unseenRequests
+                  .slice(firstRequestDisplayed, count)
+                  .map((request) => (
+                     <div key={request.id}>
+                        <img
+                           src={`https://image.tmdb.org/t/p/w200/${request.Poster}`}
+                           alt={request.Title}
+                           width="75"
+                           height="100"
+                        />
+                     </div>
+                  ))}
             </div>
          </div>
       );

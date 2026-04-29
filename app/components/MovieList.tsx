@@ -26,10 +26,12 @@ const MovieList = () => {
    const isCreator = user && user.isCreator;
 
    const [requestStatusState, setRequestStatusState] = useState({});
-   const [isRequestFilterAscending, setIsRequestFilterAscending] =
-      useState(true);
-   const [isTitleFilterAscending, setIsTitleFilterAscending] = useState(true);
-   const [isRatingFilterAscending, setIsRatingFilterAscending] = useState(true);
+   const [tableSortAscending, setTableSortAscending] = useState({
+      title: true,
+      rating: true,
+      votes: true,
+   });
+
    const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
    const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
    const indexOfLastPost = currentPage * rowsPerPage;
@@ -83,7 +85,7 @@ const MovieList = () => {
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
-         alphabetical: isTitleFilterAscending
+         alphabetical: tableSortAscending.title
             ? alphabetical.Ascending
             : alphabetical.Descending,
       });
@@ -96,7 +98,7 @@ const MovieList = () => {
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
-         votes: isRequestFilterAscending ? votes.Ascending : votes.Descending,
+         votes: tableSortAscending.votes ? votes.Ascending : votes.Descending,
       });
    };
 
@@ -107,7 +109,9 @@ const MovieList = () => {
          added: added.Default,
          published: published.Default,
          votes: votes.Default,
-         rating: isRatingFilterAscending ? rating.Ascending : rating.Descending,
+         rating: tableSortAscending.rating
+            ? rating.Ascending
+            : rating.Descending,
       });
    };
 
@@ -123,7 +127,11 @@ const MovieList = () => {
             </button>
             <button
                onClick={() => {
-                  setIsTitleFilterAscending(!isTitleFilterAscending);
+                  setTableSortAscending({
+                     title: !tableSortAscending.title,
+                     rating: true,
+                     votes: true,
+                  });
                   handleTitleSort();
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
@@ -148,7 +156,11 @@ const MovieList = () => {
          <div className="bg-black w-full lg:w-[80px]">
             <button
                onClick={() => {
-                  setIsRatingFilterAscending(!isRatingFilterAscending);
+                  setTableSortAscending({
+                     title: true,
+                     rating: !tableSortAscending.rating,
+                     votes: true,
+                  });
                   handleRatingsSort();
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
@@ -164,7 +176,11 @@ const MovieList = () => {
          <div className="bg-black w-full lg:w-[100px]">
             <button
                onClick={() => {
-                  setIsRequestFilterAscending(!isRequestFilterAscending);
+                  setTableSortAscending({
+                     title: true,
+                     rating: true,
+                     votes: !tableSortAscending.votes,
+                  });
                   handleVotesSort();
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"

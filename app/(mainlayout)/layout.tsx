@@ -19,9 +19,7 @@ interface MainLayoutProps {
 
 export default async function MainLayout({ children }: MainLayoutProps) {
    const user = await getCurrentUser();
-   const summary = user
-      ? await getMonthlySummary(user.id, user.isProducer)
-      : null;
+   const summary = user ? await getMonthlySummary(user) : null;
 
    return (
       <NextAuthProvider>
