@@ -51,12 +51,16 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
                   <div className="flex items-center gap-[5px]">
                      <p className="flex gap-[5px] items-start md:items-center">
                         <TbInfoSquareRoundedFilled className="text-[#ba00d9] text-[20px] w-[30px]" />
-                        Tip: You can use the 'y:' filter to narrow your results
-                        by year. Example: 'star wars y:1977'.{" "}
+                        Tip: You can use the &#39;y:&#39; filter to narrow your
+                        results by year. Example: &#39;star wars
+                        y:1977&#39;.{" "}
                      </p>
                   </div>
                   <div>
-                     <p>You can also search by imdb id. Example: tt0076759 </p>
+                     <p>
+                        You can also search by imdb id. Example:
+                        &#39;tt0076759&#39;{" "}
+                     </p>
                   </div>
                </div>
             </div>
