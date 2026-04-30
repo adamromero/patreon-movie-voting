@@ -17,7 +17,7 @@ const SearchMoviesList = () => {
 
    return (
       <div className="mb-[15px]">
-         <div className="mb-[2px]">Search requested movies</div>
+         <div className="mb-[2px]">Search requests</div>
          <div className="flex flex-col lg:flex-row gap-[10px] w-full lg:max-w-[1000px]">
             <div className="flex flex-1 gap-[5px]">
                <input

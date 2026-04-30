@@ -26,11 +26,6 @@ const MovieList = () => {
    const isCreator = user && user.isCreator;
 
    const [requestStatusState, setRequestStatusState] = useState({});
-   const [tableSortAscending, setTableSortAscending] = useState({
-      title: true,
-      rating: true,
-      votes: true,
-   });
 
    const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
    const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
@@ -78,40 +73,38 @@ const MovieList = () => {
       setRequestStatusState(requestStateObject);
    }, [filteredMovies]);
 
-   const handleTitleSort = () => {
+   const handleTitleSort = (isAscending: boolean) => {
       setSortOptions({
          votes: votes.Default,
          rating: rating.Default,
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
-         alphabetical: tableSortAscending.title
+         alphabetical: isAscending
             ? alphabetical.Ascending
             : alphabetical.Descending,
       });
    };
 
-   const handleVotesSort = () => {
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         rating: rating.Default,
-         chronological: chronological.Default,
-         added: added.Default,
-         published: published.Default,
-         votes: tableSortAscending.votes ? votes.Ascending : votes.Descending,
-      });
-   };
-
-   const handleRatingsSort = () => {
+   const handleRatingsSort = (isAscending: boolean) => {
       setSortOptions({
          alphabetical: alphabetical.Default,
          chronological: chronological.Default,
          added: added.Default,
          published: published.Default,
          votes: votes.Default,
-         rating: tableSortAscending.rating
-            ? rating.Ascending
-            : rating.Descending,
+         rating: isAscending ? rating.Ascending : rating.Descending,
+      });
+   };
+
+   const handleVotesSort = (isAscending: boolean) => {
+      setSortOptions({
+         alphabetical: alphabetical.Default,
+         rating: rating.Default,
+         chronological: chronological.Default,
+         added: added.Default,
+         published: published.Default,
+         votes: isAscending ? votes.Ascending : votes.Descending,
       });
    };
 
@@ -127,12 +120,11 @@ const MovieList = () => {
             </button>
             <button
                onClick={() => {
-                  setTableSortAscending({
-                     title: !tableSortAscending.title,
-                     rating: true,
-                     votes: true,
-                  });
-                  handleTitleSort();
+                  const nextAscending =
+                     sortOptions.alphabetical === alphabetical.Default
+                        ? true
+                        : sortOptions.alphabetical !== alphabetical.Ascending;
+                  handleTitleSort(nextAscending);
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
@@ -156,12 +148,11 @@ const MovieList = () => {
          <div className="bg-black w-full lg:w-[80px]">
             <button
                onClick={() => {
-                  setTableSortAscending({
-                     title: true,
-                     rating: !tableSortAscending.rating,
-                     votes: true,
-                  });
-                  handleRatingsSort();
+                  const nextAscending =
+                     sortOptions.rating === rating.Default
+                        ? true
+                        : sortOptions.rating !== rating.Ascending;
+                  handleRatingsSort(nextAscending);
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
@@ -176,12 +167,11 @@ const MovieList = () => {
          <div className="bg-black w-full lg:w-[100px]">
             <button
                onClick={() => {
-                  setTableSortAscending({
-                     title: true,
-                     rating: true,
-                     votes: !tableSortAscending.votes,
-                  });
-                  handleVotesSort();
+                  const nextAscending =
+                     sortOptions.votes === votes.Default
+                        ? true
+                        : sortOptions.votes !== votes.Ascending;
+                  handleVotesSort(nextAscending);
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
