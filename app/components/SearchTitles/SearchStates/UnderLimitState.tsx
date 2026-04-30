@@ -19,7 +19,7 @@ const UnderLimitState: React.FC<UnderLimitStateProps> = ({
    return (
       <div className="relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
          <button
-            className="block"
+            className="block group"
             onClick={() => handleMovieSelection(movie)}
             disabled={disableAddButton}
          >
@@ -37,7 +37,7 @@ const UnderLimitState: React.FC<UnderLimitStateProps> = ({
                />
             )}
             <div
-               className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-white text-[25px] flex items-center justify-center"
+               className="absolute bg-black/50 top-0 left-0 right-0 h-[100%] font-black text-white text-[25px] flex items-center justify-center group-focus:border-[2px] rounded-[5px]"
                style={{
                   textShadow: "1px 1px 3px black",
                }}

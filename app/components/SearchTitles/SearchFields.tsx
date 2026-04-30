@@ -1,6 +1,6 @@
-import React, { RefObject } from "react";
-import { Tooltip } from "react-tooltip";
+import React, { useState, RefObject } from "react";
 import { TbInfoSquareRoundedFilled } from "react-icons/tb";
+import { IoMdCloseCircle } from "react-icons/io";
 
 interface SearchFieldsProps {
    handleTitleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -17,9 +17,11 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
    input,
    inputRef,
 }) => {
+   const [isTipOpen, setIsTipOpen] = useState(true);
+
    return (
       <>
-         <div className="flex flex-col basis-full md:basis-2/3 gap-[10px]">
+         <div className="flex basis-full flex-col gap-[5px]">
             <form
                className="flex gap-2 w-full items-center"
                onSubmit={(e) => {
@@ -30,10 +32,6 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
                <label className="sr-only" htmlFor="SearchTitles">
                   Search Titles
                </label>
-               <TbInfoSquareRoundedFilled
-                  className="text-[purple] text-[35px]"
-                  data-tooltip-id="search-tooltip"
-               />
                <input
                   className="text-black w-full py-[8px] px-[10px]"
                   type="text"
@@ -50,26 +48,36 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
                   value="Search"
                />
             </form>
-            <Tooltip
-               id="search-tooltip"
-               place="bottom"
-               variant="info"
-               style={{
-                  backgroundColor: "#d022ef",
-                  fontWeight: "bold",
-                  color: "#222",
-                  zIndex: 999,
-               }}
-            >
-               <div>
-                  Tip: You can use the 'y:' filter to narrow your results by
-                  year. Example: 'star wars y:1977'.{" "}
+
+            {isTipOpen ? (
+               <div className="flex text-center items-start md:items-center md:text-left text-[14px] font-bold text-[black] bg-[#ba00d9] p-[5px]">
+                  <div className="flex flex-1 items-center flex-col lg:flex-row gap-0 lg:gap-[5px]">
+                     <div className="flex items-center gap-[5px]">
+                        <p className="flex gap-[5px] items-start md:items-center">
+                           <TbInfoSquareRoundedFilled className="text-[black] text-[20px]" />
+                           Tip: You can use the 'y:' filter to narrow your
+                           results by year. Example: 'star wars y:1977'.{" "}
+                        </p>
+                     </div>
+                     <div>
+                        <p>
+                           You can also search by imdb id. Example:
+                           tt0076759{" "}
+                        </p>
+                     </div>
+                  </div>
+                  <button
+                     className="ml-auto text-white text-[25px]"
+                     onClick={() => setIsTipOpen(false)}
+                  >
+                     <IoMdCloseCircle />
+                  </button>
                </div>
-               <div>
-                  You can also search by the film or show's imdb id. Example:
-                  tt0076759{" "}
-               </div>
-            </Tooltip>
+            ) : (
+               <button onClick={() => setIsTipOpen(true)} className="w-[20px]">
+                  <TbInfoSquareRoundedFilled className="text-[#ba00d9] text-[20px]" />
+               </button>
+            )}
          </div>
       </>
    );
