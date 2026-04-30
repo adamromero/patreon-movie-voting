@@ -1,6 +1,5 @@
-import React, { useState, RefObject } from "react";
+import React, { RefObject } from "react";
 import { TbInfoSquareRoundedFilled } from "react-icons/tb";
-import { IoMdCloseCircle } from "react-icons/io";
 
 interface SearchFieldsProps {
    handleTitleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -17,8 +16,6 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
    input,
    inputRef,
 }) => {
-   const [isTipOpen, setIsTipOpen] = useState(true);
-
    return (
       <>
          <div className="flex basis-full flex-col gap-[5px]">
@@ -49,35 +46,20 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
                />
             </form>
 
-            {isTipOpen ? (
-               <div className="flex text-center items-start md:items-center md:text-left text-[14px] font-bold text-[black] bg-[#ba00d9] p-[5px]">
-                  <div className="flex flex-1 items-center flex-col lg:flex-row gap-0 lg:gap-[5px]">
-                     <div className="flex items-center gap-[5px]">
-                        <p className="flex gap-[5px] items-start md:items-center">
-                           <TbInfoSquareRoundedFilled className="text-[black] text-[20px]" />
-                           Tip: You can use the 'y:' filter to narrow your
-                           results by year. Example: 'star wars y:1977'.{" "}
-                        </p>
-                     </div>
-                     <div>
-                        <p>
-                           You can also search by imdb id. Example:
-                           tt0076759{" "}
-                        </p>
-                     </div>
+            <div className="flex text-center items-start md:items-center md:text-left text-[14px] p-[5px]">
+               <div className="flex flex-1 items-center flex-col lg:flex-row gap-0 lg:gap-[5px]">
+                  <div className="flex items-center gap-[5px]">
+                     <p className="flex gap-[5px] items-start md:items-center">
+                        <TbInfoSquareRoundedFilled className="text-[#ba00d9] text-[20px] w-[30px]" />
+                        Tip: You can use the 'y:' filter to narrow your results
+                        by year. Example: 'star wars y:1977'.{" "}
+                     </p>
                   </div>
-                  <button
-                     className="ml-auto text-white text-[25px]"
-                     onClick={() => setIsTipOpen(false)}
-                  >
-                     <IoMdCloseCircle />
-                  </button>
+                  <div>
+                     <p>You can also search by imdb id. Example: tt0076759 </p>
+                  </div>
                </div>
-            ) : (
-               <button onClick={() => setIsTipOpen(true)} className="w-[20px]">
-                  <TbInfoSquareRoundedFilled className="text-[#ba00d9] text-[20px]" />
-               </button>
-            )}
+            </div>
          </div>
       </>
    );
