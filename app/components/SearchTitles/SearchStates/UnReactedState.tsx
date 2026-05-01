@@ -9,6 +9,8 @@ interface UnReactedStateProps {
    isMovieVotedByUser: (selectedMovie: APIMovieData) => boolean;
    handleRemoveVote: (selectedMovie: APIMovieData) => void;
    handleAddVote: (selectedMovie: APIMovieData) => void;
+   loadingVote: boolean;
+   setLoadingVote: (value: boolean) => void;
    movieIDCollection: Record<string | number, boolean>;
    movie: APIMovieData;
 }
@@ -19,6 +21,8 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
    isMovieVotedByUser,
    handleRemoveVote,
    handleAddVote,
+   loadingVote,
+   setLoadingVote,
    movieIDCollection,
    movie,
 }) => {
@@ -57,17 +61,31 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
                   </div>
                   {isMovieVotedByUser(movie) ? (
                      <button
-                        onClick={() => handleRemoveVote(movie)}
+                        onClick={() => {
+                           setLoadingVote(true);
+                           handleRemoveVote(movie);
+                        }}
                         className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                      >
-                        Unvote
+                        {loadingVote ? (
+                           <span className="button-loader"></span>
+                        ) : (
+                           "Unvote"
+                        )}
                      </button>
                   ) : (
                      <button
-                        onClick={() => handleAddVote(movie)}
+                        onClick={() => {
+                           setLoadingVote(true);
+                           handleAddVote(movie);
+                        }}
                         className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                      >
-                        Upvote
+                        {loadingVote ? (
+                           <span className="button-loader"></span>
+                        ) : (
+                           "Upvote"
+                        )}
                      </button>
                   )}
                </div>

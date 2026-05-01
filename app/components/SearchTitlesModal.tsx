@@ -24,6 +24,7 @@ const SearchTitlesModal = () => {
    const [loading, setLoading] = useState(false);
    const [limitError, setLimitError] = useState("");
    const [error, setError] = useState("");
+   const [loadingVote, setLoadingVote] = useState(false);
 
    const {
       user,
@@ -132,19 +133,21 @@ const SearchTitlesModal = () => {
       return movie ? movie.voters.includes(currentUser ?? "") : false;
    };
 
-   const handleRemoveVote = (selectedMovie: APIMovieData) => {
+   const handleRemoveVote = async (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
-         removeVoteFromRequest(movie._id);
+         await removeVoteFromRequest(movie._id);
          setDisabledButtonStates({ [selectedMovie?.id]: false });
       }
+      setLoadingVote(false);
    };
 
-   const handleAddVote = (selectedMovie: APIMovieData) => {
+   const handleAddVote = async (selectedMovie: APIMovieData) => {
       const movie = getMovieData(selectedMovie);
       if (movie) {
-         addVoteToRequest(movie._id);
+         await addVoteToRequest(movie._id);
       }
+      setLoadingVote(false);
    };
 
    const renderMovieStatus = (movie: MovieData) => {
@@ -164,6 +167,8 @@ const SearchTitlesModal = () => {
          isMovieVotedByUser,
          handleRemoveVote,
          handleAddVote,
+         loadingVote,
+         setLoadingVote,
       };
 
       const underLimitProps = {
