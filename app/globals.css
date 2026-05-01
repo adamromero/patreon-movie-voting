@@ -42,6 +42,7 @@ body {
 
 .react-responsive-modal-root .request-movies-modal {
    max-width: 1000px;
+   padding-top: 40px;
 }
 
 .react-responsive-modal-root .reaction-link-modal {
@@ -53,7 +54,6 @@ body {
    .react-responsive-modal-root .react-responsive-modal-modal {
       border-radius: 8px;
       box-shadow: 0px 0px 30px #800080;
-      padding-top: 40px;
    }
 }
 
@@ -201,18 +201,14 @@ input:focus-visible + .checkmark {
    top: 35%;
 }
 
-.loader--intro {
-   width: 100px;
-   height: 100px;
-   border-width: 5px;
-}
-
 .button-loader {
-   width: 24px;
-   height: 24px;
+   width: 18px;
+   height: 18px;
    position: relative;
    border: 2px solid #eaf0f6;
    border-top: 2px solid #830483;
+   border-radius: 50%;
+   animation: spinner 1s linear infinite;
 }
 
 @keyframes spinner {
@@ -235,26 +231,5 @@ input:focus-visible + .checkmark {
    }
    100% {
       transform: rotate(45deg);
-   }
-}
-
-.request-grid {
-   display: grid;
-   grid-template-columns: repeat(4, 120px);
-}
-
-.request-grid--month {
-   grid-template-columns: repeat(3, 120px);
-}
-
-@media screen and (min-width: 640px) {
-   .request-grid {
-      grid-template-columns: repeat(6, 120px);
-   }
-}
-
-@media screen and (min-width: 960px) {
-   .request-grid {
-      grid-template-columns: repeat(10, 120px);
    }
 }

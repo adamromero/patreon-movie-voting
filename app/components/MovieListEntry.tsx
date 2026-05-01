@@ -44,17 +44,21 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    const [patreonReactionLink, setPatreonReactionLink] = useState("");
    const [youtubeReactionLink, setYouTubeReactionLink] = useState("");
 
+   const [loadingVote, setLoadingVote] = useState(false);
+
    const { addVoteToRequest, removeVoteFromRequest, removeRequestFromList } =
       useMovieContext();
 
    const rankedMovies = useRankedMovies();
 
    const handleAddVote = async (movieId: string) => {
-      addVoteToRequest(movieId);
+      await addVoteToRequest(movieId);
+      setLoadingVote(false);
    };
 
    const handleRemoveVote = async (movieId: string) => {
-      removeVoteFromRequest(movieId);
+      await removeVoteFromRequest(movieId);
+      setLoadingVote(false);
    };
 
    const handleScrollToTop = () => {
@@ -161,16 +165,30 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                   {hasVoted ? (
                      <button
                         className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                        onClick={() => handleRemoveVote(data?._id)}
+                        onClick={() => {
+                           setLoadingVote(true);
+                           handleRemoveVote(data?._id);
+                        }}
                      >
-                        Unvote
+                        {loadingVote ? (
+                           <span className="button-loader"></span>
+                        ) : (
+                           "Unvote"
+                        )}
                      </button>
                   ) : (
                      <button
                         className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
-                        onClick={() => handleAddVote(data?._id)}
+                        onClick={() => {
+                           setLoadingVote(true);
+                           handleAddVote(data?._id);
+                        }}
                      >
-                        Upvote
+                        {loadingVote ? (
+                           <span className="button-loader"></span>
+                        ) : (
+                           "Upvote"
+                        )}
                      </button>
                   )}
                </div>
