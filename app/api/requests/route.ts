@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
          message = error.message;
       }
       return NextResponse.json({
-         error: "Unable to fetch movie votes from the database.",
+         error: "Unable to fetch requests from the database.",
          details: message,
       });
    }

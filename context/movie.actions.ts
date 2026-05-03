@@ -10,7 +10,7 @@ import {
    updateRequestLink,
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
-import { User } from "@/app/types/user";
+import { fetchRequestsApi } from "@/lib/api/requests";
 
 export interface AddRequestMovieInput {
    id: number;
@@ -18,7 +18,7 @@ export interface AddRequestMovieInput {
 }
 
 export type MovieActions = {
-   fetchMovies: () => Promise<void>;
+   fetchRequests: () => Promise<void>;
 
    addRequestToList: (args: {
       tmdbId: number;
@@ -54,10 +54,9 @@ export function useMovieActions({
    setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
 }) {
-   const fetchMovies = useCallback(async () => {
-      const res = await fetch("/api/requests");
-      const movies: Movie[] = await res.json();
-      setMoviesList(movies);
+   const fetchRequests = useCallback(async () => {
+      const requests = await fetchRequestsApi();
+      setMoviesList(requests);
    }, [setMoviesList]);
 
    const addRequestToList = async ({
@@ -141,7 +140,7 @@ export function useMovieActions({
    };
 
    return {
-      fetchMovies,
+      fetchRequests,
       addVoteToRequest,
       removeRequestFromList,
       removeVoteFromRequest,

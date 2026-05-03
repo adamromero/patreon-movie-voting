@@ -39,7 +39,7 @@ export const MovieProvider = ({
    });
 
    useEffect(() => {
-      actions.fetchMovies();
+      actions.fetchRequests();
    }, []);
 
    const value: MovieContextValue = {
