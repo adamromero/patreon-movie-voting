@@ -1,8 +1,10 @@
 import React, { RefObject } from "react";
 import { TbInfoSquareRoundedFilled } from "react-icons/tb";
+import { IoSearch } from "react-icons/io5";
 
 interface SearchFieldsProps {
    handleTitleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+   loading: boolean;
    setLoading: (value: boolean) => void;
    setInput: (value: string) => void;
    input: string;
@@ -11,6 +13,7 @@ interface SearchFieldsProps {
 
 const SearchFields: React.FC<SearchFieldsProps> = ({
    handleTitleSubmit,
+   loading,
    setLoading,
    setInput,
    input,
@@ -39,11 +42,14 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
                   ref={inputRef}
                   onChange={(e) => setInput(e.target.value)}
                />
-               <input
+               <button
                   className="bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white cursor-pointer py-[8px] px-[18px]"
                   type="submit"
-                  value="Search"
-               />
+                  disabled={loading}
+               >
+                  <IoSearch className="text-[24px]" />
+               </button>
+               <div className="p-[13px]"></div>
             </form>
 
             <div className="flex text-center items-start md:items-center md:text-left text-[14px] p-[5px]">

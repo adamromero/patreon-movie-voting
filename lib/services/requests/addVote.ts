@@ -17,7 +17,7 @@ export async function addVote({
       throw new Error("Request not found");
    }
 
-   request.voters = [...request.voters, user.id];
+   request.voters = Array.from(new Set([...request.voters, user.id]));
    await request.save();
 
    const summary = await getMonthlySummary(user);

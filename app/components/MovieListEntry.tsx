@@ -183,6 +183,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                            setLoadingVote(true);
                            handleAddVote(data?._id);
                         }}
+                        disabled={loadingVote}
                      >
                         {loadingVote ? (
                            <span className="button-loader"></span>

@@ -17,9 +17,9 @@ export async function removeVote({
       throw new Error("Request not found");
    }
 
-   request.voters = request.voters.filter((voter: string) => voter !== user.id);
-
    let deleted = false;
+
+   request.voters = request.voters.filter((voter: string) => voter !== user.id);
 
    if (request.voters.length === 0) {
       await request.deleteOne();

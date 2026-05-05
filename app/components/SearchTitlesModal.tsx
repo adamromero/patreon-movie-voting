@@ -8,6 +8,7 @@ import LimitReachedState from "./SearchTitles/SearchStates/LimitReachedState";
 import UnderLimitState from "./SearchTitles/SearchStates/UnderLimitState";
 import SearchFields from "./SearchTitles/SearchFields";
 import ErrorMessage from "./ErrorMessage";
+
 import { useMovieContext } from "@/context/MovieContext";
 
 import { searchTitlesApi } from "@/lib/api/tmdb/search";
@@ -196,6 +197,7 @@ const SearchTitlesModal = () => {
 
    const searchFieldsProps = {
       handleTitleSubmit,
+      loading,
       setLoading,
       setInput,
       input,
@@ -204,7 +206,7 @@ const SearchTitlesModal = () => {
 
    return (
       <div>
-         <div className="flex mt-[35px] md:mt-0 mb-[25px] justify-center">
+         <div className="flex mb-[25px] justify-center">
             {isLimitReached ? (
                <ErrorMessage message={limitError} />
             ) : (

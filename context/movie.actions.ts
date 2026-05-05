@@ -84,11 +84,15 @@ export function useMovieActions({
       if (data.deleted) {
          setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
          setSummary(data.summary);
-      } else {
-         setMoviesList((prev) =>
-            prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-         );
+         return;
       }
+
+      if (!data.request) return;
+
+      setMoviesList((prev) =>
+         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
+      );
+      setSummary(data.summary);
    };
 
    const addVoteToRequest = async (movieId: string) => {

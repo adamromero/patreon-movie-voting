@@ -42,7 +42,6 @@ body {
 
 .react-responsive-modal-root .request-movies-modal {
    max-width: 1000px;
-   padding-top: 40px;
 }
 
 .react-responsive-modal-root .reaction-link-modal {
@@ -59,7 +58,7 @@ body {
 
 .react-responsive-modal-root .react-responsive-modal-closeButton {
    fill: white;
-   top: 6px;
+   top: 22px;
 }
 
 .checkbox-container {

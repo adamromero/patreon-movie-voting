@@ -75,11 +75,12 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
                      </button>
                   ) : (
                      <button
+                        className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
                         onClick={() => {
                            setLoadingVote(true);
                            handleAddVote(movie);
                         }}
-                        className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        disabled={loadingVote}
                      >
                         {loadingVote ? (
                            <span className="button-loader"></span>
