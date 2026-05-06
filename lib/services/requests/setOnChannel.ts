@@ -2,7 +2,7 @@ import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 
 const extractTitle = (input: string) => {
-   const match = input.match(/^(.*?)(?: \((\d{4})\)| S\d{2}E\d{2})/);
+   const match = input.match(/^(.*?)(?: \((\d{4})\)| \d+\s*x\s*\d+-\d+)/);
    return match ? match[1].trim() : "";
 };
 

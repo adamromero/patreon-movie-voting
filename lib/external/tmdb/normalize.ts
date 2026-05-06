@@ -145,8 +145,6 @@ export function normalizeTVDetails(
       ),
    );
 
-   console.log(composer);
-
    const runtime =
       details.episode_run_time?.length > 0 ? details.episode_run_time[0] : null;
 
