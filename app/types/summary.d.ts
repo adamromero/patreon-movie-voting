@@ -7,8 +7,8 @@ export interface RequestItem {
 
 export interface Summary {
    count: number;
-   limit?: number;
-   remaining?: number;
-   isLimitReached?: boolean;
+   limit: number | null;
+   remaining: number | null;
+   isLimitReached: boolean;
    requests: RequestItem[];
 }

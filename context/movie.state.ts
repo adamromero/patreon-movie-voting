@@ -111,7 +111,7 @@ export function useMovieState(
 
    const [requestsRemaining, setRequestsRemaining] = useState<
       number | undefined
-   >(initialSummary?.remaining);
+   >(initialSummary?.remaining ?? undefined);
 
    const [requestsThisMonth, setRequestsThisMonth] = useState<Movie[]>([]);
 
