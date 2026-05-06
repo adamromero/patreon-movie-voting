@@ -15,7 +15,7 @@ export async function PUT(
    const status = await req.json();
 
    try {
-      const result = await updateStatus({ requestId: params.id, status });
+      const result = await updateStatus({ requestId: params.id, status, user });
       return NextResponse.json(result);
    } catch (error) {
       return NextResponse.json({

@@ -1,12 +1,16 @@
 import connectDB from "@/lib/connectDB";
+import { getMonthlySummary } from "@/lib/db/requests";
 import Movie from "@/models/movieModel";
+import { User } from "@/app/types/user";
 
 export async function updateStatus({
    requestId,
    status,
+   user,
 }: {
    requestId: string;
    status: "channel" | "seen" | "rewatch" | "rewatchFriend" | "unseen";
+   user: User;
 }) {
    await connectDB();
 
@@ -31,5 +35,7 @@ export async function updateStatus({
       throw new Error("Request not found");
    }
 
-   return request;
+   const summary = await getMonthlySummary(user);
+
+   return { request, summary };
 }

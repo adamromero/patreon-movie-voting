@@ -114,11 +114,12 @@ export function useMovieActions({
       movieId: string,
       status: "channel" | "seen" | "rewatch" | "rewatchFriend" | "unseen",
    ) => {
-      const request = await updateRequestWatchStatus(movieId, status);
+      const data = await updateRequestWatchStatus(movieId, status);
 
       setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? request : movie)),
+         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
       );
+      setSummary(data.summary);
    };
 
    const setHolidayStatus = async (

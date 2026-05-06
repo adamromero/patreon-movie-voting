@@ -5,8 +5,7 @@ import SubmitRequests from "../components/SubmitRequests";
 import MovieList from "../components/MovieList";
 import FilterMovieList from "../components/FilterMovieList";
 import SearchMoviesList from "../components/SearchMoviesList";
-import { getMonthlyRequests, getMonthlySummary } from "@/lib/db/requests";
-import { Movie } from "../types/movie";
+import { getMonthlySummary } from "@/lib/db/requests";
 import { User } from "../types/user";
 import { Summary } from "../types/summary";
 import { redirect } from "next/navigation";
@@ -27,19 +26,12 @@ export default async function Home() {
    );
 
    if (user) {
-      const { id, isProducer, isCreator } = user as User;
-
-      const seenRequests: Movie[] = [];
-      const monthlyRequests = await getMonthlyRequests(id);
+      const { isProducer, isCreator } = user as User;
 
       const summary = await getMonthlySummary(user);
-      const { limit, isLimitReached } = summary as Summary;
+      const { limit, requests, isLimitReached } = summary as Summary;
 
-      monthlyRequests.forEach((movie: Movie) => {
-         if (movie.hasSeen) {
-            seenRequests.push(movie);
-         }
-      });
+      const seenRequests = requests.filter((r) => r.hasSeen).length;
 
       const heading = !isCreator && (
          <h2 className="text-[20px] font-bold mb-[10px]">
@@ -67,11 +59,11 @@ export default async function Home() {
                </p>
             ) : (
                <>
-                  {!isLimitReached && seenRequests.length > 0 && (
+                  {!isLimitReached && seenRequests > 0 && (
                      <p className="text-[14px] italic">
-                        Since {seenRequests.length} of your requests this month
-                        was marked as &quot;Seen&quot;, you get an extra{" "}
-                        {seenRequests.length}.
+                        Since {seenRequests} of your requests this month{" "}
+                        {seenRequests > 1 ? "were" : "was"} marked as
+                        &quot;Seen&quot;, you get an extra {seenRequests}.
                      </p>
                   )}
                </>

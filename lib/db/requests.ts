@@ -64,21 +64,15 @@ export async function getMonthlySummary(user: User) {
       hasSeen: item?.hasSeen || false,
    }));
 
-   const count = requests.length;
+   const seenRequests = requests.filter((r) => r.hasSeen).length;
+   const count = requests.length - seenRequests;
    const limit = isProducer ? 3 : 2;
-
-   if (isCreator) {
-      return {
-         count,
-         requests: posters,
-      };
-   }
 
    return {
       count,
-      limit,
-      remaining: Math.max(0, limit - count),
-      isLimitReached: count >= limit,
+      limit: isCreator ? null : limit,
+      remaining: isCreator ? null : Math.max(0, limit - count),
+      isLimitReached: isCreator ? false : count >= limit,
       requests: posters,
    };
 }
@@ -86,22 +80,12 @@ export async function getMonthlySummary(user: User) {
 // post a request to the list
 export async function addRequest(user: User, payload: any) {
    await connectDB();
-   const { id, isProducer, isCreator } = user;
+   const { isCreator } = user;
 
    if (!isCreator) {
-      const MONTHLY_LIMIT = isProducer ? 3 : 2;
+      const { limit, count } = await getMonthlySummary(user);
 
-      const { start, end } = getCurrentMonthRange();
-
-      const count = await Movie.count({
-         createdAt: {
-            $gte: start,
-            $lt: end,
-         },
-         requester: id,
-      });
-
-      if (count >= MONTHLY_LIMIT) {
+      if (limit !== null && count >= limit) {
          throw new Error("Monthly limit reached");
       }
    }
