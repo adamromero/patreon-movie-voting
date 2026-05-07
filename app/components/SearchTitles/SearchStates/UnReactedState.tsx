@@ -1,5 +1,5 @@
 import { APIMovieData } from "@/app/types/movie";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegImage } from "react-icons/fa6";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
@@ -26,6 +26,14 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
    movieIDCollection,
    movie,
 }) => {
+   const [votePendingHere, setVotePendingHere] = useState(false);
+
+   useEffect(() => {
+      if (!loadingVote && votePendingHere) {
+         setVotePendingHere(false);
+      }
+   }, [loadingVote, votePendingHere]);
+
    return (
       <div className="text-white relative flex justify-center items-center w-[175px] h-[285px] overflow-hidden">
          <div>
@@ -62,12 +70,14 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
                   {isMovieVotedByUser(movie) ? (
                      <button
                         onClick={() => {
+                           setVotePendingHere(true);
                            setLoadingVote(true);
                            handleRemoveVote(movie);
                         }}
-                        className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        disabled={loadingVote}
+                        className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold disabled:pointer-events-none"
                      >
-                        {loadingVote ? (
+                        {votePendingHere ? (
                            <span className="button-loader"></span>
                         ) : (
                            "Unvote"
@@ -75,14 +85,15 @@ const UnReactedState: React.FC<UnReactedStateProps> = ({
                      </button>
                   ) : (
                      <button
-                        className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold disabled:pointer-events-none"
                         onClick={() => {
+                           setVotePendingHere(true);
                            setLoadingVote(true);
                            handleAddVote(movie);
                         }}
                         disabled={loadingVote}
                      >
-                        {loadingVote ? (
+                        {votePendingHere ? (
                            <span className="button-loader"></span>
                         ) : (
                            "Upvote"

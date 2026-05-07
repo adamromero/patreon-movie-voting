@@ -164,7 +164,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                <div className="mt-[10px] md:mt-0 lg:w-[70px]">
                   {hasVoted ? (
                      <button
-                        className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        className="w-[70px] flex justify-center bg-[#585858] hover:bg-[#858585] focus-visible:bg-[#858585] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold disabled:pointer-events-none"
                         onClick={() => {
                            setLoadingVote(true);
                            handleRemoveVote(data?._id);
@@ -178,7 +178,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                      </button>
                   ) : (
                      <button
-                        className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold"
+                        className="w-[70px] flex justify-center bg-[#830483] hover:bg-[#a300a3] focus-visible:bg-[#a300a3] transition-colors duration-300 ease-in-out text-white p-2 uppercase text-[10px] md:text-[12px] font-bold disabled:pointer-events-none"
                         onClick={() => {
                            setLoadingVote(true);
                            handleAddVote(data?._id);
