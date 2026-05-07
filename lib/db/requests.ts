@@ -90,7 +90,6 @@ export async function addRequest(user: User, payload: any) {
       }
    }
 
-   // maybe prevent potential duplicate by checking imdb id
    const request = await Movie.create(payload);
    return request;
 }
