@@ -21,7 +21,7 @@ export async function fetchMonthlyRequests() {
 
 // fetch a total summary of requests made by current user this month
 export async function fetchMonthlySummary() {
-   const res = await fetch("/api/requests/user/monthly");
+   const res = await fetch("/api/requests/user/monthly/summary");
    if (!res.ok) throw new Error("Failed to fetch requests");
    return res.json();
 }

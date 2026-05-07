@@ -15,7 +15,7 @@ const SubmitRequests = () => {
    return (
       <div className="flex flex-col mb-[15px]">
          {!isCreator &&
-            (isLimitReached ? (
+            (isLimitReached && !open ? (
                <>
                   <div>
                      You have reached your monthly request limit and cannot make
@@ -26,18 +26,19 @@ const SubmitRequests = () => {
                   </div>
                </>
             ) : (
-               <div>Begin requesting movies and shows.</div>
+               <>
+                  <div>Begin requesting movies and shows.</div>
+                  <div className="text-[16px] sm:text-[18px] mb-[15px]">
+                     You have {remaining} <strong> new</strong>{" "}
+                     {remaining === 1 ? "request" : "requests"} remaining this
+                     month.
+                  </div>
+               </>
             ))}
 
-         {!isLimitReached && !isCreator && (
-            <div className="text-[16px] sm:text-[18px] mb-[15px]">
-               You have {remaining} <strong> new</strong>{" "}
-               {remaining === 1 ? "request" : "requests"} remaining this month.
-            </div>
-         )}
          <div className="flex max-w-[430px] text-[16px]">
             <div className="flex-1">
-               {isLimitReached && !isCreator ? (
+               {!isCreator && isLimitReached && !open ? (
                   <div className="max-w-[200px] w-full bg-[#262626] text-white text-center cursor-not-allowed py-1 px-3">
                      Limit Reached
                   </div>

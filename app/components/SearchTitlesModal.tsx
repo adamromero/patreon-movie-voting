@@ -54,10 +54,6 @@ const SearchTitlesModal = () => {
       return moviesMap.get(key);
    };
 
-   const clearSearchState = (data: MovieData) => {
-      setTitlesFromAPI([data]);
-   };
-
    const isMovieInList = (selectedMovie: APIMovieData) => {
       return !!getMovieData(selectedMovie);
    };

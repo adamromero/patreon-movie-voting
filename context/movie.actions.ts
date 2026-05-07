@@ -8,6 +8,7 @@ import {
    updateRequestWatchStatus,
    updateRequestHolidayStatus,
    updateRequestLink,
+   fetchMonthlySummary,
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
 import { fetchRequestsApi } from "@/lib/api/requests";
@@ -68,12 +69,13 @@ export function useMovieActions({
    }) => {
       try {
          const data = await addRequestApi({ id: tmdbId, mediaType });
-
          setMoviesList((prev) => [data.request, ...prev]);
          setSummary(data.summary);
 
          return data.request;
       } catch (err) {
+         const summary = await fetchMonthlySummary();
+         setSummary(summary);
          throw err;
       }
    };
