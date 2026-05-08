@@ -148,9 +148,11 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                {data?.data?.Year && <>({data?.data?.Year})</>}
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
-            <div className="lg:hidden">
-               <span>Rank:</span> {rankedMovies[data.data.imdbID ?? ""]}
-            </div>
+            {rankedMovies[data.data.imdbID ?? ""] && (
+               <div className="lg:hidden">
+                  <span>Rank:</span> {rankedMovies[data.data.imdbID ?? ""]}
+               </div>
+            )}
             <div className="lg:w-[40px]">
                <span className="inline lg:hidden">Rating:</span>{" "}
                {data?.data?.Rating ? data?.data?.Rating.toFixed(1) : ""}
