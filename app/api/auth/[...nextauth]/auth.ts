@@ -4,13 +4,12 @@ import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
 import connectDB from "@/lib/connectDB";
 
-connectDB();
-
 declare module "next-auth" {
    interface Session {
       user: {
          id?: string;
          name: string;
+         firstName: string;
          isCreator: boolean;
          isProducer: boolean;
          accessEndsAt?: Date;
@@ -19,6 +18,7 @@ declare module "next-auth" {
    }
 
    interface User {
+      firstName: string;
       patreonId?: string;
       tier?: string;
       isGifted?: boolean;
@@ -78,7 +78,7 @@ export const authOptions: AuthOptions = {
                item.type === "member" &&
                item.attributes.patron_status === "active_patron" &&
                item.relationships.campaign?.data?.id ===
-               process.env.CAMPAIGN_ID,
+                  process.env.CAMPAIGN_ID,
          );
 
          if (!pledge) {
@@ -93,17 +93,32 @@ export const authOptions: AuthOptions = {
          user.patreonId = patreonId;
          user.tier = tier;
 
-         const conn = await connectDB()
+         const conn = await connectDB();
          const db = conn.connection.db;
 
          if (db) {
             const userDB = await db.collection("users").findOne({ email });
+
             if (userDB) {
+               const updates: Partial<{
+                  patreonId: string;
+                  tier: string;
+               }> = {};
+
+               //set patreon id to existing user that didn't have one
                if (!userDB.patreonId) {
-                  userDB.updateOne({ $set: { patreonId } })
+                  updates.patreonId = patreonId;
                }
-               if (!userDB.tier || userDB.tier !== tier) {
-                  userDB.updateOne({ $set: { tier } })
+
+               //set tier to existing user who doesn't have a tier or the stored tier differs from the current one
+               if (userDB.tier !== tier) {
+                  updates.tier = tier;
+               }
+
+               if (Object.keys(updates).length > 0) {
+                  await db
+                     .collection("users")
+                     .updateOne({ email }, { $set: updates });
                }
             }
          }
@@ -117,11 +132,11 @@ export const authOptions: AuthOptions = {
 
       async session({ session, user }) {
          session.user.id = user.patreonId;
+         session.user.firstName = user.firstName;
          session.user.accessEndsAt = user.accessEndsAt;
          session.user.isCreator = user.patreonId === process.env.CREATOR_ID;
          session.user.isProducer =
-            user.patreonId === process.env.PRODUCER_TIER_ID ||
-            user.patreonId === process.env.DEV_ID;
+            user.patreonId === process.env.PRODUCER_TIER_ID;
 
          return session;
       },

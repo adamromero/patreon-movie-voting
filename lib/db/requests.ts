@@ -43,9 +43,17 @@ export async function getMonthlyRequests(userId: string) {
 
 // get a total summary of requests made by current user this month
 export async function getMonthlySummary(user: User) {
-   await connectDB();
+   const { id, isCreator } = user;
 
-   const { id, isProducer, isCreator } = user;
+   const conn = await connectDB();
+   const db = conn.connection.db;
+
+   let isProducer = false;
+   if (db) {
+      // fetch current tier from user in db
+      const userDB = await db.collection("users").findOne({ patreonId: id });
+      isProducer = process.env.PRODUCER_TIER_ID === userDB?.tier;
+   }
 
    const { start, end } = getCurrentMonthRange();
 
