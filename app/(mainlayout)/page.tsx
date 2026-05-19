@@ -15,6 +15,8 @@ export default async function Home() {
 
    const user = await getCurrentUser();
 
+   console.log(user);
+
    let heroSection = (
       <div className="mb-[15px]">
          <p>

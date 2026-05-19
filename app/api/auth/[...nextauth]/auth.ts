@@ -3,25 +3,17 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
 import connectDB from "@/lib/connectDB";
+import type { User as AppUser } from "@/app/types/user";
 
 declare module "next-auth" {
    interface Session {
-      user: {
-         id?: string;
-         name: string;
-         firstName: string;
-         isCreator: boolean;
-         isProducer: boolean;
-         accessEndsAt?: Date;
-         pledgeCanceledAt?: Date;
-      };
+      user: AppUser;
    }
 
    interface User {
       firstName: string;
-      patreonId?: string;
+      patreonId: string;
       tier?: string;
-      isGifted?: boolean;
       accessEndsAt?: Date;
    }
 }
@@ -64,8 +56,6 @@ export const authOptions: AuthOptions = {
             return true;
          }
 
-         const email = (profile as any)?.data?.attributes?.email;
-
          const response = await fetch(process.env.PATREON_PROFILE_URL!, {
             headers: {
                Authorization: `Bearer ${account?.access_token}`,
@@ -85,11 +75,13 @@ export const authOptions: AuthOptions = {
             return "/unauthorized";
          }
 
+         const email = (profile as any)?.data?.attributes?.email;
          const tier =
             pledge.relationships?.currently_entitled_tiers?.data?.find(
                (item: any) => item.type === "tier",
             )?.id;
 
+         user.firstName = (profile as any).data.attributes.first_name;
          user.patreonId = patreonId;
          user.tier = tier;
 
@@ -129,10 +121,9 @@ export const authOptions: AuthOptions = {
       async redirect({ baseUrl }) {
          return baseUrl;
       },
-
       async session({ session, user }) {
          session.user.id = user.patreonId;
-         session.user.firstName = user.firstName;
+         session.user.firstName = user.firstName ?? "";
          session.user.accessEndsAt = user.accessEndsAt;
          session.user.isCreator = user.patreonId === process.env.CREATOR_ID;
          session.user.isProducer =
