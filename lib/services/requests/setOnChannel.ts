@@ -11,12 +11,9 @@ const extractYear = (input: string) => {
    return match ? match[2].trim() : "";
 };
 
-export async function setOnChannel({
-   patreonResponse,
-}: {
-   patreonResponse: any;
-}) {
+export async function setOnChannel(patreonResponse: any) {
    await connectDB();
+
    const { title, url, published_at } = patreonResponse.data.attributes;
 
    if (!title || !url || !published_at) {
