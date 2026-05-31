@@ -6,6 +6,8 @@ import { useMovieActions, MovieActions } from "./movie.actions";
 import { Summary } from "@/app/types/summary";
 import { User } from "@/app/types/user";
 
+import { useRequestQuery } from "@/app/hooks/useRequestQuery";
+
 type MovieContextValue = MovieState & MovieActions;
 
 export const MovieContext = createContext<MovieContextValue | undefined>(
@@ -32,14 +34,19 @@ export const MovieProvider = ({
    initialUser,
 }: MovieProviderProps) => {
    const state = useMovieState(initialSummary, initialUser);
+   const query = useRequestQuery();
 
    const actions = useMovieActions({
       setMoviesList: state.setMoviesList,
       setSummary: state.setSummary,
+      requestsData: state.requestsData,
+      setRequestsData: state.setRequestsData,
+      isLoading: state.isLoading,
+      setIsLoading: state.setIsLoading,
    });
 
    useEffect(() => {
-      actions.fetchRequests();
+      actions.fetchRequests(query);
    }, []);
 
    const value: MovieContextValue = {

@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMovieContext } from "@/context/MovieContext";
+import { useRequestQuery } from "../hooks/useRequestQuery";
 
 import {
    genre,
@@ -30,19 +32,17 @@ const FilterMovieList = () => {
    } = useMovieContext();
 
    const currentUser = user ? user.id : null;
+   const query = useRequestQuery();
+   const router = useRouter();
+   const searchParams = useSearchParams();
 
    const handleChronologicalSort = (
       e: React.ChangeEvent<HTMLSelectElement>,
    ) => {
       const selection = e.target.value;
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         rating: rating.Default,
-         added: added.Default,
-         published: published.Default,
-         chronological: selection,
-      });
+      const params = new URLSearchParams(searchParams);
+      params.set("sort", selection.toLowerCase());
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    const handleAddedSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -82,37 +82,32 @@ const FilterMovieList = () => {
       });
    };
 
-   const handleTypeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         type: selection,
-      }));
-   };
-
    const handleGenreFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         genre: selection,
-      }));
+      const params = new URLSearchParams(searchParams);
+      params.set("genre", selection);
+      router.push(`?${params.toString()}`, { scroll: false });
+   };
+
+   const handleTypeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const selection = e.target.value;
+      const params = new URLSearchParams(searchParams);
+      params.set("type", selection);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    const handleStatusFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         status: selection,
-      }));
+      const params = new URLSearchParams(searchParams);
+      params.set("status", selection);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         requests: selection,
-      }));
    };
+
+   console.log(query);
 
    return (
       <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 xlg:flex-row gap-[10px] w-full text-white flex gap-[20px]">
@@ -129,7 +124,7 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="genreFilter"
                         id="genre"
-                        value={filterOptions.genre}
+                        value={query.genre}
                         onChange={handleGenreFilter}
                      >
                         <option value={genre.Default}>All</option>
@@ -161,7 +156,7 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="typeFilter"
                         id="type"
-                        value={filterOptions.type}
+                        value={query.type}
                         onChange={handleTypeFilter}
                      >
                         <option value={type.Default}>All</option>
@@ -177,7 +172,7 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="statusFilter"
                         id="status"
-                        value={filterOptions.status}
+                        value={query.status}
                         onChange={handleStatusFilter}
                      >
                         <option value={status.Default}>All</option>
@@ -241,7 +236,7 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="chronologicalFilter"
                         id="chronological"
-                        value={sortOptions.chronological}
+                        value={query.order}
                         onChange={handleChronologicalSort}
                      >
                         <option value={chronological.Default}>Default</option>

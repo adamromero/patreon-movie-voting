@@ -15,6 +15,7 @@ import {
 import { Movie } from "@/app/types/movie";
 import { Summary } from "@/app/types/summary";
 import { User } from "@/app/types/user";
+import { RequestsData } from "@/app/types/request";
 
 export interface MovieFilterOptions {
    type: string;
@@ -41,6 +42,9 @@ export type MovieState = {
 
    moviesList: Movie[];
    filteredMoviesList: Movie[];
+
+   requestsData: RequestsData;
+   setRequestsData: React.Dispatch<React.SetStateAction<RequestsData>>;
 
    filterOptions: MovieFilterOptions;
    setFilterOptions: React.Dispatch<React.SetStateAction<MovieFilterOptions>>;
@@ -70,6 +74,9 @@ export type MovieState = {
 
    summary: Summary | null;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
+
+   isLoading: boolean;
+   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function useMovieState(
@@ -80,6 +87,8 @@ export function useMovieState(
 
    const [moviesList, setMoviesList] = useState<Movie[]>([]);
    const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
+
+   const [requestsData, setRequestsData] = useState<RequestsData>();
 
    const [filterOptions, setFilterOptions] = useState<MovieFilterOptions>({
       type: type.Default,
@@ -117,11 +126,16 @@ export function useMovieState(
 
    const [summary, setSummary] = useState<Summary | null>(initialSummary);
 
+   const [isLoading, setIsLoading] = useState(false);
+
    return {
       user,
 
       moviesList,
       setMoviesList,
+
+      requestsData,
+      setRequestsData,
 
       filteredMoviesList,
 
@@ -157,5 +171,8 @@ export function useMovieState(
 
       summary,
       setSummary,
+
+      isLoading,
+      setIsLoading,
    };
 }

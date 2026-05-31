@@ -11,7 +11,9 @@ import {
    fetchMonthlySummary,
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
-import { fetchRequestsApi } from "@/lib/api/requests";
+import { RequestsData } from "@/app/types/request";
+import { fetchRequestsApi, fetchRequestsServer } from "@/lib/api/requests";
+import { useRequestQuery } from "@/app/hooks/useRequestQuery";
 
 export interface AddRequestMovieInput {
    id: number;
@@ -19,7 +21,7 @@ export interface AddRequestMovieInput {
 }
 
 export type MovieActions = {
-   fetchRequests: () => Promise<void>;
+   fetchRequests: (query: any) => Promise<void>;
 
    addRequestToList: (args: {
       tmdbId: number;
@@ -51,14 +53,28 @@ export type MovieActions = {
 export function useMovieActions({
    setMoviesList,
    setSummary,
+   requestsData,
+   setRequestsData,
+   isLoading,
+   setIsLoading,
 }: {
    setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
+   requestsData: RequestsData;
+   setRequestsData: React.Dispatch<React.SetStateAction<RequestsData | null>>;
+   isLoading: boolean;
+   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-   const fetchRequests = useCallback(async () => {
-      const requests = await fetchRequestsApi();
-      setMoviesList(requests);
-   }, [setMoviesList]);
+   const fetchRequests = useCallback(async (query: any) => {
+      try {
+         setIsLoading(true);
+         const data = await fetchRequestsServer(query);
+         setRequestsData(data);
+      } catch (err) {
+      } finally {
+         setIsLoading(false);
+      }
+   }, []);
 
    const addRequestToList = async ({
       tmdbId,

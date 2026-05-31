@@ -14,9 +14,97 @@ function getCurrentMonthRange() {
 }
 
 // get full list of requests
-export async function getRequests() {
+export async function getRequests(options: any) {
    await connectDB();
-   return await Movie.find().sort({ createdAt: 1 });
+
+   const query: any = {};
+
+   // needs to be extended to include actors, director, composer
+   if (options.title) {
+      query["data.Title"] = {
+         $regex: options.title,
+         $options: "i",
+      };
+   }
+
+   if (options.director) {
+      query["data.Director"] = {
+         $regex: options.director,
+         $options: "i",
+      };
+   }
+
+   if (options.actor) {
+      query["data.Actors"] = {
+         $regex: options.actor,
+         $options: "i",
+      };
+   }
+
+   if (options.composer) {
+      query["data.Composer"] = {
+         $regex: options.composer,
+         $options: "i",
+      };
+   }
+
+   if (options.genre) {
+      query["data.Genre"] = {
+         $regex: options.genre,
+         $options: "i",
+      };
+   }
+
+   if (options.type) {
+      query["data.Type"] = {
+         $regex: options.type,
+         $options: "i",
+      };
+   }
+
+   // if (options.status) {
+   //    query["data.Status"] = {
+   //       $regex: options.status,
+   //       $options: "i",
+   //    };
+   // }
+
+   //let sort: any = { createdAt: 1 };
+   let sort: any = {};
+
+   if (options.sort === "votes") {
+      //voteCount needs to be added to documents in db
+      sort.voters = options.order === "asc" ? 1 : -1;
+   }
+
+   if (options.sort === "chronological") {
+      sort.chronological = options.order === "newer" ? 1 : -1;
+   }
+
+   if (options.sort === "published") {
+      sort.published = options.order === "newer" ? 1 : -1;
+   }
+
+   if (options.sort === "added") {
+      sort.added = options.order === "newer" ? 1 : -1;
+   }
+
+   const total = await Movie.countDocuments();
+
+   const requests = await Movie.find(query)
+      //.sort({ createdAt: 1 })
+      .sort(sort)
+      .skip((options.page - 1) * options.limit)
+      .limit(options.limit)
+      .lean();
+
+   return {
+      requests,
+      total,
+      limit: options.limit,
+      page: options.page,
+      pages: Math.ceil(total / options.limit),
+   };
 }
 
 // get list of requests made by current user
@@ -101,4 +189,9 @@ export async function deleteRequest(id: string, user: User) {
    const summary = await getMonthlySummary(user);
 
    return summary;
+}
+
+export async function getRequestBySearchTitle(title: string) {
+   await connectDB();
+   return await Movie.find().find({ "data.Title": title });
 }

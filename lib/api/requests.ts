@@ -5,6 +5,65 @@ export async function fetchRequestsApi() {
    return res.json();
 }
 
+export async function fetchRequestsServer(params: {
+   page?: number;
+   limit?: number;
+   title?: string;
+   director?: string;
+   actor?: string;
+   composer?: string;
+   genre?: string;
+   type?: string;
+   status?: string;
+   sort?: string;
+}) {
+   const searchParams = new URLSearchParams();
+
+   if (params?.page) {
+      searchParams.set("page", String(params.page));
+   }
+
+   if (params?.limit) {
+      searchParams.set("limit", String(params.limit));
+   }
+
+   if (params?.title) {
+      searchParams.set("title", params.title);
+   }
+
+   if (params?.director) {
+      searchParams.set("director", params.director);
+   }
+
+   if (params?.actor) {
+      searchParams.set("actor", params.actor);
+   }
+
+   if (params?.composer) {
+      searchParams.set("composer", params.composer);
+   }
+
+   if (params?.genre) {
+      searchParams.set("genre", params.genre);
+   }
+
+   if (params?.type) {
+      searchParams.set("type", params.type);
+   }
+
+   if (params?.status) {
+      searchParams.set("status", params.status);
+   }
+
+   if (params?.sort) {
+      searchParams.set("sort", params.sort);
+   }
+
+   const res = await fetch(`/api/requests?${searchParams}`);
+   if (!res.ok) throw new Error("Failed to fetch requests");
+   return res.json();
+}
+
 // fetch list of requests made by current user
 export async function fetchUserRequests() {
    const res = await fetch("/api/requests/user");

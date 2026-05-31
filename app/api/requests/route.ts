@@ -4,8 +4,39 @@ import { getCurrentUser } from "@/lib/session";
 import { buildRequestPayload } from "@/lib/services/requests/buildRequest";
 
 export async function GET(req: NextRequest, res: NextResponse) {
+   const { searchParams } = new URL(req.url);
+
+   const page = Number(searchParams.get("page") || 1);
+   const limit = Number(searchParams.get("limit") || 50);
+
+   //const search = searchParams.get("search");
+   const genre = searchParams.get("genre");
+   const type = searchParams.get("type");
+   const status = searchParams.get("status");
+   const requests = searchParams.get("requests");
+
+   const sort = searchParams.get("sort") || "votes";
+   const order = searchParams.get("order") || "newer";
+
+   const title = searchParams.get("title");
+   const director = searchParams.get("director");
+   const actor = searchParams.get("actor");
+   const composer = searchParams.get("composer");
+
    try {
-      const requests = await getRequests();
+      const requests = await getRequests({
+         page,
+         limit,
+         sort,
+         order,
+         genre,
+         type,
+         status,
+         title,
+         actor,
+         director,
+         composer,
+      });
       return NextResponse.json(requests);
    } catch (error) {
       let message = "Unknown error";

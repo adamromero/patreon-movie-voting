@@ -29,6 +29,7 @@ export async function setOnChannel({
       "full reaction",
       "watch along",
       "watch-along",
+      "full + watch-along",
    ];
    const lowerTitle = title.toLowerCase();
 

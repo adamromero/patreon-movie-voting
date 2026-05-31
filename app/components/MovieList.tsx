@@ -14,13 +14,22 @@ import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
 import PageControls from "./PageControls";
-import { useFilteredMovies } from "../hooks/useFilteredMovies";
+import { useRequestQuery } from "../hooks/useRequestQuery";
 
 const MovieList = () => {
+   const query = useRequestQuery();
+
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
 
-   const { user, moviesList, sortOptions, setSortOptions } = useMovieContext();
+   const {
+      user,
+      sortOptions,
+      setSortOptions,
+      requestsData,
+      fetchRequests,
+      isLoading,
+   } = useMovieContext();
 
    const currentUser = user && user.id;
    const isCreator = user && user.isCreator;
@@ -32,16 +41,10 @@ const MovieList = () => {
    const indexOfLastPost = currentPage * rowsPerPage;
    const indexOfFirstPost = indexOfLastPost - rowsPerPage;
    const [isRankingOn, setIsRankingOn] = useState(false);
-   const filteredMovies = useFilteredMovies(currentUser);
 
    useEffect(() => {
-      const maxPage = Math.ceil(filteredMovies.length / rowsPerPage);
-      if (currentPage > maxPage) {
-         setCurrentPage(maxPage || 1);
-      }
-   }, [filteredMovies, currentPage, rowsPerPage]);
+      fetchRequests(query);
 
-   useEffect(() => {
       const requestStateObject: {
          [key: string]: {
             hasReacted: boolean;
@@ -54,7 +57,7 @@ const MovieList = () => {
          };
       } = {};
 
-      filteredMovies.forEach((movie) => {
+      requestsData?.requests?.forEach((movie) => {
          requestStateObject[movie._id] = {
             hasReacted: movie.hasReacted,
             hasSeen: movie.hasSeen,
@@ -71,7 +74,18 @@ const MovieList = () => {
       });
 
       setRequestStatusState(requestStateObject);
-   }, [filteredMovies]);
+   }, [
+      query.page,
+      query.limit,
+      query.genre,
+      query.type,
+      query.status,
+      query.sort,
+      query.title,
+      query.director,
+      query.actor,
+      query.composer,
+   ]);
 
    const handleTitleSort = (isAscending: boolean) => {
       setSortOptions({
@@ -196,8 +210,8 @@ const MovieList = () => {
 
    const tableBody = (
       <div>
-         {filteredMovies
-            .slice(indexOfFirstPost, indexOfLastPost)
+         {requestsData?.requests
+            ?.slice(indexOfFirstPost, indexOfLastPost)
             .map((data) => (
                <div
                   key={data._id}
@@ -222,32 +236,33 @@ const MovieList = () => {
       </div>
    );
 
+   if (isLoading) {
+      return (
+         <div className="relative flex justify-center items-center h-[100px] sm:h-[200px] mb-[100px]">
+            <div className="loader relative"></div>
+         </div>
+      );
+   }
+
    return (
       <>
-         {moviesList.length ? (
-            filteredMovies.length ? (
-               <>
-                  <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
-                     <PageControls
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        rowsPerPage={rowsPerPage}
-                        setRowsPerPage={setRowsPerPage}
-                        filteredListLength={filteredMovies.length}
-                     />
-                  </div>
-                  <div>
-                     {tableHead}
-                     {tableBody}
-                  </div>
-               </>
-            ) : (
-               <div className="text-[18px]">No results found</div>
-            )
+         {requestsData?.requests?.length ? (
+            <>
+               <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
+                  <PageControls
+                     total={requestsData.total}
+                     page={requestsData.page}
+                     pages={requestsData.pages}
+                     limit={requestsData.limit}
+                  />
+               </div>
+               <div>
+                  {tableHead}
+                  {tableBody}
+               </div>
+            </>
          ) : (
-            <div className="relative flex justify-center items-center h-[100px] sm:h-[200px] mb-[100px]">
-               <div className="loader relative"></div>
-            </div>
+            <div className="text-[18px]">No results found</div>
          )}
       </>
    );
