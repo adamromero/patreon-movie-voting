@@ -36,17 +36,24 @@ const FilterMovieList = () => {
    const router = useRouter();
    const searchParams = useSearchParams();
 
-   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+   const handleFilterSortSelection = (
+      e: React.ChangeEvent<HTMLSelectElement>,
+      filterType: string,
+   ) => {
       const selection = e.target.value;
       const params = new URLSearchParams(searchParams);
 
       if (selection) {
-         params.set("sort", selection.toLowerCase());
+         params.set(filterType, selection);
       } else {
-         params.delete("sort");
+         params.delete(filterType);
       }
 
       router.push(`?${params.toString()}`, { scroll: false });
+   };
+
+   const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const selection = e.target.value;
    };
 
    const handleWatchedStatusSort = (
@@ -56,31 +63,6 @@ const FilterMovieList = () => {
       setStatusSortOption({
          statusSort: selection,
       });
-   };
-
-   const handleGenreFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      const params = new URLSearchParams(searchParams);
-      params.set("genre", selection);
-      router.push(`?${params.toString()}`, { scroll: false });
-   };
-
-   const handleTypeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      const params = new URLSearchParams(searchParams);
-      params.set("type", selection);
-      router.push(`?${params.toString()}`, { scroll: false });
-   };
-
-   const handleStatusFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      const params = new URLSearchParams(searchParams);
-      params.set("status", selection);
-      router.push(`?${params.toString()}`, { scroll: false });
-   };
-
-   const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
    };
 
    return (
@@ -99,7 +81,7 @@ const FilterMovieList = () => {
                         name="genreFilter"
                         id="genre"
                         value={query.genre}
-                        onChange={handleGenreFilter}
+                        onChange={(e) => handleFilterSortSelection(e, "genre")}
                      >
                         <option value={genre.Default}>All</option>
                         <option value={genre.Action}>Action</option>
@@ -131,7 +113,7 @@ const FilterMovieList = () => {
                         name="typeFilter"
                         id="type"
                         value={query.type}
-                        onChange={handleTypeFilter}
+                        onChange={(e) => handleFilterSortSelection(e, "type")}
                      >
                         <option value={type.Default}>All</option>
                         <option value={type.Movie}>Movie</option>
@@ -147,7 +129,7 @@ const FilterMovieList = () => {
                         name="statusFilter"
                         id="status"
                         value={query.status}
-                        onChange={handleStatusFilter}
+                        onChange={(e) => handleFilterSortSelection(e, "status")}
                      >
                         <option value={status.Default}>All</option>
                         <option value={status.OnChannel}>On Channel</option>
@@ -211,7 +193,7 @@ const FilterMovieList = () => {
                         name="chronologicalFilter"
                         id="chronological"
                         value={query.sort}
-                        onChange={handleSort}
+                        onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
                         <option value={chronological.Default}>Default</option>
                         <option value={chronological.Older}>Older</option>
@@ -227,7 +209,7 @@ const FilterMovieList = () => {
                         name="publishedFilter"
                         id="published"
                         value={query.sort}
-                        onChange={handleSort}
+                        onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
                         <option value={published.Default}>Default</option>
                         <option value={published.Older}>Older</option>
@@ -241,7 +223,7 @@ const FilterMovieList = () => {
                         name="addedFilter"
                         id="added"
                         value={query.sort}
-                        onChange={handleSort}
+                        onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
                         <option value={added.Default}>Default</option>
                         <option value={added.Older}>Older</option>
