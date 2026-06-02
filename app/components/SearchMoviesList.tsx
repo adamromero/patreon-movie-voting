@@ -30,21 +30,25 @@ const SearchMoviesList = () => {
 
       if (debouncedTitle) {
          params.set("title", debouncedTitle);
+         params.set("page", "1");
          router.push(`?${params.toString()}`);
       }
 
       if (debouncedDirector) {
          params.set("director", debouncedDirector);
+         params.set("page", "1");
          router.push(`?${params.toString()}`);
       }
 
       if (debouncedActor) {
          params.set("actor", debouncedActor);
+         params.set("page", "1");
          router.push(`?${params.toString()}`);
       }
 
       if (debouncedComposer) {
          params.set("composer", debouncedComposer);
+         params.set("page", "1");
          router.push(`?${params.toString()}`);
       }
    }, [debouncedTitle, debouncedDirector, debouncedActor, debouncedComposer]);

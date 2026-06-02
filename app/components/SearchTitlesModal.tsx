@@ -40,7 +40,7 @@ const SearchTitlesModal = () => {
 
    const currentUser = user && user.id;
 
-   const moviesMap = useMoviesMap();
+   const moviesMap = useMoviesMap(input);
    const inputRef = useRef<HTMLInputElement>(null);
    const [movieIDCollection, setMovieIDCollection] = useState<
       Record<string | number, boolean>

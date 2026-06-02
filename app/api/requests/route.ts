@@ -13,10 +13,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
    const genre = searchParams.get("genre");
    const type = searchParams.get("type");
    const status = searchParams.get("status");
-   const requests = searchParams.get("requests");
+   const myrequests = searchParams.get("myrequests");
 
    const sort = searchParams.get("sort") || "votes";
-   const order = searchParams.get("order") || "newer";
 
    const title = searchParams.get("title");
    const director = searchParams.get("director");
@@ -28,10 +27,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
          page,
          limit,
          sort,
-         order,
          genre,
          type,
          status,
+         myrequests,
          title,
          actor,
          director,

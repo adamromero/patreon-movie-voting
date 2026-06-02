@@ -36,41 +36,17 @@ const FilterMovieList = () => {
    const router = useRouter();
    const searchParams = useSearchParams();
 
-   const handleChronologicalSort = (
-      e: React.ChangeEvent<HTMLSelectElement>,
-   ) => {
+   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
       const params = new URLSearchParams(searchParams);
-      params.set("sort", selection.toLowerCase());
+
+      if (selection) {
+         params.set("sort", selection.toLowerCase());
+      } else {
+         params.delete("sort");
+      }
+
       router.push(`?${params.toString()}`, { scroll: false });
-   };
-
-   const handleAddedSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         rating: rating.Default,
-         chronological: chronological.Default,
-         published: published.Default,
-         added: selection,
-      });
-   };
-
-   const handlePublishSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         rating: rating.Default,
-         added: added.Default,
-         chronological: chronological.Default,
-         published: selection,
-      });
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         status: status.OnChannel,
-      }));
    };
 
    const handleWatchedStatusSort = (
@@ -106,8 +82,6 @@ const FilterMovieList = () => {
    const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selection = e.target.value;
    };
-
-   console.log(query);
 
    return (
       <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 xlg:flex-row gap-[10px] w-full text-white flex gap-[20px]">
@@ -236,8 +210,8 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="chronologicalFilter"
                         id="chronological"
-                        value={query.order}
-                        onChange={handleChronologicalSort}
+                        value={query.sort}
+                        onChange={handleSort}
                      >
                         <option value={chronological.Default}>Default</option>
                         <option value={chronological.Older}>Older</option>
@@ -252,8 +226,8 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="publishedFilter"
                         id="published"
-                        value={sortOptions.published}
-                        onChange={handlePublishSort}
+                        value={query.sort}
+                        onChange={handleSort}
                      >
                         <option value={published.Default}>Default</option>
                         <option value={published.Older}>Older</option>
@@ -266,8 +240,8 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="addedFilter"
                         id="added"
-                        value={sortOptions.added}
-                        onChange={handleAddedSort}
+                        value={query.sort}
+                        onChange={handleSort}
                      >
                         <option value={added.Default}>Default</option>
                         <option value={added.Older}>Older</option>

@@ -19,7 +19,6 @@ export async function getRequests(options: any) {
 
    const query: any = {};
 
-   // needs to be extended to include actors, director, composer
    if (options.title) {
       query["data.Title"] = {
          $regex: options.title,
@@ -49,10 +48,20 @@ export async function getRequests(options: any) {
    }
 
    if (options.genre) {
-      query["data.Genre"] = {
-         $regex: options.genre,
-         $options: "i",
-      };
+      if (options.genre !== "halloween" && options.genre !== "christmas") {
+         query["data.Genre"] = {
+            $regex: options.genre,
+            $options: "i",
+         };
+      }
+
+      if (options.genre === "halloween") {
+         query["isHalloween"] = true;
+      }
+
+      if (options.genre === "christmas") {
+         query["isChristmas"] = true;
+      }
    }
 
    if (options.type) {
@@ -62,48 +71,83 @@ export async function getRequests(options: any) {
       };
    }
 
-   // if (options.status) {
-   //    query["data.Status"] = {
-   //       $regex: options.status,
-   //       $options: "i",
-   //    };
+   if (options.status) {
+      switch (options.status) {
+         case "channel":
+            query["hasReacted"] = true;
+            break;
+         case "seen":
+            query["hasSeen"] = true;
+            break;
+         case "rewatch":
+            query.rewatch = {
+               $or: [{ isRewatch: true }, { isRewatchFriend: true }],
+            };
+            break;
+         case "unseen":
+            query["hasReacted"] = false;
+            query["hasSeen"] = false;
+            query["isRewatch"] = false;
+            query["isRewatchFriend"] = false;
+            break;
+      }
+   }
+
+   // if (options.myrequests) {
+   //    switch (options.myrequests) {
+   //       case "myrequests":
+   //          query["requester"]
+   //    }
    // }
 
-   //let sort: any = { createdAt: 1 };
-   let sort: any = {};
+   let sort: any = { createdAt: 1 };
 
-   if (options.sort === "votes") {
-      //voteCount needs to be added to documents in db
-      sort.voters = options.order === "asc" ? 1 : -1;
+   // if (options.sort === "votes") {
+   //    //voteCount needs to be added to documents in db
+   //    sort.voters = options.order === "asc" ? 1 : -1;
+   // }
+
+   if (options.sort === "co") {
+      sort = { "data.Release": 1 };
    }
 
-   if (options.sort === "chronological") {
-      sort.chronological = options.order === "newer" ? 1 : -1;
+   if (options.sort === "cn") {
+      sort = { "data.Release": -1 };
    }
 
-   if (options.sort === "published") {
-      sort.published = options.order === "newer" ? 1 : -1;
+   if (options.sort === "po") {
+      sort = { publishedAt: 1 };
    }
 
-   if (options.sort === "added") {
-      sort.added = options.order === "newer" ? 1 : -1;
+   if (options.sort === "pn") {
+      sort = { publishedAt: -1 };
    }
 
-   const total = await Movie.countDocuments();
+   if (options.sort === "ao") {
+      sort = { createdAt: 1 };
+   }
+
+   if (options.sort === "an") {
+      sort = { createdAt: -1 };
+   }
+
+   const total = await Movie.countDocuments(query);
+   const limit = options.limit;
+   const pages = Math.ceil(total / limit);
+   const page = Math.min(options.page, Math.max(1, pages));
 
    const requests = await Movie.find(query)
-      //.sort({ createdAt: 1 })
       .sort(sort)
-      .skip((options.page - 1) * options.limit)
-      .limit(options.limit)
+      .skip((page - 1) * limit)
+      .limit(limit)
       .lean();
 
    return {
       requests,
       total,
-      limit: options.limit,
-      page: options.page,
-      pages: Math.ceil(total / options.limit),
+      limit,
+      page,
+      pages,
    };
 }
 
