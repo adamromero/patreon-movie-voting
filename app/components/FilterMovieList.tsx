@@ -16,6 +16,8 @@ import {
    alphabetical,
    statusSort,
    published,
+   requestFilters,
+   requestSorts,
 } from "@/app/utils/filtersOptions";
 import MovieListFilterTags from "./MovieListFilterTags";
 import MovieListSortTags from "./MovieListSortTags";
@@ -75,7 +77,7 @@ const FilterMovieList = () => {
             <div className="flex flex-col lg:flex-row gap-[10px]">
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="genre">{genre.Name}</label>
+                     <label htmlFor="genre">{requestFilters.genre.label}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="genreFilter"
@@ -83,31 +85,15 @@ const FilterMovieList = () => {
                         value={query.genre}
                         onChange={(e) => handleFilterSortSelection(e, "genre")}
                      >
-                        <option value={genre.Default}>All</option>
-                        <option value={genre.Action}>Action</option>
-                        <option value={genre.Adventure}>Adventure</option>
-                        <option value={genre.Animation}>Animation</option>
-                        <option value={genre.Christmas}>Christmas</option>
-                        <option value={genre.Comedy}>Comedy</option>
-                        <option value={genre.Crime}>Crime</option>
-                        <option value={genre.Documentary}>Documentary</option>
-                        <option value={genre.Drama}>Drama</option>
-                        <option value={genre.Family}>Family</option>
-                        <option value={genre.Fantasy}>Fantasy</option>
-                        <option value={genre.Halloween}>Halloween</option>
-                        <option value={genre.History}>History</option>
-                        <option value={genre.Horror}>Horror</option>
-                        <option value={genre.Mystery}>Mystery</option>
-                        <option value={genre.Music}>Music</option>
-                        <option value={genre.Romance}>Romance</option>
-                        <option value={genre.SciFi}>Sci-Fi</option>
-                        <option value={genre.Thriller}>Thriller</option>
-                        <option value={genre.Western}>Western</option>
-                        <option value={genre.War}>War</option>
+                        {requestFilters.genre.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="type">{type.Name}</label>
+                     <label htmlFor="type">{requestFilters.type.label}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="typeFilter"
@@ -115,15 +101,19 @@ const FilterMovieList = () => {
                         value={query.type}
                         onChange={(e) => handleFilterSortSelection(e, "type")}
                      >
-                        <option value={type.Default}>All</option>
-                        <option value={type.Movie}>Movie</option>
-                        <option value={type.Series}>Series</option>
+                        {requestFilters.type.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                </div>
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="status">{status.Name}</label>
+                     <label htmlFor="status">
+                        {requestFilters.status.label}
+                     </label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="statusFilter"
@@ -131,12 +121,11 @@ const FilterMovieList = () => {
                         value={query.status}
                         onChange={(e) => handleFilterSortSelection(e, "status")}
                      >
-                        <option value={status.Default}>All</option>
-                        <option value={status.OnChannel}>On Channel</option>
-                        <option value={status.Seen}>Seen</option>
-                        <option value={status.Rewatch}>Rewatch</option>
-                        <option value={status.Unseen}>Unseen</option>
-                        <option value={status.Votable}>Votable</option>
+                        {requestFilters.status.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   {currentUser && (
@@ -187,7 +176,9 @@ const FilterMovieList = () => {
                      </select>
                   </div>
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="chronological">{chronological.Name}</label>
+                     <label htmlFor="chronological">
+                        {requestSorts.chronological.label}
+                     </label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="chronologicalFilter"
@@ -195,15 +186,19 @@ const FilterMovieList = () => {
                         value={query.sort}
                         onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
-                        <option value={chronological.Default}>Default</option>
-                        <option value={chronological.Older}>Older</option>
-                        <option value={chronological.Newer}>Newer</option>
+                        {requestSorts.chronological.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                </div>
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="published">{published.Name}</label>
+                     <label htmlFor="published">
+                        {requestSorts.published.label}
+                     </label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="publishedFilter"
@@ -211,13 +206,15 @@ const FilterMovieList = () => {
                         value={query.sort}
                         onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
-                        <option value={published.Default}>Default</option>
-                        <option value={published.Older}>Older</option>
-                        <option value={published.Newer}>Newer</option>
+                        {requestSorts.published.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="added">{added.Name}</label>
+                     <label htmlFor="added">{requestSorts.added.label}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="addedFilter"
@@ -225,9 +222,11 @@ const FilterMovieList = () => {
                         value={query.sort}
                         onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
-                        <option value={added.Default}>Default</option>
-                        <option value={added.Older}>Older</option>
-                        <option value={added.Newer}>Newer</option>
+                        {requestSorts.added.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                </div>

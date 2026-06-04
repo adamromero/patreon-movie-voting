@@ -2,10 +2,10 @@ import { useMovieContext } from "@/context/MovieContext";
 import { useMemo } from "react";
 
 export const useRankedMovies = () => {
-   const { moviesList } = useMovieContext();
+   const { requestsData } = useMovieContext();
 
    return useMemo(() => {
-      const filtered = moviesList
+      const filtered = (requestsData?.requests ?? [])
          .filter((m) => !m.hasSeen && !m.hasReacted)
          .sort((a, b) => b.voters.length - a.voters.length);
 
@@ -16,5 +16,5 @@ export const useRankedMovies = () => {
       });
 
       return rankings;
-   }, [moviesList]);
+   }, [requestsData?.requests]);
 };

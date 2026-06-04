@@ -51,28 +51,26 @@ export type MovieActions = {
 };
 
 export function useMovieActions({
-   setMoviesList,
-   setSummary,
-   requestsData,
    setRequestsData,
+   setSummary,
    isLoading,
    setIsLoading,
 }: {
-   setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
-   requestsData: RequestsData;
-   setRequestsData: React.Dispatch<React.SetStateAction<RequestsData | null>>;
+   setRequestsData: React.Dispatch<
+      React.SetStateAction<RequestsData | undefined>
+   >;
    isLoading: boolean;
    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
    const fetchRequests = useCallback(async (query: any) => {
       try {
-         setIsLoading(true);
+         //setIsLoading(true);
          const data = await fetchRequestsServer(query);
          setRequestsData(data);
       } catch (err) {
       } finally {
-         setIsLoading(false);
+         //setIsLoading(false);
       }
    }, []);
 
@@ -85,7 +83,7 @@ export function useMovieActions({
    }) => {
       try {
          const data = await addRequestApi({ id: tmdbId, mediaType });
-         setMoviesList((prev) => [data.request, ...prev]);
+         //setMoviesList((prev) => [data.request, ...prev]);
          setSummary(data.summary);
 
          return data.request;
@@ -100,31 +98,31 @@ export function useMovieActions({
       const data = await removeRequestVote(movieId);
 
       if (data.deleted) {
-         setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+         //setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
          setSummary(data.summary);
          return;
       }
 
       if (!data.request) return;
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      );
+      // setMoviesList((prev) =>
+      //    prev.map((movie) => (movie._id === movieId ? data.request : movie)),
+      // );
       setSummary(data.summary);
    };
 
    const addVoteToRequest = async (movieId: string) => {
       const data = await addRequestVote(movieId);
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      );
+      // setMoviesList((prev) =>
+      //    prev.map((movie) => (movie._id === movieId ? data.request : movie)),
+      // );
    };
 
    const removeRequestFromList = async (movieId: string) => {
       const summary = await deleteRequestApi(movieId);
 
-      setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+      // setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
       setSummary(summary);
    };
 
@@ -134,9 +132,9 @@ export function useMovieActions({
    ) => {
       const data = await updateRequestWatchStatus(movieId, status);
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      );
+      // setMoviesList((prev) =>
+      //    prev.map((movie) => (movie._id === movieId ? data.request : movie)),
+      // );
       setSummary(data.summary);
    };
 
@@ -146,9 +144,9 @@ export function useMovieActions({
    ) => {
       const request = await updateRequestHolidayStatus(movieId, holiday);
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? request : movie)),
-      );
+      // setMoviesList((prev) =>
+      //    prev.map((movie) => (movie._id === movieId ? request : movie)),
+      // );
    };
 
    const setReactionLink = async (
@@ -157,9 +155,9 @@ export function useMovieActions({
    ) => {
       const request = await updateRequestLink(movieId, links);
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? request : movie)),
-      );
+      // setMoviesList((prev) =>
+      //    prev.map((movie) => (movie._id === movieId ? request : movie)),
+      // );
    };
 
    return {

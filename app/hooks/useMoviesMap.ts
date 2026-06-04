@@ -9,11 +9,11 @@ export const useMoviesMap = (input: string) => {
    return useMemo(() => {
       const map = new Map<string, Movie>();
 
-      requestsData.requests.forEach((request) => {
+      (requestsData?.requests ?? []).forEach((request) => {
          const key = `${request.data.id}-${request.data.Type}`;
          map.set(key, request);
       });
 
       return map;
-   }, [requestsData.requests]);
+   }, [requestsData?.requests]);
 };

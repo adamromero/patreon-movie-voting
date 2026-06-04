@@ -40,11 +40,10 @@ export interface MovieStatusSortOption {
 export type MovieState = {
    user: User | undefined;
 
-   moviesList: Movie[];
-   filteredMoviesList: Movie[];
-
-   requestsData: RequestsData;
-   setRequestsData: React.Dispatch<React.SetStateAction<RequestsData>>;
+   requestsData: RequestsData | undefined;
+   setRequestsData: React.Dispatch<
+      React.SetStateAction<RequestsData | undefined>
+   >;
 
    filterOptions: MovieFilterOptions;
    setFilterOptions: React.Dispatch<React.SetStateAction<MovieFilterOptions>>;
@@ -84,9 +83,6 @@ export function useMovieState(
    initialUser?: User,
 ) {
    const [user] = useState<User | undefined>(initialUser);
-
-   const [moviesList, setMoviesList] = useState<Movie[]>([]);
-   const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
 
    const [requestsData, setRequestsData] = useState<RequestsData>();
 
@@ -131,13 +127,8 @@ export function useMovieState(
    return {
       user,
 
-      moviesList,
-      setMoviesList,
-
       requestsData,
       setRequestsData,
-
-      filteredMoviesList,
 
       filterOptions,
       setFilterOptions,

@@ -37,10 +37,8 @@ export const MovieProvider = ({
    const query = useRequestQuery();
 
    const actions = useMovieActions({
-      setMoviesList: state.setMoviesList,
-      setSummary: state.setSummary,
-      requestsData: state.requestsData,
       setRequestsData: state.setRequestsData,
+      setSummary: state.setSummary,
       isLoading: state.isLoading,
       setIsLoading: state.setIsLoading,
    });
