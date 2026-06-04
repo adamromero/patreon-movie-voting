@@ -80,6 +80,7 @@ const MovieList = () => {
       query.genre,
       query.type,
       query.status,
+      query.myrequests,
       query.sort,
       query.title,
       query.director,

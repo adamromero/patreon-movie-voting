@@ -4,12 +4,14 @@ import { getCurrentUser } from "@/lib/session";
 import { buildRequestPayload } from "@/lib/services/requests/buildRequest";
 
 export async function GET(req: NextRequest, res: NextResponse) {
+   const user = await getCurrentUser();
+   const userId = user ? user.id : null;
+
    const { searchParams } = new URL(req.url);
 
    const page = Number(searchParams.get("page") || 1);
    const limit = Number(searchParams.get("limit") || 50);
 
-   //const search = searchParams.get("search");
    const genre = searchParams.get("genre");
    const type = searchParams.get("type");
    const status = searchParams.get("status");
@@ -23,19 +25,22 @@ export async function GET(req: NextRequest, res: NextResponse) {
    const composer = searchParams.get("composer");
 
    try {
-      const requests = await getRequests({
-         page,
-         limit,
-         sort,
-         genre,
-         type,
-         status,
-         myrequests,
-         title,
-         actor,
-         director,
-         composer,
-      });
+      const requests = await getRequests(
+         {
+            page,
+            limit,
+            sort,
+            genre,
+            type,
+            status,
+            myrequests,
+            title,
+            actor,
+            director,
+            composer,
+         },
+         userId,
+      );
       return NextResponse.json(requests);
    } catch (error) {
       let message = "Unknown error";

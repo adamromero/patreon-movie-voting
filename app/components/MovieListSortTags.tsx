@@ -5,12 +5,7 @@ import { useRequestQuery } from "../hooks/useRequestQuery";
 import { statusSort, requestSorts } from "@/app/utils/filtersOptions";
 
 const MovieListSortTags = () => {
-   const {
-      sortOptions,
-      setSortOptions,
-      statusSortOption,
-      setStatusSortOption,
-   } = useMovieContext();
+   const { statusSortOption, setStatusSortOption } = useMovieContext();
 
    const query = useRequestQuery();
    const router = useRouter();
@@ -22,11 +17,18 @@ const MovieListSortTags = () => {
       });
    };
 
-   const getSortLabel = (value: string) => {
-      // return (
-      //    requestSorts.options.find((option) => option.value === value)?.label ?? value
-      // );
-      return value;
+   const getSortLabel = (sortValue: string) => {
+      for (const sort of Object.values(requestSorts)) {
+         const option = sort.options.find(
+            (option) => option.value === sortValue,
+         );
+
+         if (option) {
+            return `${sort.label} (${option.label})`;
+         }
+      }
+
+      return sortValue;
    };
 
    const clearUrlParam = (param: string) => {
@@ -46,7 +48,7 @@ const MovieListSortTags = () => {
             </button>
          )}
 
-         {query.sort && (
+         {query.sort !== "createdAt" && (
             <button
                onClick={(e) => clearUrlParam("sort")}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"

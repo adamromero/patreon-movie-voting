@@ -190,8 +190,8 @@ export const requestSorts = {
       label: "Chronological",
       options: [
          { value: "", label: "Default" },
-         { value: "cn", label: "Newer" },
          { value: "co", label: "Older" },
+         { value: "cn", label: "Newer" },
       ],
    },
 
@@ -199,8 +199,8 @@ export const requestSorts = {
       label: "Published",
       options: [
          { value: "", label: "Default" },
-         { value: "pn", label: "Newer" },
          { value: "po", label: "Older" },
+         { value: "pn", label: "Newer" },
       ],
    },
 
@@ -208,8 +208,8 @@ export const requestSorts = {
       label: "Added",
       options: [
          { value: "", label: "Default" },
-         { value: "an", label: "Newer" },
          { value: "ao", label: "Older" },
+         { value: "an", label: "Newer" },
       ],
    },
 };

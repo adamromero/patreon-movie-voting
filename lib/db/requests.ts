@@ -14,7 +14,7 @@ function getCurrentMonthRange() {
 }
 
 // get full list of requests
-export async function getRequests(options: any) {
+export async function getRequests(options: any, userId: string | null) {
    await connectDB();
 
    const query: any = {};
@@ -80,9 +80,7 @@ export async function getRequests(options: any) {
             query["hasSeen"] = true;
             break;
          case "rewatch":
-            query.rewatch = {
-               $or: [{ isRewatch: true }, { isRewatchFriend: true }],
-            };
+            query.$or = [{ isRewatch: true }, { isRewatchFriend: true }];
             break;
          case "unseen":
             query["hasReacted"] = false;
@@ -93,12 +91,15 @@ export async function getRequests(options: any) {
       }
    }
 
-   // if (options.myrequests) {
-   //    switch (options.myrequests) {
-   //       case "myrequests":
-   //          query["requester"]
-   //    }
-   // }
+   console.log(options);
+
+   if (options.myrequests) {
+      switch (options.myrequests) {
+         case "myrequests":
+            query["requester"] = userId;
+            break;
+      }
+   }
 
    let sort: any = { createdAt: 1 };
 

@@ -5,17 +5,8 @@ import { useMovieContext } from "@/context/MovieContext";
 import { useRequestQuery } from "../hooks/useRequestQuery";
 
 import {
-   genre,
-   status,
-   type,
    requests,
-   chronological,
-   added,
-   rating,
-   votes,
-   alphabetical,
    statusSort,
-   published,
    requestFilters,
    requestSorts,
 } from "@/app/utils/filtersOptions";
@@ -23,15 +14,7 @@ import MovieListFilterTags from "./MovieListFilterTags";
 import MovieListSortTags from "./MovieListSortTags";
 
 const FilterMovieList = () => {
-   const {
-      user,
-      filterOptions,
-      setFilterOptions,
-      sortOptions,
-      setSortOptions,
-      statusSortOption,
-      setStatusSortOption,
-   } = useMovieContext();
+   const { user, statusSortOption, setStatusSortOption } = useMovieContext();
 
    const currentUser = user ? user.id : null;
    const query = useRequestQuery();
@@ -135,15 +118,16 @@ const FilterMovieList = () => {
                            className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                            name="requestsFilter"
                            id="requests"
-                           value={filterOptions.requests}
-                           onChange={handleRequestsFilter}
+                           value={query.myrequests}
+                           onChange={(e) =>
+                              handleFilterSortSelection(e, "myrequests")
+                           }
                         >
-                           <option value={requests.Default}>All</option>
-                           <option value={requests.MyRequests}>
-                              My Requests
-                           </option>
-                           <option value={requests.Voted}>Voted</option>
-                           <option value={requests.NotVoted}>Not Voted</option>
+                           {requestFilters.request.options.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                 {option.label}
+                              </option>
+                           ))}
                         </select>
                      </div>
                   )}

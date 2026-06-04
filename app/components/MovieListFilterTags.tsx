@@ -51,14 +51,14 @@ const MovieListFilterTags = () => {
                {getFilterLabel(requestFilters.status, query.status)}
             </button>
          )}
-         {/* {activeRequests !== requests.Default && (
+         {query.myrequests && (
             <button
-               onClick={handleStatusRequestsRemove}
+               onClick={(e) => clearUrlParam("myrequests")}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
-               {requestsLabels[activeRequests] ?? activeRequests}
+               {getFilterLabel(requestFilters.request, query.myrequests)}
             </button>
-         )} */}
+         )}
       </div>
    );
 };

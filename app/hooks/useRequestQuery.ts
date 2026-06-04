@@ -13,15 +13,13 @@ export function useRequestQuery() {
 
    const sort = searchParams.get("sort") || "createdAt";
 
-   const order = searchParams.get("order") === "newer" ? "newer" : "older";
-
    const genre = searchParams.get("genre") || "";
 
    const type = searchParams.get("type") || "";
 
    const status = searchParams.get("status") || "";
 
-   const requests = searchParams.get("requests") || "";
+   const myrequests = searchParams.get("myrequests") || "";
 
    return {
       page,
@@ -31,10 +29,9 @@ export function useRequestQuery() {
       actor,
       composer,
       sort,
-      order,
       genre,
       type,
       status,
-      requests,
+      myrequests,
    };
 }
