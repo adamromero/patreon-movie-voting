@@ -37,19 +37,6 @@ const FilterMovieList = () => {
       router.push(`?${params.toString()}`, { scroll: false });
    };
 
-   const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-   };
-
-   const handleWatchedStatusSort = (
-      e: React.ChangeEvent<HTMLSelectElement>,
-   ) => {
-      const selection = e.target.value;
-      setStatusSortOption({
-         statusSort: selection,
-      });
-   };
-
    return (
       <div className="flex flex-col justify-between mt-[10px] mb-[15px] sm:mt-0 xlg:flex-row gap-[10px] w-full text-white flex gap-[20px]">
          <div>
@@ -147,16 +134,16 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="watchedFilter"
                         id="watched"
-                        value={statusSortOption.statusSort}
-                        onChange={handleWatchedStatusSort}
+                        value={query.sortStatus}
+                        onChange={(e) =>
+                           handleFilterSortSelection(e, "sortStatus")
+                        }
                      >
-                        <option value={statusSort.Default}>Default</option>
-                        <option value={statusSort.Unwatched}>
-                           Unseen/Rewatch
-                        </option>
-                        <option value={statusSort.Watched}>
-                           On Channel/Seen
-                        </option>
+                        {requestSorts.status.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   <div className="flex flex-col flex-1 lg:flex-none">

@@ -1,21 +1,12 @@
 import React from "react";
-import { useMovieContext } from "@/context/MovieContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useRequestQuery } from "../hooks/useRequestQuery";
-import { statusSort, requestSorts } from "@/app/utils/filtersOptions";
+import { requestSorts } from "@/app/utils/filtersOptions";
 
 const MovieListSortTags = () => {
-   const { statusSortOption, setStatusSortOption } = useMovieContext();
-
    const query = useRequestQuery();
    const router = useRouter();
    const searchParams = useSearchParams();
-
-   const handleStatusSortFilterRemove = () => {
-      setStatusSortOption({
-         statusSort: statusSort.Default,
-      });
-   };
 
    const getSortLabel = (sortValue: string) => {
       for (const sort of Object.values(requestSorts)) {
@@ -39,9 +30,9 @@ const MovieListSortTags = () => {
 
    return (
       <div className="capitalize flex gap-[5px]">
-         {statusSortOption.statusSort !== statusSort.Default && (
+         {query.sortStatus && (
             <button
-               onClick={handleStatusSortFilterRemove}
+               onClick={(e) => clearUrlParam("sortStatus")}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                Status

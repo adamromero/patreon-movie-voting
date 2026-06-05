@@ -91,45 +91,84 @@ export async function getRequests(options: any, userId: string | null) {
       }
    }
 
-   console.log(options);
-
    if (options.myrequests) {
       switch (options.myrequests) {
          case "myrequests":
             query["requester"] = userId;
             break;
+         case "voted":
+            query["voters"] = {
+               $in: [userId],
+            };
+            break;
+         case "notvoted":
+            query["voters"] = {
+               $nin: [userId],
+            };
+            break;
       }
    }
 
-   let sort: any = { createdAt: 1 };
+   let sort: any = {};
 
-   // if (options.sort === "votes") {
-   //    //voteCount needs to be added to documents in db
-   //    sort.voters = options.order === "asc" ? 1 : -1;
-   // }
+   if (options.sort === "createdAt") {
+      sort.createdAt = 1;
+   }
+
+   if (options.sortStatus === "su") {
+      sort.hasReacted = 1;
+   }
+
+   if (options.sortStatus === "ss") {
+      sort.hasReacted = -1;
+   }
+
+   if (options.sort === "ta") {
+      sort["data.Title"] = 1;
+   }
+
+   if (options.sort === "td") {
+      sort["data.Title"] = -1;
+   }
+
+   if (options.sort === "ra") {
+      sort["data.Rating"] = -1;
+   }
+
+   if (options.sort === "rd") {
+      sort["data.Rating"] = 1;
+   }
+
+   if (options.sort === "va") {
+      sort.votes = -1;
+   }
+
+   if (options.sort === "vd") {
+      sort.votes = 1;
+   }
 
    if (options.sort === "co") {
-      sort = { "data.Release": 1 };
+      sort["data.Release"] = 1;
    }
 
    if (options.sort === "cn") {
-      sort = { "data.Release": -1 };
+      sort["data.Release"] = -1;
    }
 
    if (options.sort === "po") {
-      sort = { publishedAt: 1 };
+      sort.publishedAt = 1;
    }
 
    if (options.sort === "pn") {
-      sort = { publishedAt: -1 };
+      sort.publishedAt = -1;
    }
 
    if (options.sort === "ao") {
-      sort = { createdAt: 1 };
+      sort.createdAt = 1;
    }
 
    if (options.sort === "an") {
-      sort = { createdAt: -1 };
+      sort.createdAt = -1;
    }
 
    const total = await Movie.countDocuments(query);

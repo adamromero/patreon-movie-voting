@@ -186,6 +186,15 @@ export const requestSorts = {
       ],
    },
 
+   status: {
+      label: "Status",
+      options: [
+         { value: "", label: "Default" },
+         { value: "su", label: "Unseen/Rewatch" },
+         { value: "ss", label: "Seen/On Channel" },
+      ],
+   },
+
    chronological: {
       label: "Chronological",
       options: [

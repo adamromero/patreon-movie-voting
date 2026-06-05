@@ -13,6 +13,8 @@ export function useRequestQuery() {
 
    const sort = searchParams.get("sort") || "createdAt";
 
+   const sortStatus = searchParams.get("sortStatus") || "";
+
    const genre = searchParams.get("genre") || "";
 
    const type = searchParams.get("type") || "";
@@ -33,5 +35,6 @@ export function useRequestQuery() {
       type,
       status,
       myrequests,
+      sortStatus,
    };
 }

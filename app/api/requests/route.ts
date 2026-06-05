@@ -18,6 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
    const myrequests = searchParams.get("myrequests");
 
    const sort = searchParams.get("sort") || "votes";
+   const sortStatus = searchParams.get("sortStatus");
 
    const title = searchParams.get("title");
    const director = searchParams.get("director");
@@ -30,6 +31,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
             page,
             limit,
             sort,
+            sortStatus,
             genre,
             type,
             status,

@@ -9,27 +9,25 @@ import {
    rating,
    votes,
    published,
+   requestSorts,
 } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
 import PageControls from "./PageControls";
 import { useRequestQuery } from "../hooks/useRequestQuery";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const MovieList = () => {
    const query = useRequestQuery();
+   const searchParams = useSearchParams();
+   const router = useRouter();
+   let params = new URLSearchParams(searchParams);
 
    const defaultCurrentPage = 1;
    const defaultRowsPerPage = 50;
 
-   const {
-      user,
-      sortOptions,
-      setSortOptions,
-      requestsData,
-      fetchRequests,
-      isLoading,
-   } = useMovieContext();
+   const { user, requestsData, fetchRequests, isLoading } = useMovieContext();
 
    const currentUser = user && user.id;
    const isCreator = user && user.isCreator;
@@ -82,46 +80,61 @@ const MovieList = () => {
       query.status,
       query.myrequests,
       query.sort,
+      query.sortStatus,
       query.title,
       query.director,
       query.actor,
       query.composer,
    ]);
 
-   const handleTitleSort = (isAscending: boolean) => {
-      setSortOptions({
-         votes: votes.Default,
-         rating: rating.Default,
-         chronological: chronological.Default,
-         added: added.Default,
-         published: published.Default,
-         alphabetical: isAscending
-            ? alphabetical.Ascending
-            : alphabetical.Descending,
-      });
-   };
+   function getSortDirectionIcon(
+      currentSort: string,
+      sortCategory: {
+         options: {
+            value: string;
+         }[];
+      },
+   ) {
+      const asc = sortCategory.options[1].value;
+      const desc = sortCategory.options[2].value;
 
-   const handleRatingsSort = (isAscending: boolean) => {
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         chronological: chronological.Default,
-         added: added.Default,
-         published: published.Default,
-         votes: votes.Default,
-         rating: isAscending ? rating.Ascending : rating.Descending,
-      });
-   };
+      if (currentSort === asc) return "asc";
+      if (currentSort === desc) return "desc";
 
-   const handleVotesSort = (isAscending: boolean) => {
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         rating: rating.Default,
-         chronological: chronological.Default,
-         added: added.Default,
-         published: published.Default,
-         votes: isAscending ? votes.Ascending : votes.Descending,
-      });
-   };
+      return null;
+   }
+
+   function toggleSortCategory(
+      currentSort: string,
+      sortCategory: {
+         options: {
+            value: string;
+         }[];
+      },
+   ) {
+      const asc = sortCategory.options[1].value;
+      const desc = sortCategory.options[2].value;
+
+      return currentSort === asc ? desc : asc;
+   }
+
+   function updateSort(sort: string) {
+      params.set("sort", sort);
+      router.push(`?${params.toString()}`, { scroll: false });
+   }
+
+   const titleIconDirection = getSortDirectionIcon(
+      query.sort,
+      requestSorts.title,
+   );
+   const ratingIconDirection = getSortDirectionIcon(
+      query.sort,
+      requestSorts.rating,
+   );
+   const votesIconDirection = getSortDirectionIcon(
+      query.sort,
+      requestSorts.votes,
+   );
 
    const tableHead = (
       <div className="flex gap-[5px] sm:gap-[10px] lg:gap-0 bg-transparent lg:bg-black justify-between mb-[10px]">
@@ -135,24 +148,18 @@ const MovieList = () => {
             </button>
             <button
                onClick={() => {
-                  const nextAscending =
-                     sortOptions.alphabetical === alphabetical.Default
-                        ? true
-                        : sortOptions.alphabetical !== alphabetical.Ascending;
-                  handleTitleSort(nextAscending);
+                  const newSort = toggleSortCategory(
+                     query.sort,
+                     requestSorts.title,
+                  );
+                  updateSort(newSort);
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
-                  {sortOptions.alphabetical === alphabetical.Default && (
-                     <FaSort />
-                  )}
-                  {sortOptions.alphabetical === alphabetical.Ascending && (
-                     <FaSortUp />
-                  )}
-                  {sortOptions.alphabetical === alphabetical.Descending && (
-                     <FaSortDown />
-                  )}
+                  {titleIconDirection === "asc" && <FaSortUp />}
+                  {titleIconDirection === "desc" && <FaSortDown />}
+                  {!titleIconDirection && <FaSort />}
                   Title
                </div>
             </button>
@@ -163,18 +170,18 @@ const MovieList = () => {
          <div className="bg-black w-full lg:w-[80px]">
             <button
                onClick={() => {
-                  const nextAscending =
-                     sortOptions.rating === rating.Default
-                        ? true
-                        : sortOptions.rating !== rating.Ascending;
-                  handleRatingsSort(nextAscending);
+                  const newSort = toggleSortCategory(
+                     query.sort,
+                     requestSorts.rating,
+                  );
+                  updateSort(newSort);
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
-                  {sortOptions.rating === rating.Default && <FaSort />}
-                  {sortOptions.rating === rating.Ascending && <FaSortUp />}
-                  {sortOptions.rating === rating.Descending && <FaSortDown />}
+                  {ratingIconDirection === "asc" && <FaSortUp />}
+                  {ratingIconDirection === "desc" && <FaSortDown />}
+                  {!ratingIconDirection && <FaSort />}
                   Rating
                </div>
             </button>
@@ -182,18 +189,18 @@ const MovieList = () => {
          <div className="bg-black w-full lg:w-[100px]">
             <button
                onClick={() => {
-                  const nextAscending =
-                     sortOptions.votes === votes.Default
-                        ? true
-                        : sortOptions.votes !== votes.Ascending;
-                  handleVotesSort(nextAscending);
+                  const newSort = toggleSortCategory(
+                     query.sort,
+                     requestSorts.votes,
+                  );
+                  updateSort(newSort);
                }}
                className="flex justify-center lg:block w-full text-[14px] sm:text-[16px] lg:text-left px-[5px] py-[10px] sm:p-[10px]"
             >
                <div className="flex gap-[5px] items-center">
-                  {sortOptions.votes === votes.Default && <FaSort />}
-                  {sortOptions.votes === votes.Ascending && <FaSortUp />}
-                  {sortOptions.votes === votes.Descending && <FaSortDown />}
+                  {votesIconDirection === "asc" && <FaSortUp />}
+                  {votesIconDirection === "desc" && <FaSortDown />}
+                  {!votesIconDirection && <FaSort />}
                   Votes
                </div>
             </button>

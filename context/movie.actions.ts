@@ -65,12 +65,12 @@ export function useMovieActions({
 }) {
    const fetchRequests = useCallback(async (query: any) => {
       try {
-         //setIsLoading(true);
+         setIsLoading(true);
          const data = await fetchRequestsServer(query);
          setRequestsData(data);
       } catch (err) {
       } finally {
-         //setIsLoading(false);
+         setIsLoading(false);
       }
    }, []);
 

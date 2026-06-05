@@ -9,6 +9,8 @@ export async function fetchRequestsServer(params: {
    page?: number;
    limit?: number;
    title?: string;
+   rating?: string;
+   votes?: string;
    director?: string;
    actor?: string;
    composer?: string;
@@ -17,6 +19,7 @@ export async function fetchRequestsServer(params: {
    status?: string;
    myrequests?: string;
    sort?: string;
+   sortStatus?: string;
 }) {
    const searchParams = new URLSearchParams();
 
@@ -62,6 +65,22 @@ export async function fetchRequestsServer(params: {
 
    if (params?.sort) {
       searchParams.set("sort", params.sort);
+   }
+
+   if (params?.sortStatus) {
+      searchParams.set("sortStatus", params.sortStatus);
+   }
+
+   if (params?.title) {
+      searchParams.set("title", params.title);
+   }
+
+   if (params?.rating) {
+      searchParams.set("rating", params.rating);
+   }
+
+   if (params?.votes) {
+      searchParams.set("votes", params.votes);
    }
 
    const res = await fetch(`/api/requests?${searchParams}`);
