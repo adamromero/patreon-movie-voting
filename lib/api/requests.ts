@@ -1,3 +1,5 @@
+import { RequestVoteResponse } from "@/app/types/request";
+
 // fetch full list of requests
 export async function fetchAllRequests() {
    const res = await fetch("/api/requests");

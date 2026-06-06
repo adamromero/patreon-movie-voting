@@ -11,7 +11,11 @@ import {
    fetchMonthlySummary,
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
-import { RequestsData } from "@/app/types/request";
+import {
+   RequestsData,
+   RequestVoteResponse,
+   RequestRemoveVoteResponse,
+} from "@/app/types/request";
 import { fetchRequestsByParams } from "@/lib/api/requests";
 import { useRequestQuery } from "@/app/hooks/useRequestQuery";
 
@@ -28,11 +32,13 @@ export type MovieActions = {
       mediaType: "movie" | "tv";
    }) => Promise<Movie | null>;
 
-   addVoteToRequest: (movieId: string) => Promise<Movie | unknown>;
+   addVoteToRequest: (movieId: string) => Promise<RequestVoteResponse>;
 
    removeRequestFromList: (movieId: string) => Promise<unknown>;
 
-   removeVoteFromRequest: (movieId: string) => Promise<unknown>;
+   removeVoteFromRequest: (
+      movieId: string,
+   ) => Promise<RequestRemoveVoteResponse>;
 
    setWatchStatus: (
       movieId: string,
@@ -104,19 +110,24 @@ export function useMovieActions({
       if (data.deleted) {
          await fetchRequests();
          setSummary(data.summary);
-         return;
+         return {
+            deleted: data.deleted,
+            tmdbId: data.tmdbId,
+            mediaType: data.mediaType,
+         };
       }
 
       if (!data.request) return;
 
       await fetchRequests();
       setSummary(data.summary);
+      return data;
    };
 
    const addVoteToRequest = async (movieId: string) => {
-      console.log("add vote to request is called: ", movieId);
-      await addRequestVote(movieId);
+      const data = await addRequestVote(movieId);
       await fetchRequests();
+      return data;
    };
 
    const removeRequestFromList = async (movieId: string) => {

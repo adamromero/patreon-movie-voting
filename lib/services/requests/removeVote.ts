@@ -36,6 +36,8 @@ export async function removeVote({
       deleted,
       request: deleted ? null : request,
       requestId,
+      tmdbId: request.data.id,
+      mediaType: request.data.Type,
       summary,
    };
 }
