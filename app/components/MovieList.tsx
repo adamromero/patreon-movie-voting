@@ -2,15 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useMovieContext } from "@/context/MovieContext";
 
-import {
-   chronological,
-   added,
-   alphabetical,
-   rating,
-   votes,
-   published,
-   requestSorts,
-} from "@/app/utils/filtersOptions";
+import { requestSorts } from "@/app/utils/filtersOptions";
 import MovieListEntry from "./MovieListEntry";
 import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import { AiOutlineNumber } from "react-icons/ai";
@@ -41,7 +33,7 @@ const MovieList = () => {
    const [isRankingOn, setIsRankingOn] = useState(false);
 
    useEffect(() => {
-      fetchRequests(query);
+      fetchRequests();
 
       const requestStateObject: {
          [key: string]: {

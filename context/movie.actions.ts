@@ -12,7 +12,7 @@ import {
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
 import { RequestsData } from "@/app/types/request";
-import { fetchRequestsApi, fetchRequestsServer } from "@/lib/api/requests";
+import { fetchRequestsByParams } from "@/lib/api/requests";
 import { useRequestQuery } from "@/app/hooks/useRequestQuery";
 
 export interface AddRequestMovieInput {
@@ -21,7 +21,7 @@ export interface AddRequestMovieInput {
 }
 
 export type MovieActions = {
-   fetchRequests: (query: any) => Promise<void>;
+   fetchRequests: () => Promise<void>;
 
    addRequestToList: (args: {
       tmdbId: number;
@@ -51,11 +51,13 @@ export type MovieActions = {
 };
 
 export function useMovieActions({
+   requestsData,
    setRequestsData,
    setSummary,
    isLoading,
    setIsLoading,
 }: {
+   requestsData: RequestsData | undefined;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
    setRequestsData: React.Dispatch<
       React.SetStateAction<RequestsData | undefined>
@@ -63,16 +65,18 @@ export function useMovieActions({
    isLoading: boolean;
    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-   const fetchRequests = useCallback(async (query: any) => {
+   const query = useRequestQuery();
+
+   const fetchRequests = useCallback(async () => {
       try {
-         setIsLoading(true);
-         const data = await fetchRequestsServer(query);
+         //setIsLoading(true);
+         const data = await fetchRequestsByParams(query);
          setRequestsData(data);
       } catch (err) {
       } finally {
-         setIsLoading(false);
+         //setIsLoading(false);
       }
-   }, []);
+   }, [query]);
 
    const addRequestToList = async ({
       tmdbId,
@@ -83,7 +87,7 @@ export function useMovieActions({
    }) => {
       try {
          const data = await addRequestApi({ id: tmdbId, mediaType });
-         //setMoviesList((prev) => [data.request, ...prev]);
+         await fetchRequests();
          setSummary(data.summary);
 
          return data.request;
@@ -98,31 +102,27 @@ export function useMovieActions({
       const data = await removeRequestVote(movieId);
 
       if (data.deleted) {
-         //setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+         await fetchRequests();
          setSummary(data.summary);
          return;
       }
 
       if (!data.request) return;
 
-      // setMoviesList((prev) =>
-      //    prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      // );
+      await fetchRequests();
       setSummary(data.summary);
    };
 
    const addVoteToRequest = async (movieId: string) => {
-      const data = await addRequestVote(movieId);
-
-      // setMoviesList((prev) =>
-      //    prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      // );
+      console.log("add vote to request is called: ", movieId);
+      await addRequestVote(movieId);
+      await fetchRequests();
    };
 
    const removeRequestFromList = async (movieId: string) => {
       const summary = await deleteRequestApi(movieId);
 
-      // setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+      await fetchRequests();
       setSummary(summary);
    };
 

@@ -14,7 +14,7 @@ import MovieListFilterTags from "./MovieListFilterTags";
 import MovieListSortTags from "./MovieListSortTags";
 
 const FilterMovieList = () => {
-   const { user, statusSortOption, setStatusSortOption } = useMovieContext();
+   const { user } = useMovieContext();
 
    const currentUser = user ? user.id : null;
    const query = useRequestQuery();
@@ -30,6 +30,10 @@ const FilterMovieList = () => {
 
       if (selection) {
          params.set(filterType, selection);
+
+         if (selection === "po" || selection === "pn") {
+            params.set("status", "channel");
+         }
       } else {
          params.delete(filterType);
       }

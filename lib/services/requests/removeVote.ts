@@ -19,7 +19,9 @@ export async function removeVote({
 
    let deleted = false;
 
-   request.voters = request.voters.filter((voter: string) => voter !== user.id);
+   const voters = request.voters.filter((voter: string) => voter !== user.id);
+   request.voters = voters;
+   request.votes = voters.length;
 
    if (request.voters.length === 0) {
       await request.deleteOne();

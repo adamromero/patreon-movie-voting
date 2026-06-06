@@ -279,3 +279,17 @@ export async function getRequestBySearchTitle(title: string) {
    await connectDB();
    return await Movie.find().find({ "data.Title": title });
 }
+
+export async function findRequestsByTmdbIds(
+   items: {
+      id: number;
+      mediaType: string;
+   }[],
+) {
+   return Movie.find({
+      $or: items.map((item) => ({
+         "data.id": item.id,
+         "data.Type": item.mediaType,
+      })),
+   }).lean();
+}

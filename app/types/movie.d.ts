@@ -43,4 +43,5 @@ export interface Movie {
    publishedAt: string | null;
    requester: string;
    voters: string[];
+   votes: number;
 }

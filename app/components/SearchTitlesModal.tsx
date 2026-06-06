@@ -13,9 +13,10 @@ import { useMovieContext } from "@/context/MovieContext";
 
 import { searchTitlesApi } from "@/lib/api/tmdb/search";
 import { parseInput } from "@/lib/external/tmdb/parse";
+import { lookupRequests } from "@/lib/api/requests";
 
 import { APIMovieData } from "../types/movie";
-import { useMoviesMap } from "../hooks/useMoviesMap";
+import { Movie } from "../types/movie";
 
 type MovieData = APIMovieData;
 
@@ -26,6 +27,7 @@ const SearchTitlesModal = () => {
    const [limitError, setLimitError] = useState("");
    const [error, setError] = useState("");
    const [loadingVote, setLoadingVote] = useState(false);
+   const [moviesMap, setMoviesMap] = useState<Map<string, Movie>>();
 
    const {
       user,
@@ -39,8 +41,6 @@ const SearchTitlesModal = () => {
    const { isLimitReached } = summary ?? { count: 0, requests: [] };
 
    const currentUser = user && user.id;
-
-   const moviesMap = useMoviesMap(input);
    const inputRef = useRef<HTMLInputElement>(null);
    const [movieIDCollection, setMovieIDCollection] = useState<
       Record<string | number, boolean>
@@ -49,9 +49,11 @@ const SearchTitlesModal = () => {
       Record<string | number, boolean>
    >({});
 
+   console.log("movies map: ", moviesMap);
+
    const getMovieData = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
-      return moviesMap.get(key);
+      return moviesMap?.get(key);
    };
 
    const isMovieInList = (selectedMovie: APIMovieData) => {
@@ -96,6 +98,15 @@ const SearchTitlesModal = () => {
          try {
             const results = await searchTitlesApi(parsedInput);
             if (results.length) {
+               const storedRequests = await lookupRequests(results);
+               const map = new Map<string, Movie>(
+                  storedRequests.map((request: Movie) => [
+                     `${request.data.id}-${request.data.Type}`,
+                     request,
+                  ]),
+               );
+
+               setMoviesMap(map);
                setTitlesFromAPI(results);
             } else {
                setError("No results found");
@@ -115,10 +126,18 @@ const SearchTitlesModal = () => {
       setDisabledButtonStates({ [movie?.id]: true });
 
       try {
-         await addRequestToList({
+         const request = await addRequestToList({
             tmdbId: movie.id,
             mediaType: movie.mediaType,
          });
+
+         if (request) {
+            setMoviesMap((prev) => {
+               const next = new Map(prev);
+               next.set(`${request.data.id}-${request.data.Type}`, request);
+               return next;
+            });
+         }
       } catch (err: any) {
          setLimitError(err.message);
       }
@@ -126,7 +145,7 @@ const SearchTitlesModal = () => {
 
    const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
-      const movie = moviesMap.get(key);
+      const movie = moviesMap?.get(key);
       return movie ? movie.voters.includes(currentUser ?? "") : false;
    };
 

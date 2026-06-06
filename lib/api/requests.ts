@@ -1,11 +1,11 @@
 // fetch full list of requests
-export async function fetchRequestsApi() {
+export async function fetchAllRequests() {
    const res = await fetch("/api/requests");
    if (!res.ok) throw new Error("Failed to fetch requests");
    return res.json();
 }
 
-export async function fetchRequestsServer(params: {
+export async function fetchRequestsByParams(params: {
    page?: number;
    limit?: number;
    title?: string;
@@ -219,4 +219,21 @@ export async function updateRequestWatchStatus(id: string, status: any) {
    }
 
    return data;
+}
+
+export async function lookupRequests(
+   items: {
+      id: number;
+      mediaType: string;
+   }[],
+) {
+   const res = await fetch("/api/requests/lookup", {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ items }),
+   });
+
+   return res.json();
 }
