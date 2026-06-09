@@ -64,7 +64,6 @@ const ReactionLinkForm: React.FC<ReactionLinkFormProps> = ({
       };
 
       if (watchedMovieData) setReactionLink(watchedMovieData._id, links);
-      //set published at timestamp
    };
 
    return (

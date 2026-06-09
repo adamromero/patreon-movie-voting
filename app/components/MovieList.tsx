@@ -16,54 +16,18 @@ const MovieList = () => {
    const router = useRouter();
    let params = new URLSearchParams(searchParams);
 
-   const defaultCurrentPage = 1;
-   const defaultRowsPerPage = 50;
-
    const { user, requestsData, fetchRequests, isLoading } = useMovieContext();
+   const { requests } = requestsData ?? {};
 
    const currentUser = user && user.id;
    const isCreator = user && user.isCreator;
 
    const [requestStatusState, setRequestStatusState] = useState({});
 
-   const [currentPage, setCurrentPage] = useState(defaultCurrentPage);
-   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
-   const indexOfLastPost = currentPage * rowsPerPage;
-   const indexOfFirstPost = indexOfLastPost - rowsPerPage;
    const [isRankingOn, setIsRankingOn] = useState(false);
 
    useEffect(() => {
       fetchRequests();
-
-      const requestStateObject: {
-         [key: string]: {
-            hasReacted: boolean;
-            hasSeen: boolean;
-            isRewatch: boolean;
-            isRewatchFriend: boolean;
-            isUnseen: boolean;
-            isHalloween: boolean;
-            isChristmas: boolean;
-         };
-      } = {};
-
-      requestsData?.requests?.forEach((movie) => {
-         requestStateObject[movie._id] = {
-            hasReacted: movie.hasReacted,
-            hasSeen: movie.hasSeen,
-            isRewatch: movie.isRewatch,
-            isRewatchFriend: movie.isRewatchFriend,
-            isUnseen:
-               !movie.hasReacted &&
-               !movie.hasSeen &&
-               !movie.isRewatch &&
-               !movie.isRewatchFriend,
-            isHalloween: movie.isHalloween,
-            isChristmas: movie.isChristmas,
-         };
-      });
-
-      setRequestStatusState(requestStateObject);
    }, [
       query.page,
       query.limit,
@@ -78,6 +42,38 @@ const MovieList = () => {
       query.actor,
       query.composer,
    ]);
+
+   useEffect(() => {
+      const requestStateObject: {
+         [key: string]: {
+            hasReacted: boolean;
+            hasSeen: boolean;
+            isRewatch: boolean;
+            isRewatchFriend: boolean;
+            isUnseen: boolean;
+            isHalloween: boolean;
+            isChristmas: boolean;
+         };
+      } = {};
+
+      requests?.forEach((request) => {
+         requestStateObject[request._id] = {
+            hasReacted: request.hasReacted,
+            hasSeen: request.hasSeen,
+            isRewatch: request.isRewatch,
+            isRewatchFriend: request.isRewatchFriend,
+            isUnseen:
+               !request.hasReacted &&
+               !request.hasSeen &&
+               !request.isRewatch &&
+               !request.isRewatchFriend,
+            isHalloween: request.isHalloween,
+            isChristmas: request.isChristmas,
+         };
+      });
+
+      setRequestStatusState(requestStateObject);
+   }, [requests]);
 
    function getSortDirectionIcon(
       currentSort: string,
@@ -210,29 +206,27 @@ const MovieList = () => {
 
    const tableBody = (
       <div>
-         {requestsData?.requests
-            ?.slice(indexOfFirstPost, indexOfLastPost)
-            .map((data) => (
-               <div
-                  key={data._id}
-                  className="relative flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
-                  style={{
-                     backgroundColor:
-                        data.hasReacted || data.hasSeen
-                           ? "rgb(0 0 0 / 40%)"
-                           : "#000",
-                     position: "relative",
-                  }}
-               >
-                  <MovieListEntry
-                     data={data}
-                     currentUser={currentUser ?? ""}
-                     isCreator={isCreator ?? false}
-                     isRankingOn={isRankingOn}
-                     requestStatusState={requestStatusState}
-                  />
-               </div>
-            ))}
+         {requests?.map((data) => (
+            <div
+               key={data._id}
+               className="relative flex justify-between items-start lg:items-center mb-[10px] gap-[15px] bg-black p-[10px] lg:p-0 text-[16px]"
+               style={{
+                  backgroundColor:
+                     data.hasReacted || data.hasSeen
+                        ? "rgb(0 0 0 / 40%)"
+                        : "#000",
+                  position: "relative",
+               }}
+            >
+               <MovieListEntry
+                  data={data}
+                  currentUser={currentUser ?? ""}
+                  isCreator={isCreator ?? false}
+                  isRankingOn={isRankingOn}
+                  requestStatusState={requestStatusState}
+               />
+            </div>
+         ))}
       </div>
    );
 

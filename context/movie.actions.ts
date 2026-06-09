@@ -143,9 +143,7 @@ export function useMovieActions({
    ) => {
       const data = await updateRequestWatchStatus(movieId, status);
 
-      // setMoviesList((prev) =>
-      //    prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      // );
+      await fetchRequests();
       setSummary(data.summary);
    };
 
@@ -155,9 +153,7 @@ export function useMovieActions({
    ) => {
       const request = await updateRequestHolidayStatus(movieId, holiday);
 
-      // setMoviesList((prev) =>
-      //    prev.map((movie) => (movie._id === movieId ? request : movie)),
-      // );
+      await fetchRequests();
    };
 
    const setReactionLink = async (
@@ -166,9 +162,7 @@ export function useMovieActions({
    ) => {
       const request = await updateRequestLink(movieId, links);
 
-      // setMoviesList((prev) =>
-      //    prev.map((movie) => (movie._id === movieId ? request : movie)),
-      // );
+      await fetchRequests();
    };
 
    return {

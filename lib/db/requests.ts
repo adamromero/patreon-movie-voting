@@ -117,10 +117,12 @@ export async function getRequests(options: any, userId: string | null) {
 
    if (options.sortStatus === "su") {
       sort.hasReacted = 1;
+      sort.hasSeen = 1;
    }
 
    if (options.sortStatus === "ss") {
       sort.hasReacted = -1;
+      sort.hasSeen = -1;
    }
 
    if (options.sort === "ta") {
