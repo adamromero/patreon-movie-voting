@@ -1,8 +1,13 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 
+const removeEmojis = (text: string) =>
+   text.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").trim();
+
 const extractTitle = (input: string) => {
-   const match = input.match(/^(.*?)(?: \((\d{4})\)| \d+\s*x\s*\d+-\d+)/);
+   const cleaned = removeEmojis(input);
+
+   const match = cleaned.match(/^(.*?)(?: \((\d{4})\)| \d+\s*x\s*\d+-\d+)/);
    return match ? match[1].trim() : "";
 };
 
