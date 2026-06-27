@@ -13,15 +13,14 @@ export default async function updatePledge(
    user: UserDocument,
    tier: string,
 ) {
-   if (user.accessEndsAt && new Date(user.accessEndsAt) > new Date()) {
-      await db.collection("users").updateOne(
-         { _id: user._id },
-         {
-            $set: {
-               accessEndsAt: null,
-               tier,
-            },
+   await db.collection("users").updateOne(
+      { _id: user._id },
+      {
+         $set: {
+            accessEndsAt: null,
+            pledgeCanceledAt: null,
+            tier,
          },
-      );
-   }
+      },
+   );
 }

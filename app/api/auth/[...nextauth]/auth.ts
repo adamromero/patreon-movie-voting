@@ -75,6 +75,13 @@ export const authOptions: AuthOptions = {
             return "/unauthorized";
          }
 
+         console.log(
+            "user in sign in process: ",
+            (profile as any)?.data?.attributes,
+         );
+
+         const name = (profile as any)?.data?.attributes?.full_name;
+         const image = (profile as any)?.data?.attributes?.image_url;
          const email = (profile as any)?.data?.attributes?.email;
          const tier =
             pledge.relationships?.currently_entitled_tiers?.data?.find(
@@ -93,6 +100,8 @@ export const authOptions: AuthOptions = {
 
             if (userDB) {
                const updates: Partial<{
+                  name: string;
+                  image: string;
                   patreonId: string;
                   tier: string;
                }> = {};
@@ -100,6 +109,16 @@ export const authOptions: AuthOptions = {
                //set patreon id to existing user that didn't have one
                if (!userDB.patreonId) {
                   updates.patreonId = patreonId;
+               }
+
+               //update user name if it has changed
+               if (userDB.name !== name) {
+                  updates.name = name;
+               }
+
+               //update user image if it has changed
+               if (userDB.image !== image) {
+                  updates.image = image;
                }
 
                //set tier to existing user who doesn't have a tier or the stored tier differs from the current one
