@@ -145,8 +145,7 @@ export const authOptions: AuthOptions = {
          session.user.firstName = user.firstName ?? "";
          session.user.accessEndsAt = user.accessEndsAt;
          session.user.isCreator = user.patreonId === process.env.CREATOR_ID;
-         session.user.isProducer =
-            user.patreonId === process.env.PRODUCER_TIER_ID;
+         session.user.isProducer = user.tier === process.env.PRODUCER_TIER_ID;
 
          return session;
       },
