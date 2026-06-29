@@ -11,6 +11,7 @@ interface UserDocument {
 export default async function removePledge(
    db: Db,
    user: UserDocument,
+   event: string,
    nextChargeDate: string,
 ) {
    const pledgeCanceledAt = new Date();
@@ -18,8 +19,10 @@ export default async function removePledge(
       ? new Date(nextChargeDate)
       : pledgeCanceledAt;
 
-   console.log("pledgeCanceledAt: ", pledgeCanceledAt);
-   console.log("accessEndsAt: ", accessEndsAt);
+   const patreonWebhookEventLog = {
+      type: event,
+      at: pledgeCanceledAt,
+   };
 
    await db.collection("users").updateOne(
       { _id: user._id },
@@ -27,6 +30,7 @@ export default async function removePledge(
          $set: {
             pledgeCanceledAt,
             accessEndsAt,
+            patreonWebhookEventLog,
          },
       },
    );

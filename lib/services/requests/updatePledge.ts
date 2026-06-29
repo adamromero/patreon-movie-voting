@@ -11,14 +11,21 @@ interface UserDocument {
 export default async function updatePledge(
    db: Db,
    user: UserDocument,
+   event: string,
    tier: string,
 ) {
+   const patreonWebhookEventLog = {
+      type: event,
+      at: new Date(),
+   };
+
    await db.collection("users").updateOne(
       { _id: user._id },
       {
          $set: {
-            accessEndsAt: null,
             pledgeCanceledAt: null,
+            accessEndsAt: null,
+            patreonWebhookEventLog,
             tier,
          },
       },

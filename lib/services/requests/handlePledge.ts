@@ -30,10 +30,10 @@ export default async function handlePledge(event: any, request: any) {
    }
 
    if (event === "members:pledge:update") {
-      updatePledge(db, user, tier);
+      updatePledge(db, user, event, tier);
    } else if (event === "members:pledge:delete") {
       const nextChargeDate = request.data?.attributes?.next_charge_date ?? null;
-      removePledge(db, user, nextChargeDate);
+      removePledge(db, user, event, nextChargeDate);
    }
 
    return { status: 200 };

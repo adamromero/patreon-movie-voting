@@ -18,25 +18,22 @@ export default async function sessionCleanup() {
    if (userIds.length === 0) {
       return {
          ok: true,
-         expiredUsers: 0,
+         deletedUsers: 0,
          deletedSessions: 0,
       };
    }
 
-   const updateResult = await db
+   const deleteUser = await db
       .collection("users")
-      .updateMany(
-         { _id: { $in: userIds } },
-         { $set: { accessEndsAt: null, pledgeCanceledAt: null } },
-      );
+      .deleteMany({ userId: { $in: userIds } });
 
-   const deleteResult = await db
+   const deleteSession = await db
       .collection("sessions")
       .deleteMany({ userId: { $in: userIds } });
 
    return {
       ok: true,
-      expiredUsers: updateResult.modifiedCount,
-      deletedSessions: deleteResult.deletedCount,
+      deletedUsers: deleteUser.deletedCount,
+      deletedSessions: deleteSession.deletedCount,
    };
 }

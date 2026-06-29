@@ -75,11 +75,6 @@ export const authOptions: AuthOptions = {
             return "/unauthorized";
          }
 
-         console.log(
-            "user in sign in process: ",
-            (profile as any)?.data?.attributes,
-         );
-
          const name = (profile as any)?.data?.attributes?.full_name;
          const image = (profile as any)?.data?.attributes?.image_url;
          const email = (profile as any)?.data?.attributes?.email;
@@ -104,7 +99,8 @@ export const authOptions: AuthOptions = {
                   image: string;
                   patreonId: string;
                   tier: string;
-               }> = {};
+                  lastSignIn: Date;
+               }> = { lastSignIn: new Date() };
 
                //set patreon id to existing user that didn't have one
                if (!userDB.patreonId) {
