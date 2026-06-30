@@ -12,10 +12,7 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
    //redirect("/maintenance");
-
    const user = await getCurrentUser();
-
-   console.log(user);
 
    let heroSection = (
       <div className="mb-[15px]">
