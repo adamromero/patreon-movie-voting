@@ -2,21 +2,19 @@ import { AuthOptions } from "next-auth";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import PatreonProvider from "next-auth/providers/patreon";
 import clientPromise from "@/lib/mongodb";
+import connectDB from "@/lib/connectDB";
+import type { User as AppUser } from "@/app/types/user";
 
 declare module "next-auth" {
    interface Session {
-      user: {
-         id: string;
-         name: string;
-         firstName: string;
-         isCreator: boolean;
-         isProducer: boolean;
-      };
+      user: AppUser;
    }
 
    interface User {
-      patreonId?: string;
+      firstName: string;
+      patreonId: string;
       tier?: string;
+      accessEndsAt?: Date;
    }
 }
 
@@ -32,7 +30,9 @@ export const authOptions: AuthOptions = {
    adapter: MongoDBAdapter(clientPromise),
    secret: process.env.NEXTAUTH_SECRET,
    session: {
-      strategy: "jwt",
+      strategy: "database",
+      maxAge: 30 * 24 * 60 * 60,
+      updateAge: 12 * 60 * 60,
    },
    pages: {
       signIn: "/",
@@ -51,8 +51,8 @@ export const authOptions: AuthOptions = {
    ],
    callbacks: {
       async signIn({ account, user, profile }) {
-         const id = (profile as any)?.data?.id;
-         if (id === process.env.CREATOR_ID) {
+         const patreonId = (profile as any)?.data?.id;
+         if (patreonId === process.env.CREATOR_ID) {
             return true;
          }
 
@@ -75,14 +75,60 @@ export const authOptions: AuthOptions = {
             return "/unauthorized";
          }
 
+         const name = (profile as any)?.data?.attributes?.full_name;
+         const image = (profile as any)?.data?.attributes?.image_url;
+         const email = (profile as any)?.data?.attributes?.email;
          const tier =
             pledge.relationships?.currently_entitled_tiers?.data?.find(
                (item: any) => item.type === "tier",
             )?.id;
 
-         user.patreonId = id;
+         user.firstName = (profile as any).data.attributes.first_name;
+         user.patreonId = patreonId;
          user.tier = tier;
-         (account as any).isProducer = tier === process.env.PRODUCER_TIER_ID;
+
+         const conn = await connectDB();
+         const db = conn.connection.db;
+
+         if (db) {
+            const userDB = await db.collection("users").findOne({ email });
+
+            if (userDB) {
+               const updates: Partial<{
+                  name: string;
+                  image: string;
+                  patreonId: string;
+                  tier: string;
+                  lastSignIn: Date;
+               }> = { lastSignIn: new Date() };
+
+               //set patreon id to existing user that didn't have one
+               if (!userDB.patreonId) {
+                  updates.patreonId = patreonId;
+               }
+
+               //update user name if it has changed
+               if (userDB.name !== name) {
+                  updates.name = name;
+               }
+
+               //update user image if it has changed
+               if (userDB.image !== image) {
+                  updates.image = image;
+               }
+
+               //set tier to existing user who doesn't have a tier or the stored tier differs from the current one
+               if (userDB.tier !== tier) {
+                  updates.tier = tier;
+               }
+
+               if (Object.keys(updates).length > 0) {
+                  await db
+                     .collection("users")
+                     .updateOne({ email }, { $set: updates });
+               }
+            }
+         }
 
          return true;
       },
@@ -90,23 +136,12 @@ export const authOptions: AuthOptions = {
       async redirect({ baseUrl }) {
          return baseUrl;
       },
-      async jwt({ token, profile, account }) {
-         if (!profile) return token;
-
-         token.id = (profile as any).data.id;
-         token.firstName = (profile as any).data.attributes.first_name;
-         token.isProducer = (account as any)?.isProducer;
-
-         return token;
-      },
-      async session({ token, session }) {
-         if (token) {
-            session.user.id = token.id;
-            session.user.firstName = token.firstName;
-            session.user.isCreator = token.id === process.env.CREATOR_ID;
-            session.user.isProducer =
-               token.isProducer || token.id === process.env.DEV_ID;
-         }
+      async session({ session, user }) {
+         session.user.id = user.patreonId;
+         session.user.firstName = user.firstName ?? "";
+         session.user.accessEndsAt = user.accessEndsAt;
+         session.user.isCreator = user.patreonId === process.env.CREATOR_ID;
+         session.user.isProducer = user.tier === process.env.PRODUCER_TIER_ID;
 
          return session;
       },

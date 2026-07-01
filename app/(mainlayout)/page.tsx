@@ -12,7 +12,6 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
    //redirect("/maintenance");
-
    const user = await getCurrentUser();
 
    let heroSection = (
@@ -68,6 +67,44 @@ export default async function Home() {
                   )}
                </>
             )}
+         </div>
+      );
+   }
+
+   if (
+      !user?.isCreator &&
+      user?.accessEndsAt &&
+      new Date(user?.accessEndsAt) < new Date()
+   ) {
+      return (
+         <div className="flex flex-col justify-center my-[50px] text-[white] text-center">
+            <div className="max-w-[675px] mx-auto px-[16px]">
+               <p className="text-[32px] font-bold mb-[16px]">
+                  Your access has expired!
+               </p>
+               <p className="text-[18px]">
+                  Patreon Membership Expired:{" "}
+                  {new Date(user?.accessEndsAt).toLocaleString()}
+               </p>
+               <p className="text-[24px]">
+                  Please renew your subscription to regain access.
+               </p>
+               <p className="text-[24px] mb-[16px]">
+                  It may take up to 24 hours to regain access after renewal.
+               </p>
+               <p className="text-[18px] mb-[30px]">
+                  If you see this page after renewing your subscription
+                  following cancellation but before expiration, you should still
+                  regain access within 24 hours.
+               </p>
+               <a
+                  className="bg-[black] px-[30px] py-[10px] mt-[20px] m-auto text-[16px]"
+                  href="https://www.patreon.com/c/jenmurray/membership"
+                  target="_blank"
+               >
+                  Join Here
+               </a>
+            </div>
          </div>
       );
    }
