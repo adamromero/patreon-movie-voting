@@ -19,6 +19,10 @@ export default async function updatePledge(
       at: new Date(),
    };
 
+   console.log("user id: ", user._id);
+   console.log("event: ", event);
+   console.log("tier: ", tier);
+
    await db.collection("users").updateOne(
       { _id: user._id },
       {

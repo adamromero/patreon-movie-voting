@@ -24,6 +24,9 @@ export default async function removePledge(
       at: pledgeCanceledAt,
    };
 
+   console.log("user id: ", user._id);
+   console.log("event: ", event);
+
    await db.collection("users").updateOne(
       { _id: user._id },
       {
