@@ -8,8 +8,11 @@ export default async function handlePledge(event: any, request: any) {
       (pledge: any) => pledge.type === "tier",
    ).id;
 
-   console.log("event: ", event);
-   console.log("request: ", request);
+   const webhookInfo = {
+      event,
+      request,
+      patreonUserId,
+   };
 
    if (!patreonUserId) {
       throw new Error("Patreon webhook: missing user ID");
@@ -27,15 +30,31 @@ export default async function handlePledge(event: any, request: any) {
    });
 
    if (!user) {
-      return { message: "User not found" };
+      console.warn("Patreon webhook received for unknown user", webhookInfo);
+
+      return {
+         ignored: true,
+         reason: "user_not_found",
+      };
    }
 
-   if (event === "members:pledge:update") {
-      updatePledge(db, user, event, tier);
-   } else if (event === "members:pledge:delete") {
-      const nextChargeDate = request.data?.attributes?.next_charge_date ?? null;
-      removePledge(db, user, event, nextChargeDate);
-   }
+   const nextChargeDate = request.data?.attributes?.next_charge_date ?? null;
 
-   return { status: 200 };
+   try {
+      if (event === "members:pledge:update") {
+         await updatePledge(db, user, event, tier);
+      }
+
+      if (event === "members:pledge:delete") {
+         await removePledge(db, user, event, nextChargeDate);
+      }
+
+      console.log("Webhook processed successfully", webhookInfo);
+
+      return { status: 200 };
+   } catch (err) {
+      console.error("Webhook processing failed", err);
+
+      throw err;
+   }
 }
