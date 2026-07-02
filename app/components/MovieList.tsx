@@ -36,7 +36,7 @@ const MovieList = () => {
       query.status,
       query.myrequests,
       query.sort,
-      query.sortStatus,
+      query.sortstatus,
       query.title,
       query.director,
       query.actor,

@@ -30,9 +30,9 @@ const MovieListSortTags = () => {
 
    return (
       <div className="capitalize flex gap-[5px]">
-         {query.sortStatus && (
+         {query.sortstatus && (
             <button
-               onClick={(e) => clearUrlParam("sortStatus")}
+               onClick={(e) => clearUrlParam("sortstatus")}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
                Status

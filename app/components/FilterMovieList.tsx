@@ -138,9 +138,9 @@ const FilterMovieList = () => {
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="watchedFilter"
                         id="watched"
-                        value={query.sortStatus}
+                        value={query.sortstatus}
                         onChange={(e) =>
-                           handleFilterSortSelection(e, "sortStatus")
+                           handleFilterSortSelection(e, "sortstatus")
                         }
                      >
                         {requestSorts.status.options.map((option) => (

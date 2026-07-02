@@ -21,7 +21,7 @@ export async function fetchRequestsByParams(params: {
    status?: string;
    myrequests?: string;
    sort?: string;
-   sortStatus?: string;
+   sortstatus?: string;
 }) {
    const searchParams = new URLSearchParams();
 
@@ -69,8 +69,8 @@ export async function fetchRequestsByParams(params: {
       searchParams.set("sort", params.sort);
    }
 
-   if (params?.sortStatus) {
-      searchParams.set("sortStatus", params.sortStatus);
+   if (params?.sortstatus) {
+      searchParams.set("sortstatus", params.sortstatus);
    }
 
    if (params?.title) {
