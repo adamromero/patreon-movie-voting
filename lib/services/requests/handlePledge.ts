@@ -8,6 +8,9 @@ export default async function handlePledge(event: any, request: any) {
       (pledge: any) => pledge.type === "tier",
    ).id;
 
+   console.log("event: ", event);
+   console.log("request: ", request);
+
    if (!patreonUserId) {
       throw new Error("Patreon webhook: missing user ID");
    }
