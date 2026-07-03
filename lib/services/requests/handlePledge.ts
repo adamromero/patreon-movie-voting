@@ -3,20 +3,21 @@ import updatePledge from "./updatePledge";
 import removePledge from "./removePledge";
 
 export default async function handlePledge(event: any, request: any) {
-   const patreonUserId = request.data?.relationships?.user?.data?.id;
-   const tier = request.included?.find(
-      (pledge: any) => pledge.type === "tier",
-   ).id;
+   console.log("Patreon webhook event:", event);
+   console.log(
+      "Included types:",
+      request.included?.map((x: any) => x.type),
+   );
 
-   const webhookInfo = {
-      event,
-      request,
-      patreonUserId,
-   };
+   const patreonUserId = request.data?.relationships?.user?.data?.id;
 
    if (!patreonUserId) {
       throw new Error("Patreon webhook: missing user ID");
    }
+
+   const tier = request.included?.find(
+      (pledge: any) => pledge.type === "tier",
+   )?.id;
 
    const conn = await connectDB();
    const db = conn.connection.db;
@@ -28,6 +29,12 @@ export default async function handlePledge(event: any, request: any) {
    const user = await db.collection("users").findOne({
       patreonId: patreonUserId,
    });
+
+   const webhookInfo = {
+      event,
+      request,
+      patreonUserId,
+   };
 
    if (!user) {
       console.warn("Patreon webhook received for unknown user", webhookInfo);
