@@ -20,10 +20,10 @@ const SearchMoviesList = () => {
 
    const router = useRouter();
    const searchParams = useSearchParams();
-   const debouncedTitle = useDebounce(searchTitle, 1000);
-   const debouncedDirector = useDebounce(searchDirector, 1000);
-   const debouncedActor = useDebounce(searchActor, 1000);
-   const debouncedComposer = useDebounce(searchComposer, 1000);
+   const debouncedTitle = useDebounce(searchTitle, 500);
+   const debouncedDirector = useDebounce(searchDirector, 500);
+   const debouncedActor = useDebounce(searchActor, 500);
+   const debouncedComposer = useDebounce(searchComposer, 500);
 
    useEffect(() => {
       const params = new URLSearchParams(searchParams);

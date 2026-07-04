@@ -111,10 +111,6 @@ export async function getRequests(options: any, userId: string | null) {
 
    let sort: any = {};
 
-   if (options.sort === "createdAt") {
-      sort.createdAt = 1;
-   }
-
    if (options.sortstatus === "su") {
       sort.hasReacted = 1;
       sort.hasSeen = 1;
@@ -171,6 +167,10 @@ export async function getRequests(options: any, userId: string | null) {
 
    if (options.sort === "an") {
       sort.createdAt = -1;
+   }
+
+   if (options.sort === "createdAt") {
+      sort.createdAt = 1;
    }
 
    const total = await Movie.countDocuments(query);

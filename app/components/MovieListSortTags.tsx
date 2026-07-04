@@ -15,7 +15,7 @@ const MovieListSortTags = () => {
          );
 
          if (option) {
-            return `${sort.label} (${option.label})`;
+            return `${sort.label}`;
          }
       }
 
@@ -39,7 +39,7 @@ const MovieListSortTags = () => {
             </button>
          )}
 
-         {query.sort !== "createdAt" && (
+         {query.sort !== "createdAt" && query.sort !== "" && (
             <button
                onClick={(e) => clearUrlParam("sort")}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"

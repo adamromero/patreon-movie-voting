@@ -34,6 +34,9 @@ const FilterMovieList = () => {
          if (selection === "po" || selection === "pn") {
             params.set("status", "channel");
          }
+         // if (selection === "pd") {
+         //    params.set("status", "");
+         // }
       } else {
          params.delete(filterType);
       }

@@ -230,7 +230,7 @@ const MovieList = () => {
       </div>
    );
 
-   if (isLoading) {
+   if (!requestsData) {
       return (
          <div className="relative flex justify-center items-center h-[100px] sm:h-[200px] mb-[100px]">
             <div className="loader relative"></div>
@@ -238,26 +238,24 @@ const MovieList = () => {
       );
    }
 
+   if (!requestsData.requests.length) {
+      return <div className="text-[18px]">No results found</div>;
+   }
+
    return (
       <>
-         {requestsData?.requests?.length ? (
-            <>
-               <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
-                  <PageControls
-                     total={requestsData.total}
-                     page={requestsData.page}
-                     pages={requestsData.pages}
-                     limit={requestsData.limit}
-                  />
-               </div>
-               <div>
-                  {tableHead}
-                  {tableBody}
-               </div>
-            </>
-         ) : (
-            <div className="text-[18px]">No results found</div>
-         )}
+         <div className="sticky top-[-1px] z-50 bg-[#830483] py-[10px] flex flex-col-reverse md:flex-row items-center gap-[3px] md:gap-[15px]">
+            <PageControls
+               total={requestsData.total}
+               page={requestsData.page}
+               pages={requestsData.pages}
+               limit={requestsData.limit}
+            />
+         </div>
+         <div>
+            {tableHead}
+            {tableBody}
+         </div>
       </>
    );
 };

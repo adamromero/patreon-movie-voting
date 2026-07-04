@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
    const status = searchParams.get("status");
    const myrequests = searchParams.get("myrequests");
 
-   const sort = searchParams.get("sort") || "votes";
+   const sort = searchParams.get("sort") || "createdAt";
    const sortstatus = searchParams.get("sortstatus");
 
    const title = searchParams.get("title");

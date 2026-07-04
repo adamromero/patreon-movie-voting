@@ -74,13 +74,14 @@ export function useMovieActions({
    const query = useRequestQuery();
 
    const fetchRequests = useCallback(async () => {
+      setIsLoading(true);
+
       try {
-         //setIsLoading(true);
          const data = await fetchRequestsByParams(query);
          setRequestsData(data);
       } catch (err) {
       } finally {
-         //setIsLoading(false);
+         setIsLoading(false);
       }
    }, [query]);
 
@@ -151,8 +152,7 @@ export function useMovieActions({
       movieId: string,
       holiday: "halloween" | "christmas",
    ) => {
-      const request = await updateRequestHolidayStatus(movieId, holiday);
-
+      await updateRequestHolidayStatus(movieId, holiday);
       await fetchRequests();
    };
 
@@ -160,8 +160,7 @@ export function useMovieActions({
       movieId: string,
       links: { patreon: string; youtube: string },
    ) => {
-      const request = await updateRequestLink(movieId, links);
-
+      await updateRequestLink(movieId, links);
       await fetchRequests();
    };
 
