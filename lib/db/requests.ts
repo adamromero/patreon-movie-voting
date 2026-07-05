@@ -88,6 +88,10 @@ export async function getRequests(options: any, userId: string | null) {
             query["isRewatch"] = false;
             query["isRewatchFriend"] = false;
             break;
+         case "votable":
+            query["hasReacted"] = false;
+            query["hasSeen"] = false;
+            break;
       }
    }
 
