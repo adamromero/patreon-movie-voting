@@ -42,7 +42,7 @@ const UserSignIn: React.FC<UserSignInProps> = ({ user }) => {
                            alt={user.name}
                            width={35}
                            height={35}
-                           className="rounded-full"
+                           className="rounded-full object-cover w-[35px] h-[35px]"
                         />
                      </div>
                      <span className="hidden sm:block">{user.name}</span>
