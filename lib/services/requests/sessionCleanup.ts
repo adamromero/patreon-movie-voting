@@ -16,24 +16,30 @@ export default async function sessionCleanup() {
    const userIds = expiredUsers.map((u) => u._id);
 
    if (userIds.length === 0) {
-      return {
+      const response = {
          ok: true,
          deletedUsers: 0,
          deletedSessions: 0,
       };
-   }
 
-   const deleteUser = await db
-      .collection("users")
-      .deleteMany({ userId: { $in: userIds } });
+      console.log(response);
+      return response;
+   }
 
    const deleteSession = await db
       .collection("sessions")
       .deleteMany({ userId: { $in: userIds } });
 
-   return {
+   const deleteUser = await db
+      .collection("users")
+      .deleteMany({ _id: { $in: userIds } });
+
+   const response = {
       ok: true,
       deletedUsers: deleteUser.deletedCount,
       deletedSessions: deleteSession.deletedCount,
    };
+
+   console.log(response);
+   return response;
 }
