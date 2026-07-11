@@ -22,4 +22,5 @@ export interface RequestsData {
    page: number;
    pages: number;
    limit: number;
+   rankings: any;
 }

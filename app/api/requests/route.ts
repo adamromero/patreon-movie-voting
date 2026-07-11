@@ -26,23 +26,23 @@ export async function GET(req: NextRequest, res: NextResponse) {
    const composer = searchParams.get("composer");
 
    try {
-      const requests = await getRequests(
-         {
-            page,
-            limit,
-            sort,
-            sortstatus,
-            genre,
-            type,
-            status,
-            myrequests,
-            title,
-            actor,
-            director,
-            composer,
-         },
-         userId,
-      );
+      const options = {
+         page,
+         limit,
+         sort,
+         sortstatus,
+         genre,
+         type,
+         status,
+         myrequests,
+         title,
+         actor,
+         director,
+         composer,
+      };
+
+      const requests = await getRequests(options, userId);
+
       return NextResponse.json(requests);
    } catch (error) {
       let message = "Unknown error";

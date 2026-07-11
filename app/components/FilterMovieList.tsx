@@ -135,7 +135,7 @@ const FilterMovieList = () => {
             </div>
             <div className="flex flex-col lg:flex-row gap-[10px]">
                <div className="flex gap-[10px]">
-                  <div className="flex flex-col flex-1 lg:flex-none">
+                  {/* <div className="flex flex-col flex-1 lg:flex-none">
                      <label htmlFor="statusSort">{statusSort.Name}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
@@ -152,7 +152,7 @@ const FilterMovieList = () => {
                            </option>
                         ))}
                      </select>
-                  </div>
+                  </div> */}
                   <div className="flex flex-col flex-1 lg:flex-none">
                      <label htmlFor="chronological">
                         {requestSorts.chronological.label}

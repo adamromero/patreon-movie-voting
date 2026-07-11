@@ -62,6 +62,7 @@ export function useMovieActions({
    setSummary,
    isLoading,
    setIsLoading,
+   params,
 }: {
    requestsData: RequestsData | undefined;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
@@ -70,20 +71,21 @@ export function useMovieActions({
    >;
    isLoading: boolean;
    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+   params: any;
 }) {
    const query = useRequestQuery();
 
-   const fetchRequests = useCallback(async () => {
+   const fetchRequests = async () => {
       setIsLoading(true);
 
       try {
-         const data = await fetchRequestsByParams(query);
+         const data = await fetchRequestsByParams(query, params);
          setRequestsData(data);
       } catch (err) {
       } finally {
          setIsLoading(false);
       }
-   }, [query]);
+   };
 
    const addRequestToList = async ({
       tmdbId,

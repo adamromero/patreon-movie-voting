@@ -1,5 +1,3 @@
-import { RequestVoteResponse } from "@/app/types/request";
-
 // fetch full list of requests
 export async function fetchAllRequests() {
    const res = await fetch("/api/requests");
@@ -7,23 +5,26 @@ export async function fetchAllRequests() {
    return res.json();
 }
 
-export async function fetchRequestsByParams(params: {
-   page?: number;
-   limit?: number;
-   title?: string;
-   rating?: string;
-   votes?: string;
-   director?: string;
-   actor?: string;
-   composer?: string;
-   genre?: string;
-   type?: string;
-   status?: string;
-   myrequests?: string;
-   sort?: string;
-   sortstatus?: string;
-}) {
-   const searchParams = new URLSearchParams();
+export async function fetchRequestsByParams(
+   params: {
+      page?: number;
+      limit?: number;
+      title?: string;
+      rating?: string;
+      votes?: string;
+      director?: string;
+      actor?: string;
+      composer?: string;
+      genre?: string;
+      type?: string;
+      status?: string;
+      myrequests?: string;
+      sort?: string;
+      sortstatus?: string;
+   },
+   searchParams: any,
+) {
+   //const searchParams = new URLSearchParams();
 
    if (params?.page) {
       searchParams.set("page", String(params.page));

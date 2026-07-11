@@ -10,14 +10,27 @@ import PageControls from "./PageControls";
 import { useRequestQuery } from "../hooks/useRequestQuery";
 import { useSearchParams, useRouter } from "next/navigation";
 
+interface RequestStateObjectProps {
+   [key: string]: {
+      hasReacted: boolean;
+      hasSeen: boolean;
+      isRewatch: boolean;
+      isRewatchFriend: boolean;
+      isUnseen: boolean;
+      isHalloween: boolean;
+      isChristmas: boolean;
+   };
+}
+
 const MovieList = () => {
    const query = useRequestQuery();
+
    const searchParams = useSearchParams();
    const router = useRouter();
-   let params = new URLSearchParams(searchParams);
+   const params = new URLSearchParams(searchParams);
 
-   const { user, requestsData, fetchRequests, isLoading } = useMovieContext();
-   const { requests } = requestsData ?? {};
+   const { user, requestsData, fetchRequests } = useMovieContext();
+   const { requests, rankings } = requestsData ?? {};
 
    const currentUser = user && user.id;
    const isCreator = user && user.isCreator;
@@ -28,33 +41,10 @@ const MovieList = () => {
 
    useEffect(() => {
       fetchRequests();
-   }, [
-      query.page,
-      query.limit,
-      query.genre,
-      query.type,
-      query.status,
-      query.myrequests,
-      query.sort,
-      query.sortstatus,
-      query.title,
-      query.director,
-      query.actor,
-      query.composer,
-   ]);
+   }, [query]);
 
    useEffect(() => {
-      const requestStateObject: {
-         [key: string]: {
-            hasReacted: boolean;
-            hasSeen: boolean;
-            isRewatch: boolean;
-            isRewatchFriend: boolean;
-            isUnseen: boolean;
-            isHalloween: boolean;
-            isChristmas: boolean;
-         };
-      } = {};
+      const requestStateObject: RequestStateObjectProps = {};
 
       requests?.forEach((request) => {
          requestStateObject[request._id] = {
@@ -224,6 +214,7 @@ const MovieList = () => {
                   isCreator={isCreator ?? false}
                   isRankingOn={isRankingOn}
                   requestStatusState={requestStatusState}
+                  ranking={rankings[data.data.imdbID]}
                />
             </div>
          ))}

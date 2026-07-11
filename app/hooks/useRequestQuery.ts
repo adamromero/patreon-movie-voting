@@ -1,6 +1,7 @@
 import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
-export function useRequestQuery() {
+export function useRequestQuery(param?: string, value?: string) {
    const searchParams = useSearchParams();
 
    const page = Number(searchParams.get("page")) || 1;
@@ -11,7 +12,7 @@ export function useRequestQuery() {
    const actor = searchParams.get("actor") || "";
    const composer = searchParams.get("composer") || "";
 
-   const sort = searchParams.get("sort") || "createdAt";
+   const sort = searchParams.get("sort") || "";
 
    const sortstatus = searchParams.get("sortstatus") || "";
 
@@ -23,18 +24,20 @@ export function useRequestQuery() {
 
    const myrequests = searchParams.get("myrequests") || "";
 
-   return {
-      page,
-      limit,
-      title,
-      director,
-      actor,
-      composer,
-      sort,
-      genre,
-      type,
-      status,
-      myrequests,
-      sortstatus,
-   };
+   return useMemo(() => {
+      return {
+         page,
+         limit,
+         title,
+         director,
+         actor,
+         composer,
+         sort,
+         genre,
+         type,
+         status,
+         myrequests,
+         sortstatus,
+      };
+   }, [searchParams]);
 }

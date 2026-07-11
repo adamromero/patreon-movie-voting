@@ -1,6 +1,8 @@
 import connectDB from "@/lib/connectDB";
 import Movie from "@/models/movieModel";
 import { User } from "@/app/types/user";
+import { escapeRegex } from "@/app/utils/helpers";
+import { RequestData } from "next/dist/server/web/types";
 
 function getCurrentMonthRange() {
    const start = new Date();
@@ -21,28 +23,28 @@ export async function getRequests(options: any, userId: string | null) {
 
    if (options.title) {
       query["data.Title"] = {
-         $regex: options.title,
+         $regex: escapeRegex(options.title),
          $options: "i",
       };
    }
 
    if (options.director) {
       query["data.Director"] = {
-         $regex: options.director,
+         $regex: escapeRegex(options.director),
          $options: "i",
       };
    }
 
    if (options.actor) {
       query["data.Actors"] = {
-         $regex: options.actor,
+         $regex: escapeRegex(options.actor),
          $options: "i",
       };
    }
 
    if (options.composer) {
       query["data.Composer"] = {
-         $regex: options.composer,
+         $regex: escapeRegex(options.composer),
          $options: "i",
       };
    }
@@ -115,15 +117,18 @@ export async function getRequests(options: any, userId: string | null) {
 
    let sort: any = {};
 
-   if (options.sortstatus === "su") {
-      sort.hasReacted = 1;
-      sort.hasSeen = 1;
-   }
+   // if (options.sortstatus === "su") {
+   //    sort.hasReacted = 1;
+   //    sort.hasSeen = 1;
+   // }
 
-   if (options.sortstatus === "ss") {
-      sort.hasReacted = -1;
-      sort.hasSeen = -1;
-   }
+   // if (options.sortstatus === "ss") {
+   //    sort.hasReacted = -1;
+   //    sort.hasSeen = -1;
+   // }
+
+   sort.hasReacted = 1;
+   sort.hasSeen = 1;
 
    if (options.sort === "ta") {
       sort["data.Title"] = 1;
@@ -188,13 +193,68 @@ export async function getRequests(options: any, userId: string | null) {
       .limit(limit)
       .lean();
 
+   const activeVotingRequests = requests.filter(
+      (request) => !request.hasSeen && !request.hasReacted,
+   );
+
+   const rankings = await getRequestRankings(activeVotingRequests);
+
    return {
       requests,
       total,
       limit,
       page,
       pages,
+      rankings,
    };
+}
+
+async function getRequestRankings(requests: any) {
+   if (!requests.length) {
+      return {};
+   }
+
+   const ids = requests.map((request: any) => request.data.imdbID);
+
+   const ranked = await Movie.aggregate([
+      {
+         $match: {
+            hasSeen: false,
+            hasReacted: false,
+         },
+      },
+      {
+         $setWindowFields: {
+            sortBy: {
+               votes: -1,
+            },
+            output: {
+               rank: {
+                  $denseRank: {},
+               },
+            },
+         },
+      },
+      {
+         $match: {
+            "data.imdbID": {
+               $in: ids,
+            },
+         },
+      },
+      {
+         $project: {
+            _id: 0,
+            imdbID: "$data.imdbID",
+            rank: 1,
+         },
+      },
+   ]);
+
+   return ranked.reduce((acc, item) => {
+      acc[item.imdbID] = item.rank;
+      return acc;
+   }, {});
 }
 
 // get list of requests made by current user

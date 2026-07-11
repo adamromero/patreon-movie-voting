@@ -1,25 +1,20 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMovieContext } from "@/context/MovieContext";
 import { useRequestQuery } from "../hooks/useRequestQuery";
 import { useDebounce } from "../hooks/useDebounce";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const SearchMoviesList = () => {
-   const {
-      searchTitle,
-      setSearchTitle,
-      searchDirector,
-      setSearchDirector,
-      searchActor,
-      setSearchActor,
-      searchComposer,
-      setSearchComposer,
-   } = useMovieContext();
-
    const router = useRouter();
    const searchParams = useSearchParams();
+   const query = useRequestQuery();
+
+   const [searchTitle, setSearchTitle] = useState(query.title ?? "");
+   const [searchDirector, setSearchDirector] = useState(query.director ?? "");
+   const [searchActor, setSearchActor] = useState(query.actor ?? "");
+   const [searchComposer, setSearchComposer] = useState(query.composer ?? "");
+
    const debouncedTitle = useDebounce(searchTitle, 500);
    const debouncedDirector = useDebounce(searchDirector, 500);
    const debouncedActor = useDebounce(searchActor, 500);
@@ -32,11 +27,17 @@ const SearchMoviesList = () => {
          params.set("title", debouncedTitle);
          params.set("page", "1");
          router.push(`?${params.toString()}`);
+      } else {
+         params.delete("title");
+         router.push(`?${params.toString()}`);
       }
 
       if (debouncedDirector) {
          params.set("director", debouncedDirector);
          params.set("page", "1");
+         router.push(`?${params.toString()}`);
+      } else {
+         params.delete("director");
          router.push(`?${params.toString()}`);
       }
 
@@ -44,11 +45,17 @@ const SearchMoviesList = () => {
          params.set("actor", debouncedActor);
          params.set("page", "1");
          router.push(`?${params.toString()}`);
+      } else {
+         params.delete("actor");
+         router.push(`?${params.toString()}`);
       }
 
       if (debouncedComposer) {
          params.set("composer", debouncedComposer);
          params.set("page", "1");
+         router.push(`?${params.toString()}`);
+      } else {
+         params.delete("composer");
          router.push(`?${params.toString()}`);
       }
    }, [debouncedTitle, debouncedDirector, debouncedActor, debouncedComposer]);

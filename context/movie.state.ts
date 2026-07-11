@@ -55,15 +55,6 @@ export type MovieState = {
       React.SetStateAction<MovieStatusSortOption>
    >;
 
-   searchTitle: string;
-   setSearchTitle: React.Dispatch<React.SetStateAction<string>>;
-   searchDirector: string;
-   setSearchDirector: React.Dispatch<React.SetStateAction<string>>;
-   searchActor: string;
-   setSearchActor: React.Dispatch<React.SetStateAction<string>>;
-   searchComposer: string;
-   setSearchComposer: React.Dispatch<React.SetStateAction<string>>;
-
    isRankingOn: boolean;
 
    disableAddButton: boolean;
@@ -105,11 +96,6 @@ export function useMovieState(
          statusSort: statusSort.Unwatched,
       });
 
-   const [searchTitle, setSearchTitle] = useState("");
-   const [searchDirector, setSearchDirector] = useState("");
-   const [searchActor, setSearchActor] = useState("");
-   const [searchComposer, setSearchComposer] = useState("");
-
    const [isRankingOn, setIsRankingOn] = useState(false);
 
    const [disableAddButton, setDisableAddButton] = useState(false);
@@ -138,15 +124,6 @@ export function useMovieState(
 
       statusSortOption,
       setStatusSortOption,
-
-      searchTitle,
-      setSearchTitle,
-      searchDirector,
-      setSearchDirector,
-      searchActor,
-      setSearchActor,
-      searchComposer,
-      setSearchComposer,
 
       isRankingOn,
       setIsRankingOn,
