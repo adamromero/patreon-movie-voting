@@ -4,6 +4,8 @@ export default async function sessionCleanup() {
    const conn = await connectDB();
    const db = conn.connection.db;
 
+   console.log("Running cron...");
+
    if (!db) {
       throw new Error("No DB connection");
    }
@@ -13,7 +15,7 @@ export default async function sessionCleanup() {
       .find({ accessEndsAt: { $lt: new Date() } }, { projection: { _id: 1 } })
       .toArray();
 
-   const userIds = expiredUsers.map((u) => u._id);
+   const userIds = expiredUsers.map((user) => user._id);
 
    if (userIds.length === 0) {
       const response = {
