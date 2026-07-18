@@ -52,40 +52,46 @@ export const authOptions: AuthOptions = {
    callbacks: {
       async signIn({ account, user, profile }) {
          const patreonId = (profile as any)?.data?.id;
-         if (patreonId === process.env.CREATOR_ID) {
-            return true;
-         }
+         const isCreator = patreonId === process.env.CREATOR_ID;
 
-         const response = await fetch(process.env.PATREON_PROFILE_URL!, {
-            headers: {
-               Authorization: `Bearer ${account?.access_token}`,
-            },
-         });
+         let tier: string | undefined;
 
-         const userResponse = await response.json();
-         const pledge = userResponse?.included?.find(
-            (item: any) =>
-               item.type === "member" &&
-               item.attributes.patron_status === "active_patron" &&
-               item.relationships.campaign?.data?.id ===
-                  process.env.CAMPAIGN_ID,
-         );
+         if (!isCreator) {
+            const response = await fetch(process.env.PATREON_PROFILE_URL!, {
+               headers: {
+                  Authorization: `Bearer ${account?.access_token}`,
+               },
+            });
 
-         if (!pledge) {
-            return "/unauthorized";
+            const userResponse = await response.json();
+
+            const pledge = userResponse?.included?.find(
+               (item: any) =>
+                  item.type === "member" &&
+                  item.attributes.patron_status === "active_patron" &&
+                  item.relationships.campaign?.data?.id ===
+                     process.env.CAMPAIGN_ID,
+            );
+
+            if (!pledge) {
+               return "/unauthorized";
+            }
+
+            tier = pledge.relationships?.currently_entitled_tiers?.data?.find(
+               (item: any) => item.type === "tier",
+            )?.id;
          }
 
          const name = (profile as any)?.data?.attributes?.full_name;
          const image = (profile as any)?.data?.attributes?.image_url;
          const email = (profile as any)?.data?.attributes?.email;
-         const tier =
-            pledge.relationships?.currently_entitled_tiers?.data?.find(
-               (item: any) => item.type === "tier",
-            )?.id;
 
          user.firstName = (profile as any).data.attributes.first_name;
-         user.patreonId = patreonId;
-         user.tier = tier;
+
+         if (!isCreator) {
+            user.patreonId = patreonId;
+            user.tier = tier;
+         }
 
          const conn = await connectDB();
          const db = conn.connection.db;
@@ -103,7 +109,7 @@ export const authOptions: AuthOptions = {
                }> = { lastSignIn: new Date() };
 
                //set patreon id to existing user that didn't have one
-               if (!userDB.patreonId) {
+               if (!isCreator && userDB.patreonId !== patreonId) {
                   updates.patreonId = patreonId;
                }
 
@@ -118,7 +124,7 @@ export const authOptions: AuthOptions = {
                }
 
                //set tier to existing user who doesn't have a tier or the stored tier differs from the current one
-               if (userDB.tier !== tier) {
+               if (!isCreator && userDB.tier !== tier) {
                   updates.tier = tier;
                }
 
