@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
    try {
+      console.log("Running cron...");
       const result = await sessionCleanup();
       return NextResponse.json(result);
    } catch (error) {
