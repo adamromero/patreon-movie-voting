@@ -33,8 +33,6 @@ const PageControls: React.FC<PageControlsProps> = ({
    return (
       <>
          <Pagination
-            rowsPerPage={50}
-            totalPosts={total}
             currentPage={page}
             totalPages={pages}
             firstPage={() => updatePage(1)}

@@ -12,7 +12,7 @@ export function useRequestQuery(param?: string, value?: string) {
    const actor = searchParams.get("actor") || "";
    const composer = searchParams.get("composer") || "";
 
-   const sort = searchParams.get("sort") || "";
+   const sort = searchParams.get("sort") || "va";
 
    const sortstatus = searchParams.get("sortstatus") || "";
 

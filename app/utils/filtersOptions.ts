@@ -160,7 +160,8 @@ export const requestFilters = {
 
 export const requestSorts = {
    title: {
-      label: "Title",
+      //label: "Title",
+      label: "",
       options: [
          { value: "", label: "Default" },
          { value: "ta", label: "Ascending" },
@@ -169,7 +170,8 @@ export const requestSorts = {
    },
 
    rating: {
-      label: "Rating",
+      //label: "Rating",
+      label: "",
       options: [
          { value: "", label: "Default" },
          { value: "ra", label: "Ascending" },
@@ -178,7 +180,8 @@ export const requestSorts = {
    },
 
    votes: {
-      label: "Votes",
+      //label: "Votes",
+      label: "",
       options: [
          { value: "", label: "Default" },
          { value: "va", label: "Ascending" },

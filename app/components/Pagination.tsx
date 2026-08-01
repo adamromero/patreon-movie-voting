@@ -7,8 +7,6 @@ import {
 } from "react-icons/md";
 
 interface PaginationProps {
-   rowsPerPage: number;
-   totalPosts: number;
    currentPage: number;
    totalPages: number;
    firstPage: () => void;
@@ -18,8 +16,6 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-   rowsPerPage,
-   totalPosts,
    currentPage,
    totalPages,
    firstPage,

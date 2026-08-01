@@ -30,16 +30,7 @@ const MovieListSortTags = () => {
 
    return (
       <div className="capitalize flex gap-[5px]">
-         {/* {query.sortstatus && (
-            <button
-               onClick={(e) => clearUrlParam("sortstatus")}
-               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
-            >
-               Status
-            </button>
-         )} */}
-
-         {query.sort !== "createdAt" && query.sort !== "" && (
+         {query.sort && getSortLabel(query.sort) && (
             <button
                onClick={(e) => clearUrlParam("sort")}
                className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
