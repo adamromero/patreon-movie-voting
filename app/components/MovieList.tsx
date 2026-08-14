@@ -93,7 +93,7 @@ const MovieList = () => {
       const asc = sortCategory.options[1].value;
       const desc = sortCategory.options[2].value;
 
-      return currentSort === asc ? desc : asc;
+      return currentSort === desc ? asc : desc;
    }
 
    function updateSort(sort: string) {

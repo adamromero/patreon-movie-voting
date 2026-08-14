@@ -131,27 +131,27 @@ export async function getRequests(options: any, userId: string | null) {
    sort.hasSeen = 1;
 
    if (options.sort === "ta") {
-      sort["data.Title"] = 1;
-   }
-
-   if (options.sort === "td") {
       sort["data.Title"] = -1;
    }
 
-   if (options.sort === "ra") {
-      sort["data.Rating"] = -1;
+   if (options.sort === "td") {
+      sort["data.Title"] = 1;
    }
 
-   if (options.sort === "rd") {
+   if (options.sort === "ra") {
       sort["data.Rating"] = 1;
    }
 
+   if (options.sort === "rd") {
+      sort["data.Rating"] = -1;
+   }
+
    if (options.sort === "va") {
-      sort.votes = -1;
+      sort.votes = 1;
    }
 
    if (options.sort === "vd") {
-      sort.votes = 1;
+      sort.votes = -1;
    }
 
    if (options.sort === "co") {
