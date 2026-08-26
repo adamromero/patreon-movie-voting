@@ -1,70 +1,62 @@
+"use client";
+
 import React from "react";
-import { useMovieContext } from "@/context/MovieContext";
-import { genre, type, status, requests } from "../utils/filtersOptions";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRequestQuery } from "../hooks/useRequestQuery";
+import { requestFilters } from "../utils/filtersOptions";
 
 const MovieListFilterTags = () => {
-   const { filterOptions, setFilterOptions } = useMovieContext();
+   const query = useRequestQuery();
+   const router = useRouter();
+   const searchParams = useSearchParams();
 
-   const handleGenreFilterRemove = () => {
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         genre: genre.Default,
-      }));
+   const clearUrlParam = (param: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.delete(param);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
-   const handleTypeFilterRemove = () => {
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         type: type.Default,
-      }));
-   };
-
-   const handleStatusFilterRemove = () => {
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         status: status.Default,
-      }));
-   };
-
-   const handleStatusRequestsRemove = () => {
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         requests: requests.Default,
-      }));
+   const getFilterLabel = (
+      filter: { options: { value: string; label: string }[] },
+      value: string,
+   ) => {
+      return (
+         filter.options.find((option) => option.value === value)?.label ?? value
+      );
    };
 
    return (
       <div className="capitalize flex gap-[5px]">
-         {filterOptions.genre !== "All" && (
+         {query.genre && (
             <button
-               onClick={handleGenreFilterRemove}
-               className="1 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               onClick={(e) => clearUrlParam("genre")}
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
-               {filterOptions.genre}
+               {getFilterLabel(requestFilters.genre, query.genre)}
             </button>
          )}
-         {filterOptions.type !== "All" && (
+         {query.type && (
             <button
-               onClick={handleTypeFilterRemove}
-               className="2 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               onClick={(e) => clearUrlParam("type")}
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
-               {filterOptions.type === "TV" ? "Series" : filterOptions.type}
+               {getFilterLabel(requestFilters.type, query.type)}
             </button>
          )}
-         {filterOptions.status !== "All" && (
+         {query.status && (
             <button
-               onClick={handleStatusFilterRemove}
-               className="3 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               onClick={(e) => clearUrlParam("status")}
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
-               {filterOptions.status}
+               {getFilterLabel(requestFilters.status, query.status)}
             </button>
          )}
-         {filterOptions.requests !== "All" && (
+         {query.myrequests && (
             <button
-               onClick={handleStatusRequestsRemove}
-               className="4 bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
+               onClick={(e) => clearUrlParam("myrequests")}
+               className="bg-black py-[2px] px-[10px] rounded-[15px] cursor-pointer focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out"
             >
-               {filterOptions.requests}
+               {getFilterLabel(requestFilters.request, query.myrequests)}
             </button>
          )}
       </div>

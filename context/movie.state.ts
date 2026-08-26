@@ -15,6 +15,7 @@ import {
 import { Movie } from "@/app/types/movie";
 import { Summary } from "@/app/types/summary";
 import { User } from "@/app/types/user";
+import { RequestsData } from "@/app/types/request";
 
 export interface MovieFilterOptions {
    type: string;
@@ -39,8 +40,10 @@ export interface MovieStatusSortOption {
 export type MovieState = {
    user: User | undefined;
 
-   moviesList: Movie[];
-   filteredMoviesList: Movie[];
+   requestsData: RequestsData | undefined;
+   setRequestsData: React.Dispatch<
+      React.SetStateAction<RequestsData | undefined>
+   >;
 
    filterOptions: MovieFilterOptions;
    setFilterOptions: React.Dispatch<React.SetStateAction<MovieFilterOptions>>;
@@ -52,15 +55,6 @@ export type MovieState = {
       React.SetStateAction<MovieStatusSortOption>
    >;
 
-   searchTitle: string;
-   setSearchTitle: React.Dispatch<React.SetStateAction<string>>;
-   searchDirector: string;
-   setSearchDirector: React.Dispatch<React.SetStateAction<string>>;
-   searchActor: string;
-   setSearchActor: React.Dispatch<React.SetStateAction<string>>;
-   searchComposer: string;
-   setSearchComposer: React.Dispatch<React.SetStateAction<string>>;
-
    isRankingOn: boolean;
 
    disableAddButton: boolean;
@@ -70,6 +64,9 @@ export type MovieState = {
 
    summary: Summary | null;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
+
+   isLoading: boolean;
+   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function useMovieState(
@@ -78,8 +75,7 @@ export function useMovieState(
 ) {
    const [user] = useState<User | undefined>(initialUser);
 
-   const [moviesList, setMoviesList] = useState<Movie[]>([]);
-   const [filteredMoviesList, setFilteredMoviesList] = useState<Movie[]>([]);
+   const [requestsData, setRequestsData] = useState<RequestsData>();
 
    const [filterOptions, setFilterOptions] = useState<MovieFilterOptions>({
       type: type.Default,
@@ -100,11 +96,6 @@ export function useMovieState(
          statusSort: statusSort.Unwatched,
       });
 
-   const [searchTitle, setSearchTitle] = useState("");
-   const [searchDirector, setSearchDirector] = useState("");
-   const [searchActor, setSearchActor] = useState("");
-   const [searchComposer, setSearchComposer] = useState("");
-
    const [isRankingOn, setIsRankingOn] = useState(false);
 
    const [disableAddButton, setDisableAddButton] = useState(false);
@@ -117,13 +108,13 @@ export function useMovieState(
 
    const [summary, setSummary] = useState<Summary | null>(initialSummary);
 
+   const [isLoading, setIsLoading] = useState(false);
+
    return {
       user,
 
-      moviesList,
-      setMoviesList,
-
-      filteredMoviesList,
+      requestsData,
+      setRequestsData,
 
       filterOptions,
       setFilterOptions,
@@ -133,15 +124,6 @@ export function useMovieState(
 
       statusSortOption,
       setStatusSortOption,
-
-      searchTitle,
-      setSearchTitle,
-      searchDirector,
-      setSearchDirector,
-      searchActor,
-      setSearchActor,
-      searchComposer,
-      setSearchComposer,
 
       isRankingOn,
       setIsRankingOn,
@@ -157,5 +139,8 @@ export function useMovieState(
 
       summary,
       setSummary,
+
+      isLoading,
+      setIsLoading,
    };
 }

@@ -52,6 +52,9 @@ const movieSchema = new mongoose.Schema({
       },
    },
    voters: [{ type: String }],
+   votes: {
+      type: Number,
+   },
    hasReacted: {
       type: Boolean,
       default: false,

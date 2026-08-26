@@ -7,9 +7,8 @@ import {
 } from "react-icons/md";
 
 interface PaginationProps {
-   rowsPerPage: number;
-   totalPosts: number;
    currentPage: number;
+   totalPages: number;
    firstPage: () => void;
    lastPage: () => void;
    decrementPage: () => void;
@@ -17,9 +16,8 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-   rowsPerPage,
-   totalPosts,
    currentPage,
+   totalPages,
    firstPage,
    lastPage,
    decrementPage,
@@ -40,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({
             <MdKeyboardArrowLeft />
          </button>
          <div className="text-[16px] mx-[5px]">
-            {currentPage} of {Math.ceil(totalPosts / rowsPerPage)}
+            {currentPage} of {totalPages}
          </div>
          <button
             className="border-[1px] border-white rounded-[5px] text-[30px] hover:bg-black/[.4] focus-visible:bg-black/[.4]"

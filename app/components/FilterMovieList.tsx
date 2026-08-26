@@ -1,117 +1,47 @@
 "use client";
 import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMovieContext } from "@/context/MovieContext";
+import { useRequestQuery } from "../hooks/useRequestQuery";
 
 import {
-   genre,
-   status,
-   type,
    requests,
-   chronological,
-   added,
-   rating,
-   votes,
-   alphabetical,
    statusSort,
-   published,
+   requestFilters,
+   requestSorts,
 } from "@/app/utils/filtersOptions";
 import MovieListFilterTags from "./MovieListFilterTags";
 import MovieListSortTags from "./MovieListSortTags";
 
 const FilterMovieList = () => {
-   const {
-      user,
-      filterOptions,
-      setFilterOptions,
-      sortOptions,
-      setSortOptions,
-      statusSortOption,
-      setStatusSortOption,
-   } = useMovieContext();
+   const { user } = useMovieContext();
 
    const currentUser = user ? user.id : null;
+   const query = useRequestQuery();
+   const router = useRouter();
+   const searchParams = useSearchParams();
 
-   const handleChronologicalSort = (
+   const handleFilterSortSelection = (
       e: React.ChangeEvent<HTMLSelectElement>,
+      filterType: string,
    ) => {
       const selection = e.target.value;
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         rating: rating.Default,
-         added: added.Default,
-         published: published.Default,
-         chronological: selection,
-      });
-   };
+      const params = new URLSearchParams(searchParams);
 
-   const handleAddedSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         rating: rating.Default,
-         chronological: chronological.Default,
-         published: published.Default,
-         added: selection,
-      });
-   };
+      if (selection) {
+         params.set(filterType, selection);
 
-   const handlePublishSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setSortOptions({
-         alphabetical: alphabetical.Default,
-         votes: votes.Default,
-         rating: rating.Default,
-         added: added.Default,
-         chronological: chronological.Default,
-         published: selection,
-      });
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         status: status.OnChannel,
-      }));
-   };
+         if (selection === "po" || selection === "pn") {
+            params.set("status", "channel");
+         }
+         // if (selection === "pd") {
+         //    params.set("status", "");
+         // }
+      } else {
+         params.delete(filterType);
+      }
 
-   const handleWatchedStatusSort = (
-      e: React.ChangeEvent<HTMLSelectElement>,
-   ) => {
-      const selection = e.target.value;
-      setStatusSortOption({
-         statusSort: selection,
-      });
-   };
-
-   const handleTypeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         type: selection,
-      }));
-   };
-
-   const handleGenreFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         genre: selection,
-      }));
-   };
-
-   const handleStatusFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         status: selection,
-      }));
-   };
-
-   const handleRequestsFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const selection = e.target.value;
-      setFilterOptions((currentFilters) => ({
-         ...currentFilters,
-         requests: selection,
-      }));
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    return (
@@ -124,68 +54,55 @@ const FilterMovieList = () => {
             <div className="flex flex-col lg:flex-row gap-[10px]">
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="genre">{genre.Name}</label>
+                     <label htmlFor="genre">{requestFilters.genre.label}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="genreFilter"
                         id="genre"
-                        value={filterOptions.genre}
-                        onChange={handleGenreFilter}
+                        value={query.genre}
+                        onChange={(e) => handleFilterSortSelection(e, "genre")}
                      >
-                        <option value={genre.Default}>All</option>
-                        <option value={genre.Action}>Action</option>
-                        <option value={genre.Adventure}>Adventure</option>
-                        <option value={genre.Animation}>Animation</option>
-                        <option value={genre.Christmas}>Christmas</option>
-                        <option value={genre.Comedy}>Comedy</option>
-                        <option value={genre.Crime}>Crime</option>
-                        <option value={genre.Documentary}>Documentary</option>
-                        <option value={genre.Drama}>Drama</option>
-                        <option value={genre.Family}>Family</option>
-                        <option value={genre.Fantasy}>Fantasy</option>
-                        <option value={genre.Halloween}>Halloween</option>
-                        <option value={genre.History}>History</option>
-                        <option value={genre.Horror}>Horror</option>
-                        <option value={genre.Mystery}>Mystery</option>
-                        <option value={genre.Music}>Music</option>
-                        <option value={genre.Romance}>Romance</option>
-                        <option value={genre.SciFi}>Sci-Fi</option>
-                        <option value={genre.Thriller}>Thriller</option>
-                        <option value={genre.Western}>Western</option>
-                        <option value={genre.War}>War</option>
+                        {requestFilters.genre.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="type">{type.Name}</label>
+                     <label htmlFor="type">{requestFilters.type.label}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="typeFilter"
                         id="type"
-                        value={filterOptions.type}
-                        onChange={handleTypeFilter}
+                        value={query.type}
+                        onChange={(e) => handleFilterSortSelection(e, "type")}
                      >
-                        <option value={type.Default}>All</option>
-                        <option value={type.Movie}>Movie</option>
-                        <option value={type.Series}>Series</option>
+                        {requestFilters.type.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                </div>
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="status">{status.Name}</label>
+                     <label htmlFor="status">
+                        {requestFilters.status.label}
+                     </label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="statusFilter"
                         id="status"
-                        value={filterOptions.status}
-                        onChange={handleStatusFilter}
+                        value={query.status}
+                        onChange={(e) => handleFilterSortSelection(e, "status")}
                      >
-                        <option value={status.Default}>All</option>
-                        <option value={status.OnChannel}>On Channel</option>
-                        <option value={status.Seen}>Seen</option>
-                        <option value={status.Rewatch}>Rewatch</option>
-                        <option value={status.Unseen}>Unseen</option>
-                        <option value={status.Votable}>Votable</option>
+                        {requestFilters.status.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   {currentUser && (
@@ -195,15 +112,16 @@ const FilterMovieList = () => {
                            className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                            name="requestsFilter"
                            id="requests"
-                           value={filterOptions.requests}
-                           onChange={handleRequestsFilter}
+                           value={query.myrequests}
+                           onChange={(e) =>
+                              handleFilterSortSelection(e, "myrequests")
+                           }
                         >
-                           <option value={requests.Default}>All</option>
-                           <option value={requests.MyRequests}>
-                              My Requests
-                           </option>
-                           <option value={requests.Voted}>Voted</option>
-                           <option value={requests.NotVoted}>Not Voted</option>
+                           {requestFilters.request.options.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                 {option.label}
+                              </option>
+                           ))}
                         </select>
                      </div>
                   )}
@@ -218,65 +136,57 @@ const FilterMovieList = () => {
             <div className="flex flex-col lg:flex-row gap-[10px]">
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="statusSort">{statusSort.Name}</label>
-                     <select
-                        className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
-                        name="watchedFilter"
-                        id="watched"
-                        value={statusSortOption.statusSort}
-                        onChange={handleWatchedStatusSort}
-                     >
-                        <option value={statusSort.Default}>Default</option>
-                        <option value={statusSort.Unwatched}>
-                           Unseen/Rewatch
-                        </option>
-                        <option value={statusSort.Watched}>
-                           On Channel/Seen
-                        </option>
-                     </select>
-                  </div>
-                  <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="chronological">{chronological.Name}</label>
+                     <label htmlFor="chronological">
+                        {requestSorts.chronological.label}
+                     </label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="chronologicalFilter"
                         id="chronological"
-                        value={sortOptions.chronological}
-                        onChange={handleChronologicalSort}
+                        value={query.sort}
+                        onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
-                        <option value={chronological.Default}>Default</option>
-                        <option value={chronological.Older}>Older</option>
-                        <option value={chronological.Newer}>Newer</option>
+                        {requestSorts.chronological.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                </div>
                <div className="flex gap-[10px]">
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="published">{published.Name}</label>
+                     <label htmlFor="published">
+                        {requestSorts.published.label}
+                     </label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="publishedFilter"
                         id="published"
-                        value={sortOptions.published}
-                        onChange={handlePublishSort}
+                        value={query.sort}
+                        onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
-                        <option value={published.Default}>Default</option>
-                        <option value={published.Older}>Older</option>
-                        <option value={published.Newer}>Newer</option>
+                        {requestSorts.published.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                   <div className="flex flex-col flex-1 lg:flex-none">
-                     <label htmlFor="added">{added.Name}</label>
+                     <label htmlFor="added">{requestSorts.added.label}</label>
                      <select
                         className="bg-white text-black w-full lg:w-[125px] p-[5px] overflow-hidden whitespace-nowrap text-ellipsis"
                         name="addedFilter"
                         id="added"
-                        value={sortOptions.added}
-                        onChange={handleAddedSort}
+                        value={query.sort}
+                        onChange={(e) => handleFilterSortSelection(e, "sort")}
                      >
-                        <option value={added.Default}>Default</option>
-                        <option value={added.Older}>Older</option>
-                        <option value={added.Newer}>Newer</option>
+                        {requestSorts.added.options.map((option) => (
+                           <option key={option.value} value={option.value}>
+                              {option.label}
+                           </option>
+                        ))}
                      </select>
                   </div>
                </div>

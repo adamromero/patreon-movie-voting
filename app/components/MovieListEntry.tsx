@@ -10,7 +10,6 @@ import { FaRegImage } from "react-icons/fa6";
 
 import RequestModal from "./MovieListEntryModal/RequestModal";
 import { Movie } from "../types/movie";
-import { useRankedMovies } from "../hooks/useRankedMovies";
 
 interface MovieListEntryProps {
    data: Movie;
@@ -18,6 +17,7 @@ interface MovieListEntryProps {
    isCreator: boolean;
    isRankingOn: boolean;
    requestStatusState: Record<string | number, boolean>;
+   ranking: any;
 }
 
 type WatchedMovieRef = { _id: string };
@@ -28,6 +28,7 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
    isCreator,
    isRankingOn,
    requestStatusState,
+   ranking,
 }) => {
    const [moreInfoOpen, setMoreInfoOpen] = useState(false);
    const onOpenMoreInfoModal = () => setMoreInfoOpen(true);
@@ -48,8 +49,6 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
 
    const { addVoteToRequest, removeVoteFromRequest, removeRequestFromList } =
       useMovieContext();
-
-   const rankedMovies = useRankedMovies();
 
    const handleAddVote = async (movieId: string) => {
       await addVoteToRequest(movieId);
@@ -112,12 +111,12 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                )}
                {data?.data?.Poster ? (
                   <div className="relative">
-                     {isRankingOn && rankedMovies[data.data.imdbID ?? ""] && (
+                     {isRankingOn && ranking && (
                         <span
                            className="absolute w-full h-full items-center justify-center hidden lg:flex z-20"
                            style={{ background: "rgba(0,0,0,.75)" }}
                         >
-                           {rankedMovies[data.data.imdbID ?? ""]}
+                           {ranking}
                         </span>
                      )}
 
@@ -148,9 +147,9 @@ const MovieListEntry: React.FC<MovieListEntryProps> = ({
                {data?.data?.Year && <>({data?.data?.Year})</>}
             </div>
             <div className="lg:w-[200px]">{data?.data?.Genre}</div>
-            {rankedMovies[data.data.imdbID ?? ""] && (
+            {ranking && (
                <div className="lg:hidden">
-                  <span>Rank:</span> {rankedMovies[data.data.imdbID ?? ""]}
+                  <span>Rank:</span> {ranking}
                </div>
             )}
             <div className="lg:w-[40px]">

@@ -1,56 +1,54 @@
-import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Pagination from "./Pagination";
 
 interface PageControlsProps {
-   currentPage: number;
-   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-   rowsPerPage: number;
-   setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
-   filteredListLength: number;
+   total: number;
+   page: number;
+   pages: number;
+   limit: number;
 }
 
 const PageControls: React.FC<PageControlsProps> = ({
-   currentPage,
-   setCurrentPage,
-   rowsPerPage,
-   setRowsPerPage,
-   filteredListLength,
+   total,
+   page,
+   pages,
+   limit,
 }) => {
-   const firstPage = () => setCurrentPage(1);
-   const lastPage = () =>
-      setCurrentPage(Math.ceil(filteredListLength / rowsPerPage));
-   const decrementPage = () =>
-      setCurrentPage((pageNumber) =>
-         pageNumber > 1 ? pageNumber - 1 : pageNumber
-      );
-   const incrementPage = () => {
-      setCurrentPage((pageNumber) =>
-         pageNumber < Math.ceil(filteredListLength / rowsPerPage)
-            ? pageNumber + 1
-            : pageNumber
-      );
+   const router = useRouter();
+   const searchParams = useSearchParams();
+
+   const updatePage = (newPage: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("page", newPage.toString());
+      router.push(`?${params.toString()}`, { scroll: false });
+   };
+
+   const handleRowsPerPage = (limit: number) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("limit", limit.toString());
+      params.set("page", "1");
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    return (
       <>
          <Pagination
-            rowsPerPage={rowsPerPage}
-            totalPosts={filteredListLength}
-            currentPage={currentPage}
-            firstPage={firstPage}
-            lastPage={lastPage}
-            decrementPage={decrementPage}
-            incrementPage={incrementPage}
+            currentPage={page}
+            totalPages={pages}
+            firstPage={() => updatePage(1)}
+            lastPage={() => updatePage(pages)}
+            decrementPage={() => updatePage(Math.max(page - 1, 1))}
+            incrementPage={() => updatePage(Math.min(page + 1, pages))}
          />
-         <div>Results: {filteredListLength}</div>
+         <div>Results: {total}</div>
          <div className="flex gap-[5px]">
             <label htmlFor="rowsPerPage">Rows per page</label>
             <select
                className="text-black"
                name="rowsPerPage"
                id="rowsPerPage"
-               value={rowsPerPage}
-               onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+               value={limit}
+               onChange={(e) => handleRowsPerPage(Number(e.target.value))}
             >
                <option value="10">10</option>
                <option value="20">20</option>

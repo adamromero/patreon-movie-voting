@@ -1,19 +1,92 @@
 "use client";
 
-import React from "react";
-import { useMovieContext } from "@/context/MovieContext";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useRequestQuery } from "../hooks/useRequestQuery";
+import { useDebounce } from "../hooks/useDebounce";
+import { useState, useEffect } from "react";
 
 const SearchMoviesList = () => {
-   const {
-      searchTitle,
-      setSearchTitle,
-      searchDirector,
-      setSearchDirector,
-      searchActor,
-      setSearchActor,
-      searchComposer,
-      setSearchComposer,
-   } = useMovieContext();
+   const router = useRouter();
+   const searchParams = useSearchParams();
+   const query = useRequestQuery();
+
+   const [searchTitle, setSearchTitle] = useState(query.title ?? "");
+   const [searchDirector, setSearchDirector] = useState(query.director ?? "");
+   const [searchActor, setSearchActor] = useState(query.actor ?? "");
+   const [searchComposer, setSearchComposer] = useState(query.composer ?? "");
+
+   const debouncedTitle = useDebounce(searchTitle, 500);
+   const debouncedDirector = useDebounce(searchDirector, 500);
+   const debouncedActor = useDebounce(searchActor, 500);
+   const debouncedComposer = useDebounce(searchComposer, 500);
+
+   useEffect(() => {
+      const params = new URLSearchParams(searchParams);
+
+      if (debouncedTitle) {
+         params.set("title", debouncedTitle);
+         params.set("page", "1");
+         router.push(`?${params.toString()}`);
+      } else {
+         params.delete("title");
+         router.push(`?${params.toString()}`);
+      }
+
+      if (debouncedDirector) {
+         params.set("director", debouncedDirector);
+         params.set("page", "1");
+         router.push(`?${params.toString()}`);
+      } else {
+         params.delete("director");
+         router.push(`?${params.toString()}`);
+      }
+
+      if (debouncedActor) {
+         params.set("actor", debouncedActor);
+         params.set("page", "1");
+         router.push(`?${params.toString()}`);
+      } else {
+         params.delete("actor");
+         router.push(`?${params.toString()}`);
+      }
+
+      if (debouncedComposer) {
+         params.set("composer", debouncedComposer);
+         params.set("page", "1");
+         router.push(`?${params.toString()}`);
+      } else {
+         params.delete("composer");
+         router.push(`?${params.toString()}`);
+      }
+   }, [debouncedTitle, debouncedDirector, debouncedActor, debouncedComposer]);
+
+   const handleClearSearchTitle = () => {
+      setSearchTitle("");
+      const params = new URLSearchParams(searchParams);
+      params.delete("title");
+      router.push(`?${params.toString()}`);
+   };
+
+   const handleClearSearchDirector = () => {
+      setSearchDirector("");
+      const params = new URLSearchParams(searchParams);
+      params.delete("director");
+      router.push(`?${params.toString()}`);
+   };
+
+   const handleClearSearchActor = () => {
+      setSearchActor("");
+      const params = new URLSearchParams(searchParams);
+      params.delete("actor");
+      router.push(`?${params.toString()}`);
+   };
+
+   const handleClearSearchComposer = () => {
+      setSearchComposer("");
+      const params = new URLSearchParams(searchParams);
+      params.delete("composer");
+      router.push(`?${params.toString()}`);
+   };
 
    return (
       <div className="mb-[15px]">
@@ -28,7 +101,7 @@ const SearchMoviesList = () => {
                   onChange={(e) => setSearchTitle(e.target.value)}
                />
                <button
-                  onClick={() => setSearchTitle("")}
+                  onClick={() => handleClearSearchTitle()}
                   className="bg-black focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out px-[10px] py-[5px]"
                >
                   Clear
@@ -43,7 +116,7 @@ const SearchMoviesList = () => {
                   onChange={(e) => setSearchDirector(e.target.value)}
                />
                <button
-                  onClick={() => setSearchDirector("")}
+                  onClick={() => handleClearSearchDirector()}
                   className="bg-black focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out px-[10px] py-[5px]"
                >
                   Clear
@@ -58,7 +131,7 @@ const SearchMoviesList = () => {
                   onChange={(e) => setSearchActor(e.target.value)}
                />
                <button
-                  onClick={() => setSearchActor("")}
+                  onClick={() => handleClearSearchActor()}
                   className="bg-black focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out px-[10px] py-[5px]"
                >
                   Clear
@@ -73,7 +146,7 @@ const SearchMoviesList = () => {
                   onChange={(e) => setSearchComposer(e.target.value)}
                />
                <button
-                  onClick={() => setSearchComposer("")}
+                  onClick={() => handleClearSearchComposer()}
                   className="bg-black focus-visible:bg-[#262626] hover:bg-[#262626] transition-colors duration-300 ease-in-out px-[10px] py-[5px]"
                >
                   Clear

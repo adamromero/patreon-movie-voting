@@ -11,7 +11,13 @@ import {
    fetchMonthlySummary,
 } from "@/lib/api/requests";
 import { Summary } from "@/app/types/summary";
-import { fetchRequestsApi } from "@/lib/api/requests";
+import {
+   RequestsData,
+   RequestVoteResponse,
+   RequestRemoveVoteResponse,
+} from "@/app/types/request";
+import { fetchRequestsByParams } from "@/lib/api/requests";
+import { useRequestQuery } from "@/app/hooks/useRequestQuery";
 
 export interface AddRequestMovieInput {
    id: number;
@@ -26,11 +32,13 @@ export type MovieActions = {
       mediaType: "movie" | "tv";
    }) => Promise<Movie | null>;
 
-   addVoteToRequest: (movieId: string) => Promise<Movie | unknown>;
+   addVoteToRequest: (movieId: string) => Promise<RequestVoteResponse>;
 
    removeRequestFromList: (movieId: string) => Promise<unknown>;
 
-   removeVoteFromRequest: (movieId: string) => Promise<unknown>;
+   removeVoteFromRequest: (
+      movieId: string,
+   ) => Promise<RequestRemoveVoteResponse>;
 
    setWatchStatus: (
       movieId: string,
@@ -49,16 +57,35 @@ export type MovieActions = {
 };
 
 export function useMovieActions({
-   setMoviesList,
+   requestsData,
+   setRequestsData,
    setSummary,
+   isLoading,
+   setIsLoading,
+   params,
 }: {
-   setMoviesList: React.Dispatch<React.SetStateAction<Movie[]>>;
+   requestsData: RequestsData | undefined;
    setSummary: React.Dispatch<React.SetStateAction<Summary | null>>;
+   setRequestsData: React.Dispatch<
+      React.SetStateAction<RequestsData | undefined>
+   >;
+   isLoading: boolean;
+   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+   params: any;
 }) {
-   const fetchRequests = useCallback(async () => {
-      const requests = await fetchRequestsApi();
-      setMoviesList(requests);
-   }, [setMoviesList]);
+   const query = useRequestQuery();
+
+   const fetchRequests = async () => {
+      setIsLoading(true);
+
+      try {
+         const data = await fetchRequestsByParams(query, params);
+         setRequestsData(data);
+      } catch (err) {
+      } finally {
+         setIsLoading(false);
+      }
+   };
 
    const addRequestToList = async ({
       tmdbId,
@@ -69,7 +96,7 @@ export function useMovieActions({
    }) => {
       try {
          const data = await addRequestApi({ id: tmdbId, mediaType });
-         setMoviesList((prev) => [data.request, ...prev]);
+         await fetchRequests();
          setSummary(data.summary);
 
          return data.request;
@@ -84,31 +111,32 @@ export function useMovieActions({
       const data = await removeRequestVote(movieId);
 
       if (data.deleted) {
-         setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+         await fetchRequests();
          setSummary(data.summary);
-         return;
+         return {
+            deleted: data.deleted,
+            tmdbId: data.tmdbId,
+            mediaType: data.mediaType,
+         };
       }
 
       if (!data.request) return;
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      );
+      await fetchRequests();
       setSummary(data.summary);
+      return data;
    };
 
    const addVoteToRequest = async (movieId: string) => {
       const data = await addRequestVote(movieId);
-
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      );
+      await fetchRequests();
+      return data;
    };
 
    const removeRequestFromList = async (movieId: string) => {
       const summary = await deleteRequestApi(movieId);
 
-      setMoviesList((prev) => prev.filter((movie) => movie._id !== movieId));
+      await fetchRequests();
       setSummary(summary);
    };
 
@@ -118,9 +146,7 @@ export function useMovieActions({
    ) => {
       const data = await updateRequestWatchStatus(movieId, status);
 
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? data.request : movie)),
-      );
+      await fetchRequests();
       setSummary(data.summary);
    };
 
@@ -128,22 +154,16 @@ export function useMovieActions({
       movieId: string,
       holiday: "halloween" | "christmas",
    ) => {
-      const request = await updateRequestHolidayStatus(movieId, holiday);
-
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? request : movie)),
-      );
+      await updateRequestHolidayStatus(movieId, holiday);
+      await fetchRequests();
    };
 
    const setReactionLink = async (
       movieId: string,
       links: { patreon: string; youtube: string },
    ) => {
-      const request = await updateRequestLink(movieId, links);
-
-      setMoviesList((prev) =>
-         prev.map((movie) => (movie._id === movieId ? request : movie)),
-      );
+      await updateRequestLink(movieId, links);
+      await fetchRequests();
    };
 
    return {

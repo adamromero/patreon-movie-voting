@@ -31,6 +31,7 @@ export async function setOnChannel(patreonResponse: any) {
       "full reaction",
       "watch along",
       "watch-along",
+      "full + watch-along",
    ];
    const lowerTitle = title.toLowerCase();
 

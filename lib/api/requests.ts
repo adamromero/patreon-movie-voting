@@ -1,6 +1,92 @@
 // fetch full list of requests
-export async function fetchRequestsApi() {
+export async function fetchAllRequests() {
    const res = await fetch("/api/requests");
+   if (!res.ok) throw new Error("Failed to fetch requests");
+   return res.json();
+}
+
+export async function fetchRequestsByParams(
+   params: {
+      page?: number;
+      limit?: number;
+      title?: string;
+      rating?: string;
+      votes?: string;
+      director?: string;
+      actor?: string;
+      composer?: string;
+      genre?: string;
+      type?: string;
+      status?: string;
+      myrequests?: string;
+      sort?: string;
+      sortstatus?: string;
+   },
+   searchParams: any,
+) {
+   //const searchParams = new URLSearchParams();
+
+   if (params?.page) {
+      searchParams.set("page", String(params.page));
+   }
+
+   if (params?.limit) {
+      searchParams.set("limit", String(params.limit));
+   }
+
+   if (params?.title) {
+      searchParams.set("title", params.title);
+   }
+
+   if (params?.director) {
+      searchParams.set("director", params.director);
+   }
+
+   if (params?.actor) {
+      searchParams.set("actor", params.actor);
+   }
+
+   if (params?.composer) {
+      searchParams.set("composer", params.composer);
+   }
+
+   if (params?.genre) {
+      searchParams.set("genre", params.genre);
+   }
+
+   if (params?.type) {
+      searchParams.set("type", params.type);
+   }
+
+   if (params?.status) {
+      searchParams.set("status", params.status);
+   }
+
+   if (params?.myrequests) {
+      searchParams.set("myrequests", params.myrequests);
+   }
+
+   if (params?.sort) {
+      searchParams.set("sort", params.sort);
+   }
+
+   if (params?.sortstatus) {
+      searchParams.set("sortstatus", params.sortstatus);
+   }
+
+   if (params?.title) {
+      searchParams.set("title", params.title);
+   }
+
+   if (params?.rating) {
+      searchParams.set("rating", params.rating);
+   }
+
+   if (params?.votes) {
+      searchParams.set("votes", params.votes);
+   }
+
+   const res = await fetch(`/api/requests?${searchParams}`);
    if (!res.ok) throw new Error("Failed to fetch requests");
    return res.json();
 }
@@ -136,4 +222,21 @@ export async function updateRequestWatchStatus(id: string, status: any) {
    }
 
    return data;
+}
+
+export async function lookupRequests(
+   items: {
+      id: number;
+      mediaType: string;
+   }[],
+) {
+   const res = await fetch("/api/requests/lookup", {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ items }),
+   });
+
+   return res.json();
 }

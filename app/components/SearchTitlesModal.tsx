@@ -13,9 +13,10 @@ import { useMovieContext } from "@/context/MovieContext";
 
 import { searchTitlesApi } from "@/lib/api/tmdb/search";
 import { parseInput } from "@/lib/external/tmdb/parse";
+import { lookupRequests } from "@/lib/api/requests";
 
 import { APIMovieData } from "../types/movie";
-import { useMoviesMap } from "../hooks/useMoviesMap";
+import { Movie } from "../types/movie";
 
 type MovieData = APIMovieData;
 
@@ -26,6 +27,7 @@ const SearchTitlesModal = () => {
    const [limitError, setLimitError] = useState("");
    const [error, setError] = useState("");
    const [loadingVote, setLoadingVote] = useState(false);
+   const [lookupMap, setLookupMap] = useState<Map<string, Movie>>();
 
    const {
       user,
@@ -39,8 +41,6 @@ const SearchTitlesModal = () => {
    const { isLimitReached } = summary ?? { count: 0, requests: [] };
 
    const currentUser = user && user.id;
-
-   const moviesMap = useMoviesMap();
    const inputRef = useRef<HTMLInputElement>(null);
    const [movieIDCollection, setMovieIDCollection] = useState<
       Record<string | number, boolean>
@@ -49,42 +49,65 @@ const SearchTitlesModal = () => {
       Record<string | number, boolean>
    >({});
 
-   const getMovieData = (selectedMovie: APIMovieData) => {
+   const buildRequestKey = (id: number, mediaType: string | undefined) => {
+      return `${id}-${mediaType}`;
+   };
+
+   const upsertLookupRequest = (
+      map: Map<string, Movie> | undefined,
+      request: Movie,
+   ) => {
+      const next = new Map(map);
+      next.set(buildRequestKey(request.data.id, request.data.Type), request);
+      return next;
+   };
+
+   const removeLookupRequest = (
+      map: Map<string, Movie> | undefined,
+      tmdbId: number,
+      mediaType: string,
+   ) => {
+      const next = new Map(map);
+      next.delete(buildRequestKey(tmdbId, mediaType));
+      return next;
+   };
+
+   const getRequestFromMap = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
-      return moviesMap.get(key);
+      return lookupMap?.get(key);
    };
 
    const isMovieInList = (selectedMovie: APIMovieData) => {
-      return !!getMovieData(selectedMovie);
+      return !!getRequestFromMap(selectedMovie);
    };
 
    const isMovieReacted = (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       return movie ? movie.hasReacted : false;
    };
 
    const isMovieSeen = (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       return movie ? movie.hasSeen : false;
    };
 
    const isMovieRewatch = (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       return movie ? movie.isRewatch : false;
    };
 
    const getMovieVoteTotal = (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       return movie ? movie.voters.length : 0;
    };
 
    const getPatreonLink = (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       return movie ? movie.links.patreon : "";
    };
 
    const getYouTubeLink = (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       return movie ? movie.links.youtube : "";
    };
 
@@ -96,6 +119,15 @@ const SearchTitlesModal = () => {
          try {
             const results = await searchTitlesApi(parsedInput);
             if (results.length) {
+               const storedRequests = await lookupRequests(results);
+               const map = new Map<string, Movie>(
+                  storedRequests.map((request: Movie) => [
+                     buildRequestKey(request.data.id, request.data.Type),
+                     request,
+                  ]),
+               );
+
+               setLookupMap(map);
                setTitlesFromAPI(results);
             } else {
                setError("No results found");
@@ -115,10 +147,14 @@ const SearchTitlesModal = () => {
       setDisabledButtonStates({ [movie?.id]: true });
 
       try {
-         await addRequestToList({
+         const request = await addRequestToList({
             tmdbId: movie.id,
             mediaType: movie.mediaType,
          });
+
+         if (request) {
+            setLookupMap((prev) => upsertLookupRequest(prev, request));
+         }
       } catch (err: any) {
          setLimitError(err.message);
       }
@@ -126,23 +162,33 @@ const SearchTitlesModal = () => {
 
    const isMovieVotedByUser = (selectedMovie: APIMovieData) => {
       const key = `${selectedMovie?.id}-${selectedMovie?.mediaType}`;
-      const movie = moviesMap.get(key);
+      const movie = lookupMap?.get(key);
       return movie ? movie.voters.includes(currentUser ?? "") : false;
    };
 
    const handleRemoveVote = async (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
       if (movie) {
-         await removeVoteFromRequest(movie._id);
+         const data = await removeVoteFromRequest(movie._id);
          setDisabledButtonStates({ [selectedMovie?.id]: false });
+
+         if (data.deleted) {
+            setLookupMap((prev) =>
+               removeLookupRequest(prev, data.tmdbId, data.mediaType),
+            );
+         } else {
+            setLookupMap((prev) => upsertLookupRequest(prev, data.request));
+         }
       }
       setLoadingVote(false);
    };
 
    const handleAddVote = async (selectedMovie: APIMovieData) => {
-      const movie = getMovieData(selectedMovie);
+      const movie = getRequestFromMap(selectedMovie);
+
       if (movie) {
-         await addVoteToRequest(movie._id);
+         const data = await addVoteToRequest(movie._id);
+         setLookupMap((prev) => upsertLookupRequest(prev, data.request));
       }
       setLoadingVote(false);
    };
