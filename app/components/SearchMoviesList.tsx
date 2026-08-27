@@ -71,21 +71,21 @@ const SearchMoviesList = () => {
       setSearchDirector("");
       const params = new URLSearchParams(searchParams);
       params.delete("director");
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    const handleClearSearchActor = () => {
       setSearchActor("");
       const params = new URLSearchParams(searchParams);
       params.delete("actor");
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    const handleClearSearchComposer = () => {
       setSearchComposer("");
       const params = new URLSearchParams(searchParams);
       params.delete("composer");
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    return (
