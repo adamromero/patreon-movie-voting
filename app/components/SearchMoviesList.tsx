@@ -26,37 +26,37 @@ const SearchMoviesList = () => {
       if (debouncedTitle) {
          params.set("title", debouncedTitle);
          params.set("page", "1");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       } else {
          params.delete("title");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       }
 
       if (debouncedDirector) {
          params.set("director", debouncedDirector);
          params.set("page", "1");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       } else {
          params.delete("director");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       }
 
       if (debouncedActor) {
          params.set("actor", debouncedActor);
          params.set("page", "1");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       } else {
          params.delete("actor");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       }
 
       if (debouncedComposer) {
          params.set("composer", debouncedComposer);
          params.set("page", "1");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       } else {
          params.delete("composer");
-         router.push(`?${params.toString()}`);
+         router.push(`?${params.toString()}`, { scroll: false });
       }
    }, [debouncedTitle, debouncedDirector, debouncedActor, debouncedComposer]);
 
@@ -64,7 +64,7 @@ const SearchMoviesList = () => {
       setSearchTitle("");
       const params = new URLSearchParams(searchParams);
       params.delete("title");
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, { scroll: false });
    };
 
    const handleClearSearchDirector = () => {
