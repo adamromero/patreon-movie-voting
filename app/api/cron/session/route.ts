@@ -1,6 +1,8 @@
 import sessionCleanup from "@/lib/services/requests/sessionCleanup";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
    try {
       console.log("Running cron...");
