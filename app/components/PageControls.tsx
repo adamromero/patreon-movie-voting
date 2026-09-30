@@ -1,5 +1,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import Pagination from "./Pagination";
+import { useMovieContext } from "@/context/MovieContext";
 
 interface PageControlsProps {
    total: number;
@@ -16,6 +17,8 @@ const PageControls: React.FC<PageControlsProps> = ({
 }) => {
    const router = useRouter();
    const searchParams = useSearchParams();
+
+   const { isLoading } = useMovieContext();
 
    const updatePage = (newPage: number) => {
       const params = new URLSearchParams(searchParams);
@@ -56,6 +59,7 @@ const PageControls: React.FC<PageControlsProps> = ({
                <option value="100">100</option>
             </select>
          </div>
+         {isLoading && <div className="loader loader--sm"></div>}
       </>
    );
 };
