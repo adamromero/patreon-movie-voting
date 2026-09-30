@@ -43,23 +43,30 @@ const PageControls: React.FC<PageControlsProps> = ({
             decrementPage={() => updatePage(Math.max(page - 1, 1))}
             incrementPage={() => updatePage(Math.min(page + 1, pages))}
          />
+
          <div>Results: {total}</div>
-         <div className="flex gap-[5px]">
-            <label htmlFor="rowsPerPage">Rows per page</label>
-            <select
-               className="text-black"
-               name="rowsPerPage"
-               id="rowsPerPage"
-               value={limit}
-               onChange={(e) => handleRowsPerPage(Number(e.target.value))}
-            >
-               <option value="10">10</option>
-               <option value="20">20</option>
-               <option value="50">50</option>
-               <option value="100">100</option>
-            </select>
+
+         <div className="flex gap-[20px] items-center">
+            <div className="flex gap-[5px]">
+               <label htmlFor="rowsPerPage">Rows per page</label>
+               <select
+                  className="text-black"
+                  name="rowsPerPage"
+                  id="rowsPerPage"
+                  value={limit}
+                  onChange={(e) => handleRowsPerPage(Number(e.target.value))}
+               >
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+               </select>
+            </div>
+            <div
+               className="loader loader--sm"
+               style={{ visibility: isLoading ? "visible" : "hidden" }}
+            ></div>
          </div>
-         {isLoading && <div className="loader loader--sm"></div>}
       </>
    );
 };
